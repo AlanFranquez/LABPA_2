@@ -29,8 +29,6 @@ public class Home extends HttpServlet {
 	
 	/**
 	 * Devuelve el estado de la sesión
-	 * @param request
-	 * @return 
 	 */
 	public static String getEstado(HttpServletRequest request)
 	{
@@ -43,7 +41,7 @@ public class Home extends HttpServlet {
 		
 		switch(getEstado(req)){
 			case "no login":
-				req.getRequestDispatcher("/WEB-INF/index.html").
+				req.getRequestDispatcher("/WEB-INF/listarProductos.html").
 						forward(req, resp);
 				break;
 			case "incorrecto":
