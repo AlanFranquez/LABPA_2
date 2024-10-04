@@ -2,6 +2,7 @@
     <wb-module deploy-name="LabPA-2">
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/controllers"/>
         <property name="context-root" value="LabPA-2"/>
         <property name="java-output-path" value="/LabPA-2/build/classes"/>
     </wb-module>

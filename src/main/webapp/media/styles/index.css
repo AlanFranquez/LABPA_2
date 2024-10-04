@@ -1,0 +1,68 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+
+main {
+    height: 100vh;
+    margin: auto;
+}
+
+.texto h2 {
+    margin: 30px 0;
+
+}
+
+
+
+
+.textoPrincipal {
+    color: gray;
+}
+
+.texto .sub {
+    font-weight: bold;
+    color: #2C2C2C;
+}
+
+
+.botonIndex {
+    background-color: #2C2C2C;
+    color: white;
+    padding: 10px 30px;
+    border-radius: 5px;
+    border: none;
+}
+
+.botonIndex a {
+    text-decoration: none;
+    color: white;
+
+}
+
+.botonIndex a:hover {
+    text-decoration: none;
+    color: white;
+    
+}
+
+.botonIndex:hover {
+    background-color: #0f0f0f;
+    color: white;
+    cursor: pointer;
+}
+
+.part-final {
+	background-color: #2C2C2C;
+	width: 100%;
+	height: 200px; 
+	margin: 50px 0px 0px 0px;
+	
+}
+
+.part-final p {
+	color: white;
+}

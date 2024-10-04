@@ -1,0 +1,39 @@
+@charset "UTF-8";
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+.botonRegistro {
+	padding: 10px 30px;
+	border: none;
+	border-radius: 4px;
+}
+
+a {
+	font-family: Poppins;
+	text-decoration: none;
+	color: white;
+}
+
+.carousel-item img {
+    width: 90%;
+    height: 600px;
+    object-fit: cover; 
+    object-position: center;
+}
+
+.part-final {
+	background-color: #2C2C2C;
+	width: 100%;
+	height: 200px; 
+	margin: 50px 0px 0px 0px;
+	
+}
+
+.part-final p {
+	color: white;
+}
