@@ -38,10 +38,9 @@ public class Home extends HttpServlet {
 	private void processRequest(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		initSession(req);
-		
 		switch(getEstado(req)){
 			case "no login":
-				req.getRequestDispatcher("/WEB-INF/listarProductos.html").
+				req.getRequestDispatcher("/WEB-INF/inicio.jsp").
 						forward(req, resp);
 				break;
 			case "incorrecto":
