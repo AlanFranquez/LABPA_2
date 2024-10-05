@@ -12,7 +12,7 @@
 </head>
 <body>
     
-    <div id="barra-nav"></div>
+    <jsp:include page="/WEB-INF/template/barraNav.jsp" />
 
     <main class="container d-flex justify-content-center align-items-center vh-90">
         <div class="row w-100">
@@ -177,17 +177,6 @@
 		<p class="text-center">Todos los derechos reservados, 2024. <br> Laboratorio PA.</p>
 
 	</div>
-
-    <script>
-        // Cargar el contenido de BarraNavSinReg.html usando fetch
-        fetch('BarraNavSinReg.html')
-            .then(response => response.text())  // Convertir la respuesta a texto
-            .then(data => {
-                // Insertar el contenido en el div con el id 'barra-nav'
-                document.getElementById('barra-nav').innerHTML = data;
-            })
-            .catch(error => console.error('Error al cargar BarraNav:', error));
-    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
