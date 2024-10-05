@@ -6,18 +6,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
-    <link rel="stylesheet" href="../media/styles/index.css">
+    <link rel="stylesheet" href="media/styles/index.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 <body>
     
     <jsp:include page="/WEB-INF/template/barraNav.jsp" />
-
+    
     <main class="container d-flex justify-content-center align-items-center vh-90">
         <div class="row w-100">
             <div class="col-md-6 d-flex justify-content-center align-items-center">
-                <img src="./public/icono.png" alt="Icono.png" style="width: 200px; height: 200px">
+                <img src="media/images/icono.svg" alt="Icono.png" style="width: 200px; height: 200px">
             </div>
 
             <div class="col-md-6 d-flex flex-column justify-content-center align-items-start">
