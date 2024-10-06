@@ -59,6 +59,10 @@ public class DTCliente {
     public DTFecha getNacimiento() {
         return nacimiento;
     }
+    
+    public String getNacimientoFormateado() {
+    	return this.nacimiento.getDia() + " / " + this.nacimiento.getMes() + " / " + this.nacimiento.getAnio();
+    }
     public String getTipo() {
     	return tipo;
     }

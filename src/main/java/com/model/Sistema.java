@@ -459,6 +459,18 @@ public class Sistema implements ISistema {
     	
     	return lista;
     }
+    
+    public List<DTCliente> obtenerSoloClientes() {
+        List<DTCliente> listaClientes = new ArrayList<>();
+        for (Usuario usuario : usuarios.values()) {
+            if (usuario instanceof Cliente) {
+            	Cliente cl = (Cliente) usuario;
+                listaClientes.add(cl.crearDt());
+            }
+        }
+        return listaClientes;
+    }
+    
     public void addOrdenes(OrdenDeCompra o, String nickUsuario) {
     	Usuario us = this.usuarios.get(nickUsuario);
     	
@@ -505,6 +517,7 @@ public class Sistema implements ISistema {
 	 }
 	 
 }
+
 
 
 
