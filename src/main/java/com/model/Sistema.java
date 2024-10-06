@@ -18,6 +18,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import com.exceptions.CategoriaException;
 import com.exceptions.OrdenDeCompraException;
 import com.exceptions.ProductoException;
+import com.exceptions.UsuarioException;
 import com.exceptions.UsuarioRepetidoException;
 
 public class Sistema implements ISistema {
@@ -516,6 +517,17 @@ public class Sistema implements ISistema {
 		 return cl.mostrarCompras();
 	 }
 	 
+	 
+	 public Usuario getUserByEmail(String email) throws UsuarioException {
+		 for (Usuario usuario : usuarios.values()) {
+			 	if(usuario.getCorreo() == email) {
+			 		return usuario;
+			 	}
+	     }
+		 
+		 throw new UsuarioException("No se ha encontrado al usuario");
+		 
+	 }
 }
 
 

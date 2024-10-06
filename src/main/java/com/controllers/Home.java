@@ -8,59 +8,35 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import com.model.Usuario;
 
-@WebServlet ("/home")
+@WebServlet("/home")
 public class Home extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
+    private static final long serialVersionUID = 1L;
+
     public Home() {
         super();
     }
 
-    /**
-	 * inicializa la sesión si no estaba creada 
-	 */
-	public static void initSession(HttpServletRequest request) {
-		HttpSession session = request.getSession();
-		if (session.getAttribute("estado_sesion") == null) {
-			session.setAttribute("estado_sesion", "no login");
-		}
-	}
-	
-	/**
-	 * Devuelve el estado de la sesión
-	 */
-	public static String getEstado(HttpServletRequest request)
-	{
-		return (String) request.getSession().getAttribute("estado_sesion");
-	}
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
 
-	private void processRequest(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
-		initSession(req);
-		switch(getEstado(req)){
-			case "no login":
-				req.getRequestDispatcher("/WEB-INF/inicio.jsp").
-						forward(req, resp);
-				break;
-			case "incorrecto":
-				req.getRequestDispatcher("/WEB-INF/prueba.jsp").
-						forward(req, resp);
-				break;
-			case "login":
-				//resp.sendRedirect("/gamebook/perfil");
-				break;
-		}
-	}
-	
+        
+        if (session == null) {
+            response.sendRedirect("formlogin"); 
+            return;
+        }
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		processRequest(request, response);
-	}
+        Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
 
-	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		processRequest(request, response);
-	}
-
+        if (usuarioLogueado != null) {
+            request.setAttribute("usuario", usuarioLogueado); 
+            request.setAttribute("estado", "logueado");
+            request.getRequestDispatcher("/WEB-INF/inicio.jsp").forward(request, response);
+        } else {
+            response.sendRedirect("formlogin");
+            request.setAttribute("estado", "noLogueado");
+        }
+    }
 }

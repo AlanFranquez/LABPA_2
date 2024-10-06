@@ -10,6 +10,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import com.exceptions.CategoriaException;
 import com.exceptions.OrdenDeCompraException;
 import com.exceptions.ProductoException;
+import com.exceptions.UsuarioException;
 import com.exceptions.UsuarioRepetidoException;
 
 public interface ISistema {
@@ -96,4 +97,7 @@ public interface ISistema {
 	 
 	 // Traer Ordenes de compras de un cliente
 	 public List<DTOrdenDeCompra> getOrdenesCliente(String nick);
+	 
+	 
+	 public Usuario getUserByEmail(String email) throws UsuarioException;
 }
