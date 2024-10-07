@@ -1,9 +1,14 @@
+<%@page import="java.util.HashMap"%>
 <%@page import="com.model.DTCliente"%>
+<%@page import="com.model.DTOrdenDeCompra"%>
 <%@page import="com.model.DTFecha" %>
 <%@page import="com.model.DTCliente" %>
 <%@page import="java.util.Collection"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
+<%@page import="java.util.Map"%>
+<%@page import="com.model.OrdenDeCompra"%>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -11,7 +16,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=1440, initial-scale=1.0">
     <title>Perfil</title>
-    <link href="InfoPerfil.css" rel="stylesheet" />
+    <link href="media/styles/IniciarSesion.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
@@ -93,7 +98,6 @@
                 
                 
             </div>
-            <a class="editIcon"><img src="public/Edit.svg" /></a>
         </section>
 
     </main>
@@ -104,67 +108,49 @@
         	
       	%>
       	<p class="text-center mt-4">No ha realizado compras :(</p>
-      	<% } else { %>
-      		
+      	<% } else { 
+			Map<Integer, OrdenDeCompra> ordenesCliente = user.getOrdenes();
+        	List<DTOrdenDeCompra> listaOrden = new ArrayList<>();
+        	
+            for (OrdenDeCompra orden : ordenesCliente.values()) {
+            	DTOrdenDeCompra dtOrden = orden.crearDT();
+            	listaOrden.add(dtOrden);
+            	
+            }
+      	
+      		for(DTOrdenDeCompra dt : listaOrden) {
+      			%>
       	<div class="container align-items-center justify-content-center">
             <div class="card">
                 <div class="row g-0">
-                    <div class="col-md-2">
-                        <img class="rounded-start" src="public/t3.jpg" />
-                    </div>
                     <div class="col-md-8">
                         <div class="card-body">
-                            <h3 class="card-title">Title</h3>
-                            <p class="card-text">Description</p>
+                            <h3 class="card-title"><%= dt.getNumero() %></h3>
+                            <p class="card-text"><b>Precio total: </b><%= dt.getPrecioTotal() %></p>
+                            <p class="card-text"><b>Fecha de compra: </b><%= dt.getFechaString() %></p>
+                            <button class="btn" style="border: none; background-color: #2C2C2C">
+                            <a style="text-decoration: none; color: white" href="perfilOrden?nickname=<%= user.getNick() %>&orden=<%= dt.getNumero() %>" >VER DETALLES</a>
+                            </button>
+    
+
                         </div>
-                        <button class="btn btn-primary"><a href="InfoProducto.html">Ver más</a></button>
+                        
                     </div>
                 </div>
             </div>
-                <div class="card">
-                    <div class="row g-0">
-                        <div class="col-md-2">
-                            <img class="rounded-start" src="public/t3.jpg" />
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <h3 class="card-title">Title</h3>
-                                <p class="card-text">Description</p>
-                            </div>
-                        <button class="btn btn-primary"><a href="InfoProducto.html">Ver más</a></button>
-                    </div>
-                </div>
-            </div>
-                <div class="card">
-                    <div class="row g-0">
-                        <div class="col-md-2">
-                            <img class="rounded-start" src="public/t3.jpg" />    
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <h3 class="card-title">Title</h3>
-                                <p class="card-text">Description</p>
-                            </div>
-                        <button class="btn btn-primary"><a href="InfoProducto.html">Ver más</a></button>
-                    </div>
-                </div>
-            </div>
-        </div>
+           </div>
+          
+      			
+      	<% } %>
+      	
+      		
+      	
+                
       	<% } %>
         
         
     </section>
 
-    <script>
-        // Cargar el contenido de BarraNav.html usando fetch
-        fetch('BarraNav.html')
-            .then(response => response.text())  // Convertir la respuesta a texto
-            .then(data => {
-                // Insertar el contenido en el div con el id 'barra-nav'
-                document.getElementById('barra-nav').innerHTML = data;
-            })
-            .catch(error => console.error('Error al cargar BarraNav:', error));
-    </script>
 
 </body>
 </html>

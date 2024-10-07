@@ -72,4 +72,5 @@ public class DTCliente {
     public Map<Integer, OrdenDeCompra> getOrdenes() {
         return ordenes;
     }
+	
 }

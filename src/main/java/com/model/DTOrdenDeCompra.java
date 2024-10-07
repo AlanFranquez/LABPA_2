@@ -49,6 +49,11 @@ public class DTOrdenDeCompra {
     public Map<Integer, Item> getItems() {
         return items;
     }
+    
+    public String getFechaString() {
+    	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    	return fecha.format(formatter).toString();
+    }
 
 
 	@Override

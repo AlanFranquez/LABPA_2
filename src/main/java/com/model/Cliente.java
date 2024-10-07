@@ -23,6 +23,7 @@ public class Cliente extends Usuario {
         return listaCompras;
     }
     
+    
     public void agregarRespuesta(int numeroComentario, String nombreProducto, Comentario r) {
     	for(Map.Entry<Integer, OrdenDeCompra> entry : listaCompras.entrySet()) {
     		OrdenDeCompra o = entry.getValue();
