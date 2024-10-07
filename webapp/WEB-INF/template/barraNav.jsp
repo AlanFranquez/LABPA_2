@@ -7,7 +7,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2C2C2C;">
         <div class="container">
             <!-- Logo -->
-            <a href="index.html" class="navbar-brand">
+            <a href="home" class="navbar-brand">
                 ITSCODIGO
             </a>
             

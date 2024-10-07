@@ -89,6 +89,8 @@
                 	DTItem dtit = entry.getValue().crearDT();
                 
                 %>
+                	<a class="link"  href="perfilProducto?producto=<%=dtit.getProducto().crearDT().getNumRef()%>">Ver Producto</a>
+                	
                     <li>
                         <p><strong>Nombre: </strong> <%= dtit.getProducto().crearDT().getNombre() %></p> 
                         <p><strong>Precio Unitario: </strong> $<%= dtit.getProducto().crearDT().getPrecio() %> USD</p>

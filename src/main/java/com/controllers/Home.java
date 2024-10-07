@@ -8,6 +8,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+
+import com.model.Cliente;
+import com.model.DTCliente;
 import com.model.Usuario;
 
 @WebServlet("/home")
@@ -29,6 +32,9 @@ public class Home extends HttpServlet {
         }
 
         Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
+        
+        
+        
 
         if (usuarioLogueado != null) {
             request.setAttribute("usuario", usuarioLogueado); 
