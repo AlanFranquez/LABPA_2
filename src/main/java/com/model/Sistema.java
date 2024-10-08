@@ -77,7 +77,7 @@ public class Sistema implements ISistema {
     	Cliente nuevoCliente = new Cliente(nombre, nick, apellido, correo, fecha, contra);
     	usuarios.put(nick, nuevoCliente);
     }
-    public void agregarImagenUsuario(String nick, ImageIcon imagen) {
+    public void agregarImagenUsuario(String nick, String imagen) {
     	Usuario usuarioBuscado = this.usuarios.get(nick);
     	if (usuarioBuscado == null) {
     		System.out.println("Usuario con nick: " + nick + " no encontrado.");

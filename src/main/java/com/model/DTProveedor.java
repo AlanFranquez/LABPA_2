@@ -1,5 +1,6 @@
 package com.model;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,9 +12,9 @@ public class DTProveedor {
 	private Map<Integer, Producto> listaProductos;  
     private String compania, link, nombre, nick, apellido, correo;
     private DTFecha nacimiento;
-    private ImageIcon imagen;
+    private String imagen;
     // Constructor:
-    public DTProveedor(String nombre, String nick, String apellido, String correo, DTFecha nacimiento, ImageIcon imagen, String compania, String link) {
+    public DTProveedor(String nombre, String nick, String apellido, String correo, DTFecha nacimiento, String imagen, String compania, String link) {
     	   this.nombre = nombre;
            this.nick = nick;
            this.apellido = apellido;
@@ -97,10 +98,10 @@ public class DTProveedor {
 		return this;
     	
     }
-	public ImageIcon getImagen() {
+	public String getImagen() {
 		return imagen;
 	}
-	public void setImagen(ImageIcon imagen) {
+	public void setImagen(String imagen) {
 		this.imagen = imagen;
 	}
 	public void setNombre(String nombre) {

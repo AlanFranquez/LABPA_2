@@ -1,11 +1,13 @@
 package com.model;
 
+import java.io.File;
+
 import javax.swing.ImageIcon;
 
 public class Usuario {
     private String nombre, nick, apellido, correo, tipo, contrasena;
     private DTFecha nacimiento;
-    private ImageIcon imagen;
+    private String imagen;
     
     // Constructor:
     public Usuario(String nombre, String nick, String apellido, String correo, DTFecha nacimiento, String tipo, String contrasena) {
@@ -40,7 +42,7 @@ public class Usuario {
     public String getContrasena(){
         return contrasena;
     }
-    public ImageIcon getImagen() {
+    public String getImagen() {
         return imagen;
     }
     
@@ -63,7 +65,7 @@ public class Usuario {
     public void setContrasena(String contra){
         this.contrasena = contra;
     }
-    public void setImagen(ImageIcon imagen) { 
+    public void setImagen(String imagen) { 
         this.imagen = imagen;
     }
 }

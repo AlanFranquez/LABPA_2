@@ -20,7 +20,7 @@ public interface ISistema {
     
     public void agregarCliente(String nombre, String nick, String apellido, String correo, DTFecha fecha, String contra, String confContra) throws UsuarioRepetidoException;
     
-    public abstract void agregarImagenUsuario(String nick, ImageIcon imageIcon);
+    public abstract void agregarImagenUsuario(String nick, String image);
     
     public abstract List<DTCliente> listarClientes();
     

@@ -1,4 +1,5 @@
 package com.model;
+import java.io.File;
 import java.util.Map;
 
 import javax.swing.ImageIcon;
@@ -8,9 +9,9 @@ public class DTCliente {
     private DTFecha nacimiento;
     
     private Map<Integer, OrdenDeCompra> ordenes;
-	private ImageIcon imagen;
+	private String imagen;
     
-    public DTCliente(String nombre, String nick, String apellido, String correo, DTFecha nacimiento, ImageIcon imagen, Map<Integer, OrdenDeCompra> ordenes) {
+    public DTCliente(String nombre, String nick, String apellido, String correo, DTFecha nacimiento, String imagen, Map<Integer, OrdenDeCompra> ordenes) {
         this.nombre = nombre;
         this.nick = nick;
         this.apellido = apellido;
@@ -66,7 +67,7 @@ public class DTCliente {
     public String getTipo() {
     	return tipo;
     }
-    public ImageIcon getImagenes() {
+    public String getImagenes() {
         return imagen;
     }
     public Map<Integer, OrdenDeCompra> getOrdenes() {

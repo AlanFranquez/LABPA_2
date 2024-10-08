@@ -26,8 +26,8 @@ public class Home extends HttpServlet {
         HttpSession session = request.getSession(false);
 
         
-        if (session == null) {
-            response.sendRedirect("formlogin"); 
+        if (session == null || session.getAttribute("usuarioLogueado") == null) {
+            request.getRequestDispatcher("/WEB-INF/inicioNoLogueado.jsp").forward(request, response);
             return;
         }
 
