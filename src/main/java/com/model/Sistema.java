@@ -3,6 +3,7 @@ package com.model;
 import java.awt.Image;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -162,6 +163,14 @@ public class Sistema implements ISistema {
         return new ImageIcon(resizedImage);
     }
     
+    public Categoria getCat(String nombre) {
+    	return this.categorias.get(nombre);
+    }
+    
+    public Categoria[] getCategorias() {
+        Collection<Categoria> collection = this.categorias.values(); // Obtiene todas las categorías
+        return collection.toArray(new Categoria[collection.size()]); // Convierte a un arreglo
+    }
     
     
     // CASO DE USO 3: ALTA DE CATEGORIA

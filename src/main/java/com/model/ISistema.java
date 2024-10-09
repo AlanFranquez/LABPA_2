@@ -40,6 +40,10 @@ public interface ISistema {
     
     public abstract List<DTOrdenDeCompra> listarOrdenes();
     
+    public Categoria getCat(String nombre);
+    
+    public Categoria[] getCategorias();
+    
     public abstract boolean existenOrdenesParaListar();
 
 	public abstract DefaultMutableTreeNode arbolCategorias();
