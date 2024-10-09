@@ -26,6 +26,8 @@
     
     <%
     	DTProveedor user = (DTProveedor) request.getAttribute("usuario");
+    	System.out.print(user.getNick());
+    	System.out.print(user.obtenerProd(1).getNombre());
     %>
     
     <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2C2C2C;">
@@ -122,7 +124,7 @@
             <h1 class="display-4"><%= dt != null ? dt.getNombre() : "Producto no encontrado" %></h1>
             <p><strong>Precio:</strong> $<%= dt != null ? dt.getPrecio() : "N/A" %></p>
             <p><strong>Número de Referencia:</strong> <%= dt != null ? dt.getNumRef() : "N/A" %></p>                
-            
+            <p></p>
         </div>
           
       			

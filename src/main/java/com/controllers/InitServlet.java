@@ -74,22 +74,18 @@ public class InitServlet extends HttpServlet {
              
              Producto p1 = new Producto("Pelota", "Pelota inflable ideal", 120, 1,"Lalala", prov, 2);
              
-             s.agregarProducto("Pelota", 1, "lalal", "-", 120, "Perez", 0);
+             s.agregarProducto("Pelota", 1, "lalal", "-", 120, "Perez", 1);
              prov.agregarProd(p1);
              
              if (prov.existeProd(1)) {
-                 System.out.println("Nombre del producto: ");
+            	 DTProveedor dtprov = prov.crearDt();
+                 System.out.println("Nombre del producto: " + dtprov.obtenerProd(1).getNombre());
              } else {
                  System.out.println("No se encontró un producto con el ID 1.");
              }
              
              
-             DtProducto producto = s.getDtProducto(1);
-             if (producto != null) {
-                 System.out.println("Nombre del producto: " + producto.getNombre());
-             } else {
-                 System.out.println("No se encontró un producto con el ID 1.");
-             }
+             
              s.agregarProductoCategoria("Tecno", 1);
              s.agregarProductoCategoria("Otros", 1);
              s.agregarProductoCategoria("Tecno", 2);

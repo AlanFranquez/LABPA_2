@@ -21,6 +21,10 @@ public class Proveedor extends Usuario {
         this.compania = comp;
     }
 
+    
+    public Map<Integer, Producto> getProductos() {
+    	return this.listaProductos;
+    }
     public String getLink() {
         return link;
     }
@@ -53,7 +57,7 @@ public class Proveedor extends Usuario {
   
     
     public DTProveedor crearDt() {
-        return new DTProveedor(this.getNombre(), getNick(), getApellido(), getCorreo(), getNacimiento(), getImagen(), getCompania(), getLink());
+        return new DTProveedor(this.getNombre(), getNick(), getApellido(), getCorreo(), getNacimiento(), getImagen(), getCompania(), getLink(), this.getProductos());
     }
 
 }

@@ -14,7 +14,7 @@ public class DTProveedor {
     private DTFecha nacimiento;
     private String imagen;
     // Constructor:
-    public DTProveedor(String nombre, String nick, String apellido, String correo, DTFecha nacimiento, String imagen, String compania, String link) {
+    public DTProveedor(String nombre, String nick, String apellido, String correo, DTFecha nacimiento, String imagen, String compania, String link, Map<Integer, Producto> listaProductos) {
     	   this.nombre = nombre;
            this.nick = nick;
            this.apellido = apellido;
@@ -23,7 +23,7 @@ public class DTProveedor {
            this.imagen = imagen;
            this.compania = compania;
            this.link = link;
-           this.listaProductos = new HashMap<>();
+           this.listaProductos = listaProductos;
     }
     // Gets sets
     public String getCompania() {
