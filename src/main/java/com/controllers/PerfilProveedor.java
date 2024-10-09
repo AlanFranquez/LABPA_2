@@ -12,42 +12,39 @@ import java.io.IOException;
 
 import com.model.Cliente;
 import com.model.DTCliente;
+import com.model.DTProveedor;
+import com.model.Proveedor;
 import com.model.Usuario;
 
 /**
  * Servlet implementation class Perfil
  */
-@WebServlet("/perfilCliente")
-public class PerfilCliente extends HttpServlet {
+@WebServlet("/perfilProveedor")
+public class PerfilProveedor extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public PerfilCliente() {
+  
+    public PerfilProveedor() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
+	
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         
-        if (session == null || session.getAttribute("usuarioLogueado") == null) {
+        if (session == null) {
             response.sendRedirect("formlogin");
             return;
         }
         
-        Cliente usuarioLogueado = (Cliente) session.getAttribute("usuarioLogueado");
-        DTCliente dtcli = usuarioLogueado.crearDt();
+        Proveedor usuarioLogueado = (Proveedor) session.getAttribute("usuarioLogueado");
+        DTProveedor dtprov = usuarioLogueado.crearDt();
         
         String parametro = request.getParameter("nickname");
         
         if (usuarioLogueado.getNick().equals(parametro)) {
-            request.setAttribute("usuario", dtcli);
-            request.getRequestDispatcher("/WEB-INF/InfoPerfilCliente.jsp").forward(request, response);
+            request.setAttribute("usuario", dtprov);
+            request.getRequestDispatcher("/WEB-INF/InfoPerfilProveedor.jsp").forward(request, response);
             return;
         }
         

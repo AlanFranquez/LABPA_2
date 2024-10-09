@@ -7,6 +7,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 
 import java.io.File;
+import java.util.Map;
 
 import javax.swing.ImageIcon;
 
@@ -14,6 +15,8 @@ import com.exceptions.CategoriaException;
 import com.exceptions.UsuarioRepetidoException;
 import com.model.Cliente;
 import com.model.DTFecha;
+import com.model.DTProveedor;
+import com.model.DtProducto;
 import com.model.Factory;
 import com.model.ISistema;
 import com.model.OrdenDeCompra;
@@ -67,25 +70,30 @@ public class InitServlet extends HttpServlet {
              s.agregarProveedor("Perez", "AndresPerez@gmail.com", "Andres", "Perez", fecha3 ,"Bamboo.inc" , "www.bamboo.com", "123", "123");
              s.agregarProveedor("Jorge", "Jorge@gmail.com", "Jorge", "Urrutia", fecha3 ,"Google.inc" , "www.google.com", "123", "123");
              
-             s.agregarImagenUsuario("Perez", "./imagenes/p1.jpg");
+             s.agregarImagenUsuario("Perez", "/images/p2.jpg");
              
              Producto p1 = new Producto("Pelota", "Pelota inflable ideal", 120, 1,"Lalala", prov, 2);
-             s.agregarProducto("Pelota", 1, "Pelota inflable ideal", "Increible", 120, "Perez", 2);
-             s.agregarProducto("Cargador", 2, "Cargador tipo c", "Muy bueno", 220, "Perez", 20);
-             s.agregarProducto("Sillon Comodo", 3, "Sillon comodo para todos los hogares", "Muy bueno", 330, "Jorge", 25);
              
+             s.agregarProducto("Pelota", 1, "lalal", "-", 120, "Perez", 0);
+             prov.agregarProd(p1);
+             
+             if (prov.existeProd(1)) {
+                 System.out.println("Nombre del producto: ");
+             } else {
+                 System.out.println("No se encontró un producto con el ID 1.");
+             }
+             
+             
+             DtProducto producto = s.getDtProducto(1);
+             if (producto != null) {
+                 System.out.println("Nombre del producto: " + producto.getNombre());
+             } else {
+                 System.out.println("No se encontró un producto con el ID 1.");
+             }
              s.agregarProductoCategoria("Tecno", 1);
              s.agregarProductoCategoria("Otros", 1);
              s.agregarProductoCategoria("Tecno", 2);
              s.agregarProductoCategoria("Bazar", 3);
-             s.agregarImagenesProducto("Tecno", 2, new File("./imagenes/cargador1.jpg"));
-             s.agregarImagenesProducto("Tecno", 2, new File("./imagenes/cargador2.jpg"));
-             
-             s.agregarImagenesProducto("Tecno", 1, new File("./imagenes/pelota1.jpg"));
-             s.agregarImagenesProducto("Tecno", 1, new File("./imagenes/pelota2.jpg"));
-             
-             s.agregarImagenesProducto("Bazar", 3, new File("./imagenes/s1.jpg"));
-             s.agregarImagenesProducto("Bazar", 3, new File("./imagenes/s2.jpg"));
              
              s.agregarProductoCategoria("Tecno", 2);
              OrdenDeCompra o1 = new OrdenDeCompra(1);
@@ -100,4 +108,3 @@ public class InitServlet extends HttpServlet {
          }
     }
 }
-

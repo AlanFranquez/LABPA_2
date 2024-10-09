@@ -489,11 +489,7 @@ public class Sistema implements ISistema {
     	Proveedor prov = (Proveedor) this.usuarios.get(proveedor);
     	prov.eliminarProd(numRef);
     }
-    public void agregarImagenesProducto(String cat, int num, File imagen) {
-    	Cat_Producto catP = (Cat_Producto) this.categorias.get(cat);
-    	Producto p = catP.getProducto(num);
-    	p.agregarImagen(imagen);
-    }
+    
     
 
 	 // MOSTRAR PERFIL CLIENTE

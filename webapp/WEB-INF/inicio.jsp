@@ -17,7 +17,7 @@
 	<%
 	String estadoUser = (String) request.getAttribute("estado");
     Usuario usr = (Usuario) request.getAttribute("usuario");
-	
+    	
 	%>
 	
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2C2C2C;">
@@ -43,14 +43,21 @@
             <ul class="navbar-nav align-items-center">
                 <!-- Perfil -->
                 <li class="nav-item">
-                    <% if (usr != null) { %>
-                        <a class="nav-link" href="perfilCliente?nickname=<%= usr.getNick() %>">Perfil</a>
-                    <% } else { %>
-                        <a class="nav-link" href="formlogin">Iniciar Sesión</a>
+                    <% if (usr != null && usr.getTipo() == "proveedor") { %>
+                        <a class="nav-link" href="perfilProveedor?nickname=<%= usr.getNick() %>">Perfil</a>
+                    <% } else if(usr != null && usr.getTipo() == "cliente"){ %>
+                    
+						 <a class="nav-link" href="perfilCliente?nickname=<%= usr.getNick() %>">Perfil</a>                    
+                 
                     <% } %>
                 </li>
                 
-                <!-- Carrito -->
+               <%
+               	if(usr != null && usr.getTipo() == "cliente") {
+               		
+               %>
+               	
+               
                 <li class="nav-item">
                     <a class="nav-link" href="Carrito.html">
                         <svg xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" viewBox="0 0 24 24">
@@ -58,6 +65,8 @@
                         </svg>
                     </a>
                 </li>
+                
+                <% }%>
 
                 <li class="nav-item">
                     <button class="btn btn-danger">

@@ -83,7 +83,6 @@ public interface ISistema {
 	
 	public abstract void eliminarPDesdeProveedor(String proveedor, int numRef);
 	
-	public abstract void agregarImagenesProducto(String cat, int num, File imagen);
 	
 	public abstract void borrarProducto(int numRef, String titulo);
 

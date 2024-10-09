@@ -84,6 +84,11 @@ public class DTProveedor {
 	public String getCorreo() {
 		return correo;
 	}
+	
+	 public String getNacimientoFormateado() {
+	    	return this.nacimiento.getDia() + " / " + this.nacimiento.getMes() + " / " + this.nacimiento.getAnio();
+	    }
+	
 	public void setCorreo(String correo) {
 		this.correo = correo;
 	}
