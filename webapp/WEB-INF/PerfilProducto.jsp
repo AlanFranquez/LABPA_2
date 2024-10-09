@@ -90,7 +90,27 @@
         <div class="col-md-6">
             <!-- Carrusel de imágenes -->
             <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
-               
+                <div class="carousel-inner">
+                    <% 
+                        // Suponiendo que getImagenes() retorna una lista de imágenes
+                        List<String> imagenes = prod.getImagenes(); // Cambia esto si tu método es diferente
+                        if (imagenes != null && !imagenes.isEmpty()) {
+                            for (int i = 0; i < imagenes.size(); i++) {
+                                String imagenSrc = "media/" + imagenes.get(i);
+                                %>
+                                <div class="carousel-item <%= i == 0 ? "active" : "" %>">
+                                    <img src="<%= imagenSrc %>" class="d-block w-100" alt="Imagen de <%= prod.getNombre() %>" style="max-height: 400px; object-fit: cover;">
+                                </div>
+                                <%
+                            }
+                        } else { 
+                    %>
+                        <div class="carousel-item active">
+                            <img src="media/default-image.png" class="d-block w-100" alt="Imagen no disponible" style="max-height: 400px; object-fit: cover;">
+                        </div>
+                    <% } %>
+                </div>
+                
                 <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">Previous</span>
@@ -113,17 +133,13 @@
             <p><strong>Especificaciones:</strong> <%= prod != null ? prod.getEspecs() : "N/A" %></p>
             <p><strong>Proveedor:</strong> <%= prod != null ? prod.getNicknameProveedor() : "N/A" %></p>
             
-            <% if(usr.getTipo() == "cliente") {
-            	
-            	%>
-            	<button class="btn btn-secondary botonRegistro">
-                Agregar al Carrito
-            </button>
-            <% }%>
-            
+            <% if (usr.getTipo() == "cliente") { %>
+                <button class="btn btn-secondary botonRegistro">Agregar al Carrito</button>
+            <% } %>
         </div>
     </div>
 </div>
+
 
 
 

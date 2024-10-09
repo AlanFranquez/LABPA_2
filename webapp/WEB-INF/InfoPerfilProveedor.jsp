@@ -79,81 +79,76 @@
 	
     
     <main class="container mt-5 d-flex"> 
-        <section class="row justify-content-center align-items-center">
-            <div class="col-md-6 col-12 text-center" >
-                <% if(user.getImagen() == null) { %>
-                    <h1>No Hay imagen disponible :/</h1>
-                <% } else { %>
-                    <img class="img-fluid" style="max-width: 280px; height: auto; border-radius: 5px" src="media<%=user.getImagen()%>" alt="Imagen de cliente" />
-                <% } %>            	
-            </div>
-            <div class="col-md-6 col-12">
-            	
-                  <p>Tipo de Usuario: <b>Proveedor</b></p>
-                <p>Nickname: <b><%= user.getNick() %></b></p>
-                 <p>Nombre: <b><%= user.getNombre() %></b></p>
-                 <p>Apellido: <b><%= user.getApellido() %></b></p>
-                 <p> Fecha de Nacimiento: <b><%= user.getNacimientoFormateado() %></b> </p>                 
-                <p> Sitio WEB: <a href="<%= user.getLink() %>"><%= user.getLink() %></a> </p>
-                <p> Compañía: <b><%= user.getCompania() %></b> </p>
-                
-            </div>
-        </section>
-
-    </main>
-    <section>
-        <h2 class="comprasTitle text-center mt-5">Compras Realizadas</h2>
-        
-        <% if(user.getListaProductos() == null)  {
-        	
-      	%>
-      	<p class="text-center mt-4">No ha asignado productos :/</p>
-      	<% } else { 
-			Map<Integer, Producto> listaProductos = user.getListaProductos();
-        	List<DtProducto> listaDTProductos = new ArrayList<>();
-        	
-            for (Producto p : listaProductos.values()) {
-            	DtProducto dtp = p.crearDT();
-            	listaDTProductos.add(dtp);
-            	
-            }
-      	
-      		for(DtProducto dt : listaDTProductos) {
-      			%>
-      	<div class="col-md-6">
-      	
-      		<div>
-      			<% if (dt != null && dt.getPrimeraImagen() != null) { %>
-    <img alt="img prod" src="<%= dt.getPrimeraImagen() %>">
-<% } else { %>
-    <p>No hay imagen disponible.</p>
-<% } %>
-      		</div>
-      		
-      		<div>
-	      		<h1 class="display-4"><%= dt != null ? dt.getNombre() : "Producto no encontrado" %></h1>
-	            <p><strong>Precio:</strong> $<%= dt != null ? dt.getPrecio() : "N/A" %></p>
-	            <p><strong>Número de Referencia:</strong> <%= dt != null ? dt.getNumRef() : "N/A" %></p>                
-	            <p><strong>Precio:</strong> <%= dt != null ? dt.getPrecio() : "N/A" %></p>
-	            <br>
-	            <button class="btn btn-primary">
-    <a href="perfilProducto?producto=<%=user.obtenerProd(dt.getNumRef()).getNumRef()%>">Ver Detalles</a>
-</button>
-
-      		</div>
-            
+    <section class="row justify-content-center align-items-center">
+        <div class="col-md-6 col-12 text-center">
+            <% if (user.getImagen() == null) { %>
+                <h1>No Hay imagen disponible :/</h1>
+            <% } else { %>
+                <img class="img-fluid rounded-circle" style="width: 200px; height: 200px; object-fit: cover;" src="media<%= user.getImagen() %>" alt="Imagen de cliente" />
+            <% } %>            	
         </div>
-          
-      			
-      	<% } %>
-      	
-      		
-      	
-                
-      	<% } %>
-        
-        
+        <div class="col-md-6 col-12">
+            <p>Tipo de Usuario: <b>Proveedor</b></p>
+            <p>Nickname: <b><%= user.getNick() %></b></p>
+            <p>Nombre: <b><%= user.getNombre() %></b></p>
+            <p>Apellido: <b><%= user.getApellido() %></b></p>
+            <p>Fecha de Nacimiento: <b><%= user.getNacimientoFormateado() %></b></p>                 
+            <p>Sitio WEB: <a href="<%= user.getLink() %>"><%= user.getLink() %></a></p>
+            <p>Compañía: <b><%= user.getCompania() %></b></p>
+        </div>
     </section>
+</main>
+
+    <section>
+    <h2 class="comprasTitle text-center mt-5">Productos Asignados</h2>
+    
+    <% if (user.getListaProductos() == null) { %>
+        <p class="text-center mt-4">No ha asignado productos :/</p>
+    <% } else { 
+        Map<Integer, Producto> listaProductos = user.getListaProductos();
+        List<DtProducto> listaDTProductos = new ArrayList<>();
+        
+        for (Producto p : listaProductos.values()) {
+            DtProducto dtp = p.crearDT();
+            listaDTProductos.add(dtp);
+        }
+    %>
+    
+    <div class="row justify-content-center">
+        <% for (DtProducto dt : listaDTProductos) { %>
+            <div class="col-md-4 col-sm-6 mb-4">
+                <div class="card h-100 text-center">
+                    <div class="card-body">
+                        <div>
+                            <% if (dt != null && dt.getImagenes().getFirst() != null) { %>
+                                <img class="card-img-top" src="media/<%= dt.getImagenes().getFirst() %>" alt="<%= dt.getNombre() %>" style="max-height: 200px; object-fit: cover;">
+                            <% } else { %>
+                                <p class="text-muted">No hay imagen disponible.</p>
+                            <% } %>
+                        </div>
+                        <h5 class="card-title mt-2"><%= dt != null ? dt.getNombre() : "Producto no encontrado" %></h5>
+                        <p class="card-text"><strong>Precio:</strong> $<%= dt != null ? dt.getPrecio() : "N/A" %></p>
+                        <p class="card-text"><strong>Número de Referencia:</strong> <%= dt != null ? dt.getNumRef() : "N/A" %></p>
+                        <a href="perfilProducto?producto=<%= user.obtenerProd(dt.getNumRef()).getNumRef() %>" class="btn btn-primary">Ver Detalles</a>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+    </div>
+    
+    <% } %>
+</section>
+
+<br>
+
+<div class="text-center">
+
+<button class="btn btn-primary bg-black" style="border:none; color: white;">
+	<a href="registrarproductos" style="text-decoration: none; color: white;">Agregar Productos</a>
+</button>
+</div>
+
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
