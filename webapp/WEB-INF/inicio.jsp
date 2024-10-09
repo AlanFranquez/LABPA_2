@@ -108,7 +108,7 @@
                 <p class="sub">Estamos para ayudarte!</p>
                 <p class="textoPrincipal">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam consectetur sequi enim atque quaerat sed laudantium repudiandae id, asperiores doloribus molestias totam necessitatibus! Quam perspiciatis officia alias hic repellendus dolorem.</p>
                 <button class="botonIndex">
-                    <a href="./listarProductos.html">
+                    <a href="home">
                         Empezar
                     </a>
                 </button>

@@ -89,13 +89,13 @@
             </div>
             <div class="col-md-6 col-12">
             	
-                <p>Tipo de Usuario: <b>Proveedor</b></p>
+                  <p>Tipo de Usuario: <b>Proveedor</b></p>
                 <p>Nickname: <b><%= user.getNick() %></b></p>
                  <p>Nombre: <b><%= user.getNombre() %></b></p>
                  <p>Apellido: <b><%= user.getApellido() %></b></p>
                  <p> Fecha de Nacimiento: <b><%= user.getNacimientoFormateado() %></b> </p>                 
-                
-                
+                <p> Sitio WEB: <a href="<%= user.getLink() %>"><%= user.getLink() %></a> </p>
+                <p> Compañía: <b><%= user.getCompania() %></b> </p>
                 
             </div>
         </section>
@@ -121,10 +121,27 @@
       		for(DtProducto dt : listaDTProductos) {
       			%>
       	<div class="col-md-6">
-            <h1 class="display-4"><%= dt != null ? dt.getNombre() : "Producto no encontrado" %></h1>
-            <p><strong>Precio:</strong> $<%= dt != null ? dt.getPrecio() : "N/A" %></p>
-            <p><strong>Número de Referencia:</strong> <%= dt != null ? dt.getNumRef() : "N/A" %></p>                
-            <p></p>
+      	
+      		<div>
+      			<% if (dt != null && dt.getPrimeraImagen() != null) { %>
+    <img alt="img prod" src="<%= dt.getPrimeraImagen() %>">
+<% } else { %>
+    <p>No hay imagen disponible.</p>
+<% } %>
+      		</div>
+      		
+      		<div>
+	      		<h1 class="display-4"><%= dt != null ? dt.getNombre() : "Producto no encontrado" %></h1>
+	            <p><strong>Precio:</strong> $<%= dt != null ? dt.getPrecio() : "N/A" %></p>
+	            <p><strong>Número de Referencia:</strong> <%= dt != null ? dt.getNumRef() : "N/A" %></p>                
+	            <p><strong>Precio:</strong> <%= dt != null ? dt.getPrecio() : "N/A" %></p>
+	            <br>
+	            <button class="btn btn-primary">
+    <a href="perfilProducto?producto=<%=user.obtenerProd(dt.getNumRef()).getNumRef()%>">Ver Detalles</a>
+</button>
+
+      		</div>
+            
         </div>
           
       			

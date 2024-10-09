@@ -7,6 +7,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.ImageIcon;
@@ -40,19 +41,9 @@ public class InitServlet extends HttpServlet {
              s.agregarCliente("Alberto", "albert1341", "Hernandez", "Ahernandez@gmail.com", fecha2, "123", "123");
              s.agregarCliente("Maria", "agusmari", "Agustina", "mariaagustina@gmail.com", fecha1, "123", "123");
 
-             
-          // Ruta accesible públicamente (sin getRealPath, directamente la URL relativa)
-             String imagePath1 = "/images/p1.jpg";
-             s.agregarImagenUsuario("Juan123", imagePath1);
-
-             String imagePath2 = "/images/p2.jpg";
-             s.agregarImagenUsuario("albert1341", imagePath2);
-
-             String imagePath3 = "/images/p3.jpg";
-             s.agregarImagenUsuario("agusmari", imagePath3);
-             
-             Cliente e = (Cliente) s.getUsuario("Juan123");
-             System.out.print(e.getImagen());
+             s.agregarImagenUsuario("Juan123", "/images/p1.jpg");
+             s.agregarImagenUsuario("albert1341", "/images/p2.jpg");
+             s.agregarImagenUsuario("agusmari", "/images/p3.jpg");
              
              s.agregarCategoria("Living");
              s.agregarCategoria("Tecnología");
@@ -70,21 +61,12 @@ public class InitServlet extends HttpServlet {
              s.agregarProveedor("Perez", "AndresPerez@gmail.com", "Andres", "Perez", fecha3 ,"Bamboo.inc" , "www.bamboo.com", "123", "123");
              s.agregarProveedor("Jorge", "Jorge@gmail.com", "Jorge", "Urrutia", fecha3 ,"Google.inc" , "www.google.com", "123", "123");
              
-             s.agregarImagenUsuario("Perez", "/images/p2.jpg");
+             s.agregarImagenUsuario("Perez", "/images/p1.jpg");
              
              Producto p1 = new Producto("Pelota", "Pelota inflable ideal", 120, 1,"Lalala", prov, 2);
-             
-             s.agregarProducto("Pelota", 1, "lalal", "-", 120, "Perez", 1);
-             prov.agregarProd(p1);
-             
-             if (prov.existeProd(1)) {
-            	 DTProveedor dtprov = prov.crearDt();
-                 System.out.println("Nombre del producto: " + dtprov.obtenerProd(1).getNombre());
-             } else {
-                 System.out.println("No se encontró un producto con el ID 1.");
-             }
-             
-             
+             s.agregarProducto("Pelota", 1, "Pelota inflable ideal", "Increible", 120, "Perez", 2);
+             s.agregarProducto("Cargador", 2, "Cargador tipo c", "Muy bueno", 220, "Perez", 20);
+             s.agregarProducto("Sillon Comodo", 3, "Sillon comodo para todos los hogares", "Muy bueno", 330, "Jorge", 25);
              
              s.agregarProductoCategoria("Tecno", 1);
              s.agregarProductoCategoria("Otros", 1);
@@ -92,11 +74,34 @@ public class InitServlet extends HttpServlet {
              s.agregarProductoCategoria("Bazar", 3);
              
              s.agregarProductoCategoria("Tecno", 2);
+             
+             // DOS FORMAS DE AGREGAR IMAGENES
+             s.agregarImagenesDesdeProveedor("Perez", 1, "/images/pelota1.jpg");
+             s.getProdByCateogria("Tecno", 1).agregarImagen("/images/pelota2.jpg");
+             
+             s.agregarImagenesDesdeProveedor("Perez", 2, "/images/cargador1.jpg");
+             s.agregarImagenesDesdeProveedor("Perez", 2, "/images/cargador2.jpg");
+             
+             
+             List<String> lista = s.getProdByCateogria("Tecno", 2).crearDT().getImagenes();
+             
+             for(String dt : lista) {
+            	 System.out.print(dt);
+             }
+             
+             
+             
              OrdenDeCompra o1 = new OrdenDeCompra(1);
              o1.addItem(p1, 3);
              
              
              s.addOrdenes(o1, "Juan123");
+
+             s.agregarImagenUsuario("Juan123", "/images/p1.jpg");
+             s.agregarImagenUsuario("albert1341", "/images/p2.jpg");
+             s.agregarImagenUsuario("agusmari", "/images/p3.jpg");
+             
+             //System.out.print(s.getUsuario("Juan123").getImagen());
 
 
          } catch (Exception e) {

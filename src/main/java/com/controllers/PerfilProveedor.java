@@ -30,12 +30,13 @@ public class PerfilProveedor extends HttpServlet {
 
 	
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession();
+        HttpSession session = request.getSession(false);
         
         if (session == null) {
             response.sendRedirect("formlogin");
             return;
         }
+        
         
         Proveedor usuarioLogueado = (Proveedor) session.getAttribute("usuarioLogueado");
         DTProveedor dtprov = usuarioLogueado.crearDt();
@@ -44,6 +45,7 @@ public class PerfilProveedor extends HttpServlet {
         
         if (usuarioLogueado.getNick().equals(parametro)) {
             request.setAttribute("usuario", dtprov);
+            System.out.println("Tipo de usuario almacenado en sesión: " + usuarioLogueado.getClass().getName());
             request.getRequestDispatcher("/WEB-INF/InfoPerfilProveedor.jsp").forward(request, response);
             return;
         }

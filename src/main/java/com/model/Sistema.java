@@ -402,6 +402,23 @@ public class Sistema implements ISistema {
     	}	
     	return listaProductos;
     }
+    
+    
+    public Producto getProdByCateogria(String cat, int numRef) throws ProductoException {
+        Cat_Producto prodC = (Cat_Producto) this.categorias.get(cat);
+        
+        if (prodC == null || prodC.getProductos().isEmpty()) {
+            throw new ProductoException("Esta categoría no cuenta con productos");
+        }
+        
+        Producto producto = prodC.getProducto(numRef);
+        if (producto == null) {
+            throw new ProductoException("El producto no existe en esta categoría");
+        }
+
+        return producto;
+    }
+
     public List<DtProducto> listarALLProductos() throws ProductoException {
     	List<DtProducto> listaProductos = new ArrayList<>();
     	List<Integer> numRefs = new ArrayList<Integer>();
@@ -524,6 +541,28 @@ public class Sistema implements ISistema {
 		 throw new UsuarioException("No se ha encontrado al usuario");
 		 
 	 }
+	 
+	
+	 
+	 public void agregarImagenesDesdeProveedor(String proveedor, int numRef, String imagen) {
+		 Proveedor usr = (Proveedor) this.getUsuario(proveedor);
+		 if(usr == null) {
+			 return;
+		 }
+		 
+		 Producto p1 = usr.obtenerProd(numRef);
+		 
+		 if(p1 == null) {
+			 return;
+		 }
+		 
+		 p1.agregarImagen(imagen);
+		 
+	 }
+	 
+	 public void agregarImagenesProducto(String cat, int num, String imagen) throws ProductoException {
+	    	this.getProdByCateogria(cat, num).getImagenes().add(imagen);
+	   }
 }
 
 

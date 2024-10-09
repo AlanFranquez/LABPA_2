@@ -99,4 +99,10 @@ public interface ISistema {
 	 
 	 
 	 public Usuario getUserByEmail(String email) throws UsuarioException;
+	 
+	 
+	 public void agregarImagenesDesdeProveedor(String proveedor, int numRef, String imagen);
+	 
+	 public Producto getProdByCateogria(String cat, int numRef) throws ProductoException;
+
 }

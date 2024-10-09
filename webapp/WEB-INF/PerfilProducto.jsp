@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
  <%@page import="com.model.DtProducto" %>
+ <%@page import="com.model.Usuario" %>
  <%@page import="java.util.Collections" %>
  <%@page import="java.util.List" %>
  <%@page import="com.model.DTCliente" %>
@@ -10,14 +11,7 @@
 
 <% 
     DtProducto prod = (DtProducto) request.getAttribute("dtprod");
-    DTCliente user = (DTCliente) request.getAttribute("usuario");
-
-    if (user == null) {
-        HttpSession s = request.getSession(false);
-        if (s != null) {
-            user = (DTCliente) s.getAttribute("usuarioLogueado");
-        }
-    }
+	Usuario usr = (Usuario) request.getAttribute("usuario");
 %>
 
 <meta charset="UTF-8">
@@ -27,9 +21,10 @@
     <link href="media/styles/InfoProducto.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleTelevisión 24' Pulgadasapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
+
 
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2C2C2C;">
     <div class="container">
@@ -54,14 +49,21 @@
             <ul class="navbar-nav align-items-center">
                 <!-- Perfil -->
                 <li class="nav-item">
-                    <% if (user != null) { %>
-                        <a class="nav-link" href="perfilCliente?nickname=<%= user.getNick() %>">Perfil</a>
-                    <% } else { %>
-                        <a class="nav-link" href="formlogin">Iniciar Sesión</a>
+                    <% if (usr != null && usr.getTipo() == "proveedor") { %>
+                        <a class="nav-link" href="perfilProveedor?nickname=<%= usr.getNick() %>">Perfil</a>
+                    <% } else if(usr != null && usr.getTipo() == "cliente"){ %>
+                    
+						 <a class="nav-link" href="perfilCliente?nickname=<%= usr.getNick() %>">Perfil</a>                    
+                 
                     <% } %>
                 </li>
                 
-                <!-- Carrito -->
+               <%
+               	if(usr != null && usr.getTipo() == "cliente") {
+               		
+               %>
+               	
+               
                 <li class="nav-item">
                     <a class="nav-link" href="Carrito.html">
                         <svg xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" viewBox="0 0 24 24">
@@ -69,6 +71,8 @@
                         </svg>
                     </a>
                 </li>
+                
+                <% }%>
 
                 <li class="nav-item">
                     <button class="btn btn-danger">
@@ -79,7 +83,6 @@
         </div>
     </div>
 </nav>
-
 
 
 <div class="container mt-5">
@@ -109,9 +112,15 @@
             </div>
             <p><strong>Especificaciones:</strong> <%= prod != null ? prod.getEspecs() : "N/A" %></p>
             <p><strong>Proveedor:</strong> <%= prod != null ? prod.getNicknameProveedor() : "N/A" %></p>
-            <button class="btn btn-secondary botonRegistro">
-                Añadir Producto
+            
+            <% if(usr.getTipo() == "cliente") {
+            	
+            	%>
+            	<button class="btn btn-secondary botonRegistro">
+                Agregar al Carrito
             </button>
+            <% }%>
+            
         </div>
     </div>
 </div>

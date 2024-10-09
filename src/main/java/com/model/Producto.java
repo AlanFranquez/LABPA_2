@@ -16,7 +16,7 @@ public class Producto {
 	private float precio;
 	private Integer numRef, stock;
 	private String especificaciones;
-	private List<File> imagenes;
+	private List<String> imagenes;
 	
 	// Constructor:
 	public Producto(String nombre, String descripcion, float precio, Integer numRef, String especificaciones, Proveedor prov, int stock) {
@@ -32,12 +32,11 @@ public class Producto {
 		this.imagenes = new ArrayList<>();
 	}
 
-	// Hacer una lista de imágenes en vez de una única
-	public void agregarImagen(File img) {
+	public void agregarImagen(String img) {
 		this.imagenes.add(img);
 	}
 	
-	public List<File> getImagenes() {
+	public List<String> getImagenes() {
 		return this.imagenes;
 	}
 	
@@ -55,10 +54,6 @@ public class Producto {
 	}
 	
 	
-	public void agregarNuevasImagenes(List<File> imagenes) {
-		this.imagenes = null;
-		this.imagenes = imagenes;
-	}
 	
 	public void agregarCategorias(Cat_Producto cat) {
 		categorias.put(cat.getNombre(), cat);

@@ -11,9 +11,12 @@ import java.io.IOException;
 
 import com.model.Cliente;
 import com.model.DTCliente;
+import com.model.DTProveedor;
 import com.model.DtProducto;
 import com.model.Factory;
 import com.model.ISistema;
+import com.model.Proveedor;
+import com.model.Usuario;
 
 /**
  * Servlet implementation class PerfilProducto
@@ -43,47 +46,47 @@ public class PerfilProducto extends HttpServlet {
     }
 
 	
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession();
-		
-		if(session == null) {
-			response.sendRedirect("formlogin");
-		} else {
-			Cliente cliente = (Cliente) session.getAttribute("usuarioLogueado");
-            
-            
-	          
-            DTCliente dtcli = (DTCliente) cliente.crearDt();
-            request.setAttribute("usuario", dtcli);
-		}
-		
-		try {
-		    String parametro = request.getParameter("producto");
-		    if (parametro == null) {
-		        response.sendRedirect("perfilCliente");
-		        return;
-		    }
-		    int paramNumero = Integer.parseInt(parametro);
-		    DtProducto dtprod = sistema.getDtProducto(paramNumero);
-		    
-		    if(dtprod == null) {
-				response.sendRedirect("perfilCliente");
-				
-				return;
-			}
-			
-			
-			request.setAttribute("dtprod", dtprod);
-			request.getRequestDispatcher("/WEB-INF/PerfilProducto.jsp").forward(request, response);
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession(false); // Cambiado a false para no crear una nueva sesión
 
-		} catch (NumberFormatException e) {
-		    response.sendRedirect("perfilCliente");
-		}
+       
+        if (session == null) {
+            response.sendRedirect("formlogin");
+            return;
+        }
 
-		
-		
-		
-	}
+        Object usuarioLogueado = session.getAttribute("usuarioLogueado");
+        
+        if(usuarioLogueado == null) {
+        	response.sendRedirect("formlogin");
+        }
+        Usuario user = (Usuario) usuarioLogueado;
+        request.setAttribute("usuario", user);
+
+        try {
+            String parametro = request.getParameter("producto");
+            if (parametro == null) {
+                response.sendRedirect("perfilCliente");
+                return;
+            }
+            int paramNumero = Integer.parseInt(parametro);
+            DtProducto dtprod = sistema.getDtProducto(paramNumero);
+
+            if (dtprod == null) {
+                response.sendRedirect("perfilCliente");
+                return;
+            }
+
+            request.setAttribute("dtprod", dtprod);
+            request.getRequestDispatcher("/WEB-INF/PerfilProducto.jsp").forward(request, response);
+        } catch (NumberFormatException e) {
+            response.sendRedirect("perfilCliente");
+        } catch (Exception e) {
+            // Manejar otras excepciones si es necesario
+            response.sendRedirect("errorPage"); // O una página de error adecuada
+        }
+    }
+
 
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

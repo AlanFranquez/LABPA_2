@@ -22,10 +22,10 @@ public class DtProducto {
 	private String nickProveedor, nomProveedor;
 	private String categorias;
 	List<Comentario> comentarios;
-	List<File> imagenes;
+	List<String> imagenes;
 	
 	// Constructor:
-	public DtProducto(String nombre, String descripcion, float precio, Integer numRef, String especs, Proveedor prov, String cat, List<File> imagenes, Integer stock, List<Comentario> comentarios) {
+	public DtProducto(String nombre, String descripcion, float precio, Integer numRef, String especs, Proveedor prov, String cat, List<String> imagenes, Integer stock, List<Comentario> comentarios) {
 		this.nombre = nombre;
 		this.descripcion = descripcion;
 		this.precio = precio;
@@ -76,12 +76,19 @@ public class DtProducto {
 		return categorias;
 	}
 	
-	public void agregarImagen(File img) {
+	public void agregarImagen(String img) {
 		this.imagenes.add(img);
 	}
 	
-	public List<File> getImagenes() {
+	public List<String> getImagenes() {
 		return this.imagenes;
+	}
+	
+	public String getPrimeraImagen() {
+	    if (imagenes != null && !imagenes.isEmpty()) {
+	        return imagenes.get(0);
+	    }
+	    return null; 
 	}
 
 }
