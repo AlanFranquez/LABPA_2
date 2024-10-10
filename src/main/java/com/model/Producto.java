@@ -53,6 +53,17 @@ public class Producto {
 		return this.comentarios;
 	}
 	
+	public Comentario getComentario(int num) {
+		List<Comentario> coms = this.comentarios;
+		
+		for(Comentario c: coms) {
+			if(c.getNumero() == num) {
+				return c;
+			}
+		}
+		
+		return null;
+	}
 	
 	
 	public void agregarCategorias(Cat_Producto cat) {
