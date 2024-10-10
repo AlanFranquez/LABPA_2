@@ -66,6 +66,6 @@ public class Proveedor extends Usuario {
     	    prod.agregarCategorias((Cat_Producto) categoria);
     	}
     	
-    	
+    	this.agregarProd(prod);
     }
 }
