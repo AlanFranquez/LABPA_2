@@ -177,3 +177,6 @@ public class ProductoServlet extends HttpServlet {
         response.sendRedirect("home");
     }
 }
+
+
+//prueba commit
