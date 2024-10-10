@@ -60,7 +60,7 @@
             <a href="#">¿Olvidó su contraseña?</a>
         </form>
         <section class="container-sm row g-3" id="registrarSection">
-            <a href="RegistrarUsuario1.html" class="btn"> 
+            <a href="registrarusuario1" class="btn"> 
               <button type="button" class="btn btn-outline-secondary w-100">Registrarse</button>
             </a>
         </section>
