@@ -40,21 +40,31 @@ public class RegistrarUsuarios1 extends HttpServlet {
         String correo = request.getParameter("correo");
         HttpSession objSession = request.getSession();
 
-        // Validar los datos de entrada
+        // Validar los datos
         if (nick == null || nick.isEmpty() || correo == null || correo.isEmpty()) {
-            objSession.setAttribute("errorMsg", "Nickname o correo no pueden estar vacíos");
-            response.sendRedirect("Error.jsp");  // Redirige a una página de error
+            objSession.setAttribute("errorMsg", "El nickname o correo no pueden estar vacíos");
+            response.sendRedirect("/WEB-INF/Error.jsp");
             return;
         }
 
         try {
             // Verificar si el usuario ya existe
-            Usuario prueba = sist.getUsuario(nick);
-            Usuario prueba2 = sist.getUserByEmail(correo);
+            Usuario prueba = null;
+            Usuario prueba2 = null;
+
+            prueba = sist.getUsuario(nick);
+
+            try {
+                prueba2 = sist.getUserByEmail(correo);
+            } catch (UsuarioException e) {
+                // El usuario por correo no fue encontrado, pero eso no es un error grave
+                System.out.println("Usuario con correo no encontrado");
+            }
 
             if (prueba != null || prueba2 != null) {
                 objSession.setAttribute("errorMsg", "El nickname o correo ya están registrados");
-                request.getRequestDispatcher("/WEB-INF/RegistrarUsuario1.jsp").forward(request, response);  // Redirige al formulario original
+                System.out.println("Redirigiendo a RegistrarUsuario1.jsp");
+                request.getRequestDispatcher("/WEB-INF/Error.jsp").forward(request, response);
             } else {
                 // Si los datos son válidos, guarda el usuario en sesión y redirige a la segunda página
                 objSession.setAttribute("nickname", nick);
@@ -63,11 +73,13 @@ public class RegistrarUsuarios1 extends HttpServlet {
                 request.getRequestDispatcher("/WEB-INF/RegistrarUsuario2.jsp").forward(request, response);
             }
 
-        } catch (UsuarioException e) {
-            // Manejo de excepción si no se puede obtener el usuario por email
+        } catch (Exception e) {
+            // Manejo de excepción genérica si ocurre algún otro problema
             e.printStackTrace();
             objSession.setAttribute("errorMsg", "Error al verificar los datos del usuario");
-            response.sendRedirect("Error.jsp");
+            System.out.println("Error general");
+            response.sendRedirect("/WEB-INF/Error.jsp");
         }
     }
+
 }

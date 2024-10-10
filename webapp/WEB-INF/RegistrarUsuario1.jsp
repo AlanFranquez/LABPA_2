@@ -26,7 +26,7 @@
                     <div class="icon-container mb-3">
                         <img alt="Icono de la web" src="media/images/icono.svg" style="width: 80px; height: 80px;">
                     </div>
-                    <form id="myform" action="registrarusuario2" method="post" class="d-flex align-items-center flex-column">
+                    <form id="myform" action="registrarusuario1" method="post" class="d-flex align-items-center flex-column">
                         <div class="form-group">
                             <label for="nick">Nick</label>
                             <input type="text" placeholder="Alan123" id="nick" name="nick" class="form-control" required>
@@ -51,6 +51,6 @@
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-
+    <script src="RegistrarUsuario1.js"></script>
 </body>
 </html>

@@ -18,7 +18,7 @@
         <% } %>
     </p>
     <div class="button-group">
-        <button onclick="window.location.href='lab2-home';">Ir a la Página de Inicio</button>
+        <button onclick="window.location.href='home';">Ir a la Página de Inicio</button>
         <button onclick="window.history.back();">Volver a la Página Anterior</button>
     </div>
 </body>
