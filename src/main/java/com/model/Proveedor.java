@@ -1,4 +1,5 @@
 package com.model;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,10 +55,17 @@ public class Proveedor extends Usuario {
     	
     }
     
-  
-    
     public DTProveedor crearDt() {
         return new DTProveedor(this.getNombre(), getNick(), getApellido(), getCorreo(), getNacimiento(), getImagen(), getCompania(), getLink(), this.getProductos());
     }
 
+    public void registrarProducto(String nombre, String descripcion, float precio, Integer numRef, String especificaciones, Proveedor prov, int stock, Categoria[] cats, File[] archivosImagenes) {
+    	Producto prod = new Producto(nombre, descripcion, precio, numRef, especificaciones, prov, stock);
+    	
+    	for (Categoria categoria : cats) {
+    	    prod.agregarCategorias((Cat_Producto) categoria);
+    	}
+    	
+    	this.agregarProd(prod);
+    }
 }

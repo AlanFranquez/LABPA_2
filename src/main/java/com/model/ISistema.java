@@ -40,6 +40,10 @@ public interface ISistema {
     
     public abstract List<DTOrdenDeCompra> listarOrdenes();
     
+    public Categoria getCat(String nombre);
+    
+    public Categoria[] getCategorias();
+    
     public abstract boolean existenOrdenesParaListar();
 
 	public abstract DefaultMutableTreeNode arbolCategorias();
@@ -104,5 +108,7 @@ public interface ISistema {
 	 public void agregarImagenesDesdeProveedor(String proveedor, int numRef, String imagen);
 	 
 	 public Producto getProdByCateogria(String cat, int numRef) throws ProductoException;
+	 
+	   public Producto getProducto(int numRef);
 
 }

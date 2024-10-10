@@ -64,7 +64,7 @@ public class Carrito {
         }
     }
 
-    public void generarOrdenDeCompra(int numeroOrden) {
+    public void generarOrdenDeCompra(int numeroOrden, int numero) {
         if (productos.isEmpty()) {
             System.out.println("El carrito está vacío. No se puede generar la orden de compra.");
             return;

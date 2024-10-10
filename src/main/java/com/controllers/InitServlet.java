@@ -15,6 +15,7 @@ import javax.swing.ImageIcon;
 import com.exceptions.CategoriaException;
 import com.exceptions.UsuarioRepetidoException;
 import com.model.Cliente;
+import com.model.Comentario;
 import com.model.DTFecha;
 import com.model.DTProveedor;
 import com.model.DtProducto;
@@ -85,13 +86,22 @@ public class InitServlet extends HttpServlet {
              
              List<String> lista = s.getProdByCateogria("Tecno", 2).crearDT().getImagenes();
              
-             System.out.print(lista.getFirst());
+             for(String dt : lista) {
+            	 System.out.print(dt);
+             }
              
-             
-             
+             if(p1.getComentarios() == null || p1.getComentarios().isEmpty()){
+            	 System.out.print("no Hya comentarios");
+             } else {
+            	 List<Comentario> listacc = p1.getComentarios();
+            	 for(Comentario c : listacc) {
+            		 System.out.print(c.getTexto());
+            	 }
+             }
+             //
              OrdenDeCompra o1 = new OrdenDeCompra(1);
              o1.addItem(p1, 3);
-             
+             //
              
              s.addOrdenes(o1, "Juan123");
 
