@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
  <%@page import="com.model.DtProducto" %>
  <%@page import="com.model.Usuario" %>
+ <%@page import="com.model.Comentario" %>
  <%@page import="java.util.Collections" %>
  <%@page import="java.util.List" %>
  <%@page import="com.model.DTCliente" %>
@@ -13,6 +14,7 @@
     DtProducto prod = (DtProducto) request.getAttribute("dtprod");
 	Usuario usr = (Usuario) request.getAttribute("usuario");
 	 List<String> imagenes = prod.getImagenes();
+	 int id = prod.getNumRef();
 %>
 
 <meta charset="UTF-8">
@@ -143,23 +145,54 @@
 <div class="container mt-5">
     <h2>Comentarios</h2>
     <div id="commentSection">
-        <!-- Aquí se cargarán los comentarios -->
+        <% List<Comentario> comentarios = prod.getComentarios(); %>
+        
+        <% if (comentarios == null || comentarios.isEmpty()) { %>
+            <div class="alert alert-info" role="alert">
+                Todavía no hay comentarios.
+            </div>
+        <% } else { %>
+            <div class="column">
+                <% for (Comentario c : comentarios) { %>
+                    <div class="col-md-6 mb-4">
+                        <div class="card shadow-sm" style="border: none;">
+                            <div class="card-body">
+                                <div class="d-flex align-items-start">
+                                    <img src="media/<%= c.getAutor().crearDt().getImagenes() %>" alt="Autor" class="mr-3" style="width: 80px; height: 80px; object-fit: cover; border-radius: 50%;">
+                                    <div class="ml-3" style="margin-left: 15px;"> <!-- Aumentar separación -->
+                                        <h5 class="mt-0" style="font-size: 1.25em;"><%= c.getAutor().crearDt().getNombre() %></h5>
+                                        <div class="d-flex align-items-center">
+                                            <!-- Estrellas de calificación (5 estrellas) -->
+                                            <div class="text-warning">
+                                                <% for (int i = 0; i < 5; i++) { %>
+                                                    <span class="bi-star-fill"></span>
+                                                <% } %>
+                                            </div>
+                                        </div>
+                                        <p style="font-size: 1em;"><%= c.getTexto() %></p>
+                                        <small class="text-muted"><%= c.getFecha().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) %></small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+        <% } %>
     </div>
 
     <% if (usr != null && usr.getTipo().equals("cliente")) { %>
         <div class="mt-4">
             <h3>Deja un comentario</h3>
-            
-            <form id="formulario" action="" >
-            	<textarea id="commentText" class="form-control" rows="3" placeholder="Escribe tu comentario..."></textarea>
-            <button class="btn btn-primary mt-3" type="submit">Enviar Comentario</button>
-            	
+            <form id="formulario" action="enviarComentario" method="post">
+                <textarea id="comentario" name="comentario" class="form-control" rows="3" placeholder="Escribe tu comentario..." required></textarea>
+                <input type="hidden" name="dtprod" value="<%= id %>">
+                <button class="btn btn-primary mt-3" type="submit">Enviar Comentario</button>
             </form>
-            
-            
         </div>
     <% } %>
 </div>
+
 
 
 
@@ -178,10 +211,27 @@
 
 <script type="text/javascript">
 document.getElementById("formulario").addEventListener("submit", function(event) {
+    event.preventDefault(); 
 
-    event.preventDefault();
+    const comentario = document.getElementById("comentario").value;
+    const formData = new FormData();
+    formData.append("comentario", comentario);
 
-    console.log("click")
+    fetch("enviarComentario", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => response.text())
+    .then(data => {
+        const commentSection = document.getElementById("commentSection");
+        const newComment = document.createElement("div");
+        newComment.innerHTML = `<p>${comentario}</p>`;
+        commentSection.appendChild(newComment);
+
+        document.getElementById("comentario").value = '';
+    })
+    .catch(error => console.error('Error:', error));
+});
 });
 
 </script>

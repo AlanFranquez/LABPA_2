@@ -56,6 +56,7 @@ public class DtProducto {
 		return this.nickProveedor;
 	}
 	
+	
 	public String getDescripcion() {
 		return descripcion;
 	}
