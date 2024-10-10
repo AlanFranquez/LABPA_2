@@ -39,7 +39,7 @@
                 <input type="number" id="reference-number" placeholder="20" required>
     
 <label for="categories">Categorías</label>
-<select id="categories" name="categoria" required>
+<select id="categories" name="categoria" required multiple>
     <option value="" disabled selected>Seleccionar Categoría</option>
     <% 
         // Obtener el array desde el request
@@ -62,9 +62,10 @@
 
 
 
+
     
                 <label for="image-upload">Elegir imagen</label>
-                <input type="file" id="image-upload" name="imagen" required>
+                <input type="file" id="image-upload" name="imagen" required multiple>
     
                 <div class="button-group">
     				<button type="button" class="btn-cancel" onclick="window.location.href='perfilProveedor?nickname=' + encodeURIComponent('<%= ((Proveedor) session.getAttribute("usuarioLogueado")).getNickname() %>');">Cancelar</button>
