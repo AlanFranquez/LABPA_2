@@ -85,7 +85,9 @@ public class InitServlet extends HttpServlet {
              
              List<String> lista = s.getProdByCateogria("Tecno", 2).crearDT().getImagenes();
              
-             System.out.print(lista.getFirst());
+             for(String dt : lista) {
+            	 System.out.print(dt);
+             }
              
              
              

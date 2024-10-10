@@ -3,6 +3,7 @@ package com.model;
 import java.awt.Image;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -162,6 +163,14 @@ public class Sistema implements ISistema {
         return new ImageIcon(resizedImage);
     }
     
+    public Categoria getCat(String nombre) {
+    	return this.categorias.get(nombre);
+    }
+    
+    public Categoria[] getCategorias() {
+        Collection<Categoria> collection = this.categorias.values(); // Obtiene todas las categorías
+        return collection.toArray(new Categoria[collection.size()]); // Convierte a un arreglo
+    }
     
     
     // CASO DE USO 3: ALTA DE CATEGORIA
@@ -460,6 +469,18 @@ public class Sistema implements ISistema {
     	return null;
     }
     
+    public Producto getProducto(int numRef) {
+    	for (Usuario user : usuarios.values()) {
+    		if (user instanceof Proveedor) {
+    			Proveedor p = (Proveedor) user;
+    			Producto prod = p.obtenerProd(numRef);
+    			if(prod != null) {
+    				return prod;
+    			}
+    		}
+    	}
+    	return null;
+    }
     
     
     // CASO DE USO 10: VER INFORMACION DE ORDEN DE COMPRA
@@ -564,9 +585,3 @@ public class Sistema implements ISistema {
 	    	this.getProdByCateogria(cat, num).getImagenes().add(imagen);
 	   }
 }
-
-
-
-
-
-

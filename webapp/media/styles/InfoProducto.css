@@ -7,6 +7,11 @@
     font-family: 'Poppins', sans-serif;
 }
 
+main {
+    height: 80vh;
+    margin: auto;
+}
+
 .botonRegistro {
 	padding: 10px 30px;
 	border: none;
@@ -29,7 +34,7 @@ a {
 .part-final {
 	background-color: #2C2C2C;
 	width: 100%;
-	height: 200px; 
+	height: 300px; 
 	margin: 50px 0px 0px 0px;
 	
 }
@@ -37,3 +42,5 @@ a {
 .part-final p {
 	color: white;
 }
+
+
