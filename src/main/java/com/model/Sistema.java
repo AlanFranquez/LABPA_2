@@ -584,4 +584,8 @@ public class Sistema implements ISistema {
 	 public void agregarImagenesProducto(String cat, int num, String imagen) throws ProductoException {
 	    	this.getProdByCateogria(cat, num).getImagenes().add(imagen);
 	   }
+	 
+	 public Map<String, Categoria> getCategoriasLista() {
+		 return this.categorias;
+	 }
 }

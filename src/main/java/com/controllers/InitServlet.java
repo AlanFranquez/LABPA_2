@@ -7,6 +7,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +15,8 @@ import javax.swing.ImageIcon;
 
 import com.exceptions.CategoriaException;
 import com.exceptions.UsuarioRepetidoException;
+import com.model.Cat_Padre;
+import com.model.Categoria;
 import com.model.Cliente;
 import com.model.Comentario;
 import com.model.DTFecha;
@@ -109,6 +112,23 @@ public class InitServlet extends HttpServlet {
              s.agregarImagenUsuario("albert1341", "/images/p2.jpg");
              s.agregarImagenUsuario("agusmari", "/images/p3.jpg");
              
+             
+             
+             Map<String, Categoria> listacats = s.getCategoriasLista();
+             
+             List<String> lc = new ArrayList<String>();
+             
+             
+             for(Map.Entry<String, Categoria> entry : listacats.entrySet()) {
+         		String lsc = (String) entry.getValue().getNombre();
+         		
+         		lc.add(lsc);
+         	}
+             
+             
+             for(String ss : lc) {
+            	 System.out.print(ss);
+             }
              //System.out.print(s.getUsuario("Juan123").getImagen());
 
 

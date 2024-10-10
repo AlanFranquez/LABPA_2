@@ -141,9 +141,13 @@
 
 <div class="text-center">
 
+
+	<a href="registrarproducto" style="text-decoration: none; color: white;">
 <button class="btn btn-primary bg-black" style="border:none; color: white;">
-	<a href="registrarproductos" style="text-decoration: none; color: white;">Agregar Productos</a>
+	AGREGAR PRODUCTO	
 </button>
+	</a>
+</a>
 </div>
 
 

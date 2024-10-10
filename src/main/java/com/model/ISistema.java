@@ -2,6 +2,7 @@ package com.model;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -43,6 +44,8 @@ public interface ISistema {
     public Categoria getCat(String nombre);
     
     public Categoria[] getCategorias();
+    
+    public Map<String, Categoria> getCategoriasLista();
     
     public abstract boolean existenOrdenesParaListar();
 

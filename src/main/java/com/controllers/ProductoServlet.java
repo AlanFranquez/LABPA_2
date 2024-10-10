@@ -52,7 +52,7 @@ public class ProductoServlet extends HttpServlet {
         Proveedor prov = (Proveedor) objSession.getAttribute("usuarioLogueado");
         
         
-        request.getRequestDispatcher("/WEB-INF/RegistrarProducto.html").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/RegistrarProducto.jsp").forward(request, response);
 
         Categoria[] categorias = sist.getCategorias();
 
