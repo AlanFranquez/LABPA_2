@@ -1,3 +1,6 @@
+<%@ page import="java.util.List" %>
+<%@ page import="com.model.Proveedor" %>
+
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="es">
@@ -35,27 +38,41 @@
                 <label for="stock">Stock</label>
                 <input type="number" id="reference-number" placeholder="20" required>
     
-                <label for="categories">Categorías</label>
-                <select id="categories" name="categoria" required>
-    				<option value="" disabled selected>Seleccionar Categoría</option>
-    					<% 
-        					String[] categorias = (String[]) request.getAttribute("categorias");
-        					if (categorias != null) {
-            					for (String categoria : categorias) {
-    					%>
-                					<option value="<%= categoria %>"><%= categoria %></option>
-    					<%
-            					}
-        					}
-    					%>
-				</select>
+<label for="categories">Categorías</label>
+<select id="categories" name="categoria" required>
+    <option value="" disabled selected>Seleccionar Categoría</option>
+    <% 
+        // Obtener el array desde el request
+        List<String> categorias = (List<String>) request.getAttribute("categories");
+        
+        // Verificamos si la lista no es nula ni vacía
+        if (categorias != null && !categorias.isEmpty()) {
+            for (String categoria : categorias) {
+    %>
+                <option value="<%= categoria %>"><%= categoria %></option>
+    <%
+            }
+        } else {
+    %>
+            <option value="" disabled>No hay categorías disponibles</option>
+    <%
+        }
+    %>
+</select>
+
+
+
     
                 <label for="image-upload">Elegir imagen</label>
                 <input type="file" id="image-upload" name="imagen" required>
     
                 <div class="button-group">
-    				<button type="button" class="btn-cancel">Cancelar</button>
+    				<button type="button" class="btn-cancel" onclick="window.location.href='perfilProveedor?nickname=' + encodeURIComponent('<%= ((Proveedor) session.getAttribute("usuarioLogueado")).getNickname() %>');">Cancelar</button>
+
+
+
     				<button type="submit" class="btn-submit">Registrar</button>
+
 				</div>
             </form>
         </div>

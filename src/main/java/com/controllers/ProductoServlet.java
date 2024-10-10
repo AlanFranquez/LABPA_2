@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -15,6 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 
+import com.model.Cat_Producto;
 import com.model.Categoria;
 import com.model.Factory;
 import com.model.ISistema;
@@ -47,34 +49,47 @@ public class ProductoServlet extends HttpServlet {
    
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	 
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {     
         HttpSession objSession = request.getSession();
         Proveedor prov = (Proveedor) objSession.getAttribute("usuarioLogueado");
         
-        
-        request.getRequestDispatcher("/WEB-INF/RegistrarProducto.jsp").forward(request, response);
+        // Obtener la lista de categorías
+        Map<String, Categoria> listacats = sist.getCategoriasLista();
+        List<String> listaString = new ArrayList<>();
 
-        Categoria[] categorias = sist.getCategorias();
+        for (Map.Entry<String, Categoria> entry : listacats.entrySet()) {
+        	if(entry.getValue() instanceof Cat_Producto) {
+        		String stringUnico = entry.getValue().getNombre();
+                listaString.add(stringUnico);
+        	}
+        }
 
-        if (categorias != null) {
-            String[] nombres = new String[categorias.length];
-            for (int i = 0; i < categorias.length; i++) {
-                if (categorias[i] != null) {
-                    nombres[i] = categorias[i].getNombre();
-                }
-            }
-            request.setAttribute("categorias", nombres);
+        // Establecer el atributo de categorías antes de redirigir al JSP
+        if (!listaString.isEmpty()) {
+            request.setAttribute("categories", listaString); 
         } else {
             request.setAttribute("error", "No hay categorías disponibles.");
             RequestDispatcher dispatcher = request.getRequestDispatcher("inicio.jsp");
             dispatcher.forward(request, response);
+            return; // Asegúrate de salir después de redirigir
         }
+
+        // Ahora que el atributo está configurado, redirige al JSP
+        request.getRequestDispatcher("/WEB-INF/RegistrarProducto.jsp").forward(request, response);
     }
 
+
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {     
         // Obtener el nombre del proveedor (usuario logueado) del atributo de la sesión
         String proveedor = (String) request.getAttribute("nickname");
+
+        // Validar que el proveedor no sea nulo
+        /*if (proveedor == null) {
+            request.setAttribute("error", "No se ha podido determinar el proveedor.");
+            request.getRequestDispatcher("/WEB-INF/RegistrarProducto.jsp").forward(request, response);
+            return;
+        }*/
 
         // Recibiendo los datos del formulario
         String titulo = request.getParameter("titulo");
@@ -151,7 +166,6 @@ public class ProductoServlet extends HttpServlet {
         // Convertir la lista a un arreglo
         File[] archivosArray = archivosImagenes.toArray(new File[0]);
 
-
         // Obtener categorías seleccionadas
         String[] categoriasSeleccionadas = request.getParameterValues("categoria");
         Categoria[] cats = null;
@@ -164,17 +178,19 @@ public class ProductoServlet extends HttpServlet {
 
         // Obtener el proveedor
         Proveedor prov = (Proveedor) sist.getUsuario(proveedor);
-        Proveedor provcopia = (Proveedor) sist.getUsuario(proveedor);
-        
-        // Registrar producto
-        if (precio != 0) {
-            prov.registrarProducto(titulo, descripcion, precio, referencia, especificaciones, provcopia, stock, cats, archivosArray);
+     // Registrar producto
+        if (precio > 0) { // Solo registrar si el precio es mayor a cero
+            prov.registrarProducto(titulo, descripcion, precio, referencia, especificaciones, prov, stock, cats, archivosArray);
+            
+            // Redirigir a la página de "Producto Agregado" después del registro exitoso
+            response.sendRedirect("ProductoAgregado.jsp");
         } else {
-            throw new IllegalArgumentException("El precio debe ser mayor a cero.");
+            // Manejo del error si el precio es menor o igual a cero
+            request.setAttribute("error", "El precio debe ser mayor a cero.");
+            request.getRequestDispatcher("/WEB-INF/RegistrarProducto.jsp").forward(request, response);
+            return;
         }
 
-        // Redirigir a la página de inicio
-        response.sendRedirect("home");
     }
 }
 

@@ -114,21 +114,6 @@ public class InitServlet extends HttpServlet {
              
              
              
-             Map<String, Categoria> listacats = s.getCategoriasLista();
-             
-             List<String> lc = new ArrayList<String>();
-             
-             
-             for(Map.Entry<String, Categoria> entry : listacats.entrySet()) {
-         		String lsc = (String) entry.getValue().getNombre();
-         		
-         		lc.add(lsc);
-         	}
-             
-             
-             for(String ss : lc) {
-            	 System.out.print(ss);
-             }
              //System.out.print(s.getUsuario("Juan123").getImagen());
 
 
