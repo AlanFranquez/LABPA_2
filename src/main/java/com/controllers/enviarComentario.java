@@ -21,6 +21,8 @@ public class enviarComentario extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     private ISistema sist;
+ // Contador de comentarios
+    private static int contadorComentarios = 0;
 
     @Override
     public void init() throws ServletException {
@@ -33,7 +35,8 @@ public class enviarComentario extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
-		
+		contadorComentarios++;
+        int comentarioId = contadorComentarios;
 		String mensaje = request.getParameter("comentario");
 		String parametro = request.getParameter("dtprod");
 
@@ -53,7 +56,8 @@ public class enviarComentario extends HttpServlet {
 		Producto p1 = sist.getProducto(paramNum);
 
 		// Crear el comentario
-		Comentario c = new Comentario(paramNum, mensaje, cli, LocalDateTime.now());
+		Comentario c = new Comentario(comentarioId, mensaje, cli, LocalDateTime.now());
+	
 		p1.agregarComentario(c);
 
 		// Redirigir a la página del producto
