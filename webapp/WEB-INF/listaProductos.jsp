@@ -1,16 +1,26 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+    <%@page import="com.model.DtProducto" %>
+    <%@page import="com.model.Producto" %>
+    <%@page import="java.util.Collections" %>
+ <%@page import="java.util.List" %>
+ <%@page import="com.model.Usuario" %>
+    
 <!DOCTYPE html>
 <html>
 <head>
+
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-<link href="./listarProducto.css" rel="stylesheet" />
+<link href="media/styles/listarProducto.css" rel="stylesheet">
+
 <title>Lista de Productos</title>
+
 </head>
 
-
-<nav id="barra-nav"></nav>
-
+<div id="barra-nav"></div>
 
 <div class="container">
 <div class="row">
@@ -230,11 +240,11 @@
 
   <script>
     // Cargar el contenido de BarraNav.html usando fetch
-    fetch('BarraNav.html')
+    fetch('/WEB-INF/template/BarraNavSinReg.html')
         .then(response => response.text())  // Convertir la respuesta a texto
         .then(data => {
             // Insertar el contenido en el div con el id 'barra-nav'
-            document.getElementById('barra-nav').innerHTML = data;
+            document.getElementById('/WEB-INF/template/barra-nav').innerHTML = data;
         })
         .catch(error => console.error('Error al cargar BarraNav:', error));
 </script>
