@@ -1,6 +1,5 @@
 package com.controllers;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,54 +13,43 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import jakarta.servlet.http.Part;
 
 import com.model.Cat_Producto;
 import com.model.Categoria;
 import com.model.Factory;
 import com.model.ISistema;
+import com.model.Producto;
 import com.model.Proveedor;
-import com.model.Sistema;
 
 @WebServlet("/registrarproducto")
 public class ProductoServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-    
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public ProductoServlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
-
+    private static final long serialVersionUID = 1L;
 
     private ISistema sist;
 
     @Override
     public void init() throws ServletException {
         try {
-            sist = Factory.getSistema();  // Aquí puede estar fallando
+            sist = Factory.getSistema();  // Inicializa el sistema usando Factory
         } catch (Exception e) {
-            throw new ServletException("No se pudo inicializar ISistema", e);  // Manejar la excepción
+            throw new ServletException("No se pudo inicializar ISistema", e);
         }
     }
-   
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {     
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession objSession = request.getSession();
         Proveedor prov = (Proveedor) objSession.getAttribute("usuarioLogueado");
-        
+
         // Obtener la lista de categorías
         Map<String, Categoria> listacats = sist.getCategoriasLista();
         List<String> listaString = new ArrayList<>();
 
         for (Map.Entry<String, Categoria> entry : listacats.entrySet()) {
-        	if(entry.getValue() instanceof Cat_Producto) {
-        		String stringUnico = entry.getValue().getNombre();
+            if (entry.getValue() instanceof Cat_Producto) {
+                String stringUnico = entry.getValue().getNombre();
                 listaString.add(stringUnico);
-        	}
+            }
         }
 
         // Establecer el atributo de categorías antes de redirigir al JSP
@@ -74,22 +62,25 @@ public class ProductoServlet extends HttpServlet {
             return; // Asegúrate de salir después de redirigir
         }
 
-        // Ahora que el atributo está configurado, redirige al JSP
+        // Redirige al JSP de registro de productos
         request.getRequestDispatcher("/WEB-INF/RegistrarProducto.jsp").forward(request, response);
     }
 
-
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {     
-        // Obtener el nombre del proveedor (usuario logueado) del atributo de la sesión
-        String proveedor = (String) request.getAttribute("nickname");
-
-        // Validar que el proveedor no sea nulo
-        /*if (proveedor == null) {
-            request.setAttribute("error", "No se ha podido determinar el proveedor.");
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Obtener el proveedor (usuario logueado) de la sesión
+        HttpSession objSession = request.getSession();
+        Proveedor prov = (Proveedor) objSession.getAttribute("usuarioLogueado");
+        
+        // Verificar si el proveedor es nulo
+        if (prov == null) {
+            System.out.println("Error: No se encontró el proveedor en la sesión.");
+            request.setAttribute("error", "No se encontró el proveedor logueado.");
             request.getRequestDispatcher("/WEB-INF/RegistrarProducto.jsp").forward(request, response);
             return;
-        }*/
+        }
+        
+        System.out.println("Proveedor logueado: " + prov.getNickname());
 
         // Recibiendo los datos del formulario
         String titulo = request.getParameter("titulo");
@@ -98,101 +89,80 @@ public class ProductoServlet extends HttpServlet {
         String especificaciones = request.getParameter("especificaciones");
         String precioStr = request.getParameter("precio");
         String stockStr = request.getParameter("stock");
+        String imagenUrl = request.getParameter("imagen");
+        
+        System.out.println("Título del producto: " + titulo);
+        System.out.println("Referencia: " + referenciaStr);
+
+        
 
         // Manejo de referencia
         int referencia = 0;
-        if (referenciaStr != null && !referenciaStr.trim().isEmpty()) {
-            try {
-                referencia = Integer.parseInt(referenciaStr);
-            } catch (NumberFormatException e) {
-                request.setAttribute("error", "El número de referencia debe ser un número válido.");
-                request.getRequestDispatcher("/WEB-INF/RegistrarProducto.jsp").forward(request, response);
-                return;
-            }
+        try {
+            referencia = Integer.parseInt(referenciaStr);
+            System.out.println("Número de referencia: " + referencia);
+        } catch (NumberFormatException e) {
+            System.out.println("Error: Referencia inválida");
+            request.setAttribute("error", "El número de referencia debe ser un número válido.");
+            request.getRequestDispatcher("/WEB-INF/RegistrarProducto.jsp").forward(request, response);
+            return;
         }
 
         // Manejo del precio
         float precio = 0;
-        if (precioStr != null && !precioStr.trim().isEmpty()) {
-            try {
-                precio = Float.parseFloat(precioStr);
-            } catch (NumberFormatException e) {
-                request.setAttribute("error", "El precio debe ser un número válido.");
-                request.getRequestDispatcher("/WEB-INF/RegistrarProducto.jsp").forward(request, response);
-                return;
-            }
-        } else {
-            request.setAttribute("error", "El campo de precio no puede estar vacío.");
+        try {
+            precio = Float.parseFloat(precioStr);
+            System.out.println("Precio del producto: " + precio);
+        } catch (NumberFormatException e) {
+            System.out.println("Error: Precio inválido");
+            request.setAttribute("error", "El precio debe ser un número válido.");
             request.getRequestDispatcher("/WEB-INF/RegistrarProducto.jsp").forward(request, response);
             return;
         }
 
         // Manejo del stock
         int stock = 0;
-        if (stockStr != null && !stockStr.trim().isEmpty()) {
-            try {
-                stock = Integer.parseInt(stockStr);
-            } catch (NumberFormatException e) {
-                request.setAttribute("error", "El stock debe ser un número válido.");
-                request.getRequestDispatcher("/WEB-INF/RegistrarProducto.jsp").forward(request, response);
-                return;
-            }
-        }
-
-        // Manejo de las imágenes (limitado a 3)
-        Collection<Part> imagenes = request.getParts();
-        int cantidadImagenes = 0;
-        List<File> archivosImagenes = new ArrayList<>();
-
-        for (Part part : imagenes) {
-            if (part.getSubmittedFileName() != null && !part.getSubmittedFileName().isEmpty()) {
-                if (cantidadImagenes >= 3) {
-                    request.setAttribute("error", "Puedes cargar un máximo de 3 imágenes.");
-                    request.getRequestDispatcher("/WEB-INF/RegistrarProducto.jsp").forward(request, response);
-                    return;
-                }
-
-                File uploads = new File("/media/images");
-                if (!uploads.exists()) {
-                    uploads.mkdirs();
-                }
-                File archivo = new File(uploads, part.getSubmittedFileName());
-                part.write(archivo.getAbsolutePath());
-                archivosImagenes.add(archivo);
-                cantidadImagenes++;
-            }
-        }
-
-        // Convertir la lista a un arreglo
-        File[] archivosArray = archivosImagenes.toArray(new File[0]);
-
-        // Obtener categorías seleccionadas
-        String[] categoriasSeleccionadas = request.getParameterValues("categoria");
-        Categoria[] cats = null;
-        if (categoriasSeleccionadas != null) {
-            cats = new Categoria[categoriasSeleccionadas.length];
-            for (int i = 0; i < categoriasSeleccionadas.length; i++) {
-                cats[i] = sist.getCat(categoriasSeleccionadas[i]);
-            }
-        }
-
-        // Obtener el proveedor
-        Proveedor prov = (Proveedor) sist.getUsuario(proveedor);
-     // Registrar producto
-        if (precio > 0) { // Solo registrar si el precio es mayor a cero
-            prov.registrarProducto(titulo, descripcion, precio, referencia, especificaciones, prov, stock, cats, archivosArray);
-            
-            // Redirigir a la página de "Producto Agregado" después del registro exitoso
-            response.sendRedirect("ProductoAgregado.jsp");
-        } else {
-            // Manejo del error si el precio es menor o igual a cero
-            request.setAttribute("error", "El precio debe ser mayor a cero.");
+        try {
+            stock = Integer.parseInt(stockStr);
+            System.out.println("Stock del producto: " + stock);
+        } catch (NumberFormatException e) {
+            System.out.println("Error: Stock inválido");
+            request.setAttribute("error", "El stock debe ser un número válido.");
             request.getRequestDispatcher("/WEB-INF/RegistrarProducto.jsp").forward(request, response);
             return;
         }
 
+        // Obtener la categoría seleccionada
+        String categoriaSeleccionada = request.getParameter("categoria");
+        Categoria cat = null;
+        if (categoriaSeleccionada != null) {
+            cat = sist.getCat(categoriaSeleccionada);
+            System.out.println("Categoría seleccionada: " + categoriaSeleccionada);
+        } else {
+            System.out.println("Error: No se seleccionó una categoría");
+            request.setAttribute("error", "Debe seleccionar una categoría.");
+            request.getRequestDispatcher("/WEB-INF/RegistrarProducto.jsp").forward(request, response);
+            return;
+        }
+
+        // Registrar producto si el precio es mayor a cero
+        if (precio > 0) { 
+            Producto p1 = new Producto(titulo, descripcion, precio, referencia, especificaciones, prov, stock);
+            Cat_Producto catp1 = new Cat_Producto(categoriaSeleccionada);
+            catp1.agregarProducto(p1);
+            prov.agregarProd(p1);
+            System.out.println("Producto registrado correctamente.");
+
+            // Redirigir a la página de "Producto Agregado" después del registro exitoso
+            response.sendRedirect("perfilProveedor?nickname=" + prov.getNickname());
+        } else {
+            // Manejo del error si el precio es menor o igual a cero
+            System.out.println("Error: El precio debe ser mayor a cero.");
+            request.setAttribute("error", "El precio debe ser mayor a cero.");
+            request.getRequestDispatcher("/WEB-INF/RegistrarProducto.jsp").forward(request, response);
+        }
     }
+
+
+
 }
-
-
-//prueba committt

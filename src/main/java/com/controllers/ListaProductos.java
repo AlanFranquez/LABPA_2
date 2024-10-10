@@ -38,6 +38,17 @@ public class ListaProductos extends HttpServlet {
         super();
         // TODO Auto-generated constructor stub
     }
+    
+    private ISistema sist;
+
+    @Override
+    public void init() throws ServletException {
+        try {
+            sist = Factory.getSistema();  // Aquí puede estar fallando
+        } catch (Exception e) {
+            throw new ServletException("No se pudo inicializar ISistema", e);  // Manejar la excepción
+        }
+    }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -99,6 +110,9 @@ public class ListaProductos extends HttpServlet {
     private Producto obtenerProductoPorNumRef(int IntnumRef) {
     	
     	Iterator<Map.Entry<String, Categoria>> iterator;
+    	
+    
+    	
 
     	while (iterator.hasNext()) {
     	    Map.Entry<String, Categoria> entry = iterator.next();
@@ -107,7 +121,6 @@ public class ListaProductos extends HttpServlet {
     	    // Verificar si la categoría es una instancia de Cat_Producto
     	    if (categoria instanceof Cat_Producto) {
     	        Cat_Producto prodC = (Cat_Producto) categoria;
-
     	        Iterator<Map.Entry<Integer, Producto>> prodIterator = prodC.getProductos().entrySet().iterator();
 
     	        while (prodIterator.hasNext()) {

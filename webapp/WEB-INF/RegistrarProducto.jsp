@@ -14,10 +14,9 @@
 </head>
 <body>
 
-
     <div class="body">
         <div class="containerForm">
-            <form class="product-form" action="registrarproducto" method="POST" enctype="multipart/form-data">
+            <form class="product-form" action="registrarproducto" method="POST">
                 <h2>Registro de Producto</h2>
     
                 <label for="product-name">Nombre del Producto</label>
@@ -36,45 +35,37 @@
                 <input type="number" id="price" name="precio" placeholder="430" required>
                 
                 <label for="stock">Stock</label>
-                <input type="number" id="reference-number" placeholder="20" required>
-    
-<label for="categories">Categorías</label>
-<select id="categories" name="categoria" required multiple>
-    <option value="" disabled selected>Seleccionar Categoría</option>
-    <% 
-        // Obtener el array desde el request
-        List<String> categorias = (List<String>) request.getAttribute("categories");
-        
-        // Verificamos si la lista no es nula ni vacía
-        if (categorias != null && !categorias.isEmpty()) {
-            for (String categoria : categorias) {
-    %>
-                <option value="<%= categoria %>"><%= categoria %></option>
-    <%
-            }
-        } else {
-    %>
-            <option value="" disabled>No hay categorías disponibles</option>
-    <%
-        }
-    %>
-</select>
+                <input type="number" id="stock" name="stock" placeholder="20" required>
 
-
-
-
+                <label for="categories">Categorías</label>
+                <select id="categories" name="categoria" required>
+                    <option value="" disabled selected>Seleccionar Categoría</option>
+                    <% 
+                        // Obtener el array desde el request
+                        List<String> categorias = (List<String>) request.getAttribute("categories");
+                        
+                        // Verificamos si la lista no es nula ni vacía
+                        if (categorias != null && !categorias.isEmpty()) {
+                            for (String categoria : categorias) {
+                    %>
+                                <option value="<%= categoria %>"><%= categoria %></option>
+                    <%
+                            }
+                        } else {
+                    %>
+                        <option value="" disabled>No hay categorías disponibles</option>
+                    <%
+                        }
+                    %>
+                </select>
     
                 <label for="image-upload">Elegir imagen</label>
-                <input type="file" id="image-upload" name="imagen" required multiple>
+                <input type="file" id="image-upload" name="imagen">
     
                 <div class="button-group">
-    				<button type="button" class="btn-cancel" onclick="window.location.href='perfilProveedor?nickname=' + encodeURIComponent('<%= ((Proveedor) session.getAttribute("usuarioLogueado")).getNickname() %>');">Cancelar</button>
-
-
-
-    				<button type="submit" class="btn-submit">Registrar</button>
-
-				</div>
+                    <button type="button" class="btn-cancel" onclick="window.location.href='perfilProveedor?nickname=' + encodeURIComponent('<%= ((Proveedor) session.getAttribute("usuarioLogueado")).getNickname() %>');">Cancelar</button>
+                    <button type="submit" class="btn-submit">Registrar</button>
+                </div>
             </form>
         </div>
     </div>
@@ -82,7 +73,3 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-
-
-
-

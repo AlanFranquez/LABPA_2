@@ -117,13 +117,11 @@
             <div class="col-md-4 col-sm-6 mb-4">
                 <div class="card h-100 text-center">
                     <div class="card-body">
-                        <div>
-                            <% if (dt != null && dt.getImagenes().getFirst() != null) { %>
-                                <img class="card-img-top" src="media/<%= dt.getImagenes().getFirst() %>" alt="<%= dt.getNombre() %>" style="max-height: 200px; object-fit: cover;">
-                            <% } else { %>
-                                <p class="text-muted">No hay imagen disponible.</p>
-                            <% } %>
-                        </div>
+                        <% if (dt != null && dt.getImagenes() != null && !dt.getImagenes().isEmpty() && dt.getImagenes().getFirst() != null) { %>
+    <img class="card-img-top" src="media/<%= dt.getImagenes().getFirst() %>" alt="<%= dt.getNombre() %>" style="max-height: 200px; object-fit: cover;">
+<% } else { %>
+    <img class="card-img-top" src="https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png" alt="<%= dt.getNombre() %>" style="max-height: 200px; object-fit: cover;">
+<% } %>
                         <h5 class="card-title mt-2"><%= dt != null ? dt.getNombre() : "Producto no encontrado" %></h5>
                         <p class="card-text"><strong>Precio:</strong> $<%= dt != null ? dt.getPrecio() : "N/A" %></p>
                         <p class="card-text"><strong>Número de Referencia:</strong> <%= dt != null ? dt.getNumRef() : "N/A" %></p>
@@ -147,10 +145,14 @@
 	AGREGAR PRODUCTO	
 </button>
 	</a>
-</a>
 </div>
 
-
+<div class="part-final d-flex justify-content-center align-items-center" style="background-color: #2C2C2C;
+	width: 100%;
+	height: 200px; 
+	margin: 50px 0px 0px 0px;">
+    <p class="text-center text-white">Todos los derechos reservados, 2024. <br> Laboratorio PA.</p>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
