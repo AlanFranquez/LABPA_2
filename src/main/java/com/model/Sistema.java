@@ -469,6 +469,18 @@ public class Sistema implements ISistema {
     	return null;
     }
     
+    public Producto getProducto(int numRef) {
+    	for (Usuario user : usuarios.values()) {
+    		if (user instanceof Proveedor) {
+    			Proveedor p = (Proveedor) user;
+    			Producto prod = p.obtenerProd(numRef);
+    			if(prod != null) {
+    				return prod;
+    			}
+    		}
+    	}
+    	return null;
+    }
     
     
     // CASO DE USO 10: VER INFORMACION DE ORDEN DE COMPRA
@@ -573,9 +585,3 @@ public class Sistema implements ISistema {
 	    	this.getProdByCateogria(cat, num).getImagenes().add(imagen);
 	   }
 }
-
-
-
-
-
-

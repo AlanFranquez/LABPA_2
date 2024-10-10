@@ -12,6 +12,7 @@
 <% 
     DtProducto prod = (DtProducto) request.getAttribute("dtprod");
 	Usuario usr = (Usuario) request.getAttribute("usuario");
+	 List<String> imagenes = prod.getImagenes();
 %>
 
 <meta charset="UTF-8">
@@ -84,30 +85,29 @@
     </div>
 </nav>
 
-
-<div class="container mt-5">
+<main class="container mt-5">
     <div class="row justify-content-center align-items-center">
         <div class="col-md-6">
             <!-- Carrusel de imágenes -->
             <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
                     <% 
-                        // Suponiendo que getImagenes() retorna una lista de imágenes
-                        List<String> imagenes = prod.getImagenes(); // Cambia esto si tu método es diferente
                         if (imagenes != null && !imagenes.isEmpty()) {
+                            // Si hay imágenes, las mostramos en el carrusel
                             for (int i = 0; i < imagenes.size(); i++) {
-                                String imagenSrc = "media/" + imagenes.get(i);
-                                %>
-                                <div class="carousel-item <%= i == 0 ? "active" : "" %>">
-                                    <img src="<%= imagenSrc %>" class="d-block w-100" alt="Imagen de <%= prod.getNombre() %>" style="max-height: 400px; object-fit: cover;">
-                                </div>
-                                <%
-                            }
-                        } else { 
+                                String imagen = imagenes.get(i);
                     %>
-                        <div class="carousel-item active">
-                            <img src="media/default-image.png" class="d-block w-100" alt="Imagen no disponible" style="max-height: 400px; object-fit: cover;">
-                        </div>
+                                <div class="carousel-item <%= (i == 0) ? "active" : "" %>">
+                                    <img src="media/<%= imagen %>" class="d-block w-100" alt="Imagen de producto" style="max-height: 400px; object-fit: cover;">
+                                </div>
+                    <% 
+                            }
+                        } else {
+                            // Si no hay imágenes, mostramos una por defecto
+                    %>
+                            <div class="carousel-item active">
+                                <img src="https://via.placeholder.com/400x300?text=Imagen+no+disponible" class="d-block w-100" alt="Imagen no disponible" style="max-height: 400px; object-fit: cover;">
+                            </div>
                     <% } %>
                 </div>
                 
@@ -133,25 +133,57 @@
             <p><strong>Especificaciones:</strong> <%= prod != null ? prod.getEspecs() : "N/A" %></p>
             <p><strong>Proveedor:</strong> <%= prod != null ? prod.getNicknameProveedor() : "N/A" %></p>
             
-            <% if (usr.getTipo() == "cliente") { %>
+            <% if (usr != null && usr.getTipo().equals("cliente")) { %>
                 <button class="btn btn-secondary botonRegistro">Agregar al Carrito</button>
             <% } %>
         </div>
     </div>
+</main>
+
+<div class="container mt-5">
+    <h2>Comentarios</h2>
+    <div id="commentSection">
+        <!-- Aquí se cargarán los comentarios -->
+    </div>
+
+    <% if (usr != null && usr.getTipo().equals("cliente")) { %>
+        <div class="mt-4">
+            <h3>Deja un comentario</h3>
+            
+            <form id="formulario" action="" >
+            	<textarea id="commentText" class="form-control" rows="3" placeholder="Escribe tu comentario..."></textarea>
+            <button class="btn btn-primary mt-3" type="submit">Enviar Comentario</button>
+            	
+            </form>
+            
+            
+        </div>
+    <% } %>
 </div>
-
-
 
 
 
 <!-- PARTE FINAL PAGINA -->
 
-	<div class="part-final d-flex justify-content-center align-items-center">
 
-		<p class="text-center">Todos los derechos reservados, 2024. <br> Laboratorio PA.</p>
+<div class="part-final d-flex justify-content-center align-items-center">
+        <p class="text-center">Todos los derechos reservados, 2024. <br> Laboratorio PA.</p>
+    </div>
 
-	</div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
+
+</script>
+
+<script type="text/javascript">
+document.getElementById("formulario").addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+    console.log("click")
+});
+
+</script>
 </body>
 </html>

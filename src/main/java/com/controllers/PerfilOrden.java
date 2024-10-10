@@ -34,15 +34,15 @@ public class PerfilOrden extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String nickname = request.getParameter("nickname");
         String ordenParam = request.getParameter("orden");
-        
-     // Obtener el cliente de la sesión
-        HttpSession sess = request.getSession();
-        
-        if (sess == null) {
+
+        // Obtener el cliente de la sesión
+        HttpSession sess = request.getSession(false); // No crear una nueva sesión
+        if (sess == null || sess.getAttribute("usuarioLogueado") == null) {
             response.sendRedirect("formlogin");
             return;
         }
-        
+
+        Cliente cliente = (Cliente) sess.getAttribute("usuarioLogueado");
 
         // Comprobar que el parámetro de la orden no sea nulo y convertirlo a entero
         if (ordenParam != null && !ordenParam.isEmpty()) {
@@ -54,31 +54,21 @@ public class PerfilOrden extends HttpServlet {
                 return;
             }
 
-            
-            Cliente cliente = (Cliente) sess.getAttribute("usuarioLogueado");
-            
-            
-          
-            DTCliente dtcli = (DTCliente) cliente.crearDt();
-            if (cliente != null) {
-                // Obtener la orden específica
-                DTOrdenDeCompra orden = cliente.mostrarCompras(numeroOrden);
-                
-                if (orden != null) {
-                    request.setAttribute("ordencompra", orden);
-                    request.setAttribute("usuario", dtcli);
-                    request.getRequestDispatcher("/WEB-INF/DetalleOrden.jsp").forward(request, response);
-
-                } else {
-                    response.sendError(HttpServletResponse.SC_NOT_FOUND, "Orden no encontrada.");
-                }
+            // Obtener la orden específica
+            DTOrdenDeCompra orden = cliente.mostrarCompras(numeroOrden);
+            if (orden != null) {
+                DTCliente dtcli = (DTCliente) cliente.crearDt();
+                request.setAttribute("ordencompra", orden);
+                request.setAttribute("usuario", dtcli);
+                request.getRequestDispatcher("/WEB-INF/DetalleOrden.jsp").forward(request, response);
             } else {
-                response.sendRedirect("home");
+                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Orden no encontrada.");
             }
         } else {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Falta el número de orden.");
         }
     }
+
 
     /**
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)

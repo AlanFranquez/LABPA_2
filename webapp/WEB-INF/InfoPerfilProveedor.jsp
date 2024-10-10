@@ -26,8 +26,6 @@
     
     <%
     	DTProveedor user = (DTProveedor) request.getAttribute("usuario");
-    	System.out.print(user.getNick());
-    	System.out.print(user.obtenerProd(1).getNombre());
     %>
     
     <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2C2C2C;">
