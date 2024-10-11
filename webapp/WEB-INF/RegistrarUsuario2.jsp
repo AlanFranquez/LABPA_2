@@ -6,7 +6,7 @@
     <link href="media/styles/RegistrarUsuario2.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap" rel="stylesheet">
     <title>Registrar Usuario</title>
     <%@ include file="template/BarraNavSinReg.html" %>
 </head>
@@ -19,7 +19,7 @@
     <div class="d-flex justify-content-center m-5">
         <div class="contenedor-form">
             <div class="d-flex flex-column align-items-center">
-                <form action="" id="myform" class="d-flex align-items-center flex-column">
+                <form id="myform" action="registrarusuario2" method="post" class="d-flex align-items-center flex-column">
                 
                     <h2 class="form-group text-center">Completar los datos</h2>
                     <p class="text-center" style="color: #7E7979; font-size: 16px; width: 500px; margin: 10px auto;">
@@ -36,9 +36,9 @@
                         <input type="text" placeholder="Perez" id="apellido" name="apellido" class="form-control" required>
                     </div>
                     
-                    <div class="form-group align-items-start">
+                    <div class="form-group align-items-start" >
                         <label for="imagen">Imagen *</label>
-                        <input type="file" placeholder="Ingresa una imagen" id="imagen" name="imagen" class="form-control" required>
+                        <input type="file" placeholder="Ingresa una imagen" id="imagen" name="imagen" class="form-control" required multiple >
                     </div>
                     
                     <div class="form-group align-items-start">

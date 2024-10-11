@@ -30,7 +30,7 @@ public class RegistrarUsuarios1 extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.getRequestDispatcher("/WEB-INF/RegistrarUsuario1.jsp").forward(request, response);
-        System.out.println("Redirigiendo a RegistrarUsuario1.jsp");
+        System.out.println("Redirigiendo a RegistrarUsuario1.jsp inicio Servlet");
     }
 
     @Override
@@ -63,14 +63,14 @@ public class RegistrarUsuarios1 extends HttpServlet {
 
             if (prueba != null || prueba2 != null) {
                 objSession.setAttribute("errorMsg", "El nickname o correo ya están registrados");
-                System.out.println("Redirigiendo a RegistrarUsuario1.jsp");
+                System.out.println("Redirigiendo a RegistrarUsuario1.jsp con error");
                 request.getRequestDispatcher("/WEB-INF/Error.jsp").forward(request, response);
             } else {
                 // Si los datos son válidos, guarda el usuario en sesión y redirige a la segunda página
                 objSession.setAttribute("nickname", nick);
                 objSession.setAttribute("correo", correo);
                 System.out.println("Redirigiendo a RegistrarUsuario2.jsp");
-                request.getRequestDispatcher("/WEB-INF/RegistrarUsuario2.jsp").forward(request, response);
+                response.sendRedirect(request.getContextPath() + "/registrarusuario2");
             }
 
         } catch (Exception e) {
