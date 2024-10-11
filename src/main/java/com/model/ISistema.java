@@ -107,6 +107,7 @@ public interface ISistema {
 	 
 	 public Usuario getUserByEmail(String email) throws UsuarioException;
 	 
+	 public Producto getProductoByNumRef(int NumRef);
 	 
 	 public void agregarImagenesDesdeProveedor(String proveedor, int numRef, String imagen);
 	 

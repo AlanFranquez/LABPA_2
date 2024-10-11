@@ -28,6 +28,7 @@ public class Sistema implements ISistema {
     private Map<String, Categoria> categorias;
     private Map<Integer, OrdenDeCompra> ordenes;
     private Map<String, Categoria> arbolCategorias;
+    private Map<Integer, Producto> listaProductos;
 
     private Sistema() {
         // Inicialización de colecciones
@@ -563,6 +564,10 @@ public class Sistema implements ISistema {
 		 
 	 }
 	 
+	 public Producto getProductoByNumRef(int NumRef) {
+		return listaProductos.get(NumRef);
+		}
+	 
 	
 	 
 	 public void agregarImagenesDesdeProveedor(String proveedor, int numRef, String imagen) {
@@ -588,4 +593,5 @@ public class Sistema implements ISistema {
 	 public Map<String, Categoria> getCategoriasLista() {
 		 return this.categorias;
 	 }
+	 
 }
