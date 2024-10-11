@@ -10,10 +10,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <title>Registrar Usuario</title>
-    
 </head>
 <body>
-   
 
     <!-- Parte de registro -->
     <div class="container">
@@ -24,6 +22,10 @@
                     <p class="text-center mt-2" style="color: #7E7979; font-size: 16px; width: 500px; margin: 20px auto;">
                         Asegúrate de no elegir un correo usado anteriormente. En caso de datos repetidos se cancelará el proceso.
                     </p>
+
+                    <!-- Contenedor para el mensaje de error -->
+                    <div id="error-message-container"></div>
+
                     <div class="icon-container mb-3">
                         <img alt="Icono de la web" src="media/images/icono.svg" style="width: 80px; height: 80px;">
                     </div>
@@ -50,6 +52,29 @@
         <p class="text-center">Todos los derechos reservados, 2024. <br> Laboratorio PA.</p>
     </div>
 
+    <script>
+        // Esta función se ejecuta cuando la página se carga
+        window.onload = function() {
+            // Obtener el mensaje de error de la sesión
+            var errorMsg = '<%= session.getAttribute("errorMsg") %>';
+            if (errorMsg === "El nickname o correo ya están registrados") {
+                // Crear el div de alerta
+                var alertDiv = document.createElement('div');
+                alertDiv.className = 'alert alert-danger';
+                alertDiv.role = 'alert';
+                alertDiv.innerHTML = errorMsg;
+
+                // Obtener el contenedor para el mensaje de error y agregar el div de alerta
+                var errorMessageContainer = document.getElementById('error-message-container');
+                errorMessageContainer.appendChild(alertDiv);
+
+                // Eliminar el mensaje de error de la sesión
+                <%
+                    session.removeAttribute("errorMsg");
+                %>
+            }
+        };
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="RegistrarUsuario1.js"></script>

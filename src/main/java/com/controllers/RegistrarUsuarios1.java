@@ -39,6 +39,7 @@ public class RegistrarUsuarios1 extends HttpServlet {
         String nick = request.getParameter("nick");
         String correo = request.getParameter("correo");
         HttpSession objSession = request.getSession();
+        objSession.removeAttribute("errorMsg");
 
         // Validar los datos
         if (nick == null || nick.isEmpty() || correo == null || correo.isEmpty()) {
@@ -64,13 +65,15 @@ public class RegistrarUsuarios1 extends HttpServlet {
             if (prueba != null || prueba2 != null) {
                 objSession.setAttribute("errorMsg", "El nickname o correo ya están registrados");
                 System.out.println("Redirigiendo a RegistrarUsuario1.jsp con error");
-                request.getRequestDispatcher("/WEB-INF/Error.jsp").forward(request, response);
+                request.getRequestDispatcher("/WEB-INF/RegistrarUsuario1.jsp").forward(request, response);
+                return;
             } else {
                 // Si los datos son válidos, guarda el usuario en sesión y redirige a la segunda página
                 objSession.setAttribute("nickname", nick);
                 objSession.setAttribute("correo", correo);
                 System.out.println("Redirigiendo a RegistrarUsuario2.jsp");
                 response.sendRedirect(request.getContextPath() + "/registrarusuario2");
+                objSession.removeAttribute("errorMsg");
             }
 
         } catch (Exception e) {
