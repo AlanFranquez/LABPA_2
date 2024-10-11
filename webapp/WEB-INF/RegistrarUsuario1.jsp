@@ -52,7 +52,6 @@
         <p class="text-center">Todos los derechos reservados, 2024. <br> Laboratorio PA.</p>
     </div>
 
-
     <script>
         // Esta función se ejecuta cuando la página se carga
         window.onload = function() {
