@@ -118,10 +118,13 @@
                   </div>
                 </div>
               </div>
+			  
+			  <form action="crearOrden" method="post">
+			      <button type="submit" class="btn hacerOrden">Realizar Orden 1</button>
+			  </form>
       
       
-      
-                  <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn hacerOrden">Realizar Orden</button>
+                  <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn hacerOrden">Realizar Orden 2</button>
       
             </div>
           </div>

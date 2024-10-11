@@ -7,17 +7,19 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import com.model.Carrito;
+
 /**
  * Servlet implementation class Carrito
  */
 @WebServlet("/Carrito")
-public class Carrito extends HttpServlet {
+public class CarritoServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Carrito() {
+    public CarritoServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -34,8 +36,16 @@ public class Carrito extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
-	}
+	    Carrito carrito = (Carrito) request.getSession().getAttribute("carrito");
 
+	    if (carrito != null) {
+	        carrito.generarOrdenDeCompra();
+	    } else {
+	        // Manejar el caso en que el carrito es nulo
+	        request.setAttribute("error", "El carrito no se ha encontrado en la sesión.");
+	        request.getRequestDispatcher("/WEB-INF/Carrito.jsp").forward(request, response);
+	    }
+	}
 }
+
+

@@ -9,6 +9,7 @@ public class Carrito {
     public class ProductoCarrito {
         private Producto producto;
         private int cantidad;
+        int numeroOrden = 100;
 
         public ProductoCarrito(Producto producto, int cantidad) {
             this.producto = producto;
@@ -63,13 +64,17 @@ public class Carrito {
             }
         }
     }
+    int numeroOrden = 1;
+    public int generarNumeroOrden() {
+    	return numeroOrden++;
+	 }
 
-    public void generarOrdenDeCompra(int numeroOrden, int numero) {
+    public void generarOrdenDeCompra() {
         if (productos.isEmpty()) {
             System.out.println("El carrito está vacío. No se puede generar la orden de compra.");
             return;
         }
-
+        int numeroOrden = generarNumeroOrden();
 
         OrdenDeCompra orden = new OrdenDeCompra(numeroOrden);
         for (ProductoCarrito productoCarrito : productos) {
