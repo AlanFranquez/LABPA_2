@@ -31,6 +31,7 @@ public class Producto {
 		this.comentarios = new ArrayList<>();
 		this.imagenes = new ArrayList<>();
 	}
+	
 
 	public void agregarImagen(String img) {
 		this.imagenes.add(img);
