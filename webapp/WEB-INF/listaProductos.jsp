@@ -77,141 +77,49 @@
             
             <div class="padding"></div>
             
-            
-            <!-- BEGIN TABLE RESULT -->
-            <div class="table-responsive">
-              <table class="table table-hover">
-                <a href="InfoProducto.html">
-                <button>
-                  <tbody><tr>
-                  <td class="number text-center">1</td>
-                  <td class="image"><img src="celular.jfif" alt=""></td>
-                  <td class="product"><strong>Celular</strong><br>Telefono ultimo modelo, exelente calidad.</td>
-                  <td class="rate text-right"><span><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-half-o"></i></span></td>
-                  <td class="price text-right">$750</td>
-                   <td class="text-right">
-                    <form action="agregarAlCarrito" method="post">
-                        <input type="hidden" name="numRef" value="1">
-                        <input type="number" name="cantidad" min="1" max="10" value="1" style="width: 60px;">
-                        <button type="submit" class="btn btn-primary">Agregar</button>
-                    </form>
-                </td>
-                </tr>
-              </button>
-              </a>
-                <tr>
-                  <td class="number text-center">2</td>
-                  <td class="image"><img src="MaquinaDeEscribir.jpg" alt=""></td>
-                  <td class="product"><strong>Maquina de Escribir</strong><br>Poratil Mac, ideal para programar.</td>
-                  <td class="rate text-right"><span><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i></span></td>
-                  <td class="price text-right">$1,050</td>
-                   <td class="text-right">
-                    <form action="agregarAlCarrito" method="post">
-                        <input type="hidden" name="numRef" value="2">
-                        <input type="number" name="cantidad" min="1" max="10" value="1" style="width: 60px;">
-                        <button type="submit" class="btn btn-primary">Agregar</button>
-                    </form>
-                </td>
-                </tr>
-                <tr>
-                  <td class="number text-center">3</td>
-                  <td class="image"><img src="MonaLisa.jpg" alt=""></td>
-                  <td class="product"><strong>Replica Monalisa</strong><br>Cuadro infantil para colorear.</td>
-                  <td class="rate text-right"><span><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-half-o"></i><i class="fa fa-star-o"></i></span></td>
-                  <td class="price text-right">$990</td>
-                   <td class="text-right">
-                    <form action="agregarAlCarrito" method="post">
-                        <input type="hidden" name="numRef" value="3">
-                        <input type="number" name="cantidad" min="1" max="10" value="1" style="width: 60px;">
-                        <button type="submit" class="btn btn-primary">Agregar</button>
-                    </form>
-                </td>
-                </tr>
-                <tr>
-                  <td class="number text-center">4</td>
-                  <td class="image"><img src="celular.jfif" alt=""></td>
-                  <td class="product"><strong>Celular</strong><br>Telefono ultimo modelo, exelente calidad.</td>
-                  <td class="rate text-right"><span><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-o"></i></span></td>
-                  <td class="price text-right">$5,600</td>
-                   <td class="text-right">
-                    <form action="agregarAlCarrito" method="post">
-                        <input type="hidden" name="numRef" value="4">
-                        <input type="number" name="cantidad" min="1" max="10" value="1" style="width: 60px;">
-                        <button type="submit" class="btn btn-primary">Agregar</button>
-                    </form>
-                </td>
-                </tr>
-                <tr>
-                  <td class="number text-center">5</td>
-                  <td class="image"><img src="t1.jpg" alt=""></td>
-                  <td class="product"><strong>Juego de Muebles</strong><br>Muebles comodos de living.</td>
-                  <td class="rate text-right"><span><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i></span></td>
-                  <td class="price text-right">$6,000</td>
-                   <td class="text-right">
-                    <form action="agregarAlCarrito" method="post">
-                        <input type="hidden" name="numRef" value="5">
-                        <input type="number" name="cantidad" min="1" max="10" value="1" style="width: 60px;">
-                        <button type="submit" class="btn btn-primary">Agregar</button>
-                    </form>
-                </td>
-                </tr>
-                <tr>
-                  <td class="number text-center">6</td>
-                  <td class="image"><img src="t2.jpg" alt=""></td>
-                  <td class="product"><strong>Harry Potter colecccion</strong><br>Libros de Harry Potter del 1 al 7.</td>
-                  <td class="rate text-right"><span><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-half-o"></i></span></td>
-                  <td class="price text-right">$870</td>
-                   <td class="text-right">
-                    <form action="agregarAlCarrito" method="post">
-                        <input type="hidden" name="numRef" value="6">
-                        <input type="number" name="cantidad" min="1" max="10" value="1" style="width: 60px;">
-                        <button type="submit" class="btn btn-primary">Agregar</button>
-                    </form>
-                </td>
-                </tr>
-                <tr>
-                  <td class="number text-center">7</td>
-                  <td class="image"><img src="Ferrari.jfif" alt=""></td>
-                  <td class="product"><strong>Ferrari</strong><br>Auto clasico de coleccion.</td>
-                  <td class="rate text-right"><span><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i></span></td>
-                  <td class="price text-right">$100,000</td>
-                   <td class="text-right">
-                    <form action="agregarAlCarrito" method="post">
-                        <input type="hidden" name="numRef" value="7">
-                        <input type="number" name="cantidad" min="1" max="10" value="1" style="width: 60px;">
-                        <button type="submit" class="btn btn-primary">Agregar</button>
-                    </form>
-                </td>
-                </tr>
-                <tr>
-                  <td class="number text-center">8</td>
-                  <td class="image"><img src="t3.jpg" alt=""></td>
-                  <td class="product"><strong>Libreria</strong><br>Libreria ideal para guardar libros de Harry Potter del 1 al 7.</td>
-                  <td class="rate text-right"><span><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-half-o"></i></span></td>
-                  <td class="price text-right">$1,550</td>
-                   <td class="text-right">
-                    <form action="agregarAlCarrito" method="post">
-                        <input type="hidden" name="numRef" value="8">
-                        <input type="number" name="cantidad" min="1" max="10" value="1" style="width: 60px;">
-                        <button type="submit" class="btn btn-primary">Agregar</button>
-                    </form>
-                </td>
-                </tr>
-              </tbody></table>
-            </div>
-            <!-- END TABLE RESULT -->
-            
-            <!-- BEGIN PAGINATION -->
-           <!-- <ul class="pagination">
-              <li class="disabled"><a href="#">«</a></li>
-              <li class="active"><a href="#">1</a></li>
-              <li><a href="#">2</a></li>
-              <li><a href="#">3</a></li>
-              <li><a href="#">4</a></li>
-              <li><a href="#">5</a></li>
-              <li><a href="#">»</a></li>
-            </ul>                                           -->
-            <!-- END PAGINATION -->
+			
+			<c:if test="${noHayProductos}">
+			        <p>No hay productos disponibles en este momento.</p>
+			    </c:if>
+
+			    <c:if test="${!noHayProductos}">
+					<!-- BEGIN TABLE RESULT -->
+								<div class="table-responsive">
+								    <table class="table table-hover">
+								        <tbody>
+								            <c:forEach var="producto" items="${productos}">
+								                <tr>
+								                    <td class="number text-center">${producto.getNumRef}</td> <!-- Suponiendo que tienes un método getId() en Producto -->
+								                    <td class="image"><img src="${producto.imagen}" alt=""></td> <!-- Suponiendo que tienes un método getImagen() en Producto -->
+								                    <td class="product">
+								                        <strong>${producto.getNombre}</strong><br>
+								                        ${producto.getDescripcion}
+								                    </td>
+								                    <td class="rate text-right">
+								                        <span>
+								                            <i class="fa fa-star"></i>
+								                            <i class="fa fa-star"></i>
+								                            <i class="fa fa-star"></i>
+								                            <i class="fa fa-star"></i>
+								                            <i class="fa fa-star-half-o"></i>
+								                        </span>
+								                    </td>
+								                    <td class="price text-right">${producto.getPrecio}</td> <!-- Suponiendo que tienes un método getPrecio() en Producto -->
+								                    <td class="text-right">
+								                        <form action="ListaProductos" method="post">
+								                            <input type="hidden" name="numRef" value="${producto.getNumRef}"> <!-- Usando el ID del producto -->
+								                            <input type="number" name="cantidad" min="1" max="10" value="1" style="width: 60px;">
+								                            <button type="submit" class="btn btn-primary">Agregar</button>
+								                        </form>
+								                    </td>
+								                </tr>
+								            </c:forEach>
+								        </tbody>
+								    </table>
+								</div>
+					            
+					     <!-- END TABLE RESULT -->
+				</c:if>
           </div>
           <!-- END RESULT -->
         </div>

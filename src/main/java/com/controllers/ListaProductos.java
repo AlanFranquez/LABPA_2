@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.util.List;
 import java.io.File;
 import java.util.Map;
+import java.util.ArrayList;
+
 
 import com.model.Factory;
 import com.model.ISistema;
@@ -47,11 +49,19 @@ public class ListaProductos extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// Obtener la lista de productos de la sesión o inicializarla
-        List<Producto> listaProductos = (List<Producto>) request.getSession().getAttribute("listaProductos");
-
-        // Enviar la lista al JSP
-        request.setAttribute("productos", listaProductos);
+		
+		Map<Integer, Producto> productosMap = sist.getProductoLista(); // Obtener el mapa de productos
+		List<Producto> productos = new ArrayList<>();
+		boolean noHayProductos = false; // Indicador de productos
+        
+        if (productosMap != null && !productosMap.isEmpty()) {
+            productos = new ArrayList<>(productosMap.values()); // Convertir a lista si no está vacío
+        } else {
+            noHayProductos = true; // Si el mapa es nulo o está vacío, indicar que no hay productos
+        }
+        
+        request.setAttribute("productos", productos); // Guardar la lista de productos en el request
+        request.setAttribute("noHayProductos", noHayProductos); // Indicar si no hay productos
         request.getRequestDispatcher("/WEB-INF/listaProductos.jsp").forward(request, response);
 	}
 

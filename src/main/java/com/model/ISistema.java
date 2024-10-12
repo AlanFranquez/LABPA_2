@@ -113,6 +113,8 @@ public interface ISistema {
 	 
 	 public Producto getProdByCateogria(String cat, int numRef) throws ProductoException;
 	 
-	   public Producto getProducto(int numRef);
+	 public Producto getProducto(int numRef);
+	   
+	 public Map<Integer ,Producto> getProductoLista();
 
 }

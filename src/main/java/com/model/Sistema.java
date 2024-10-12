@@ -568,6 +568,10 @@ public class Sistema implements ISistema {
 		return listaProductos.get(NumRef);
 		}
 	 
+	 public Map<Integer ,Producto> getProductoLista(){
+		 return this.listaProductos;
+	 }
+	 
 	
 	 
 	 public void agregarImagenesDesdeProveedor(String proveedor, int numRef, String imagen) {
