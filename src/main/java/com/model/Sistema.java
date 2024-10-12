@@ -594,4 +594,38 @@ public class Sistema implements ISistema {
 		 return this.categorias;
 	 }
 	 
+	 public List<Producto> buscarProductos(String query) {
+		    List<Producto> resultados = new ArrayList<>();
+
+		    for (Categoria categoria : categorias.values()) {
+		        if (categoria instanceof Cat_Producto) {
+		        	Cat_Producto catprod = (Cat_Producto) categoria;
+		            for (Producto producto : catprod.getProductos().values()) {
+		                if (producto.getNombre().toLowerCase().contains(query.toLowerCase()) ||
+		                    categoria.getNombre().toLowerCase().contains(query.toLowerCase()) ||
+		                    producto.getProveedor().getNombre().toLowerCase().contains(query.toLowerCase())) {
+		                    resultados.add(producto);
+		                }
+		            }
+		        }
+		    }
+
+		    return resultados; // Retornar la lista de productos encontrados
+		}
+	 
+	 public List<Producto> getAllProductos() {
+		    List<Producto> resultados = new ArrayList<>();
+
+		    for (Categoria categoria : categorias.values()) {
+		        if (categoria instanceof Cat_Producto) {
+		        	Cat_Producto catprod = (Cat_Producto) categoria;
+		            for (Producto producto : catprod.getProductos().values()) {
+		                resultados.add(producto);
+		            }
+		        }
+		    }
+
+		    return resultados;
+		}
+	 
 }

@@ -114,5 +114,9 @@ public interface ISistema {
 	 public Producto getProdByCateogria(String cat, int numRef) throws ProductoException;
 	 
 	   public Producto getProducto(int numRef);
+	   
+	   public List<Producto> buscarProductos(String query);
+	   
+	   public List<Producto> getAllProductos();
 
 }
