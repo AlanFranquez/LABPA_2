@@ -50,18 +50,10 @@ public class ListaProductos extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		Map<Integer, Producto> productosMap = sist.getProductoLista(); // Obtener el mapa de productos
-		List<Producto> productos = new ArrayList<>();
-		boolean noHayProductos = false; // Indicador de productos
-        
-        if (productosMap != null && !productosMap.isEmpty()) {
-            productos = new ArrayList<>(productosMap.values()); // Convertir a lista si no está vacío
-        } else {
-            noHayProductos = true; // Si el mapa es nulo o está vacío, indicar que no hay productos
-        }
+		List<Producto> productos = sist.getAllProductos();
         
         request.setAttribute("productos", productos); // Guardar la lista de productos en el request
-        request.setAttribute("noHayProductos", noHayProductos); // Indicar si no hay productos
+        request.getSession().setAttribute("sistema", sist);
         request.getRequestDispatcher("/WEB-INF/listaProductos.jsp").forward(request, response);
 	}
 
@@ -73,7 +65,7 @@ public class ListaProductos extends HttpServlet {
 
         if ("agregarAlCarrito".equals(action)) {
             agregarAlCarrito(request, response);
-        } 
+        }
     }
 
 	private void agregarAlCarrito(HttpServletRequest request, HttpServletResponse response) throws IOException {

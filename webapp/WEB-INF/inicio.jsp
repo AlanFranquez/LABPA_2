@@ -1,3 +1,4 @@
+<%@page import="com.model.Sistema"%>
 <%@page import="com.model.Usuario"%>
 <%@page import="com.model.DTCliente" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -17,15 +18,14 @@
 	<%
 	String estadoUser = (String) request.getAttribute("estado");
     Usuario usr = (Usuario) request.getAttribute("usuario");
-    	
+	
 	%>
 	
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2C2C2C;">
     <div class="container">
-        <!-- Logo -->
+      
         <a href="home" class="navbar-brand">ITSCODIGO</a>
         
-        <!-- Botón para colapsar en dispositivos móviles -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -33,10 +33,10 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav mx-auto align-items-center">
                 <li class="nav-item w-100">
-                    <form class="d-flex" role="search">
-                        <input class="form-control me-2 barraBusqueda" type="search" placeholder="Buscar productos..." aria-label="Buscar">
-                        <button class="btn botonBuscar" type="submit">BUSCAR</button>
-                    </form>
+                    <form action="buscarproductos" method="POST">
+				    <input type="text" name="query" placeholder="Buscar productos...">
+				    <button type="submit">Buscar</button>
+					</form>
                 </li>
             </ul>
 

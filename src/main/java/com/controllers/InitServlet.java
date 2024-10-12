@@ -115,7 +115,7 @@ public class InitServlet extends HttpServlet {
              
              
              //System.out.print(s.getUsuario("Juan123").getImagen());
-
+             
 
          } catch (Exception e) {
              e.printStackTrace();

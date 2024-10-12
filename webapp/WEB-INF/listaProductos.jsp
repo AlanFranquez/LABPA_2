@@ -3,8 +3,13 @@
     <%@page import="com.model.DtProducto" %>
     <%@page import="com.model.Producto" %>
     <%@page import="java.util.Collections" %>
+    <%@page import="com.model.ISistema" %>
  <%@page import="java.util.List" %>
  <%@page import="com.model.Usuario" %>
+ <%@page import="java.util.HashMap"%>
+ <%@page import="java.util.Collection"%>
+ <%@page import="java.util.ArrayList"%>
+<%@page import="java.util.Map"%>
     
 <!DOCTYPE html>
 <html>
@@ -78,48 +83,56 @@
             <div class="padding"></div>
             
 			
-			<c:if test="${noHayProductos}">
-			        <p>No hay productos disponibles en este momento.</p>
-			    </c:if>
-
-			    <c:if test="${!noHayProductos}">
-					<!-- BEGIN TABLE RESULT -->
-								<div class="table-responsive">
-								    <table class="table table-hover">
-								        <tbody>
-								            <c:forEach var="producto" items="${productos}">
-								                <tr>
-								                    <td class="number text-center">${producto.getNumRef}</td> <!-- Suponiendo que tienes un método getId() en Producto -->
-								                    <td class="image"><img src="${producto.imagen}" alt=""></td> <!-- Suponiendo que tienes un método getImagen() en Producto -->
-								                    <td class="product">
-								                        <strong>${producto.getNombre}</strong><br>
-								                        ${producto.getDescripcion}
-								                    </td>
-								                    <td class="rate text-right">
-								                        <span>
-								                            <i class="fa fa-star"></i>
-								                            <i class="fa fa-star"></i>
-								                            <i class="fa fa-star"></i>
-								                            <i class="fa fa-star"></i>
-								                            <i class="fa fa-star-half-o"></i>
-								                        </span>
-								                    </td>
-								                    <td class="price text-right">${producto.getPrecio}</td> <!-- Suponiendo que tienes un método getPrecio() en Producto -->
-								                    <td class="text-right">
-								                        <form action="ListaProductos" method="post">
-								                            <input type="hidden" name="numRef" value="${producto.getNumRef}"> <!-- Usando el ID del producto -->
-								                            <input type="number" name="cantidad" min="1" max="10" value="1" style="width: 60px;">
-								                            <button type="submit" class="btn btn-primary">Agregar</button>
-								                        </form>
-								                    </td>
-								                </tr>
-								            </c:forEach>
-								        </tbody>
-								    </table>
-								</div>
-					            
-					     <!-- END TABLE RESULT -->
-				</c:if>
+			<section>
+	    		<h2 class="comprasTitle text-center mt-5">Todos los Productos:</h2>
+	    
+	    		<% 
+	    		ISistema sistema = (ISistema) session.getAttribute("sistema");
+	    		List<Producto> listaProductos = sistema.getAllProductos();
+		        List<DtProducto> listaDTProductos = new ArrayList<>();
+		        
+			 	 if (listaProductos == null || listaProductos.isEmpty()) { %>
+		        <p class="text-center mt-4">No Existen Productos :/</p>
+		    <% } else { 
+		        for (Producto p : listaProductos) {
+		            DtProducto dtp = p.crearDT();
+		            listaDTProductos.add(dtp);
+		        }
+		    %>
+			   <% 
+			    if (listaDTProductos.isEmpty()) { %>
+			        <p class="text-center mt-4">No hay productos disponibles.</p>
+			    <% } %>
+			    
+			    <div class="row justify-content-center">
+			        <% for (DtProducto dt : listaDTProductos) { %>
+			            <div class="col-md-4 col-sm-6 mb-4">
+			                <div class="card h-100 text-center">
+			                    <div class="card-body">
+			                        <% if (dt != null && dt.getImagenes() != null && !dt.getImagenes().isEmpty() && dt.getImagenes().getFirst() != null) { %>
+			                            <img class="card-img-top" src="media/<%= dt.getImagenes().getFirst() %>" alt="<%= dt.getNombre() %>" style="max-height: 200px; object-fit: cover;">
+			                        <% } else { %>
+			                            <img class="card-img-top" src="https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png" alt="<%= dt.getNombre() %>" style="max-height: 200px; object-fit: cover;">
+			                        <% } %>
+			                        <h5 class="card-title mt-2"><%= dt != null ? dt.getNombre() : "Producto no encontrado" %></h5>
+			                        <p class="card-text"><strong>Precio:</strong> $<%= dt != null ? dt.getPrecio() : "N/A" %></p>
+			                        <p class="card-text"><strong>Número de Referencia:</strong> <%= dt != null ? dt.getNumRef() : "N/A" %></p>
+			                        <a href="perfilProducto?producto=<%= dt != null ? dt.getNumRef() : "" %>" class="btn btn-primary">Ver Detalles</a>
+			                        <form action="agregarAlCarrito" method="post" style="display: inline-block;">
+                        				<input type="hidden" name="numRef" value="<%= dt != null ? dt.getNumRef() : "" %>">
+                        				<input type="number" name="cantidad" min="1" max="10" value="1" style="width: 60px;">
+                        				<button type="submit" class="btn btn-primary">Agregar al Carrito</button>
+                    				</form>
+                    				<% } %>
+			                    </div>
+			                </div>
+			            </div>
+			        <% } %>
+			    </div>
+			    
+			   
+			</section>
+    
           </div>
           <!-- END RESULT -->
         </div>

@@ -16,7 +16,7 @@
 
     <div class="body">
         <div class="containerForm">
-            <form class="product-form" action="registrarproducto" method="POST">
+            <form class="product-form" action="registrarproducto" method="POST" enctype="multipart/form-data">
                 <h2>Registro de Producto</h2>
     
                 <label for="product-name">Nombre del Producto</label>
@@ -60,7 +60,7 @@
                 </select>
     
                 <label for="image-upload">Elegir imagen</label>
-                <input type="file" id="image-upload" name="imagen">
+                <input type="file" id="image-upload" name="imagenes" multiple>
     
                 <div class="button-group">
                     <button type="button" class="btn-cancel" onclick="window.location.href='perfilProveedor?nickname=' + encodeURIComponent('<%= ((Proveedor) session.getAttribute("usuarioLogueado")).getNickname() %>');">Cancelar</button>

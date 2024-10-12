@@ -112,9 +112,14 @@ public interface ISistema {
 	 public void agregarImagenesDesdeProveedor(String proveedor, int numRef, String imagen);
 	 
 	 public Producto getProdByCateogria(String cat, int numRef) throws ProductoException;
-	 
-	 public Producto getProducto(int numRef);
 	   
 	 public Map<Integer ,Producto> getProductoLista();
+
+	   public Producto getProducto(int numRef);
+	   
+	   public List<Producto> buscarProductos(String query);
+	   
+	   public List<Producto> getAllProductos();
+
 
 }
