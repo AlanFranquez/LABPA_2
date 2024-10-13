@@ -17,6 +17,7 @@ public class Producto {
 	private Integer numRef, stock;
 	private String especificaciones;
 	private List<String> imagenes;
+	private int cantidadCompras = 0; 
 	
 	// Constructor:
 	public Producto(String nombre, String descripcion, float precio, Integer numRef, String especificaciones, Proveedor prov, int stock) {
@@ -32,6 +33,13 @@ public class Producto {
 		this.imagenes = new ArrayList<>();
 	}
 	
+	public int getCantidadComprada() {
+		return this.cantidadCompras;
+	}
+	
+	public void setCantidadComprada(int cantidadComprada) {
+		this.cantidadCompras = cantidadComprada;
+	}
 
 	public void agregarImagen(String img) {
 		this.imagenes.add(img);
@@ -170,6 +178,6 @@ public class Producto {
             }
 		}
 		catStr = catStr + "</html>";
-		return new DtProducto(this.getNombre(), this.getDescripcion(), this.getPrecio(), this.getNumRef(), this.getEspecificaciones(), this.getProveedor(), catStr, this.getImagenes(), this.getStock(), this.getComentarios());
+		return new DtProducto(this.getNombre(), this.getDescripcion(), this.getPrecio(), this.getNumRef(), this.getEspecificaciones(), this.getProveedor(), catStr, this.getImagenes(), this.getStock(), this.getComentarios(), this.getCantidadComprada());
 	}
 }

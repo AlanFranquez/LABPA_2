@@ -4,6 +4,7 @@ import java.awt.Image;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -28,7 +29,6 @@ public class Sistema implements ISistema {
     private Map<String, Categoria> categorias;
     private Map<Integer, OrdenDeCompra> ordenes;
     private Map<String, Categoria> arbolCategorias;
-    private Map<Integer, Producto> listaProductos;
 
     private Sistema() {
         // Inicialización de colecciones
@@ -110,7 +110,7 @@ public class Sistema implements ISistema {
      	
     	return true;
     }
-    public void agregarProducto(String titulo, int numRef, String descripcion, String especificaciones, int precio, String p, int stock) {    	
+    public void agregarProducto(String titulo, int numRef, String descripcion, String especificaciones, float precio, String p, int stock) {    	
     	Proveedor proveedor = (Proveedor) usuarios.get(p);
         Producto prod = new Producto(titulo, descripcion, precio, numRef, especificaciones, proveedor, stock);
         proveedor.agregarProd(prod);
@@ -269,7 +269,7 @@ public class Sistema implements ISistema {
     	OrdenDeCompra orden = new OrdenDeCompra(maxKey + 1);
     	ordenes.put(orden.getNumero(), orden);
     }
-    public void agregarProducto(int numRef, int cant) {
+    /*public void agregarProducto(int numRef, int cant) {
     	for (Usuario user : usuarios.values()) {
     		if (user instanceof Proveedor) {
     			Proveedor p = (Proveedor) user;
@@ -280,7 +280,7 @@ public class Sistema implements ISistema {
     			}
     		}
     	}
-    }
+    }*/
     public Integer obtenerStockProducto(int numRef) {
     	for (Usuario user : usuarios.values()) {
     		if (user instanceof Proveedor) {
@@ -564,14 +564,7 @@ public class Sistema implements ISistema {
 		 
 	 }
 	 
-	 public Producto getProductoByNumRef(int NumRef) {
-		return listaProductos.get(NumRef);
-		}
-	 
-	 public Map<Integer ,Producto> getProductoLista(){
-		 return this.listaProductos;
-	 }
-	 
+	
 	
 	 
 	 public void agregarImagenesDesdeProveedor(String proveedor, int numRef, String imagen) {
@@ -597,5 +590,67 @@ public class Sistema implements ISistema {
 	 public Map<String, Categoria> getCategoriasLista() {
 		 return this.categorias;
 	 }
+	 
+	 public List<Producto> buscarProductos(String query) {
+		    List<Producto> resultados = new ArrayList<>();
+
+		    if (query == null || query.trim().isEmpty()) {
+		        return resultados; 
+		    }
+
+		    String queryLower = query.toLowerCase(); 
+
+		    for (Categoria categoria : categorias.values()) {
+		        if (categoria instanceof Cat_Producto) {
+		            Cat_Producto catprod = (Cat_Producto) categoria;
+		            for (Producto producto : catprod.getProductos().values()) {
+		                if (producto.getNombre().toLowerCase().contains(queryLower) ||
+		                    categoria.getNombre().toLowerCase().contains(queryLower) ||
+		                    producto.getProveedor().getNick().toLowerCase().contains(queryLower)) {
+		                    resultados.add(producto);
+		                }
+		            }
+		        }
+		    }
+		    return resultados; 
+		}
+	 
+	 public List<Producto> getAllProductos() {
+		    List<Producto> resultados = new ArrayList<>();
+		    for (Categoria categoria : categorias.values()) {
+		        if (categoria instanceof Cat_Producto) {
+		        	Cat_Producto catprod = (Cat_Producto) categoria;
+		            for (Producto producto : catprod.getProductos().values()) {
+		                resultados.add(producto);
+		            }
+		        }
+		    }
+		    return resultados;
+		}
+	 
+	 
+	 public void realizarCompra(OrdenDeCompra o, String nickCliente) {
+		 Cliente cl = (Cliente) this.usuarios.get(nickCliente);
+		 this.ordenes.put(o.getNumero(), o);
+		 cl.agregarCompra(o);
+		 
+		 Map<Integer, Item> itemsAdquiridos = o.getItems();
+		 
+		 for (Map.Entry<Integer, Item> entry : itemsAdquiridos.entrySet()) {
+			 
+			 
+		        Item item = entry.getValue();
+		        int numeroRef = item.getProducto().getNumRef();
+		        // Obtener el producto desde el sistema
+		        Producto producto = this.getProducto(numeroRef);
+		        if (producto != null) {
+		            producto.setCantidadComprada(producto.getCantidadComprada() + item.getCant());
+		            producto.setStock(producto.getStock() - item.getCant());
+		        }
+		    }
+	 }
+	 
+	 
+
 	 
 }

@@ -70,8 +70,7 @@ public class ListaProductos extends HttpServlet {
 
 	private void agregarAlCarrito(HttpServletRequest request, HttpServletResponse response) throws IOException {
         int cantidad = Integer.parseInt(request.getParameter("cantidad"));
-        int IntnumRef = Integer.parseInt(request.getParameter("numRef")); // Convertir el parámetro a número
-        Producto producto = sist.getProductoByNumRef(IntnumRef);
+        int IntnumRef = Integer.parseInt(request.getParameter("numRef"));
 
         // Obtener la sesión actual
         HttpSession session = request.getSession();
@@ -84,12 +83,7 @@ public class ListaProductos extends HttpServlet {
         }
         
 
-        // Agregar el producto al carrito la cantidad especificada
-        if (producto != null && cantidad > 0 && cantidad <= producto.getStock()) {
-            for (int i = 0; i < cantidad; i++) {
-                carrito.agregarProducto(producto, cantidad);
-            }
-        }
+        
 
         // Guardar el carrito actualizado en la sesión
         session.setAttribute("carrito", carrito);

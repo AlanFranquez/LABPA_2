@@ -21,9 +21,10 @@
 	
 	%>
 	
-<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2C2C2C;">
+	
+		
+	<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2C2C2C;">
     <div class="container">
-      
         <a href="home" class="navbar-brand">ITSCODIGO</a>
         
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,32 +33,26 @@
 
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav mx-auto align-items-center">
-                <li class="nav-item w-100">
-                    <form action="buscarproductos" method="POST">
-				    <input type="text" name="query" placeholder="Buscar productos...">
-				    <button type="submit">Buscar</button>
-					</form>
+                <li class="nav-item">
+                    <form action="buscarproductos" method="POST" class="d-flex">
+                        <input type="text" name="query" placeholder="Buscar productos..." class="form-control me-2" aria-label="Buscar">
+                        <button type="submit" class="btn btn-outline-light">Buscar</button>
+                    </form>
                 </li>
             </ul>
 
             <ul class="navbar-nav align-items-center">
-                <!-- Perfil -->
                 <li class="nav-item">
                     <% if (usr != null && usr.getTipo() == "proveedor") { %>
                         <a class="nav-link" href="perfilProveedor?nickname=<%= usr.getNick() %>">Perfil</a>
                     <% } else if(usr != null && usr.getTipo() == "cliente"){ %>
-                    
-						 <a class="nav-link" href="perfilCliente?nickname=<%= usr.getNick() %>">Perfil</a>                    
-                 
+                        <a class="nav-link" href="perfilCliente?nickname=<%= usr.getNick() %>">Perfil</a>
                     <% } %>
                 </li>
                 
-               <%
-               	if(usr != null && usr.getTipo() == "cliente") {
-               		
-               %>
-               	
-               
+                <%
+                if (usr != null && usr.getTipo() == "cliente") {
+                %>
                 <li class="nav-item">
                     <a class="nav-link" href="Carrito.html">
                         <svg xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" viewBox="0 0 24 24">
@@ -65,8 +60,7 @@
                         </svg>
                     </a>
                 </li>
-                
-                <% }%>
+                <% } %>
 
                 <li class="nav-item">
                     <button class="btn btn-danger">
@@ -77,8 +71,6 @@
         </div>
     </div>
 </nav>
-
-
 	
     
     <main class="container d-flex justify-content-center align-items-center vh-90">

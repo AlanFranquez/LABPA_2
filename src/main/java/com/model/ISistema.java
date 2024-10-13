@@ -62,9 +62,9 @@ public interface ISistema {
 	public abstract boolean esPadre(String catName);
 
 	public abstract void agregarProducto(String titulo, int numRef, String descripcion, String especificaciones,
-			int precio, String proveedor, int stock);
+			float precio, String proveedor, int stock);
 
-	public abstract void agregarProducto(int numRef, int cant);
+	//public abstract void agregarProducto(int numRef, int cant);
 
 	public abstract void CrearOrden();
 	
@@ -107,19 +107,18 @@ public interface ISistema {
 	 
 	 public Usuario getUserByEmail(String email) throws UsuarioException;
 	 
-	 public Producto getProductoByNumRef(int NumRef);
 	 
 	 public void agregarImagenesDesdeProveedor(String proveedor, int numRef, String imagen);
 	 
 	 public Producto getProdByCateogria(String cat, int numRef) throws ProductoException;
 	   
-	 public Map<Integer ,Producto> getProductoLista();
 
-	   public Producto getProducto(int numRef);
+	  public Producto getProducto(int numRef);
 	   
-	   public List<Producto> buscarProductos(String query);
+	  public List<Producto> buscarProductos(String query);
 	   
-	   public List<Producto> getAllProductos();
-
+	  public List<Producto> getAllProductos();
+	  
+	  public void realizarCompra(OrdenDeCompra o, String nickCliente);
 
 }

@@ -13,6 +13,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
+
+import com.exceptions.CategoriaException;
 import com.model.Cat_Producto;
 import com.model.Categoria;
 import com.model.Factory;
@@ -75,6 +77,8 @@ public class ProductoServlet extends HttpServlet {
             request.getRequestDispatcher("/WEB-INF/RegistrarProducto.jsp").forward(request, response);
             return;
         }
+        
+        objSession.setAttribute("usuarioLogueado", prov);
 
         // Recibir los datos del formulario
         String titulo = request.getParameter("titulo");
@@ -137,23 +141,27 @@ public class ProductoServlet extends HttpServlet {
         }
 
         
-
-        // Crear el producto si los datos son válidos
         if (precio > 0) {
-            Producto p1 = new Producto(titulo, descripcion, precio, referencia, especificaciones, prov, stock);
-            
+
+            sist.agregarProducto(titulo, referencia, descripcion, especificaciones, precio, prov.getNick(), stock);
            
             if (!imagenesUrls.isEmpty()) {
             	for (String img : imagenesUrls) {
                     System.out.print(img);
-                	p1.agregarImagen(img);
+                    sist.getProducto(referencia).agregarImagen(img);
                 }
             }
             
 
             Cat_Producto catp1 = new Cat_Producto(categoriaSeleccionada);
-            catp1.agregarProducto(p1);
-            prov.agregarProd(p1);
+            catp1.agregarProducto(sist.getProducto(referencia));
+            try {
+				sist.agregarProductoCategoria(catp1.getNombre(), referencia);
+			} catch (CategoriaException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+            prov.agregarProd(sist.getProducto(referencia));
 
             // Redirigir al perfil del proveedor
             response.sendRedirect("perfilProveedor?nickname=" + prov.getNickname());

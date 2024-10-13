@@ -1,6 +1,5 @@
 package com.controllers;
 
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -9,53 +8,61 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
 
 import com.model.Factory;
 import com.model.ISistema;
 import com.model.Producto;
+import com.model.Usuario;
 
-/**
- * Servlet implementation class BuscarProducto
- */
 @WebServlet("/buscarproductos")
 public class BuscarProducto extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public BuscarProducto() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+    private static final long serialVersionUID = 1L;
     private ISistema sist;
+
     @Override
     public void init() throws ServletException {
         try {
-            sist = Factory.getSistema();  
+            sist = Factory.getSistema();
         } catch (Exception e) {
             throw new ServletException("No se pudo inicializar ISistema", e);
         }
     }
-    
-    
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String searchQuery = request.getParameter("search");
-
-        List<Producto> productos;
+        HttpSession session = request.getSession(false);
+        String searchQuery = request.getParameter("query");
+        String ordenacion = request.getParameter("ordenacion");
         
+        // Verificar si la sesión es válida
+        if (session == null || session.getAttribute("usuarioLogueado") == null) {
+            response.sendRedirect("home");
+            return; 
+        }
+
+        Usuario user = (Usuario) session.getAttribute("usuarioLogueado");
+        List<Producto> productos;
+
         if (searchQuery == null || searchQuery.trim().isEmpty()) {
-            // Si no hay consulta, obtén todos los productos
-            productos = sist.getAllProductos(); // Método que recupera todos los productos
+            productos = sist.getAllProductos();
         } else {
-            // Lógica para buscar productos según la consulta
             productos = sist.buscarProductos(searchQuery);
         }
-        
+
+        if ("alfabeticamente".equals(ordenacion)) {
+            productos.sort(Comparator.comparing(Producto::getNombre));
+        } else if ("precio".equals(ordenacion)) {
+            productos.sort(Comparator.comparing(Producto::getPrecio).reversed());
+        } else if("cantidad".equals(ordenacion)) {
+        	productos.sort(Comparator.comparing(Producto::getCantidadComprada).reversed());
+        }
+    
+
+        request.setAttribute("usuarioLogueado", user);
         request.setAttribute("productos", productos);
-        request.getRequestDispatcher("/WEB-INF/PaginaResultados.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/listaProductos.jsp").forward(request, response);
     }
 
+	
 }

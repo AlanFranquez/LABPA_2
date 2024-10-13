@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServlet;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +25,7 @@ import com.model.DTProveedor;
 import com.model.DtProducto;
 import com.model.Factory;
 import com.model.ISistema;
+import com.model.Item;
 import com.model.OrdenDeCompra;
 import com.model.Producto;
 import com.model.Proveedor;
@@ -67,21 +69,17 @@ public class InitServlet extends HttpServlet {
              
              s.agregarImagenUsuario("Perez", "/images/p1.jpg");
              
-             Producto p1 = new Producto("Pelota", "Pelota inflable ideal", 120, 1,"Lalala", prov, 2);
-             s.agregarProducto("Pelota", 1, "Pelota inflable ideal", "Increible", 120, "Perez", 2);
+
+             s.agregarProducto("Pelota", 1, "Pelota inflable ideal", "Increible", 120, "Perez", 100);
              s.agregarProducto("Cargador", 2, "Cargador tipo c", "Muy bueno", 220, "Perez", 20);
-             s.agregarProducto("Sillon Comodo", 3, "Sillon comodo para todos los hogares", "Muy bueno", 330, "Jorge", 25);
-             
+          
              s.agregarProductoCategoria("Tecno", 1);
-             s.agregarProductoCategoria("Otros", 1);
              s.agregarProductoCategoria("Tecno", 2);
              s.agregarProductoCategoria("Bazar", 3);
              
-             s.agregarProductoCategoria("Tecno", 2);
-             
              // DOS FORMAS DE AGREGAR IMAGENES
              s.agregarImagenesDesdeProveedor("Perez", 1, "/images/pelota1.jpg");
-             s.getProdByCateogria("Tecno", 1).agregarImagen("/images/pelota2.jpg");
+             s.getProducto(1).agregarImagen("/images/pelota2.jpg");
              
              s.agregarImagenesDesdeProveedor("Perez", 2, "/images/cargador1.jpg");
              s.agregarImagenesDesdeProveedor("Perez", 2, "/images/cargador2.jpg");
@@ -93,26 +91,25 @@ public class InitServlet extends HttpServlet {
             	 System.out.print(dt);
              }
              
-             if(p1.getComentarios() == null || p1.getComentarios().isEmpty()){
-            	 System.out.print("no Hya comentarios");
-             } else {
-            	 List<Comentario> listacc = p1.getComentarios();
-            	 for(Comentario c : listacc) {
-            		 System.out.print(c.getTexto());
-            	 }
-             }
-             //
-             OrdenDeCompra o1 = new OrdenDeCompra(1);
-             o1.addItem(p1, 3);
-             //
              
-             s.addOrdenes(o1, "Juan123");
+             Map<Integer, Item> items = new HashMap<>();
+             Item nuevoItem = new Item(5, s.getProducto(1));
+             items.put(1, nuevoItem);
+             
+             
+             
+             OrdenDeCompra o = new OrdenDeCompra(items, nuevoItem.getSubTotal());
+             s.realizarCompra(o, "Juan123");
 
              s.agregarImagenUsuario("Juan123", "/images/p1.jpg");
              s.agregarImagenUsuario("albert1341", "/images/p2.jpg");
              s.agregarImagenUsuario("agusmari", "/images/p3.jpg");
              
+             List<Producto> prodlist = s.getAllProductos();
              
+             for(Producto p : prodlist) {
+            	 System.out.print(p.getNombre());
+             }
              
              //System.out.print(s.getUsuario("Juan123").getImagen());
              
