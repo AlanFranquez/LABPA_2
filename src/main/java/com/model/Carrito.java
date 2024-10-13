@@ -31,6 +31,10 @@ public class Carrito {
     	
     	return false;
     }
+    
+    public List<Item> getItems(){
+    	return items;
+    }
 
     public void verCarrito() {
         if (items.isEmpty()) {

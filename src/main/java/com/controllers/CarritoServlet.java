@@ -5,9 +5,15 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
 import java.io.IOException;
+import java.util.List;
 
 import com.model.Carrito;
+import com.model.Usuario;
+import com.model.Item;
+import com.model.Cliente;
 
 /**
  * Servlet implementation class Carrito
@@ -27,25 +33,35 @@ public class CarritoServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.getRequestDispatcher("/WEB-INF/Carrito.jsp").forward(request, response);
-		
-	}
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	    Carrito carrito = (Carrito) request.getSession().getAttribute("carrito");
+        // Verificar si la sesión es válida
+        if (session == null || session.getAttribute("usuarioLogueado") == null) {
+            response.sendRedirect("home");
+            return;
+        }
 
-	    if (carrito != null) {
-	        //carrito.generarOrdenDeCompra();
-	    } else {
-	        // Manejar el caso en que el carrito es nulo
-	        request.setAttribute("error", "El carrito no se ha encontrado en la sesión.");
-	        request.getRequestDispatcher("/WEB-INF/Carrito.jsp").forward(request, response);
-	    }
-	}
+        Usuario user = (Usuario) session.getAttribute("usuarioLogueado");
+
+        // Verificar si el usuario es un cliente
+        if (user instanceof Cliente) {
+            Cliente cliente = (Cliente) user;
+
+            List<Item> itemsCarrito = cliente.getCarrito().getItems();
+
+            request.setAttribute("itemsCarrito", itemsCarrito);
+        }
+        if (user != null) {
+            request.setAttribute("usuario", user); 
+            request.setAttribute("estado", "logueado");
+            request.getRequestDispatcher("/WEB-INF/Carrito.jsp").forward(request, response);
+        } else {
+            response.sendRedirect("formlogin");
+            request.setAttribute("estado", "noLogueado");
+        }
+        
+    }
 }
 
 
