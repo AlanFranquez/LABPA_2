@@ -21,17 +21,20 @@ import com.model.Usuario;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.Part;
 
 
 
 
 
 @WebServlet("/registrarusuario2")
+@MultipartConfig
 public class RegistrarUsuarios2 extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     
@@ -74,8 +77,25 @@ public class RegistrarUsuarios2 extends HttpServlet {
         String contraseña = request.getParameter("password");
         String contraseña2 = request.getParameter("confirmPassword");
         String tipoUsuario = request.getParameter("tipoUsuario");
+        
+        Part img = request.getPart("imagen");
+        // Validar la carga de la imagen
+        if (img == null || img.getSize() == 0) {
+            request.setAttribute("errorMsg", "Por favor, seleccione una imagen.");
+            request.getRequestDispatcher("/WEB-INF/RegistrarUsuario2.jsp").forward(request, response);
+            return;
+        }
 
-        // Para el caso de tipo de usuario "proveedor"
+        String uploadDir = getServletContext().getRealPath("") + File.separator + "media";
+   
+        File uploads = new File(uploadDir);
+        if (!uploads.exists()) uploads.mkdirs();
+
+        String fileName = img.getSubmittedFileName();
+        File file = new File(uploads, fileName);
+
+        img.write(file.getAbsolutePath());
+
         String nombreCompania = request.getParameter("nombreCompania");
         String sitioWeb = request.getParameter("sitioWeb");
 
@@ -111,7 +131,7 @@ public class RegistrarUsuarios2 extends HttpServlet {
         }
 
         EstadoSesion nuevoEstado = EstadoSesion.LOGIN_INCORRECTO;
-        Usuario usr = null;  // Agregamos esta variable para almacenar el usuario
+        Usuario usr = null;
 
         try {
             if (tipoUsuario.equals("proveedor")) {
@@ -122,14 +142,18 @@ public class RegistrarUsuarios2 extends HttpServlet {
             } else {
                 Cliente cliente = new Cliente(nombre, nick, apellido, correo, fechaNueva, contraseña);
                 sist.agregarCliente(nombre, nick, apellido, correo, fechaNueva, contraseña, contraseña2);
-                usr = cliente;  // Guardamos el cliente en la variable usr
-                System.out.println("Registrado Usuario");
+                usr = cliente;
             }
+
+            sist.agregarImagenUsuario(usr.getNick(), fileName);
+            
+            
+            System.out.print(sist.getUsuario(nick).getImagen());
             
             // Aquí se loguea al usuario automáticamente
             nuevoEstado = EstadoSesion.LOGIN_CORRECTO;
-            objSession.setAttribute("usuarioLogueado", usr); // Se establece el usuario logueado
-            objSession.setAttribute("estado", nuevoEstado);  // Establecemos el estado de sesión
+            objSession.setAttribute("usuarioLogueado", sist.getUsuario(nick));
+            objSession.setAttribute("estado", nuevoEstado); 
 
             // Redirigir a la página de inicio
             System.out.println("Redirigiendo a home");
@@ -143,6 +167,8 @@ public class RegistrarUsuarios2 extends HttpServlet {
             return;
         }
     }
+
+
 
 }
 

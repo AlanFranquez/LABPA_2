@@ -23,38 +23,36 @@
 <%
     DTCliente user = (DTCliente) request.getAttribute("usuario");
 %>
-    
-<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2C2C2C;">
+   <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2C2C2C;">
     <div class="container">
-        <!-- Logo -->
-        <a href="home" class="navbar-brand">
-            ITSCODIGO
-        </a>
+        <a href="home" class="navbar-brand">ITSCODIGO</a>
         
-        <!-- Botón para colapsar en dispositivos móviles -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav mx-auto align-items-center">
-                <li class="nav-item w-100">
-                    <form class="d-flex" role="search">
-                        <input class="form-control me-2 barraBusqueda" type="search" placeholder="Buscar productos..." aria-label="Buscar">
-                        <button class="btn botonBuscar" type="submit">BUSCAR</button>
+                <li class="nav-item">
+                    <form action="buscarproductos" method="POST" class="d-flex">
+                        <input type="text" name="query" placeholder="Buscar productos..." class="form-control me-2" aria-label="Buscar">
+                        <button type="submit" class="btn btn-outline-light">Buscar</button>
                     </form>
                 </li>
             </ul>
 
             <ul class="navbar-nav align-items-center">
-                <!-- Perfil -->
                 <li class="nav-item">
-                    <a class="nav-link" href="perfilCliente?nickname=<%= user.getNick() %>">
-                        Perfil
-                    </a>
+                    <% if (user != null && user.getTipo() == "proveedor") { %>
+                        <a class="nav-link" href="perfilProveedor?nickname=<%= user.getNick() %>">Perfil</a>
+                    <% } else if(user != null && user.getTipo() == "cliente"){ %>
+                        <a class="nav-link" href="perfilCliente?nickname=<%= user.getNick() %>">Perfil</a>
+                    <% } %>
                 </li>
                 
-                <!-- Carrito -->
+                <%
+                if (user != null && user.getTipo() == "cliente") {
+                %>
                 <li class="nav-item">
                     <a class="nav-link" href="Carrito.html">
                         <svg xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" viewBox="0 0 24 24">
@@ -62,12 +60,11 @@
                         </svg>
                     </a>
                 </li>
+                <% } %>
 
                 <li class="nav-item">
                     <button class="btn btn-danger">
-                        <a class="nav-link" href="logout">
-                            Cerrar Sesión
-                        </a>
+                        <a class="nav-link" href="logout">Cerrar Sesión</a>
                     </button>
                 </li>
             </ul>

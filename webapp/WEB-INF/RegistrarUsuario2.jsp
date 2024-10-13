@@ -18,8 +18,8 @@
     
     <div class="d-flex justify-content-center m-5">
         <div class="contenedor-form">
-            <div class="d-flex flex-column align-items-center">
-                <form id="myform" action="registrarusuario2" method="post" class="d-flex align-items-center flex-column">
+            <div class="d-flex flex-column align-items-center" >
+                <form id="myform" action="registrarusuario2" method="post" class="d-flex align-items-center flex-column" enctype="multipart/form-data">
                 
                     <h2 class="form-group text-center">Completar los datos</h2>
                     <p class="text-center" style="color: #7E7979; font-size: 16px; width: 500px; margin: 10px auto;">
@@ -38,7 +38,7 @@
                     
                     <div class="form-group align-items-start" >
                         <label for="imagen">Imagen *</label>
-                        <input type="file" placeholder="Ingresa una imagen" id="imagen" name="imagen" class="form-control" required multiple >
+                        <input type="file" placeholder="Ingresa una imagen" id="imagen" name="imagen" class="form-control"  >
                     </div>
                     
                     <div class="form-group align-items-start">

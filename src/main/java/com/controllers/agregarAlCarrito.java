@@ -36,9 +36,9 @@ public class agregarAlCarrito extends HttpServlet {
     @Override
     public void init() throws ServletException {
         try {
-            sist = Factory.getSistema();  // Aquí puede estar fallando
+            sist = Factory.getSistema();
         } catch (Exception e) {
-            throw new ServletException("No se pudo inicializar ISistema", e);  // Manejar la excepción
+            throw new ServletException("No se pudo inicializar ISistema", e);  
         }
     }
     

@@ -16,6 +16,28 @@ main {
 
 }
 
+.card {
+    border-radius: 15px;
+    height: 100%; /* Asegúrate de que todas las tarjetas tengan la misma altura */
+    min-height: 400px; /* Ajusta este valor según tus necesidades */
+}
+
+.bg-image img {
+    height: 200px; /* Establece una altura fija para las imágenes */
+    width: 100%; /* Asegúrate de que la imagen ocupe todo el ancho */
+    object-fit: cover; /* Mantiene la proporción de la imagen y recorta si es necesario */
+    border-top-left-radius: 15px; 
+    border-top-right-radius: 15px; 
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Esto asegura que los elementos en el cuerpo de la tarjeta se distribuyan uniformemente */
+    flex-grow: 1; /* Permite que el cuerpo de la tarjeta use todo el espacio disponible */
+}
+
+
 
 
 

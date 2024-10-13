@@ -1,6 +1,12 @@
 <%@page import="com.model.Sistema"%>
 <%@page import="com.model.Usuario"%>
+<%@page import="com.model.Producto"%>
 <%@page import="com.model.DTCliente" %>
+<%@page import="com.model.DtProducto" %>
+<%@page import="com.model.Carrito" %>
+<%@page import="com.model.Cliente" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -19,6 +25,14 @@
 	String estadoUser = (String) request.getAttribute("estado");
     Usuario usr = (Usuario) request.getAttribute("usuario");
 	
+    
+    List<Producto> prods = (List<Producto>) request.getAttribute("prods");
+    Cliente cl = null;
+    Carrito carr = null;
+    if(usr.getTipo() == "cliente") {
+    	cl = (Cliente) usr;
+    	carr = cl.getCarrito();
+    }
 	%>
 	
 	
@@ -72,7 +86,7 @@
     </div>
 </nav>
 	
-    
+    <% if(usr != null)  {%>
     <main class="container d-flex justify-content-center align-items-center vh-90">
         <div class="row w-100">
             <div class="col-md-6 d-flex justify-content-center align-items-center">
@@ -109,58 +123,62 @@
     </main>
 
     <section style="background-color: #eee;" class="mt-5">
-        <div class="container py-5">
-            <div class="row justify-content-center">
-                <!-- Repetir este bloque para más productos -->
-                <div class="col-md-8 col-lg-6 col-xl-4">
-                    <div class="card" style="border-radius: 15px;">
-                        <div class="bg-image hover-overlay ripple ripple-surface ripple-surface-light"
-                             data-mdb-ripple-color="light">
-                            <img src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Products/12.webp"
-                                 style="border-top-left-radius: 15px; border-top-right-radius: 15px;" class="img-fluid"
-                                 alt="Laptop" />
-                            <a href="#!">
-                                <div class="mask"></div>
-                            </a>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+        
+        <%
+        for(Producto p : prods) {
+            DtProducto dtp = p.crearDT();
+        %>
+            <div class="col-md-8 col-lg-6 col-xl-4 d-flex">
+                <div class="card flex-fill" style="border-radius: 15px; min-height: 400px;">
+                    <div class="overflow-hidden" style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
+                        <img src="media/<%= dtp.getImagenes().getFirst() %>"
+                             class="img-fluid" alt="Producto" 
+                             style="width: 100%; height: 200px; object-fit: cover;" />
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <p><a href="#!" class="text-dark"><%= dtp.getNombre() %></a></p>
+                            <p class="text-dark">#### 8787</p>
                         </div>
-                        <div class="card-body pb-0">
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <p><a href="#!" class="text-dark">Dell Xtreme 270</a></p>
-                                    <p class="small text-muted">Laptops</p>
-                                </div>
-                                <div>
-                                    <div class="d-flex flex-row justify-content-end mt-1 mb-4 text-danger">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
+                            <p style="color: gray"><%= dtp.getDescripcion() %></p>
+                        
+                       
+                        <div class="d-flex justify-content-between">
+                            <p class="text-dark">$<%= dtp.getPrecio() %></p>
+                            <p style="color: red;">Cantidad disponible: <%= dtp.getStock() %></p>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                           <form action="agregarAlCarrito" method="post" style="display: inline-block;" onsubmit="return validarCantidad(this)">
+                                    <input type="hidden" name="numRef" value="<%= dtp != null ? dtp.getNumRef() : "" %>">
+                                    <input class="text-center" type="number" name="cantidad" min="1" max="<%= dtp.getStock() %>" value="1" style="width: 60px;" onchange="validarCantidad(this.form)">
+                                    <br>
+                                    <div class="row mt-2">
+                                        <a href="perfilProducto?producto=<%= dtp != null ? dtp.getNumRef() : "" %>" class="btn" style="color: #0000EE; cursor: pointer">Ver Detalles</a>
+                                        <% if(usr.getTipo() == "cliente" && carr != null && !carr.existeProducto(dtp.getNumRef())) { 
+                                        	
+                                       
+                                        %>
+                                        <button type="submit" class="btn btn-primary" id="addToCartButton">Agregar al Carrito</button>
+                                        
+                                        <% } %>
+                                        
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                        <hr class="my-0" />
-                        <div class="card-body pb-0">
-                            <div class="d-flex justify-content-between">
-                                <p><a href="#!" class="text-dark">$3,999</a></p>
-                                <p class="text-dark">#### 8787</p>
-                            </div>
-                            <p class="small text-muted">VISA Platinum</p>
-                        </div>
-                        <hr class="my-0" />
-                        <div class="card-body">
-                            <a href="InfoProducto.html" class="d-flex justify-content-between align-items-center pb-2 mb-1">
-                                <button type="button" class="btn btn-primary">Añadir al Carrito</button>
-                            </a>
+                                </form>
                         </div>
                     </div>
                 </div>
-                <!-- Fin del bloque de productos -->
-
-                <!-- Puedes agregar más productos aquí -->
             </div>
+        <% } %>
+        
         </div>
-    </section>
+    </div>
+</section>
+
+<% } %>
+
+
 
     <div class="part-final d-flex justify-content-center align-items-center">
         <p class="text-center">Todos los derechos reservados, 2024. <br> Laboratorio PA.</p>
@@ -169,4 +187,20 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 <script src="../media/js/iniciarSesion.js"></script>
+
+<script>
+function validarCantidad(form) {
+    const cantidadInput = form.cantidad;
+    const stock = parseInt(cantidadInput.max);
+    const cantidad = parseInt(cantidadInput.value);
+    
+    const button = form.querySelector('button[type="submit"]');
+
+    if (cantidad > stock) {
+        button.disabled = true; 
+    } else {
+        button.disabled = false;
+    }
+}
+</script>
 </html>

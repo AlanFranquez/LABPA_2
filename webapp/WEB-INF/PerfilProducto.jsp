@@ -3,6 +3,9 @@
  <%@page import="com.model.DtProducto" %>
  <%@page import="com.model.Usuario" %>
  <%@page import="com.model.Comentario" %>
+ 
+  <%@page import="com.model.Cliente" %>
+  <%@page import="com.model.Carrito" %>
  <%@page import="java.util.Collections" %>
  <%@page import="java.util.List" %>
  <%@page import="com.model.DTCliente" %>
@@ -15,6 +18,15 @@
 	Usuario usr = (Usuario) request.getAttribute("usuario");
 	 List<String> imagenes = prod.getImagenes();
 	 int id = prod.getNumRef();
+	 
+	 Cliente cl = null;
+ 	 Carrito carr = null;	
+	 if(usr.getTipo() == "cliente") {
+	 	
+	 	cl = (Cliente) usr;
+	 	carr = cl.getCarrito();
+	 	
+	 }
 %>
 
 <meta charset="UTF-8">
@@ -134,10 +146,22 @@
             </div>
             <p><strong>Especificaciones:</strong> <%= prod != null ? prod.getEspecs() : "N/A" %></p>
             <p><strong>Proveedor:</strong> <%= prod != null ? prod.getNicknameProveedor() : "N/A" %></p>
-            
-            <% if (usr != null && usr.getTipo().equals("cliente")) { %>
-                <button class="btn btn-secondary botonRegistro">Agregar al Carrito</button>
-            <% } %>
+            <p><strong>Cantidad Disponible: </strong><%= prod.getStock() %></p>
+            <form action="agregarAlCarrito" method="post" style="display: inline-block;" onsubmit="return validarCantidad(this)">
+                                    <input type="hidden" name="numRef" value="<%= prod != null ? prod.getNumRef() : "" %>">
+                                    <br>
+                                    <div class="row mt-2">
+                                        <% if(usr.getTipo() == "cliente" && carr != null && !carr.existeProducto(prod.getNumRef())) { 
+                                        	
+                                       
+                                        %>
+                                    	<input class="text-center" type="number" name="cantidad" min="1" max="<%= prod.getStock() %>" value="1" style="width: 60px;" onchange="validarCantidad(this.form)">
+                                        <button type="submit" class="btn btn-primary" id="addToCartButton">Agregar al Carrito</button>
+                                        
+                                        <% } %>
+                                        
+                                    </div>
+                                </form>
         </div>
     </div>
 </main>
@@ -155,7 +179,7 @@
         <% } else { %>
             <div class="column">
                 <% for (Comentario c : comentarios) { 
-                    String comentarioId = "comment" + c.getNumero(); // Genera un ID único basado en el ID del comentario
+                    String comentarioId = "comment" + c.getNumero();
                 %>
                     <div class="col-md-6 mb-4">
                         <div class="card shadow-sm" style="border: none;">
@@ -246,6 +270,22 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
 
+</script>
+
+<script>
+function validarCantidad(form) {
+    const cantidadInput = form.cantidad;
+    const stock = parseInt(cantidadInput.max);
+    const cantidad = parseInt(cantidadInput.value);
+    
+    const button = form.querySelector('button[type="submit"]');
+
+    if (cantidad > stock) {
+        button.disabled = true; 
+    } else {
+        button.disabled = false;
+    }
+}
 </script>
 
 <script type="text/javascript">
