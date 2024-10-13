@@ -8,13 +8,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap" rel="stylesheet">
     <title>Registrar Usuario</title>
-    <%@ include file="template/BarraNavSinReg.html" %>
 </head>
 <body>
     
-    <!-- 
-    Parte de registro
-    -->
     
     <div class="d-flex justify-content-center m-5">
         <div class="contenedor-form">

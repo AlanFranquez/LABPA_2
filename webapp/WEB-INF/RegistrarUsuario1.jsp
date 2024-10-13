@@ -13,7 +13,6 @@
 </head>
 <body>
 
-    <!-- Parte de registro -->
     <div class="container">
         <div class="d-flex justify-content-center align-items-center">
             <div class="contenedor-form mt-5">

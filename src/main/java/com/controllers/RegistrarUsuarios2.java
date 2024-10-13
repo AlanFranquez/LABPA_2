@@ -146,17 +146,14 @@ public class RegistrarUsuarios2 extends HttpServlet {
             }
 
             sist.agregarImagenUsuario(usr.getNick(), fileName);
-            
+            usr.setImagen(fileName);
             
             System.out.print(sist.getUsuario(nick).getImagen());
             
-            // Aquí se loguea al usuario automáticamente
             nuevoEstado = EstadoSesion.LOGIN_CORRECTO;
             objSession.setAttribute("usuarioLogueado", sist.getUsuario(nick));
             objSession.setAttribute("estado", nuevoEstado); 
 
-            // Redirigir a la página de inicio
-            System.out.println("Redirigiendo a home");
             response.sendRedirect("home");
             
         } catch (UsuarioRepetidoException e) {
