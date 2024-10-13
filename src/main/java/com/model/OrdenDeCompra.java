@@ -6,7 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class OrdenDeCompra {
-    private int numero = 0;
+    private int contador = 1;
+    private int numero;
     private float precioTotal;
     private LocalDateTime fecha;
     private Map<Integer, Item> items;
@@ -20,7 +21,7 @@ public class OrdenDeCompra {
     
     public OrdenDeCompra(Map <Integer, Item> itemsAdquiridos, float precioTotal) {
     	this.items = itemsAdquiridos;
-    	this.numero = numero + 1;
+    	this.numero = contador++;
     	this.precioTotal = precioTotal;
     	this.fecha = LocalDateTime.now();
     }

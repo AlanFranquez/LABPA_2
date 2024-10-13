@@ -99,7 +99,6 @@ public class InitServlet extends HttpServlet {
              
              
              OrdenDeCompra o = new OrdenDeCompra(items, nuevoItem.getSubTotal());
-             s.realizarCompra(o, "Juan123");
 
              s.agregarImagenUsuario("Juan123", "/images/p1.jpg");
              s.agregarImagenUsuario("albert1341", "/images/p2.jpg");
@@ -111,7 +110,6 @@ public class InitServlet extends HttpServlet {
             	 System.out.print(p.getNombre());
              }
              
-             //System.out.print(s.getUsuario("Juan123").getImagen());
              
 
          } catch (Exception e) {

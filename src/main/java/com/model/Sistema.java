@@ -630,25 +630,38 @@ public class Sistema implements ISistema {
 	 
 	 
 	 public void realizarCompra(OrdenDeCompra o, String nickCliente) {
-		 Cliente cl = (Cliente) this.usuarios.get(nickCliente);
-		 this.ordenes.put(o.getNumero(), o);
-		 cl.agregarCompra(o);
-		 
-		 Map<Integer, Item> itemsAdquiridos = o.getItems();
-		 
-		 for (Map.Entry<Integer, Item> entry : itemsAdquiridos.entrySet()) {
-			 
-			 
+		    Cliente cl = (Cliente) this.usuarios.get(nickCliente);
+		    System.out.println("Realizando compra para el cliente: " + nickCliente);
+		    System.out.println("Número de orden: " + o.getNumero());
+		    
+		    if (cl == null) {
+		        System.out.println("Cliente no encontrado");
+		        return; 
+		    }
+
+		    this.ordenes.put(o.getNumero(), o);
+		    System.out.println("Orden guardada: " + o.getNumero());
+		    
+		    // Agregar compra al cliente
+		    cl.agregarCompra(o);
+		    
+		    Map<Integer, Item> itemsAdquiridos = o.getItems();
+		    for (Map.Entry<Integer, Item> entry : itemsAdquiridos.entrySet()) {
 		        Item item = entry.getValue();
 		        int numeroRef = item.getProducto().getNumRef();
-		        // Obtener el producto desde el sistema
 		        Producto producto = this.getProducto(numeroRef);
+		        
 		        if (producto != null) {
+		            System.out.println("Actualizando stock para producto: " + numeroRef);
 		            producto.setCantidadComprada(producto.getCantidadComprada() + item.getCant());
 		            producto.setStock(producto.getStock() - item.getCant());
+		            System.out.println("Nuevo stock para producto " + numeroRef + ": " + producto.getStock());
+		        } else {
+		            System.out.println("Producto no encontrado: " + numeroRef);
 		        }
 		    }
-	 }
+		}
+
 	 
 	 
 

@@ -13,6 +13,10 @@ public class Carrito {
     public Carrito() {
         items = new ArrayList<>();
     }
+    
+    public List<Item> getProductos() {
+    	return this.items;
+    }
 
     public void agregarProducto(Item i) {
         if (i.getProducto().getStock() >= i.getCant()) {
@@ -20,6 +24,19 @@ public class Carrito {
         } else {
             System.out.println("No se puede agregar el producto. Stock insuficiente. ");
         }
+    }
+    
+    public void vaciarCarrito() {
+        items.clear();
+    }
+    
+    public void eliminarProd(int numRef) {
+    	 for (int i = 0; i < items.size(); i++) {
+             if (items.get(i).getProducto().getNumRef() == numRef) {
+                 items.remove(i);
+                 return;
+             }
+         }
     }
     
     public Boolean existeProducto(int numRef) {

@@ -40,12 +40,14 @@ public class PerfilCliente extends HttpServlet {
             return;
         }
         
-        Cliente usuarioLogueado = (Cliente) session.getAttribute("usuarioLogueado");
-        DTCliente dtcli = usuarioLogueado.crearDt();
+        Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
+        Cliente cli = (Cliente) usuarioLogueado;
+        DTCliente dtcli = cli.crearDt();
         
         String parametro = request.getParameter("nickname");
         
         if (usuarioLogueado.getNick().equals(parametro)) {
+        	request.setAttribute("usuarioLogueado", usuarioLogueado);
             request.setAttribute("usuario", dtcli);
             request.getRequestDispatcher("/WEB-INF/InfoPerfilCliente.jsp").forward(request, response);
             return;
@@ -55,9 +57,7 @@ public class PerfilCliente extends HttpServlet {
         response.sendRedirect("home");
     }
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);

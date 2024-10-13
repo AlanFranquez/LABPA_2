@@ -89,7 +89,7 @@
             <p>Nickname: <b><%= user.getNick() %></b></p>
             <p>Nombre: <b><%= user.getNombre() %></b></p>
             <p>Apellido: <b><%= user.getApellido() %></b></p>
-            <p>Fecha de Nacimiento: <b><%= user.getNacimientoFormateado() %></b></p> 
+            <p>Fecha de Nacimiento: <br><b><%= user.getNacimientoFormateado() %></b></p> 
         </div>
     </section>
 </main>
