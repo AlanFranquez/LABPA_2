@@ -6,61 +6,38 @@ import java.util.ArrayList;
 
 public class Carrito {
 
-    public class ProductoCarrito {
-        private Producto producto;
-        private int cantidad;
-        int numeroOrden = 100;
+	
 
-        public ProductoCarrito(Producto producto, int cantidad) {
-            this.producto = producto;
-            this.cantidad = cantidad;
-        }
-
-        public Producto getProducto() {
-            return producto;
-        }
-
-        public int getCantidad() {
-            return cantidad;
-        }
-
-        public double getTotal() {
-            return producto.getPrecio() * cantidad;
-        }
-
-        @Override
-        public String toString() {
-            return "Referencia: " + producto.getNumRef() + 
-                   ", Nombre: " + producto.getNombre() + 
-                   ", Descripción: " + producto.getDescripcion() +
-                   ", Precio: " + producto.getPrecio() + 
-                   ", Cantidad: " + cantidad + 
-                   ", Total: " + getTotal();
-        }
-    }
-
-    private List<ProductoCarrito> productos;
+	private List<Item> items;
 
     public Carrito() {
-        productos = new ArrayList<>();
+        items = new ArrayList<>();
     }
 
-    public void agregarProducto(Producto producto, int cantidad) {
-        if (producto.getStock() >= cantidad) {
-            ProductoCarrito productoCarrito = new ProductoCarrito(producto, cantidad);
-            productos.add(productoCarrito);
-            producto.setStock(producto.getStock() - cantidad); // Actualiza el stock disponible
+    public void agregarProducto(Item i) {
+        if (i.getProducto().getStock() >= i.getCant()) {
+            items.add(i);
         } else {
-            System.out.println("No se puede agregar el producto. Stock insuficiente. Stock disponible: " + producto.getStock());
+            System.out.println("No se puede agregar el producto. Stock insuficiente. ");
         }
+    }
+    
+    public Boolean existeProducto(int numRef) {
+    	for(Item i : items) {
+    		if(i.getProducto().getNumRef() == numRef) {
+    			return true;
+    		}
+    	}
+    	
+    	return false;
     }
 
     public void verCarrito() {
-        if (productos.isEmpty()) {
+        if (items.isEmpty()) {
             System.out.println("El carrito está vacío.");
         } else {
-            for (ProductoCarrito productoCarrito : productos) {
-                System.out.println(productoCarrito);
+            for (Item productoCarrito : items) {
+                System.out.println(productoCarrito.getProducto().getNombre());
             }
         }
     }
@@ -69,7 +46,7 @@ public class Carrito {
     	return numeroOrden++;
 	 }
 
-    public void generarOrdenDeCompra() {
+    /*public void generarOrdenDeCompra() {
         if (productos.isEmpty()) {
             System.out.println("El carrito está vacío. No se puede generar la orden de compra.");
             return;
@@ -80,6 +57,6 @@ public class Carrito {
         for (ProductoCarrito productoCarrito : productos) {
             orden.addItem(productoCarrito.getProducto(), productoCarrito.getCantidad());
         }
-    }
+    }*/
 }
 

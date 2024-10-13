@@ -4,6 +4,8 @@
 <%@ page import="com.model.Producto" %>
 <%@ page import="com.model.DtProducto" %>
 <%@ page import="com.model.Usuario" %>
+<%@ page import="com.model.Carrito" %>
+<%@ page import="com.model.Cliente" %>
 <%@ page import="com.model.ISistema" %>
 
 <!DOCTYPE html>
@@ -20,6 +22,13 @@
 <%
     List<Producto> productos = (List<Producto>) request.getAttribute("productos");
     Usuario usr = (Usuario) request.getAttribute("usuarioLogueado");
+    
+    Carrito carr = null;
+    Cliente cl = null;
+    if(usr.getTipo() == "cliente") {
+		cl = (Cliente) usr;
+		carr = cl.getCarrito();
+    }
 %>
 
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2C2C2C;">
@@ -131,7 +140,14 @@
                                     <br>
                                     <div class="row mt-2">
                                         <a href="perfilProducto?producto=<%= dt != null ? dt.getNumRef() : "" %>" class="btn" style="color: #0000EE; cursor: pointer">Ver Detalles</a>
+                                        <% if(usr.getTipo() == "cliente" && carr != null && !carr.existeProducto(dt.getNumRef())) { 
+                                        	
+                                       
+                                        %>
                                         <button type="submit" class="btn btn-primary" id="addToCartButton">Agregar al Carrito</button>
+                                        
+                                        <% } %>
+                                        
                                     </div>
                                 </form>
                             </div>

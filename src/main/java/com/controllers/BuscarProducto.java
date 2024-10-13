@@ -1,6 +1,7 @@
 package com.controllers;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,6 +12,7 @@ import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
 
+import com.model.Cliente;
 import com.model.Factory;
 import com.model.ISistema;
 import com.model.Producto;
@@ -30,6 +32,8 @@ public class BuscarProducto extends HttpServlet {
         }
     }
 
+  
+    
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         String searchQuery = request.getParameter("query");
@@ -40,6 +44,7 @@ public class BuscarProducto extends HttpServlet {
             response.sendRedirect("home");
             return; 
         }
+       
 
         Usuario user = (Usuario) session.getAttribute("usuarioLogueado");
         List<Producto> productos;
@@ -58,6 +63,14 @@ public class BuscarProducto extends HttpServlet {
         	productos.sort(Comparator.comparing(Producto::getCantidadComprada).reversed());
         }
     
+        
+        
+        if (user instanceof Cliente) {
+            Cliente cliente = (Cliente) user;
+            request.setAttribute("carrito", cliente.getCarrito());
+        }
+        
+      
 
         request.setAttribute("usuarioLogueado", user);
         request.setAttribute("productos", productos);

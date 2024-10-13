@@ -11,16 +11,22 @@ import com.exceptions.ProductoException;
 public class Cliente extends Usuario {
     private Map<Integer, OrdenDeCompra> listaCompras;
     private Map<Integer, Comentario> listaComentarios;
+    private Carrito carrito;
     
     // Constructor
     public Cliente(String nombre, String nick, String apellido, String correo, DTFecha fecha, String contrasena) {
         super(nombre, nick, apellido, correo, fecha, "cliente", contrasena);
         this.listaCompras = new HashMap<>();
         this.listaComentarios = new HashMap<>();
+        this.carrito = new Carrito();
     }
     // gets, sets
     public Map<Integer, OrdenDeCompra> getCompras() {
         return listaCompras;
+    }
+    
+    public Carrito getCarrito() {
+    	return this.carrito;
     }
     
     

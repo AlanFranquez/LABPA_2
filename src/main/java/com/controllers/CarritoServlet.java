@@ -39,7 +39,7 @@ public class CarritoServlet extends HttpServlet {
 	    Carrito carrito = (Carrito) request.getSession().getAttribute("carrito");
 
 	    if (carrito != null) {
-	        carrito.generarOrdenDeCompra();
+	        //carrito.generarOrdenDeCompra();
 	    } else {
 	        // Manejar el caso en que el carrito es nulo
 	        request.setAttribute("error", "El carrito no se ha encontrado en la sesión.");
