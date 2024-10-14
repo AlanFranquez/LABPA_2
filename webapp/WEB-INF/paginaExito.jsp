@@ -46,12 +46,18 @@
 				</div>
 				
 				<p><b>Total de la compra: </b> $<%= precioTotal %></p>
+				<br>
+				<hr>
+			<a class="btn btn-dark" href="perfilCliente?nickname=<%= cl.getNick() %>">Volver al perfil</a>
+				
+				
 			</div>
+			
 		</div>
 
 		<br>
 
-		<a class="btn btn-dark" href="perfilCliente?nickname=<%= cl.getNick() %>">Volver al perfil</a>
+		
 		<%
 		} else {
 			// Redirigir a la página de inicio si no hay mensaje
