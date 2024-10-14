@@ -6,7 +6,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
 import java.io.IOException;
 import java.util.List;
 
@@ -48,7 +47,7 @@ public class CarritoServlet extends HttpServlet {
         if (user instanceof Cliente) {
             Cliente cliente = (Cliente) user;
 
-            List<Item> itemsCarrito = cliente.getCarrito().getItems();
+            List<Item> itemsCarrito = cliente.getCarrito().getProductos();
 
             request.setAttribute("itemsCarrito", itemsCarrito);
         }
@@ -61,6 +60,72 @@ public class CarritoServlet extends HttpServlet {
             request.setAttribute("estado", "noLogueado");
         }
         
+    }
+    
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    	HttpSession session = req.getSession(false);
+    	String param = req.getParameter("numRef");
+    	
+    	String action = req.getParameter("action");
+    	String cant = req.getParameter("cantidad");
+
+        // Verificar si la sesión es válida
+        if (session == null || session.getAttribute("usuarioLogueado") == null) {
+            resp.sendRedirect("home");
+            return;
+        }
+        
+        System.out.println("Cantidad recibida: " + req.getParameter("cantidad"));
+
+        
+        int paramNumero = 0;
+        if("eliminar".equals(action)) {
+              try {
+              	paramNumero = Integer.parseInt(param);
+              }catch (Exception e) {
+              	System.out.print("Hubo un error");
+              	resp.sendRedirect("home");
+              	return;
+      		}
+
+              Usuario user = (Usuario) session.getAttribute("usuarioLogueado");
+
+              if (user instanceof Cliente) {
+                  Cliente cliente = (Cliente) user;
+
+                  cliente.getCarrito().eliminarProd(paramNumero);
+              }
+        }
+        
+        if("actualizarCant".equals(action)) {
+        	Usuario user = (Usuario) session.getAttribute("usuarioLogueado");
+        	
+        	Cliente cl = (Cliente) user;
+        	int cantNum = 0;
+        	
+        	try {
+        		cantNum = Integer.parseInt(cant);
+              	paramNumero = Integer.parseInt(param);
+              }catch (Exception e) {
+              	System.out.print("Hubo un error");
+              	resp.sendRedirect("home");
+              	return;
+      		}
+        	
+        	
+        	
+        	Item it = cl.getCarrito().getItem(paramNumero);
+        	
+        	if(it != null) {
+        		it.setCant(cantNum);
+        		System.out.print(it.getCant());
+        	}
+        }
+        
+      
+        
+        resp.sendRedirect("Carrito");
     }
 }
 

@@ -18,6 +18,7 @@ public class Carrito {
     	return this.items;
     }
 
+    
     public void agregarProducto(Item i) {
         if (i.getProducto().getStock() >= i.getCant()) {
             items.add(i);
@@ -49,8 +50,14 @@ public class Carrito {
     	return false;
     }
     
-    public List<Item> getItems(){
-    	return items;
+    public Item getItem(int numRef){
+    	for(Item i : items) {
+    		if(i.getProducto().getNumRef() == numRef) {
+    			return i;
+    		}
+    	}
+    	
+    	return null;
     }
 
     public void verCarrito() {

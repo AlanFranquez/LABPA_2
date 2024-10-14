@@ -149,7 +149,7 @@
                             <p class="text-dark">$<%= dtp.getPrecio() %></p>
                             <p style="color: red;">Cantidad disponible: <%= dtp.getStock() %></p>
                         </div>
-                        <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex justify-content-center align-items-center">
                            <form action="agregarAlCarrito" method="post" style="display: inline-block;" onsubmit="return validarCantidad(this)">
                                     <input type="hidden" name="numRef" value="<%= dtp != null ? dtp.getNumRef() : "" %>">
                                     <input class="text-center" type="number" name="cantidad" min="1" max="<%= dtp.getStock() %>" value="1" style="width: 60px;" onchange="validarCantidad(this.form)">

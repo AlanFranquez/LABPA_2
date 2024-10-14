@@ -67,7 +67,7 @@ public class agregarAlCarrito extends HttpServlet {
                 
                 session.setAttribute("usuarioLogueado", cliente);
                 
-               response.sendRedirect("home");
+               response.sendRedirect("Carrito");
             } else {
                
                 response.sendRedirect("home");

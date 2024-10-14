@@ -4,9 +4,9 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class OrdenDeCompra {
-    private int contador = 1;
     private int numero;
     private float precioTotal;
     private LocalDateTime fecha;
@@ -20,8 +20,9 @@ public class OrdenDeCompra {
     }
     
     public OrdenDeCompra(Map <Integer, Item> itemsAdquiridos, float precioTotal) {
+    	Random random = new Random();
     	this.items = itemsAdquiridos;
-    	this.numero = contador++;
+    	this.numero = random.nextInt(1000);
     	this.precioTotal = precioTotal;
     	this.fecha = LocalDateTime.now();
     }
