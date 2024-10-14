@@ -30,7 +30,6 @@ public class RegistrarUsuarios1 extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.getRequestDispatcher("/WEB-INF/RegistrarUsuario1.jsp").forward(request, response);
-        System.out.println("Redirigiendo a RegistrarUsuario1.jsp inicio Servlet");
     }
 
     @Override
@@ -44,12 +43,11 @@ public class RegistrarUsuarios1 extends HttpServlet {
         // Validar los datos
         if (nick == null || nick.isEmpty() || correo == null || correo.isEmpty()) {
             objSession.setAttribute("errorMsg", "El nickname o correo no pueden estar vacíos");
-            response.sendRedirect("/WEB-INF/Error.jsp");
+            response.sendRedirect("registrarusuario1");
             return;
         }
 
         try {
-            // Verificar si el usuario ya existe
             Usuario prueba = null;
             Usuario prueba2 = null;
 
@@ -58,7 +56,6 @@ public class RegistrarUsuarios1 extends HttpServlet {
             try {
                 prueba2 = sist.getUserByEmail(correo);
             } catch (UsuarioException e) {
-                // El usuario por correo no fue encontrado, pero eso no es un error grave
                 System.out.println("Usuario con correo no encontrado");
             }
 
@@ -68,7 +65,6 @@ public class RegistrarUsuarios1 extends HttpServlet {
                 request.getRequestDispatcher("/WEB-INF/RegistrarUsuario1.jsp").forward(request, response);
                 return;
             } else {
-                // Si los datos son válidos, guarda el usuario en sesión y redirige a la segunda página
                 objSession.setAttribute("nickname", nick);
                 objSession.setAttribute("correo", correo);
                 System.out.println("Redirigiendo a RegistrarUsuario2.jsp");

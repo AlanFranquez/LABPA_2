@@ -8,18 +8,6 @@
     <link rel="stylesheet" href="styles.css"> <!-- Estilo opcional -->
 </head>
 <body>
-    <h1>Error</h1>
-    <p>
-        <% String errorMessage = (String) request.getAttribute("error"); %>
-        <% if (errorMessage != null) { %>
-            <strong>Mensaje de error:</strong> <%= errorMessage %>
-        <% } else { %>
-            <strong>Se ha producido un error inesperado.</strong>
-        <% } %>
-    </p>
-    <div class="button-group">
-        <button onclick="window.location.href='home';">Ir a la Página de Inicio</button>
-        <button onclick="window.history.back();">Volver a la Página Anterior</button>
-    </div>
+    <h1>Hola MUndo</h1>
 </body>
 </html>

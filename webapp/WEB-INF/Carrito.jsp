@@ -142,7 +142,7 @@
 								</div>
 								<div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
 									<h5 class="mb-0 text-white">
-										$<%=producto.getPrecio()%></h5>
+										$<%=item.getSubTotal()%></h5>
 
 								</div>
 
