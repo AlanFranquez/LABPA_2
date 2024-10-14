@@ -72,7 +72,7 @@
     </div>
 </nav>
 	
-    <div class="body" >
+    <div class="body d-flex justify-content-center align-items-center">
         <div class="containerForm">
             <form class="product-form" action="registrarproducto" method="POST" enctype="multipart/form-data">
                 <h2>Registro de Producto</h2>
