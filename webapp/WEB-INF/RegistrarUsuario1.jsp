@@ -1,5 +1,3 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ include file="template/BarraNavSinReg.html" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,69 +11,82 @@
 </head>
 <body>
 
-    <div class="container">
-        <div class="d-flex justify-content-center align-items-center">
-            <div class="contenedor-form mt-5">
-                <div class="d-flex flex-column align-items-center">
-                    <h1 class="text-center" style="padding: 5px 0px;">REG√çSTRATE</h1>
-                    <p class="text-center mt-2" style="color: #7E7979; font-size: 16px; width: 500px; margin: 20px auto;">
-                        Aseg√∫rate de no elegir un correo usado anteriormente. En caso de datos repetidos se cancelar√° el proceso.
-                    </p>
+<div class="container">
+    <div class="d-flex justify-content-center align-items-center">
+        <div class="contenedor-form mt-5">
+            <div class="d-flex flex-column align-items-center">
+                <h1 class="text-center" style="padding: 5px 0px;">REGÕSTRATE</h1>
+                <p class="text-center mt-2" style="color: #7E7979; font-size: 16px; width: 500px; margin: 20px auto;">
+                    Aseg˙rate de no elegir un correo usado anteriormente. En caso de datos repetidos se cancelar· el proceso.
+                </p>
 
-                    <!-- Contenedor para el mensaje de error -->
-                    <div id="error-message-container"></div>
+                <!-- Contenedor para el mensaje de error -->
+                <div id="error-message-container"></div>
 
-                    <div class="icon-container mb-3">
-                        <img alt="Icono de la web" src="media/images/icono.svg" style="width: 80px; height: 80px;">
-                    </div>
-                    <form id="myform" action="registrarusuario1" method="post" class="d-flex align-items-center flex-column">
-                        <div class="form-group">
-                            <label for="nick">Nick</label>
-                            <input type="text" placeholder="Alan123" id="nick" name="nick" class="form-control" required>
-                        </div>
-                        
-                        <div class="form-group align-items-start">
-                            <label for="correo">Correo</label>
-                            <input type="email" placeholder="powerranger@gmail.com" id="correo" name="correo" class="form-control" required>
-                        </div>
-                        
-                        <button type="submit" class="boton-Reg">Registrar Usuario</button>
-                    </form>
+                <div class="icon-container mb-3">
+                    <img alt="Icono de la web" src="media/images/icono.svg" style="width: 80px; height: 80px;">
                 </div>
+                <form id="myform" action="registrarusuario1" method="post" class="d-flex align-items-center flex-column" onsubmit="return validateForm()">
+                    <div class="form-group">
+                        <label for="nick">Nick</label>
+                        <input type="text" placeholder="Alan123" id="nick" name="nick" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group align-items-start">
+                        <label for="correo">Correo</label>
+                        <input type="email" placeholder="powerranger@gmail.com" id="correo" name="correo" class="form-control" required>
+                    </div>
+                    
+                    <button type="submit" class="boton-Reg">Registrar Usuario</button>
+                </form>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Parte de abajo -->
-    <div class="part-final d-flex justify-content-center align-items-center">
-        <p class="text-center">Todos los derechos reservados, 2024. <br> Laboratorio PA.</p>
-    </div>
+<!-- Parte de abajo -->
+<div class="part-final d-flex justify-content-center align-items-center">
+    <p class="text-center">Todos los derechos reservados, 2024. <br> Laboratorio PA.</p>
+</div>
 
-    <script>
-        // Esta funci√≥n se ejecuta cuando la p√°gina se carga
-        window.onload = function() {
-            // Obtener el mensaje de error de la sesi√≥n
-            var errorMsg = '<%= session.getAttribute("errorMsg") %>';
-            if (errorMsg === "El nickname o correo ya est√°n registrados") {
-                // Crear el div de alerta
-                var alertDiv = document.createElement('div');
-                alertDiv.className = 'alert alert-danger';
-                alertDiv.role = 'alert';
-                alertDiv.innerHTML = errorMsg;
+<script>
+    // Esta funciÛn se ejecuta cuando la p·gina se carga
+    window.onload = function() {
+        var errorMsg = '<%= session.getAttribute("errorMsg") %>';
+        if (errorMsg === "El nickname o correo ya est·n registrados") {
+            var alertDiv = document.createElement('div');
+            alertDiv.className = 'alert alert-danger';
+            alertDiv.role = 'alert';
+            alertDiv.innerHTML = errorMsg;
 
-                // Obtener el contenedor para el mensaje de error y agregar el div de alerta
-                var errorMessageContainer = document.getElementById('error-message-container');
-                errorMessageContainer.appendChild(alertDiv);
+            var errorMessageContainer = document.getElementById('error-message-container');
+            errorMessageContainer.appendChild(alertDiv);
 
-                // Eliminar el mensaje de error de la sesi√≥n
-                <%
-                    session.removeAttribute("errorMsg");
-                %>
-            }
-        };
-    </script>
+            <%
+                session.removeAttribute("errorMsg");
+            %>
+        }
+    };
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script src="RegistrarUsuario1.js"></script>
+    function validateForm() {
+        var nick = document.getElementById("nick").value;
+        var correo = document.getElementById("correo").value;
+
+        if (nick.trim() === "") {
+            alert("El campo Nick no puede estar vacÌo.");
+            return false; // Evita que el formulario se envÌe
+        }
+
+        var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(correo)) {
+            alert("Por favor, introduce un correo electrÛnico v·lido.");
+            return false; 
+        }
+
+        return true; 
+    }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>

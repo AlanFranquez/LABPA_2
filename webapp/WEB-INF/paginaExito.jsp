@@ -16,7 +16,7 @@
 	crossorigin="anonymous">
 
 </head>
-<body>
+<body class="d-flex flex-column align-items-center justify-content-center" style="min-height: 100vh;">
 
 	<%
 	Cliente cl = (Cliente) session.getAttribute("usuarioLogueado");
@@ -25,38 +25,47 @@
 	String precioTotal = (String) session.getAttribute("precioTotal");
 	%>
 
-	<main>
-		<div>
-			<h2>
-				Felicidades,
-				<%=cl.crearDt().getNick()%></h2>
-			<%
-			String mensajeExito = (String) request.getSession().getAttribute("mensajeExito");
-			if (mensajeExito != null) {
-				request.getSession().removeAttribute("mensajeExito"); // Eliminar el mensaje de la sesión
-			%>
-			<div class="alert alert-success" role="alert"
-				style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 999;">
-				<%=mensajeExito%>
+	<main class="container text-center">
+		
+		<%
+		String mensajeExito = (String) request.getSession().getAttribute("mensajeExito");
+		if (mensajeExito != null) {
+			request.getSession().removeAttribute("mensajeExito");
+		%>
+		
+		<div class="row d-flex align-items-center">
+			<div class="col-md-6">
+				<img alt="imagen" src="media/images/exito.svg" class="img-fluid" />
+			</div>
+		
+			<div class="col-md-6">
+				<h2>Felicidades, <%=cl.crearDt().getNick()%></h2>
+			
+				<div class="alert alert-success">
+					<%=mensajeExito%>
+				</div>
+				
+				<p><b>Total de la compra: </b> $<%= precioTotal %></p>
+				<br>
+				<hr>
+			<a class="btn btn-dark" href="perfilCliente?nickname=<%= cl.getNick() %>">Volver al perfil</a>
+				
+				
 			</div>
 			
-			<p><b>Total de la compra: </b> $<%= precioTotal %></p>
-			<%
-			} else {
+		</div>
+
+		<br>
+
+		
+		<%
+		} else {
 			// Redirigir a la página de inicio si no hay mensaje
 			response.sendRedirect("home.jsp");
-			}
-			%>
-
-			<br>
-
-			
-			<a class="btn btn-primary" href="perfilCliente?nickname=<%= cl.getNick() %>">Volver al perfil</a>
-		</div>
+		}
+		%>
 	</main>
 
-
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

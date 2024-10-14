@@ -60,6 +60,15 @@ public class RegistrarUsuarios2 extends HttpServlet {
    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	 HttpSession session = request.getSession();
+         String nick = (String) session.getAttribute("nickname");
+         String correo = (String) session.getAttribute("correo");
+
+         if (nick == null || correo == null) {
+             session.setAttribute("errorMsg", "Debes completar los campos requeridos en el paso anterior.");
+             response.sendRedirect("registrarusuario1");
+         }
+    	
     	request.getRequestDispatcher("/WEB-INF/RegistrarUsuario2.jsp").forward(request, response);
     	System.out.println("Redirigiendo reg2 inicio servlet");
     }

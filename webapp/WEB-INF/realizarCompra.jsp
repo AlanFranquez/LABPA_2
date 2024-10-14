@@ -186,7 +186,7 @@
 
                         <div class="row mt-3">
                             <div class="col-12">
-                                <button type="submit" id="btnSubmit" class="btn btn-primary d-block mx-auto" style="background-color: black;">Enviar</button>
+                                <button id="btnSubmit" class="btn btn-primary d-block mx-auto" style="background-color: black;">Enviar</button>
                             </div>
                         </div>
                     </form>
@@ -196,48 +196,47 @@
     </section>
 </main>
 
-	
-	<script type="text/javascript">document.getElementById('btnSubmit').onclick = function(event) {
-	    event.preventDefault();
-	    
-	    const nombre = document.getElementById('nombre').value.trim();
-	    const apellido = document.getElementById('apellido').value.trim();
-	    const titular = document.getElementById('titular').value.trim();
-	    const numeroTarjeta = document.getElementById('numeroTarjeta').value.trim();
-	    const codigoSeguridad = document.getElementById('codigoSeguridad').value.trim();
-	    const fechaVencimiento = document.getElementById('fechaVencimiento').value;
-	    const ciudad = document.getElementById('ciudad').value.trim();
-	    const pais = document.getElementById('pais').value.trim();
-	    const hoy = new Date();
-	    const fechaActual = hoy.toISOString().split('T')[0];
+	<script>
+	document.getElementById('orderForm').onsubmit = function(event) {
+    event.preventDefault(); // Evita el envío por defecto del formulario
 
-	    if (!nombre || !apellido || !titular || !numeroTarjeta || !codigoSeguridad || !fechaVencimiento || !ciudad || !pais) {
-	        alert('Todos los campos son obligatorios.');
-	        return;
-	    }
+    // Captura los valores del formulario
+    const nombre = document.getElementById('nombre').value.trim();
+    const apellido = document.getElementById('apellido').value.trim();
+    const titular = document.getElementById('titular').value.trim();
+    const numeroTarjeta = document.getElementById('numeroTarjeta').value.trim();
+    const codigoSeguridad = document.getElementById('codigoSeguridad').value.trim();
+    const fechaVencimiento = document.getElementById('fechaVencimiento').value;
+    const ciudad = document.getElementById('ciudad').value.trim();
+    const pais = document.getElementById('pais').value.trim();
+    const hoy = new Date();
+    const fechaActual = hoy.toISOString().split('T')[0];
 
-	    if (fechaVencimiento <= fechaActual) {
-	        alert('La fecha de vencimiento debe ser mayor a la fecha actual.');
-	        return;
-	    }
+    // Validaciones del lado del cliente
+    if (!nombre || !apellido || !titular || !numeroTarjeta || !codigoSeguridad || !fechaVencimiento || !ciudad || !pais) {
+        alert('Todos los campos son obligatorios.');
+        return;
+    }
 
-	    if (numeroTarjeta.length !== 8) {
-	        alert('El número de tarjeta debe tener 8 dígitos.');
-	        return;
-	    }
+    if (fechaVencimiento <= fechaActual) {
+        alert('La fecha de vencimiento debe ser mayor a la fecha actual.');
+        return;
+    }
 
-	    if (codigoSeguridad.length !== 3) {
-	        alert('El código de seguridad debe tener 3 dígitos.');
-	        return;
-	    }
+    if (numeroTarjeta.length !== 8) {
+        alert('El número de tarjeta debe tener 8 dígitos.');
+        return;
+    }
 
-	    document.getElementById('orderForm').submit();
-	};
+    if (codigoSeguridad.length !== 3) {
+        alert('El código de seguridad debe tener 3 dígitos.');
+        return;
+    }
 
-
-};
+    // Si todas las validaciones pasan, envía el formulario
+    console.log("Todos los campos son válidos, enviando formulario...");
+    document.getElementById('orderForm').submit()
 </script>
-	
 	
 
 

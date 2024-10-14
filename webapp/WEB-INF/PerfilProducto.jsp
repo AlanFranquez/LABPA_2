@@ -91,7 +91,7 @@ if (usr.getTipo() == "cliente") {
 					%>
 
 
-					<li class="nav-item"><a class="nav-link" href="Carrito.html">
+					<li class="nav-item"><a class="nav-link" href="Carrito">
 							<svg xmlns="http://www.w3.org/2000/svg" width="30px"
 								height="30px" viewBox="0 0 24 24">
                             <path fill="white"

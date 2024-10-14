@@ -134,15 +134,17 @@
 									<form action="Carrito" method="post">
 										<input type="hidden" name="action" value="actualizarCant">
 										<input type="hidden" name="numRef"
-											value="<%=item.getProducto().getNumRef()%>"> <input
-											min="0" name="cantidad" value="<%=item.getCant()%>"
-											type="number" class="form-control form-control-sm" />
-										<button type="submit" class="btn btn-primary">Actualizar</button>
+											value="<%=item.getProducto().getNumRef()%>">  
+										
+											<input
+											min="1" name="cantidad" value="<%=item.getCant()%>"
+											type="number" class="form-control form-control-sm" 	oninput="checkearCantidad()" />
+										<button type="submit" class="btn btn-primary btnActualizar">Actualizar</button>
 									</form>
 								</div>
 								<div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
 									<h5 class="mb-0 text-white">
-										$<%=producto.getPrecio()%></h5>
+										$<%=item.getSubTotal()%></h5>
 
 								</div>
 
@@ -172,7 +174,7 @@
 					<div class="d-flex justify-content-between">
 
 						<div>
-							<a class="btn" style="border: 1px solid black"
+							<a class="btn btnrealizar" style="border: 1px solid black"
 								href="buscarproductos?query=&ordenacion=alfabeticamente">
 								Seguir Comprando </a>
 
@@ -206,6 +208,29 @@
 	</div>
 
 
+	<script type="text/javascript">
+	function checkearCantidad() {
+	    const cantidadInputs = document.querySelectorAll('input[name="cantidad"]');
+	    const btnActualizar = document.querySelector('.btnActualizar');
+	    const btnRealizarCompra = document.getElementById('btnActualizar'); 
+
+	    let cantidadValida = false;
+
+	    cantidadValida.forEach(input => {
+	        const cantidad = parseInt(input.value) || 0;
+
+	        if (cantidad > 0) {
+	            hasValidQuantity = true;
+	        }
+	    });
+
+	    btnActualizar.disabled = !hasValidQuantity;
+	    btnRealizarCompra.disabled = !hasValidQuantity;
+	}
+
+	document.addEventListener('DOMContentLoaded', checkearCantidad);
+	</script>
+	
 
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
