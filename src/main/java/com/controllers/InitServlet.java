@@ -60,7 +60,152 @@ public class InitServlet extends HttpServlet {
              s.agregarCategoriaConProductos("Otros");
              s.agregarCategoriaConProductos("Bazar");
 
-             
+          // Electrónica
+             s.agregarCategoria("Electrónica");
+             s.agregarCategoriaConProductos("Celulares y Accesorios");
+             s.asignarlePadreACategoriaProds("Electrónica", "Celulares y Accesorios");
+             s.agregarCategoriaConProductos("Computadoras y Laptops");
+             s.asignarlePadreACategoriaProds("Electrónica", "Computadoras y Laptops");
+             s.agregarCategoriaConProductos("Cámaras");
+             s.asignarlePadreACategoriaProds("Electrónica", "Cámaras");
+             s.agregarCategoriaConProductos("Audio y Video");
+             s.asignarlePadreACategoriaProds("Electrónica", "Audio y Video");
+             s.agregarCategoriaConProductos("Consolas de Videojuegos");
+             s.asignarlePadreACategoriaProds("Electrónica", "Consolas de Videojuegos");
+             s.agregarCategoriaConProductos("Smart Home");
+             s.asignarlePadreACategoriaProds("Electrónica", "Smart Home");
+
+             // Hogar y Muebles
+             s.agregarCategoria("Hogar y Muebles");
+             s.agregarCategoriaConProductos("Muebles de Sala");
+             s.asignarlePadreACategoriaProds("Hogar y Muebles", "Muebles de Sala");
+             s.agregarCategoriaConProductos("Muebles de Dormitorio");
+             s.asignarlePadreACategoriaProds("Hogar y Muebles", "Muebles de Dormitorio");
+             s.agregarCategoriaConProductos("Cocina y Comedor");
+             s.asignarlePadreACategoriaProds("Hogar y Muebles", "Cocina y Comedor");
+             s.agregarCategoriaConProductos("Decoración del Hogar");
+             s.asignarlePadreACategoriaProds("Hogar y Muebles", "Decoración del Hogar");
+             s.agregarCategoriaConProductos("Iluminación");
+             s.asignarlePadreACategoriaProds("Hogar y Muebles", "Iluminación");
+             s.agregarCategoriaConProductos("Herramientas");
+             s.asignarlePadreACategoriaProds("Hogar y Muebles", "Herramientas");
+
+             // Moda y Accesorios
+             s.agregarCategoria("Moda y Accesorios");
+             s.agregarCategoriaConProductos("Ropa de Hombre");
+             s.asignarlePadreACategoriaProds("Moda y Accesorios", "Ropa de Hombre");
+             s.agregarCategoriaConProductos("Ropa de Mujer");
+             s.asignarlePadreACategoriaProds("Moda y Accesorios", "Ropa de Mujer");
+             s.agregarCategoriaConProductos("Calzado");
+             s.asignarlePadreACategoriaProds("Moda y Accesorios", "Calzado");
+             s.agregarCategoriaConProductos("Accesorios de Moda");
+             s.asignarlePadreACategoriaProds("Moda y Accesorios", "Accesorios de Moda");
+             s.agregarCategoriaConProductos("Joyería");
+             s.asignarlePadreACategoriaProds("Moda y Accesorios", "Joyería");
+             s.agregarCategoriaConProductos("Bolsos y Mochilas");
+             s.asignarlePadreACategoriaProds("Moda y Accesorios", "Bolsos y Mochilas");
+
+             // Deportes y Aire Libre
+             s.agregarCategoria("Deportes y Aire Libre");
+             s.agregarCategoriaConProductos("Bicicletas");
+             s.asignarlePadreACategoriaProds("Deportes y Aire Libre", "Bicicletas");
+             s.agregarCategoriaConProductos("Equipamiento de Gimnasio");
+             s.asignarlePadreACategoriaProds("Deportes y Aire Libre", "Equipamiento de Gimnasio");
+             s.agregarCategoriaConProductos("Ropa Deportiva");
+             s.asignarlePadreACategoriaProds("Deportes y Aire Libre", "Ropa Deportiva");
+             s.agregarCategoriaConProductos("Camping y Senderismo");
+             s.asignarlePadreACategoriaProds("Deportes y Aire Libre", "Camping y Senderismo");
+             s.agregarCategoriaConProductos("Equipamiento de Deportes");
+             s.asignarlePadreACategoriaProds("Deportes y Aire Libre", "Equipamiento de Deportes");
+
+             // Salud y Belleza
+             s.agregarCategoria("Salud y Belleza");
+             s.agregarCategoriaConProductos("Maquillaje");
+             s.asignarlePadreACategoriaProds("Salud y Belleza", "Maquillaje");
+             s.agregarCategoriaConProductos("Cuidado de la Piel");
+             s.asignarlePadreACategoriaProds("Salud y Belleza", "Cuidado de la Piel");
+             s.agregarCategoriaConProductos("Fragancias");
+             s.asignarlePadreACategoriaProds("Salud y Belleza", "Fragancias");
+             s.agregarCategoriaConProductos("Salud y Bienestar");
+             s.asignarlePadreACategoriaProds("Salud y Belleza", "Salud y Bienestar");
+             s.agregarCategoriaConProductos("Suplementos");
+             s.asignarlePadreACategoriaProds("Salud y Belleza", "Suplementos");
+
+             // Niños y Bebés
+             s.agregarCategoria("Niños y Bebés");
+             s.agregarCategoriaConProductos("Juguetes");
+             s.asignarlePadreACategoriaProds("Niños y Bebés", "Juguetes");
+             s.agregarCategoriaConProductos("Ropa de Bebé");
+             s.asignarlePadreACategoriaProds("Niños y Bebés", "Ropa de Bebé");
+             s.agregarCategoriaConProductos("Pañales y Higiene");
+             s.asignarlePadreACategoriaProds("Niños y Bebés", "Pañales y Higiene");
+             s.agregarCategoriaConProductos("Cunas y Mobiliario");
+             s.asignarlePadreACategoriaProds("Niños y Bebés", "Cunas y Mobiliario");
+
+             // Bebidas y Alimentos
+             s.agregarCategoria("Bebidas y Alimentos");
+             s.agregarCategoriaConProductos("Bebidas Alcohólicas");
+             s.asignarlePadreACategoriaProds("Bebidas y Alimentos", "Bebidas Alcohólicas");
+             s.agregarCategoriaConProductos("Comestibles");
+             s.asignarlePadreACategoriaProds("Bebidas y Alimentos", "Comestibles");
+             s.agregarCategoriaConProductos("Alimentos Gourmet");
+             s.asignarlePadreACategoriaProds("Bebidas y Alimentos", "Alimentos Gourmet");
+             s.agregarCategoriaConProductos("Suplementos Nutricionales");
+             s.asignarlePadreACategoriaProds("Bebidas y Alimentos", "Suplementos Nutricionales");
+
+             // Libros y Música
+             s.agregarCategoria("Libros y Música");
+             s.agregarCategoriaConProductos("Libros Físicos");
+             s.asignarlePadreACategoriaProds("Libros y Música", "Libros Físicos");
+             s.agregarCategoriaConProductos("E-books");
+             s.asignarlePadreACategoriaProds("Libros y Música", "E-books");
+             s.agregarCategoriaConProductos("Instrumentos Musicales");
+             s.asignarlePadreACategoriaProds("Libros y Música", "Instrumentos Musicales");
+             s.agregarCategoriaConProductos("Música y Películas");
+             s.asignarlePadreACategoriaProds("Libros y Música", "Música y Películas");
+
+             // Automotriz
+             s.agregarCategoria("Automotriz");
+             s.agregarCategoriaConProductos("Accesorios para Vehículos");
+             s.asignarlePadreACategoriaProds("Automotriz", "Accesorios para Vehículos");
+             s.agregarCategoriaConProductos("Mantenimiento y Repuestos");
+             s.asignarlePadreACategoriaProds("Automotriz", "Mantenimiento y Repuestos");
+             s.agregarCategoriaConProductos("Herramientas para el Automóvil");
+             s.asignarlePadreACategoriaProds("Automotriz", "Herramientas para el Automóvil");
+
+             // Jardín y Exterior
+             s.agregarCategoria("Jardín y Exterior");
+             s.agregarCategoriaConProductos("Mobiliario de Jardín");
+             s.asignarlePadreACategoriaProds("Jardín y Exterior", "Mobiliario de Jardín");
+             s.agregarCategoriaConProductos("Decoración para el Jardín");
+             s.asignarlePadreACategoriaProds("Jardín y Exterior", "Decoración para el Jardín");
+             s.agregarCategoriaConProductos("Herramientas de Jardinería");
+             s.asignarlePadreACategoriaProds("Jardín y Exterior", "Herramientas de Jardinería");
+             s.agregarCategoriaConProductos("Equipos para Piscinas");
+             s.asignarlePadreACategoriaProds("Jardín y Exterior", "Equipos para Piscinas");
+
+             // Oficina y Papelería
+             s.agregarCategoria("Oficina y Papelería");
+             s.agregarCategoriaConProductos("Mobiliario de Oficina");
+             s.asignarlePadreACategoriaProds("Oficina y Papelería", "Mobiliario de Oficina");
+             s.agregarCategoriaConProductos("Computadoras y Equipos");
+             s.asignarlePadreACategoriaProds("Oficina y Papelería", "Computadoras y Equipos");
+             s.agregarCategoriaConProductos("Papelería");
+             s.asignarlePadreACategoriaProds("Oficina y Papelería", "Papelería");
+             s.agregarCategoriaConProductos("Impresoras y Tintas");
+             s.asignarlePadreACategoriaProds("Oficina y Papelería", "Impresoras y Tintas");
+
+             // Mascotas
+             s.agregarCategoria("Mascotas");
+             s.agregarCategoriaConProductos("Alimentos para Mascotas");
+             s.asignarlePadreACategoriaProds("Mascotas", "Alimentos para Mascotas");
+             s.agregarCategoriaConProductos("Accesorios para Mascotas");
+             s.asignarlePadreACategoriaProds("Mascotas", "Accesorios para Mascotas");
+             s.agregarCategoriaConProductos("Juguetes para Mascotas");
+             s.asignarlePadreACategoriaProds("Mascotas", "Juguetes para Mascotas");
+             s.agregarCategoriaConProductos("Cuidado y Salud");
+             s.asignarlePadreACategoriaProds("Mascotas", "Cuidado y Salud");
+
              
             
              Proveedor prov = new Proveedor("Perez", "AndresPerez@gmail.com", "Andres", "Perez", fecha3 ,"Bamboo.inc" , "www.bamboo.com", "123");

@@ -14,7 +14,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 	
 </head>
-<body>
+<body >
 
 <%
 	String estadoUser = (String) request.getAttribute("estado");
@@ -72,7 +72,7 @@
     </div>
 </nav>
 	
-    <div class="body">
+    <div class="body" >
         <div class="containerForm">
             <form class="product-form" action="registrarproducto" method="POST" enctype="multipart/form-data">
                 <h2>Registro de Producto</h2>
@@ -96,7 +96,7 @@
                 <input type="number" id="stock" name="stock" placeholder="20" required>
 
                 <label for="categories">Categorías</label>
-                <select id="categories" name="categoria" required>
+                <select id="categories" name="categoria" required multiple size="6">
                     <option value="" disabled selected>Seleccionar Categoría</option>
                     <% 
                         // Obtener el array desde el request
@@ -118,7 +118,19 @@
                 </select>
     
                 <label for="image-upload">Elegir imagen</label>
-                <input type="file" id="image-upload" name="imagenes" multiple>
+				<input type="file" id="image-upload" name="imagenes" multiple accept="image/*">
+
+				<script>
+				    const fileInput = document.getElementById('image-upload');
+					    
+					    fileInput.addEventListener('change', function() {
+							if (this.files.length > 3) {
+								alert('Puedes seleccionar un máximo de 3 imágenes.');
+				           		this.value = ''; 
+							}
+				    	});
+				</script>
+
     
 <%
 Proveedor proveedorLogueado = (Proveedor) session.getAttribute("usuarioLogueado");
