@@ -661,6 +661,21 @@ public class Sistema implements ISistema {
 		        }
 		    }
 		}
+	 
+	 
+	 	public List<Usuario> listaUsuarios(){
+	 		Map<String, Usuario> personas = this.usuarios;
+	 		List<Usuario> nuevaLista = new ArrayList<Usuario>();
+	 		for (Map.Entry<String, Usuario> entry : personas.entrySet()) { 
+	 			Usuario u = entry.getValue();
+	 			
+	 			nuevaLista.add(u);
+	 			
+	 		}
+	 		
+	 		
+	 		return nuevaLista;
+	 	}
 
 	 
 	 

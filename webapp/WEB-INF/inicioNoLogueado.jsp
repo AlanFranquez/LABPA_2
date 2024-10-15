@@ -22,7 +22,6 @@
                 ITSCODIGO
             </a>
             
-            <!-- Botón para colapsar en dispositivos móviles -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -33,21 +32,18 @@
                 </ul>
 
                 <ul class="navbar-nav align-items-center">
-                    <!-- Perfil -->
                     <li class="nav-item">
                         <a class="nav-link" href="registrarusuario1">
                             Registrar
                         </a>
                     </li>
                     
-                    <!-- Carrito -->
                     <li class="nav-item">
                         <a class="nav-link" href="formlogin">
                             Login
                         </a>
                     </li>
                     
-                    <!-- Ayuda -->
                     <li class="nav-item">
                         <a class="nav-link" href="#">
                             Ayuda
@@ -59,10 +55,7 @@
     </nav>
 	
 
-
-	
-    
-    <main class="container d-flex justify-content-center align-items-center vh-90">
+    	<main  class="container d-flex justify-content-center align-items-center vh-90">
         <div class="row w-100">
             <div class="col-md-6 d-flex justify-content-center align-items-center">
                 <img src="media/images/icono.svg" alt="Icono.png" style="width: 200px; height: 200px">
@@ -83,6 +76,7 @@
             </div>
         </div>
     </main>
+    	
 
 
     <div class="part-final d-flex justify-content-center align-items-center">

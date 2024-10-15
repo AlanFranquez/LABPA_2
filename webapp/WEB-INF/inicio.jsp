@@ -112,12 +112,27 @@
                 </h2>
 
                 <p class="sub">Estamos para ayudarte!</p>
-                <p class="textoPrincipal">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam consectetur sequi enim atque quaerat sed laudantium repudiandae id, asperiores doloribus molestias totam necessitatibus! Quam perspiciatis officia alias hic repellendus dolorem.</p>
-                <button class="botonIndex">
-                    <a href="home">
-                        Empezar
+                <p class="textoPrincipal">En ITSCODIGO nos apasiona ofrecerte una experiencia de compra única y emocionante. Aquí encontrarás una cuidada selección de productos de alta calidad, diseñados para satisfacer tus necesidades y gustos.
+</p>
+<p class="textoPrincipal">
+Nuestro objetivo es brindarte no solo los mejores productos, sino también un servicio excepcional. Nos esforzamos por hacer que cada compra sea fácil y agradable, con un proceso de pago seguro y un envío rápido.</p>
+ </p>  
+                <div class="w-100 d-flex m-2 gap-1">
+                <button class="botonIndex mr-2">
+                    <a href="home" style="text-decoration: none;">
+                       Empezar
                     </a>
                 </button>
+                
+                <button class="btn" style="border: 1px solid black;">
+                    <a href="RegistrarUsuario1" style="text-decoration: none; color: black">
+                        Sobre Nosotros
+                    </a>
+                </button>
+                
+                </div>
+                
+                
             </div>
         </div>
     </main>

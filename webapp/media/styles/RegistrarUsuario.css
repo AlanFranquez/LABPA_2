@@ -13,7 +13,9 @@ a {
 	font-family: Poppins;
 }
 
-
+    .is-invalid {
+        border-color: red;
+    }
 
 .contenedor-form {
     display: flex;

@@ -1,3 +1,9 @@
+<%@page import="com.model.Usuario"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@page import="com.model.Producto" %>
+<%@page import="java.util.List" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,13 +17,40 @@
 </head>
 <body>
 
+<%
+    List<String> usuarios = (List<String>) request.getAttribute("usuariosLista");
+    if (usuarios != null) {
+%>
+<script>
+    // Crear un array de strings con los usuarios existentes
+    var usuariosExistentes = [
+        <%
+            for (int i = 0; i < usuarios.size(); i++) {
+                out.print("\"" + usuarios.get(i) + "\"");
+                if (i < usuarios.size() - 1) {
+                    out.print(", "); // Agregar coma entre elementos
+                }
+            }
+        %>
+    ];
+</script>
+<%
+    } else {
+%>
+<script>
+    var usuariosExistentes = [];
+</script>
+<%
+    }
+%>
+
 <div class="container">
     <div class="d-flex justify-content-center align-items-center">
         <div class="contenedor-form mt-5">
             <div class="d-flex flex-column align-items-center">
-                <h1 class="text-center" style="padding: 5px 0px;">REGÕSTRATE</h1>
+                <h1 class="text-center" style="padding: 5px 0px;">REG√çSTRATE</h1>
                 <p class="text-center mt-2" style="color: #7E7979; font-size: 16px; width: 500px; margin: 20px auto;">
-                    Aseg˙rate de no elegir un correo usado anteriormente. En caso de datos repetidos se cancelar· el proceso.
+                    Aseg√∫rate de no elegir un correo usado anteriormente. En caso de datos repetidos se cancelar√° el proceso.
                 </p>
 
                 <!-- Contenedor para el mensaje de error -->
@@ -50,41 +83,78 @@
 </div>
 
 <script>
-    // Esta funciÛn se ejecuta cuando la p·gina se carga
-    window.onload = function() {
-        var errorMsg = '<%= session.getAttribute("errorMsg") %>';
-        if (errorMsg === "El nickname o correo ya est·n registrados") {
-            var alertDiv = document.createElement('div');
-            alertDiv.className = 'alert alert-danger';
-            alertDiv.role = 'alert';
-            alertDiv.innerHTML = errorMsg;
+    document.getElementById("nick").addEventListener("input", function() {
+        let nick = document.querySelector("#nick").value;
+        
+        console.log("Hello World");
+        
+        var errorMessageContainer = document.getElementById('error-message-container');
+        var submitButton = document.querySelector("button[type='submit']");
 
-            var errorMessageContainer = document.getElementById('error-message-container');
-            errorMessageContainer.appendChild(alertDiv);
-
-            <%
-                session.removeAttribute("errorMsg");
-            %>
+        if (nick.length > 3) {
+            // Comprobar si el nombre ya existe en el array
+            if (usuariosExistentes.includes(nick)) {
+                this.classList.add("is-invalid");
+                console.log("is invalido");
+                // Agregar clase para marcar el campo
+                errorMessageContainer.innerHTML = "<div class='alert alert-danger'>El nombre de usuario no est√° disponible.</div>";
+                submitButton.disabled = true; // Desactiva el bot√≥n
+            } else {
+                this.classList.remove("is-invalid");
+                console.log("es valido");
+                errorMessageContainer.innerHTML = "<div class='alert alert-success'>Bonito Usuario, es valido</div>";
+                submitButton.disabled = false; // Habilitar el bot√≥n
+            }
+        } else {
+            this.classList.remove("is-invalid");
+            errorMessageContainer.innerHTML = ""; // Limpiar mensaje de error
+            submitButton.disabled = false;
         }
-    };
+    });
+    
+ // Crear un array de strings con los usuarios existentes
+    var correosExistentes = [
+        <%
+        	List<String> correos = (List<String>) request.getAttribute("correos");
+        	
+            for (int i = 0; i < correos.size(); i++) {
+                out.print("\"" + correos.get(i) + "\"");
+                if (i < usuarios.size() - 1) {
+                    out.print(", "); 
+                }
+            }
+        %>
+    ];
+    
+    
+    document.getElementById("correo").addEventListener("input", function() {
+        let correo = document.querySelector("#correo").value;
+        
+        console.log("Hello World");
+        
+        var errorMessageContainer = document.getElementById('error-message-container');
+        var submitButton = document.querySelector("button[type='submit']");
 
-    function validateForm() {
-        var nick = document.getElementById("nick").value;
-        var correo = document.getElementById("correo").value;
-
-        if (nick.trim() === "") {
-            alert("El campo Nick no puede estar vacÌo.");
-            return false; // Evita que el formulario se envÌe
+        if (correo.length > 3) {
+            // Comprobar si el nombre ya existe en el array
+            if (correosExistentes.includes(correo)) {
+                this.classList.add("is-invalid");
+                console.log("is invalido");
+                // Agregar clase para marcar el campo
+                errorMessageContainer.innerHTML = "<div class='alert alert-danger'>El correo est√° en uso.</div>";
+                submitButton.disabled = true; // Desactiva el bot√≥n
+            } else {
+                this.classList.remove("is-invalid");
+                console.log("es valido");
+                errorMessageContainer.innerHTML = "<div class='alert alert-success'>Correo valido</div>";
+                submitButton.disabled = false; // Habilitar el bot√≥n
+            }
+        } else {
+            this.classList.remove("is-invalid");
+            errorMessageContainer.innerHTML = ""; // Limpiar mensaje de error
+            submitButton.disabled = false;
         }
-
-        var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailPattern.test(correo)) {
-            alert("Por favor, introduce un correo electrÛnico v·lido.");
-            return false; 
-        }
-
-        return true; 
-    }
+    });
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

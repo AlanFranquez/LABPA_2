@@ -120,5 +120,7 @@ public interface ISistema {
 	  public List<Producto> getAllProductos();
 	  
 	  public void realizarCompra(OrdenDeCompra o, String nickCliente);
+	  
+	  public List<Usuario> listaUsuarios();
 
 }

@@ -220,7 +220,7 @@
 	        const cantidad = parseInt(input.value) || 0;
 
 	        if (cantidad > 0) {
-	            hasValidQuantity = true;
+	            cantidadValida- = true;
 	        }
 	    });
 

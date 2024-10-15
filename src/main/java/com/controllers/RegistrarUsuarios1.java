@@ -1,6 +1,9 @@
 package com.controllers;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.exceptions.UsuarioException;
 import com.model.Factory;
 import com.model.ISistema;
@@ -29,7 +32,19 @@ public class RegistrarUsuarios1 extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("/WEB-INF/RegistrarUsuario1.jsp").forward(request, response);
+        List<Usuario> usuarios = sist.listaUsuarios();
+        List<String> usuariosStrings = new ArrayList<String>();
+        List<String> correos = new ArrayList<String>();
+        for(Usuario u : usuarios) {
+        	usuariosStrings.add(u.getNick());
+        	correos.add(u.getCorreo());
+        }
+        
+        
+        
+        request.setAttribute("usuariosLista", usuariosStrings);
+    	request.setAttribute("correos", correos);
+    	request.getRequestDispatcher("/WEB-INF/RegistrarUsuario1.jsp").forward(request, response);
     }
 
     @Override
