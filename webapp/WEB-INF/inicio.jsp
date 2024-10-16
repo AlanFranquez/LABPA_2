@@ -148,14 +148,25 @@ Nuestro objetivo es brindarte no solo los mejores productos, sino también un se
             <div class="col-md-8 col-lg-6 col-xl-4 d-flex">
                 <div class="card flex-fill" style="border-radius: 15px; min-height: 400px;">
                     <div class="overflow-hidden" style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
-                        <img src="media/<%= dtp.getImagenes().getFirst() %>"
+                        <% if(dtp.getImagenes() != null && !dtp.getImagenes().isEmpty())  {%>
+                        
+                          <img src="media/<%= dtp.getImagenes().getFirst() %>"
                              class="img-fluid" alt="Producto" 
                              style="width: 100%; height: 200px; object-fit: cover;" />
+                        
+                        <% } else { %>
+                        	<img src="https://thumbs.dreamstime.com/b/image-not-available-icon-set-default-missing-photo-stock-vector-symbol-black-filled-outlined-style-no-found-white-332183016.jpg"
+                             class="img-fluid" alt="Producto" 
+                             style="width: 100%; height: 200px; object-fit: cover;" />
+                        
+                        <% } %>
+                        
+                      
                     </div>
                     <div class="card-body d-flex flex-column">
                         <div class="d-flex justify-content-between align-items-start">
                             <p><a href="#!" class="text-dark"><%= dtp.getNombre() %></a></p>
-                            <p class="text-dark">#### 8787</p>
+                            <p class="text-dark">#<%= dtp.getNumRef() %></p>
                         </div>
                             <p style="color: gray"><%= dtp.getDescripcion() %></p>
                         

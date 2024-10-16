@@ -218,6 +218,8 @@ public class InitServlet extends HttpServlet {
              s.agregarProducto("Pelota", 1, "Pelota inflable ideal", "Increible", 120, "Perez", 100);
              s.agregarProducto("Cargador", 2, "Cargador tipo c", "Muy bueno", 220, "Perez", 20);
           
+             s.agregarProducto("Television", 3, "Televisión en Excelente estado", "Muy bueno", 330, "Jorge", 120);
+             
              s.agregarProductoCategoria("Tecno", 1);
              s.agregarProductoCategoria("Tecno", 2);
              s.agregarProductoCategoria("Bazar", 3);

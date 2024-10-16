@@ -61,14 +61,15 @@ public class RegistrarUsuarios2 extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	 HttpSession session = request.getSession();
-         String nick = (String) session.getAttribute("nickname");
+         String nick = (String) session.getAttribute("nick");
          String correo = (String) session.getAttribute("correo");
-
-         if (nick == null || correo == null) {
-             session.setAttribute("errorMsg", "Debes completar los campos requeridos en el paso anterior.");
-             response.sendRedirect("registrarusuario1");
+         
+         System.out.print(nick);
+         if(nick == null) {
+        	 response.sendRedirect("registrarusuario1");
+        	 return;
          }
-    	
+        
     	request.getRequestDispatcher("/WEB-INF/RegistrarUsuario2.jsp").forward(request, response);
     	System.out.println("Redirigiendo reg2 inicio servlet");
     }
@@ -88,12 +89,8 @@ public class RegistrarUsuarios2 extends HttpServlet {
         String tipoUsuario = request.getParameter("tipoUsuario");
         
         Part img = request.getPart("imagen");
-        // Validar la carga de la imagen
-        if (img == null || img.getSize() == 0) {
-            request.setAttribute("errorMsg", "Por favor, seleccione una imagen.");
-            request.getRequestDispatcher("/WEB-INF/RegistrarUsuario2.jsp").forward(request, response);
-            return;
-        }
+        request.getRequestDispatcher("/WEB-INF/RegistrarUsuario2.jsp").forward(request, response);
+    	System.out.println("Redirigiendo reg2 inicio servlet");
 
         String uploadDir = getServletContext().getRealPath("") + File.separator + "media";
    

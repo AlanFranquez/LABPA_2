@@ -643,7 +643,7 @@ public class Sistema implements ISistema {
 		    System.out.println("Orden guardada: " + o.getNumero());
 		    
 		    // Agregar compra al cliente
-		    cl.agregarCompra(o);
+		    cl.agregarCompra(this.ordenes.get(o.getNumero()));
 		    
 		    Map<Integer, Item> itemsAdquiridos = o.getItems();
 		    for (Map.Entry<Integer, Item> entry : itemsAdquiridos.entrySet()) {

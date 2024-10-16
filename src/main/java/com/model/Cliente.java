@@ -119,6 +119,26 @@ public class Cliente extends Usuario {
     	return this;
     }
     
+    public Boolean comproProducto(int numeroRef) {
+    	for(Map.Entry<Integer, OrdenDeCompra> entry : listaCompras.entrySet()) {
+    		OrdenDeCompra o = entry.getValue();
+    		
+    		Map<Integer, Item> items = o.getItems();
+    		
+    		
+    		for(Map.Entry<Integer, Item> entry2 : items.entrySet()) {
+    			Item it = entry2.getValue();
+    			
+    			
+    			if(it.getProducto().getNumRef() == numeroRef) {
+    				return true;
+    			}
+    		}
+        }
+    	
+    	return false;
+    }
+    
     
    
     // Mas que un set de integers creo que debería de ser un arreglo de dtOrdenCompra

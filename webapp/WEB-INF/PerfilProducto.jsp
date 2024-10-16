@@ -27,6 +27,11 @@ if (usr.getTipo() == "cliente") {
 	carr = cl.getCarrito();
 
 }
+Boolean comproProducto = false;
+if(cl != null) {
+	
+comproProducto = cl.comproProducto(id);
+}
 %>
 
 <meta charset="UTF-8">
@@ -137,10 +142,10 @@ if (usr.getTipo() == "cliente") {
 						// Si no hay imágenes, mostramos una por defecto
 						%>
 						<div class="carousel-item active">
-							<img
-								src="https://via.placeholder.com/400x300?text=Imagen+no+disponible"
-								class="d-block w-100" alt="Imagen no disponible"
-								style="max-height: 400px; object-fit: cover;">
+							<img src="https://thumbs.dreamstime.com/b/image-not-available-icon-set-default-missing-photo-stock-vector-symbol-black-filled-outlined-style-no-found-white-332183016.jpg"
+                             class="img-fluid" alt="Producto" 
+                             style="width: 100%; height: 200px; object-fit: cover;" />
+                        
 						</div>
 						<%
 						}
@@ -168,10 +173,10 @@ if (usr.getTipo() == "cliente") {
 					<strong>Número de Referencia:</strong>
 					<%=prod != null ? prod.getNumRef() : "N/A"%></p>
 				<p>
-					<strong>Categorías:</strong>
+					<strong>Categorías:</strong> <%=prod != null ? prod.getCategorias() : "N/A"%>
 				</p>
-				<div class="mt-2">
-					<%=prod != null ? prod.getCategorias() : "N/A"%>
+				<div>
+					
 				</div>
 				<p>
 					<strong>Especificaciones:</strong>
@@ -234,6 +239,7 @@ if (usr.getTipo() == "cliente") {
 					<div class="card shadow-sm" style="border: none;">
 						<div class="card-body">
 							<div class="d-flex align-items-start">
+							
 								<img src="media/<%=c.getAutor().crearDt().getImagenes()%>"
 									alt="Autor" class="mr-3"
 									style="width: 80px; height: 80px; object-fit: cover; border-radius: 50%;">
@@ -242,7 +248,7 @@ if (usr.getTipo() == "cliente") {
 									<p style="font-size: 1em;"><%=c.getTexto()%></p>
 									<small class="text-muted"><%=c.getFecha().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))%></small>
 									<br>
-
+									<% if(comproProducto) { %>
 									<div class="accordion" id="accordion<%=comentarioId%>">
 										<div class="accordion-item">
 											<h2 class="accordion-header" id="heading<%=comentarioId%>">
@@ -271,6 +277,8 @@ if (usr.getTipo() == "cliente") {
 											</div>
 										</div>
 									</div>
+									
+									<% } %>
 									<div class="mt-3">
 										<h6>Respuestas:</h6>
 										<%
@@ -323,7 +331,7 @@ if (usr.getTipo() == "cliente") {
 		</div>
 
 		<%
-		if (usr != null && usr.getTipo().equals("cliente")) {
+		if (usr != null && usr.getTipo().equals("cliente") && comproProducto) {
 		%>
 		<div class="mt-4">
 			<h3>Deja un comentario</h3>
