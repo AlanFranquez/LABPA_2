@@ -96,7 +96,7 @@
 		</div>
 	</nav>
 
-	<section class="mt-3 h-100">
+	<section class="mt-3 h-90">
 		<div class="container h-100 py-5">
 			<div
 				class="row d-flex justify-content-center align-items-center h-100">
@@ -119,9 +119,19 @@
 							<div
 								class="row d-flex justify-content-between align-items-center">
 								<div class="col-md-2 col-lg-2 col-xl-2">
-									<!-- Imagen del producto -->
-									<img src="media/<%=producto.getImagenes().getFirst()%>"
-										class="img-fluid rounded-3" alt="<%=producto.getNombre()%>">
+									<% if(producto.crearDT().getImagenes() == null || producto.crearDT().getImagenes().isEmpty()) {%>
+												<img class="img-fluid rounded-3"
+													src="https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png"
+													alt="<%=producto.crearDT().getNombre()%>"
+													style="object-fit: cover;">
+												
+												<% } else { %>
+													
+													<img class="img-fluid rounded-3"
+													src="media/<%=producto.crearDT().getImagenes().getFirst()%>"
+													alt="<%=producto.crearDT().getNombre()%>"
+													style="object-fit: cover;">
+												<%}%>
 								</div>
 								<div class="col-md-3 col-lg-3 col-xl-3">
 									<p class="lead fw-normal mb-2 text-white"><%=producto.getNombre()%></p>
@@ -182,10 +192,14 @@
 						</div>
 
 						<div>
+						
+						<% if (itemsCarrito != null && !itemsCarrito.isEmpty()) { %>
 							<a href="realizarCompra">
 								<button class="btn hacerOrden">Realizar
 									Orden</button>
 							</a>
+							
+							<% } %>
 						</div>
 
 

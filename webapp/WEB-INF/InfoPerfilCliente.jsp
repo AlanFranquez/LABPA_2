@@ -120,7 +120,9 @@
                             <h3 class="card-title"><%= dt.getNumero() %></h3>
                             <p class="card-text"><b>Precio total: </b><%= dt.getPrecioTotal() %></p>
                             <p class="card-text"><b>Fecha de compra: </b><%= dt.getFechaString() %></p>
+                            <span class="badge badge-pill badge-warning"><%= dt.getEstado() %></span>
                             <button class="btn" style="border: none; background-color: #2C2C2C">
+                            
                             <a style="text-decoration: none; color: white" href="perfilOrden?nickname=<%= user.getNick() %>&orden=<%= dt.getNumero() %>" >VER DETALLES</a>
                             </button>
     

@@ -5,6 +5,12 @@
     font-family: 'Poppins', sans-serif;
 }
 
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Asegura que el cuerpo ocupe al menos la altura de la ventana */
+}
+
 .contenedorProductos {
     background-color: #2C2C2C;
 }
@@ -33,14 +39,17 @@ span {
     background-color: #2C2C2C;
     color: white;
 }
+
+
 .part-final {
-	background-color: #2C2C2C;
-	width: 100%;
-	height: 200px; 
-	margin: 50px 0px 0px 0px;
-	
+    background-color: #2C2C2C;
+    width: 100%;
+    height: 200px; 
+    display: flex;
+    justify-content: center;
+    align-items: center; 
 }
 
 .part-final p {
-	color: white;
+    color: white;
 }

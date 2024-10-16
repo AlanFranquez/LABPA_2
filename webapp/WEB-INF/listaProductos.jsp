@@ -175,10 +175,21 @@
 										%>
 										<div class="col-md-4 col-sm-6 mb-4">
 											<div class="card h-100 text-center">
+											
+												<% if(dt.getImagenes() == null || dt.getImagenes().isEmpty()) {%>
 												<img class="card-img-top"
+													src="https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png"
+													alt="<%=dt.getNombre()%>"
+													style="height: 200px; object-fit: cover;">
+												
+												<% } else { %>
+													
+													<img class="card-img-top"
 													src="media/<%=dt.getImagenes().getFirst()%>"
 													alt="<%=dt.getNombre()%>"
 													style="height: 200px; object-fit: cover;">
+												<%}%>
+												
 												<div class="card-body d-flex flex-column">
 													<h5 class="card-title"><%=dt != null ? dt.getNombre() : "Producto no encontrado"%></h5>
 													<p class="card-text">
