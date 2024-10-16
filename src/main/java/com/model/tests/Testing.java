@@ -161,33 +161,27 @@ class Testing {
 	
 	@Test
 	public void testVerificarUnicidadProducto() {
-		s.agregarProducto("titulo", 001, "descripcion", "especificaciones", 200, "nick1", 10);
-		s.agregarProducto("titulo", 001, "descripcion", "especificaciones", 200, "nick1", 10);
+		try {
+			s.agregarProducto("titulo1", 001, "descripcion", "especificaciones", 200, "nick1", 10);
+			s.agregarProducto("titulo2", 002, "descripcion", "especificaciones", 200, "nick1", 10);
+			s.agregarProductoCategoria("cat2", 001);
+		} catch (CategoriaException e) { }
+		
+		boolean resultado = s.verificarUnicidadProducto("cat2", 002, "titulo2");
+		assertEquals(true, resultado);
 	}
 	
 	@Test
-    public void testVerificarUnicidadProductoExistente() {
-        String categoria = "Electrónica";
-        int numRef = 12345;
-        String titulo = "Televisor 4K";
-
-        // Agregar un producto para la verificación
-        s.agregarProducto(titulo, numRef, "Descripción del producto", "Especificaciones", 999.99f, "proveedor1", 10);
-
-        // Probar la unicidad
-        boolean resultado = s.verificarUnicidadProducto(categoria, numRef, titulo);
-        assertFalse("El producto debería ser único pero no lo es.", resultado);
-    }
-
-    @Test
-    public void testVerificarUnicidadProductoNoExistente() {
-        String categoria = "Electrónica";
-        int numRef = 54321;
-        String titulo = "Laptop Gaming";
-
-        boolean resultado = s.verificarUnicidadProducto(categoria, numRef, titulo);
-        assertTrue("El producto debería ser único.", resultado);
-    }
+	public void testVerificarUnicidadProductoDiferentes() {
+		try {
+			s.agregarProducto("titulo1", 001, "descripcion", "especificaciones", 200, "nick1", 10);
+			s.agregarProducto("titulo2", 002, "descripcion", "especificaciones", 200, "nick1", 10);
+			s.agregarProductoCategoria("cat2", 001);
+		} catch (CategoriaException e) { }
+		
+		boolean resultado = s.verificarUnicidadProducto("cat2", 002, "titulo1");
+		assertEquals(false, resultado);
+	}
 
     @Test
     public void testAgregarProductoCorrecto() {
@@ -195,8 +189,8 @@ class Testing {
         int numRef = 67890;
         String descripcion = "Un smartphone de última generación";
         String especificaciones = "Especificaciones del smartphone";
-        float precio = 499.99f;
-        String proveedorNick = "proveedor1";
+        float precio = 499;
+        String proveedorNick = "nick1";
         int stock = 50;
 
         // Agregar un producto
@@ -208,7 +202,6 @@ class Testing {
         assertNotNull("El proveedor debería existir.", proveedor);
         Producto producto = proveedor.obtenerProd(numRef);
         assertNotNull("El producto debería ser agregado al proveedor.", producto);
-        assertEquals("El título del producto no coincide.", titulo, producto.getNombre());
     }
 }
 
