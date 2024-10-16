@@ -7,7 +7,7 @@
 
 <%
     DTOrdenDeCompra orden = (DTOrdenDeCompra) request.getAttribute("ordencompra");
-    Map<Integer, Item> items = orden.getItems(); // Asumiendo que getItems() devuelve un mapa de Item
+    Map<Integer, Item> items = orden.getItems();
 %>
 
 <!DOCTYPE html>
@@ -79,7 +79,7 @@
     	<form action="perfilOrden" method="post">
     	<input type="hidden" name="numeroOrden" value="<%= orden.getNumero() %>">
     	<input type="hidden" name="accion" value="confirmar">
-    	<button type="submit" class="btn btn-sucess">Confirmar</button>
+    	<button type="submit" class="btn btn-success">Confirmar</button>
 </form>
     <%  } %>
 

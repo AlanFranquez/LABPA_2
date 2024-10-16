@@ -85,18 +85,22 @@
         </div>
     </div>
 </nav>
+
+
+
 	
     <% if(usr != null)  {%>
-    <main class="container d-flex justify-content-center align-items-center vh-90">
+    <div style="position: relative; background-image: url('media/images/fondo1.jpg'); background-size: cover; background-position: center center;">
+    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); z-index: 1;"></div>
+    <main class="container d-flex justify-content-center align-items-center vh-90" style="position: relative; z-index: 2;">
         <div class="row w-100">
             <div class="col-md-6 d-flex justify-content-center align-items-center">
                 <img src="media/images/icono.svg" alt="Icono.png" style="width: 200px; height: 200px">
             </div>
 
             <div class="col-md-6 d-flex flex-column justify-content-center align-items-start">
-                <h2> Hola,   
+                <h2 style="color: white"> Hola,   
                     <%
-
                         if ("logueado".equals(estadoUser) && usr != null) {
                             String strUser = usr.getNombre();
                     %>
@@ -111,31 +115,26 @@
                     %>!
                 </h2>
 
-                <p class="sub">Estamos para ayudarte!</p>
-                <p class="textoPrincipal">En ITSCODIGO nos apasiona ofrecerte una experiencia de compra única y emocionante. Aquí encontrarás una cuidada selección de productos de alta calidad, diseñados para satisfacer tus necesidades y gustos.
-</p>
-<p class="textoPrincipal">
-Nuestro objetivo es brindarte no solo los mejores productos, sino también un servicio excepcional. Nos esforzamos por hacer que cada compra sea fácil y agradable, con un proceso de pago seguro y un envío rápido.</p>
- </p>  
+                <p class="sub" style="color:white">Estamos para ayudarte!</p>
+                <p class="textoPrincipal text-white">En ITSCODIGO nos apasiona ofrecerte una experiencia de compra única y emocionante. Aquí encontrarás una cuidada selección de productos de alta calidad, diseñados para satisfacer tus necesidades y gustos.</p>
+                
                 <div class="w-100 d-flex m-2 gap-1">
-                <button class="botonIndex mr-2">
-                    <a href="home" style="text-decoration: none;">
-                       Empezar
-                    </a>
-                </button>
-                
-                <button class="btn" style="border: 1px solid black;">
-                    <a href="RegistrarUsuario1" style="text-decoration: none; color: black">
-                        Sobre Nosotros
-                    </a>
-                </button>
-                
+                    <button class="botonIndex mr-2">
+                        <a href="home" style="text-decoration: none;">
+                           Empezar
+                        </a>
+                    </button>
+                    
+                    <button class="btn" style="border: 1px solid white;">
+                        <a href="#sobrenosotros" style="text-decoration: none; color: white">
+                            Sobre Nosotros
+                        </a>
+                    </button>
                 </div>
-                
-                
             </div>
         </div>
     </main>
+</div>
 
     <section style="background-color: #eee;" class="mt-5">
     <div class="container py-5">
@@ -171,9 +170,10 @@ Nuestro objetivo es brindarte no solo los mejores productos, sino también un se
                             <p style="color: gray"><%= dtp.getDescripcion() %></p>
                         
                        
-                        <div class="d-flex justify-content-between">
+                        <div class="">
                             <p class="text-dark">$<%= dtp.getPrecio() %></p>
-                            <p style="color: red;">Cantidad disponible: <%= dtp.getStock() %></p>
+                      
+                            <p class="alert alert-danger">Cantidad disponible: <%= dtp.getStock() %></p>
                         </div>
                         <div class="d-flex justify-content-center align-items-center">
                            <form action="agregarAlCarrito" method="post" style="display: inline-block;" onsubmit="return validarCantidad(this)">
@@ -186,7 +186,7 @@ Nuestro objetivo es brindarte no solo los mejores productos, sino también un se
                                         	
                                        
                                         %>
-                                        <button type="submit" class="btn btn-primary" id="addToCartButton">Agregar al Carrito</button>
+                                        <button type="submit" class="btn" style="background-color: black; color:white;" id="addToCartButton">Agregar al Carrito</button>
                                         
                                         <% } %>
                                         
@@ -203,6 +203,21 @@ Nuestro objetivo es brindarte no solo los mejores productos, sino también un se
 </section>
 
 <% } %>
+
+<div class="container mt-5 mb-5" id="sobrenosotros">
+    <div class="row align-items-center">
+        <div class="col-md-6">
+            <img alt="Imagen sobre nosotros" class="img-fluid shadow" src="media/images/nosotros.jpg" style="max-width: 100%; height: auto; border: 1px solid black">
+        </div>
+
+        <div class="col-md-6">
+            <p class="lead">Somos una nueva página web dedicada a la compra y venta de productos. Aquí, cualquier persona puede vender sus productos. Nuestra logística de envío es coordinada por un equipo profesional, asegurando que cada transacción sea fácil y segura.</p>
+          	<p class="textoPrincipal">Nuestro objetivo es brindarte no solo los mejores productos, sino también un servicio excepcional. Nos esforzamos por hacer que cada compra sea fácil y agradable, con un proceso de pago seguro y un envío rápido.</p>
+        </div>
+    </div>
+</div>
+
+
 
 
 
