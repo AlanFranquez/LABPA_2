@@ -22,34 +22,36 @@
                     Continúa tu proceso de registro
                     </p>
                     
+                    <div id="mensajeError"></div>
+                    
                     <div class="form-group">
                         <label for="nombre">Nombre *</label>
-                        <input type="text" placeholder="Alan" id="nombre" name="nombre" class="form-control" required>
+                        <input type="text" placeholder="Alan" id="nombre" name="nombre" class="form-control" >
                     </div>
                 
                     <div class="form-group">
                         <label for="apellido">Apellido *</label>
-                        <input type="text" placeholder="Perez" id="apellido" name="apellido" class="form-control" required>
+                        <input type="text" placeholder="Perez" id="apellido" name="apellido" class="form-control" >
                     </div>
                     
                     <div class="form-group align-items-start" >
-                        <label for="imagen">Imagen *</label>
+                        <label for="imagen">Imagen </label>
                         <input type="file" placeholder="Ingresa una imagen" id="imagen" name="imagen" class="form-control"  >
                     </div>
                     
                     <div class="form-group align-items-start">
                         <label for="nacimiento">Fecha de Nacimiento *</label>
-                        <input type="date" id="nacimiento" name="nacimiento" class="form-control" required>
+                        <input type="date" id="nacimiento" name="nacimiento" class="form-control" >
                     </div>
                     
                     <div class="form-group">
                         <label for="password">Contraseña *</label>
-                        <input type="password" placeholder="Ingrese su contraseña" id="password" name="password" class="form-control" required>
+                        <input type="password" placeholder="Ingrese su contraseña" id="password" name="password" class="form-control" >
                     </div>
 
                     <div class="form-group">
                         <label for="confirmPassword">Confirmar contraseña *</label>
-                        <input type="password" placeholder="Confirme su contraseña" id="confirmPassword" name="confirmPassword" class="form-control" required>
+                        <input type="password" placeholder="Confirme su contraseña" id="confirmPassword" name="confirmPassword" class="form-control">
                     </div>
 
                     <div class="form-group">
@@ -91,6 +93,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="RegistrarUsuario2.js"></script>
     <script>
+    
+    
+    	const mensajeError = document.querySelector("#mensajeError");
+    
         document.getElementById("tipoUsuario").addEventListener("change", function() {
             var tipo = this.value;
             document.getElementById("datosProveedor").style.display = tipo === "proveedor" ? "block" : "none";
@@ -99,69 +105,64 @@
 
         // Validación al enviar el formulario
         document.getElementById("myform").addEventListener("submit", function(event) {
-            var nombre = document.getElementById("nombre").value;
-            var apellido = document.getElementById("apellido").value;
-            var imagen = document.getElementById("imagen").value;
-            var nacimiento = document.getElementById("nacimiento").value;
-            var password = document.getElementById("password").value;
-            var confirmPassword = document.getElementById("confirmPassword").value;
-            var tipoUsuario = document.getElementById("tipoUsuario").value;
+            
+        	mensajeError.innerHTML = '';
+        	const nombre = document.getElementById("nombre").value;
+            const apellido = document.getElementById("apellido").value;
+            const imagen = document.getElementById("imagen").value;
+            const nacimiento = document.getElementById("nacimiento").value;
+            const password = document.getElementById("password").value;
+            const confirmPassword = document.getElementById("confirmPassword").value;
+            const tipoUsuario = document.getElementById("tipoUsuario").value;
 
-            // Comprobación de campos obligatorios
-            if (!nombre || !apellido || !imagen || !nacimiento || !password || !confirmPassword || !tipoUsuario) {
-                alert("Por favor, complete todos los campos obligatorios.");
-                event.preventDefault(); // Previene el envío del formulario
+            if (!nombre || !apellido || !nacimiento || !password || !confirmPassword || !tipoUsuario) {
+                mensajeError.innerHTML = '<div class="alert alert-danger">Rellenar todos los campos obligatorios</div>'
+                event.preventDefault(); 
                 return;
             }
 
-            // Validación de contraseñas
             if (password !== confirmPassword) {
-                alert("Las contraseñas no coinciden.");
-                event.preventDefault(); // Previene el envío del formulario
+            	mensajeError.innerHTML = '<div class="alert alert-danger">Las contraseñas no coinciden</div>'
+                event.preventDefault(); 
                 return;
             }
             
          	// Validación de la extensión de la imagen
             var imagenExtension = imagen.split('.').pop().toLowerCase(); // Obtiene la extensión del archivo
             if (imagen && !['png', 'jpg'].includes(imagenExtension)) {
-                alert("La imagen debe ser de tipo .png o .jpg.");
-                event.preventDefault(); // Previene el envío del formulario
+            	mensajeError.innerHTML = '<div class="alert alert-danger">El formato de imagen no es correcto</div>'
+                event.preventDefault();
+                return;
+            }
+
+            const fechaActual = new Date();
+            const fechaNacimiento = new Date(nacimiento);
+            if (fechaNacimiento > fechaActual) {
+            	mensajeError.innerHTML = '<div class="alert alert-danger">El formato de imagen no es correcto</div>'
+                event.preventDefault();
                 return;
             }
             
-         	// Validación de fecha de nacimiento
-            var today = new Date();
-            var fechaNacimiento = new Date(nacimiento);
-            if (fechaNacimiento > today) {
-                alert("La fecha de nacimiento no puede ser una fecha futura.");
-                event.preventDefault(); // Previene el envío del formulario
-                return;
-            }
-            
-         // Calcular la edad
-            var edad = today.getFullYear() - fechaNacimiento.getFullYear();
-            var m = today.getMonth() - fechaNacimiento.getMonth();
-            
-            // Ajustar la edad si la fecha de nacimiento aún no ha llegado este año
-            if (m < 0 || (m === 0 && today.getDate() < fechaNacimiento.getDate())) {
+            let edad = fechaActual.getFullYear() - fechaNacimiento.getFullYear();
+            const m = fechaActual.getMonth() - fechaNacimiento.getMonth();
+            if (m < 0 || (m === 0 && fechaActual.getDate() < fechaNacimiento.getDate())) {
                 edad--;
             }
 
-            // Verificar que el usuario tenga al menos 18 años
             if (edad < 18) {
-                alert("Debes tener al menos 18 años.");
-                event.preventDefault(); // Previene el envío del formulario
+                mensajeError.innerHTML = '<div class="alert alert-danger">El usuario debe ser mayor de edad</div>';
+                event.preventDefault();
                 return;
             }
 
-            // Validación de campos de proveedor (si corresponde)
+
             if (tipoUsuario === "proveedor") {
-                var nombreCompania = document.getElementById("nombreCompania").value;
-                var sitioWeb = document.getElementById("sitioWeb").value;
+                const nombreCompania = document.getElementById("nombreCompania").value;
+                const sitioWeb = document.getElementById("sitioWeb").value;
 
                 if (!nombreCompania || !sitioWeb) {
-                    alert("Por favor, complete los campos de la compañía.");
-                    event.preventDefault(); // Previene el envío del formulario
+                	mensajeError.innerHTML = '<div class="alert alert-danger">Campos del proveedor sin llenar</div>'
+                    event.preventDefault();
                     return;
                 }
             }

@@ -84,7 +84,7 @@ document.querySelector("#nick").addEventListener("input", function() {
     } else {
         mensajeError.innerHTML = '';
         usuarioValido = false;
-        validarFormulario(); // Verificar si el formulario es válido
+        validarFormulario(); 
     }
 });
 
@@ -108,7 +108,7 @@ document.querySelector("#correo").addEventListener("change", function() {
                     mensajeError.innerHTML = "<div class='alert alert-success'>Correo disponible.</div>";
                     correoValido = true;
                 }
-                validarFormulario(); // Verificar si el formulario es válido
+                validarFormulario(); 
             }
         };
 
@@ -116,11 +116,11 @@ document.querySelector("#correo").addEventListener("change", function() {
     } else {
         mensajeError.innerHTML = "<div class='alert alert-danger'>Formato de correo inválido</div>";
         correoValido = false;
-        validarFormulario(); // Verificar si el formulario es válido
+        validarFormulario();
     }
 });
 
-// Función que habilita o deshabilita el botón
+
 function validarFormulario() {
     if (usuarioValido && correoValido) {
         boton.disabled = false;

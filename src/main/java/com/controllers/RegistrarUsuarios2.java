@@ -77,10 +77,9 @@ public class RegistrarUsuarios2 extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession objSession = request.getSession();
-        String nick = (String) objSession.getAttribute("nickname");
+        String nick = (String) objSession.getAttribute("nick");
         String correo = (String) objSession.getAttribute("correo");
 
-        // Capturar parámetros del formulario
         String nombre = request.getParameter("nombre");
         String apellido = request.getParameter("apellido");
         String fechaNacimiento = request.getParameter("nacimiento");
@@ -89,18 +88,19 @@ public class RegistrarUsuarios2 extends HttpServlet {
         String tipoUsuario = request.getParameter("tipoUsuario");
         
         Part img = request.getPart("imagen");
-        request.getRequestDispatcher("/WEB-INF/RegistrarUsuario2.jsp").forward(request, response);
-    	System.out.println("Redirigiendo reg2 inicio servlet");
+        String fileName = null;
+        if (img != null && img.getSize() > 0) { 
+            String uploadDir = getServletContext().getRealPath("") + File.separator + "media";
+            File uploads = new File(uploadDir);
+            if (!uploads.exists()) uploads.mkdirs();
 
-        String uploadDir = getServletContext().getRealPath("") + File.separator + "media";
-   
-        File uploads = new File(uploadDir);
-        if (!uploads.exists()) uploads.mkdirs();
+            fileName = img.getSubmittedFileName();
+            File file = new File(uploads, fileName);
+            img.write(file.getAbsolutePath());
+        }
 
-        String fileName = img.getSubmittedFileName();
-        File file = new File(uploads, fileName);
+      
 
-        img.write(file.getAbsolutePath());
 
         String nombreCompania = request.getParameter("nombreCompania");
         String sitioWeb = request.getParameter("sitioWeb");
@@ -143,16 +143,18 @@ public class RegistrarUsuarios2 extends HttpServlet {
             if (tipoUsuario.equals("proveedor")) {
                 Proveedor prov = new Proveedor(nombre, nick, apellido, correo, fechaNueva, nombreCompania, sitioWeb, contraseña);
                 sist.agregarProveedor(nick, correo, nombre, apellido, fechaNueva, nombreCompania, sitioWeb, contraseña, contraseña2);
-                usr = prov;  // Guardamos el proveedor en la variable usr
+                usr = prov;
                 System.out.println("Registrado Proveedor");
             } else {
                 Cliente cliente = new Cliente(nombre, nick, apellido, correo, fechaNueva, contraseña);
                 sist.agregarCliente(nombre, nick, apellido, correo, fechaNueva, contraseña, contraseña2);
                 usr = cliente;
             }
-
-            sist.agregarImagenUsuario(usr.getNick(), fileName);
-            usr.setImagen(fileName);
+            if(fileName != null) {
+            	
+            	sist.agregarImagenUsuario(usr.getNick(), fileName);
+            	usr.setImagen(fileName);
+            }
             
             System.out.print(sist.getUsuario(nick).getImagen());
             
