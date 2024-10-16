@@ -9,13 +9,9 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-import com.model.Cliente;
-import com.model.DTCliente;
-import com.model.DTProveedor;
 import com.model.DtProducto;
 import com.model.Factory;
 import com.model.ISistema;
-import com.model.Proveedor;
 import com.model.Usuario;
 
 /**

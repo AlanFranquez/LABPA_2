@@ -1,8 +1,6 @@
 package com.model;
 
-import java.io.File;
 
-import javax.swing.ImageIcon;
 
 public class Usuario {
     private String nombre, nick, apellido, correo, tipo, contrasena;

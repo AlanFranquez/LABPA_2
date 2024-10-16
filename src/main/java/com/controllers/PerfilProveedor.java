@@ -1,7 +1,6 @@
 package com.controllers;
 
 import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,11 +9,8 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-import com.model.Cliente;
-import com.model.DTCliente;
 import com.model.DTProveedor;
 import com.model.Proveedor;
-import com.model.Usuario;
 
 /**
  * Servlet implementation class Perfil

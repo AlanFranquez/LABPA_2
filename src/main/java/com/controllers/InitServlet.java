@@ -1,38 +1,26 @@
 package com.controllers;
 
-import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebListener;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.ImageIcon;
-
-import com.exceptions.CategoriaException;
-import com.exceptions.UsuarioRepetidoException;
-import com.model.Cat_Padre;
-import com.model.Categoria;
 import com.model.Cliente;
-import com.model.Comentario;
 import com.model.DTFecha;
-import com.model.DTProveedor;
-import com.model.DtProducto;
 import com.model.Factory;
 import com.model.ISistema;
 import com.model.Item;
 import com.model.OrdenDeCompra;
 import com.model.Producto;
-import com.model.Proveedor;
 
 @WebServlet(urlPatterns = {"/initServlet"}, loadOnStartup = 1)
 public class InitServlet extends HttpServlet {
-    @Override
+    private static final long serialVersionUID = 1L;
+
+	@Override
     public void init() throws ServletException {
     	System.out.print("El SISTEMA INCIIO VAMO ARRIBA");
     	ISistema s = Factory.getSistema();
@@ -208,7 +196,7 @@ public class InitServlet extends HttpServlet {
 
              
             
-             Proveedor prov = new Proveedor("Perez", "AndresPerez@gmail.com", "Andres", "Perez", fecha3 ,"Bamboo.inc" , "www.bamboo.com", "123");
+             ;
              s.agregarProveedor("Perez", "AndresPerez@gmail.com", "Andres", "Perez", fecha3 ,"Bamboo.inc" , "www.bamboo.com", "123", "123");
              s.agregarProveedor("Jorge", "Jorge@gmail.com", "Jorge", "Urrutia", fecha3 ,"Google.inc" , "www.google.com", "123", "123");
              

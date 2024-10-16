@@ -1,10 +1,7 @@
 package com.model;
 
-import java.io.File;
-import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.ImageIcon;
 
 
 

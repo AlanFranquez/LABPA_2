@@ -1,8 +1,5 @@
 package com.model;
-import java.io.File;
 import java.util.Map;
-
-import javax.swing.ImageIcon;
 
 public class DTCliente {
     private String nombre, nick, apellido, correo, tipo;

@@ -1,6 +1,5 @@
 package com.controllers;
 
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -15,7 +14,6 @@ import com.model.DTCliente;
 import com.model.DTOrdenDeCompra;
 import com.model.Factory;
 import com.model.ISistema;
-import com.model.OrdenDeCompra;
 
 /**
  * Servlet implementation class PerfilOrden
@@ -46,7 +44,7 @@ public class PerfilOrden extends HttpServlet {
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String nickname = request.getParameter("nickname");
+        //String nickname = request.getParameter("nickname");
         String ordenParam = request.getParameter("orden");
 
         HttpSession sess = request.getSession(false); // No crear una nueva sesión

@@ -8,9 +8,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
-import java.io.File;
-import java.util.Map;
-import java.util.ArrayList;
 
 
 import com.model.Factory;
@@ -69,8 +66,7 @@ public class ListaProductos extends HttpServlet {
     }
 
 	private void agregarAlCarrito(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        int cantidad = Integer.parseInt(request.getParameter("cantidad"));
-        int IntnumRef = Integer.parseInt(request.getParameter("numRef"));
+
 
         // Obtener la sesión actual
         HttpSession session = request.getSession();

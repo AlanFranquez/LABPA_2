@@ -19,7 +19,6 @@ import com.model.Cat_Producto;
 import com.model.Categoria;
 import com.model.Factory;
 import com.model.ISistema;
-import com.model.Producto;
 import com.model.Proveedor;
 
 @WebServlet("/registrarproducto")
@@ -39,8 +38,8 @@ public class ProductoServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession objSession = request.getSession();
-        Proveedor prov = (Proveedor) objSession.getAttribute("usuarioLogueado");
+        //HttpSession objSession = request.getSession();
+        //Proveedor prov = (Proveedor) objSession.getAttribute("usuarioLogueado");
 
         // Obtener la lista de categorías
         Map<String, Categoria> listacats = sist.getCategoriasLista();
@@ -120,7 +119,7 @@ public class ProductoServlet extends HttpServlet {
 
         // Obtener la categoría seleccionada
         String categoriaSeleccionada = request.getParameter("categoria");
-        Categoria cat = sist.getCat(categoriaSeleccionada);
+        //Categoria cat = sist.getCat(categoriaSeleccionada);
 
         // Manejo de múltiples imágenes
         List<String> imagenesUrls = new ArrayList<>();

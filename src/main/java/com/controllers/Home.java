@@ -10,8 +10,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-import com.model.Cliente;
-import com.model.DTCliente;
 import com.model.Factory;
 import com.model.ISistema;
 import com.model.Producto;

@@ -85,7 +85,7 @@
                 <img class="img-fluid rounded-circle" style="width: 200px; height: 200px; object-fit: cover;" src="media/<%= user.getImagenes() %>" alt="Imagen de cliente" />
         </div>
         <div class="col-md-6 col-12">
-            <p>Tipo de Usuario: <b>Proveedor</b></p>
+            <p>Tipo de Usuario: <b>Cliente</b></p>
             <p>Nickname: <b><%= user.getNick() %></b></p>
             <p>Nombre: <b><%= user.getNombre() %></b></p>
             <p>Apellido: <b><%= user.getApellido() %></b></p>

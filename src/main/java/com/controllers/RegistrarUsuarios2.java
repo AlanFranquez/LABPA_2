@@ -2,14 +2,6 @@ package com.controllers;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
-import com.exceptions.UsuarioException;
 import com.exceptions.UsuarioRepetidoException;
 import com.model.Cliente;
 import com.model.DTFecha;
@@ -19,7 +11,6 @@ import com.model.ISistema;
 import com.model.Proveedor;
 import com.model.Usuario;
 
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -62,7 +53,6 @@ public class RegistrarUsuarios2 extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	 HttpSession session = request.getSession();
          String nick = (String) session.getAttribute("nick");
-         String correo = (String) session.getAttribute("correo");
          
          System.out.print(nick);
          if(nick == null) {
