@@ -49,9 +49,7 @@ public class Sistema implements ISistema {
     public boolean verificarUnicidad(String nick, String correo) {
     	Usuario u = this.usuarios.get(nick);
         if (u != null) {
-            if (u.getCorreo().equals(correo)) {
-                return false;
-            }
+        	return false;
         }
         for (Usuario usuario : this.usuarios.values()) {
             if (usuario.getCorreo().equals(correo)) {
