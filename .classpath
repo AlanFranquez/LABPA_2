@@ -15,5 +15,6 @@
 	<classpathentry kind="lib" path="libs/junit-4.6.jar"/>
 	<classpathentry kind="lib" path="libs/EstacionDeTrabajo.jar"/>
 	<classpathentry kind="lib" path="libs/ServerCentral.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
