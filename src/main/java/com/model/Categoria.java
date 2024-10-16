@@ -6,12 +6,13 @@ import java.util.Map;
 public class Categoria {
 	private String nombre;
 	private String tipo;
-	
+	Cat_Padre padre;
 	
 	// Constructor:
 	public Categoria(String nombre, String tipo) {
 		this.nombre = nombre;
 		this.tipo = tipo;
+		this.padre = null;
 	}
 
 	// Getters y Setters:
@@ -26,6 +27,12 @@ public class Categoria {
 	}
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
+	}
+	public void setPadre(Cat_Padre catPadre) {
+		this.padre = catPadre;
+	}
+	public Cat_Padre getPadre() {
+		return this.padre;
 	}
 
 	

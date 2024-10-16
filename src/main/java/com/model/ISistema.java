@@ -22,9 +22,9 @@ public interface ISistema {
     
     public abstract void agregarImagenUsuario(String nick, String image);
     
-    public abstract List<DTCliente> listarClientes();
-    
     public abstract Usuario getUsuario(String nickname);
+    
+    public abstract List<DTCliente> listarClientes();
     
     public abstract boolean existeCategoria(String nombre);
     
@@ -63,8 +63,6 @@ public interface ISistema {
 	public abstract void agregarProducto(String titulo, int numRef, String descripcion, String especificaciones,
 			float precio, String proveedor, int stock);
 
-	//public abstract void agregarProducto(int numRef, int cant);
-
 	public abstract void CrearOrden();
 	
 	public abstract List<DtProducto> listarALLProductos() throws ProductoException;
@@ -88,7 +86,6 @@ public interface ISistema {
 	public abstract boolean verificarUnicidadProducto(String nombreCategoria, int numRef, String titulo);
 	
 	public abstract void eliminarPDesdeProveedor(String proveedor, int numRef);
-	
 	
 	public abstract void borrarProducto(int numRef, String titulo);
 

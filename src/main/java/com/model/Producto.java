@@ -151,12 +151,12 @@ public class Producto {
     	
     		Cat_Padre cPadre = cProducto.getPadre();
     		
-    		while(cPadre.traerPadre() != null) {
+    		while(cPadre.getPadre() != null) {
     			arrString[contador++] = cPadre.getNombre();
     			
     			
     			
-    			cPadre = cPadre.traerPadre();
+    			cPadre = cPadre.getPadre();
     		}
     	}
     	
@@ -174,7 +174,7 @@ public class Producto {
 			Cat_Padre cPadre = cat.getPadre();
             while (cPadre != null) {
             	catStr = catStr + " -> " + cPadre.getNombre();
-                cPadre = cPadre.traerPadre();
+                cPadre = cPadre.getPadre();
             }
 		}
 		catStr = catStr + "</html>";

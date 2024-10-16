@@ -1,8 +1,10 @@
 package com.model.tests;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import org.junit.jupiter.api.Test;
 
-import com.exceptions.UsuarioRepetidoException;
+import com.exceptions.*;
 import com.model.*;
 
 class Testing {
@@ -70,4 +72,19 @@ class Testing {
 		s.agregarImagenUsuario("nick3", "imagen");
 	}
 	
+	@Test
+	public void testGetUsuario1() {
+		Usuario u = s.getUsuario("nick1");
+		assertEquals("nick1", u.getNick());
+	}
+	@Test
+	public void testGetUsuario2() {
+		Usuario u = s.getUsuario("otro");
+		assertEquals(null, u);
+	}
+	
+	@Test
+	public void testVerificarUnicidadProducto() {
+		s.listarClientes();
+	}
 }
