@@ -258,18 +258,6 @@ public class Sistema implements ISistema {
     	OrdenDeCompra orden = new OrdenDeCompra(maxKey + 1);
     	ordenes.put(orden.getNumero(), orden);
     }
-    /*public void agregarProducto(int numRef, int cant) {
-    	for (Usuario user : usuarios.values()) {
-    		if (user instanceof Proveedor) {
-    			Proveedor p = (Proveedor) user;
-    			Producto prod = p.obtenerProd(numRef);
-    			if(prod != null) {
-    				prod.setStock(prod.getStock() - cant);
-    				ordenes.get(ordenes.size()).addItem(prod, cant);
-    			}
-    		}
-    	}
-    }*/
     public Integer obtenerStockProducto(int numRef) {
     	for (Usuario user : usuarios.values()) {
     		if (user instanceof Proveedor) {
@@ -287,9 +275,7 @@ public class Sistema implements ISistema {
     	ordenes.remove(keyOrden);
     }
     public void asignarOrdenCliente(String cliente) {
-    	System.out.println(cliente);
     	Cliente c = (Cliente) usuarios.get(cliente);
-    	System.out.println(c.getNombre());
     	c.agregarCompra(ordenes.get(ordenes.size()));
     }
     

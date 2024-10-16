@@ -154,6 +154,7 @@ class Testing {
 	public void testListarSoloNombresPadresCat() {
 		List<String> cats= s.listarSoloNombresPadresCat();
 		List<String> esperado = new ArrayList<>();
+		s.arbolCategorias();
 		esperado.add("cat1");
 		boolean eq = cats.equals(esperado);
 		assertEquals(true,eq);
@@ -162,26 +163,28 @@ class Testing {
 	@Test
 	public void testVerificarUnicidadProducto() {
 		try {
-			s.agregarProducto("titulo1", 001, "descripcion", "especificaciones", 200, "nick1", 10);
-			s.agregarProducto("titulo2", 002, "descripcion", "especificaciones", 200, "nick1", 10);
-			s.agregarProductoCategoria("cat2", 001);
+			s.agregarProducto("titulo1", 1, "descripcion", "especificaciones", 200, "nick1", 10);
+			s.agregarProducto("titulo2", 2, "descripcion", "especificaciones", 200, "nick1", 10);
+			s.agregarProductoCategoria("cat2", 1);
+			s.arbolProductos();
 		} catch (CategoriaException e) { }
 		
-		boolean resultado = s.verificarUnicidadProducto("cat2", 002, "titulo2");
+		boolean resultado = s.verificarUnicidadProducto("cat2", 2, "titulo2");
 		assertEquals(true, resultado);
 	}
 	
 	@Test
 	public void testVerificarUnicidadProductoDiferentes() {
 		try {
-			s.agregarProducto("titulo1", 001, "descripcion", "especificaciones", 200, "nick1", 10);
-			s.agregarProducto("titulo2", 002, "descripcion", "especificaciones", 200, "nick1", 10);
-			s.agregarProductoCategoria("cat2", 001);
+			s.agregarProducto("titulo1", 1, "descripcion", "especificaciones", 200, "nick1", 10);
+			s.agregarProducto("titulo2", 2, "descripcion", "especificaciones", 200, "nick1", 10);
+			s.agregarProductoCategoria("cat2", 1);
 		} catch (CategoriaException e) { }
 		
-		boolean resultado = s.verificarUnicidadProducto("cat2", 002, "titulo1");
+		boolean resultado = s.verificarUnicidadProducto("cat2", 2, "titulo1");
 		assertEquals(false, resultado);
 	}
+	
 
     @Test
     public void testAgregarProductoCorrecto() {
@@ -198,10 +201,41 @@ class Testing {
 
         // Verificar que el producto se haya agregado correctamente
         Producto p = s.getProducto(numRef);
+        s.obtenerStockProducto(numRef);
         Proveedor proveedor = p.getProveedor();
         assertNotNull("El proveedor debería existir.", proveedor);
         Producto producto = proveedor.obtenerProd(numRef);
         assertNotNull("El producto debería ser agregado al proveedor.", producto);
+    }
+    
+    @Test
+    public void testEsPadre() {
+    	assertEquals(s.esPadre("cat2"), false);
+    }
+    
+    @Test
+    public void testOrdenCompra() {
+    	s.CrearOrden();
+    	s.eliminarUltimaOrden();
+    	s.CrearOrden();
+    	s.CrearOrden();
+    	s.asignarOrdenCliente("nick2");
+    	int i = s.obtenerStockProducto(1);
+    	assertEquals(10, i);
+    }
+    
+    @Test
+    public void testListarClientes() {
+    	try {
+        	DTFecha f = new DTFecha(1, 1, 1111);
+			s.agregarCliente("nombre", "nick2", "apellido", "correo2", f, "contra", "contra");
+		} catch (UsuarioRepetidoException e) { }
+    	List<DTCliente> clientes = s.listarClientes();
+    	List<DTCliente> esperado = new ArrayList<>();
+    	Cliente u = (Cliente) s.getUsuario("nick2");
+    	esperado.add(u.crearDt());
+    	boolean eq = esperado.equals(clientes);
+    	assertEquals(false, eq);
     }
 }
 
