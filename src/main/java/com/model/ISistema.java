@@ -35,9 +35,7 @@ public interface ISistema {
     public abstract void agregarCategoriaConProductos(String nombre) throws CategoriaException;
     
     public abstract void asignarlePadreCategoria(String nombrePadre, String nombre) throws CategoriaException;
-    
-    public abstract void asignarlePadreACategoriaProds(String nombrePadre, String nombre) throws CategoriaException;
-    
+        
     public abstract List<DTOrdenDeCompra> listarOrdenes();
     
     public Categoria getCat(String nombre);

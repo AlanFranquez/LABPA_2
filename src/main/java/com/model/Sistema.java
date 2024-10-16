@@ -99,13 +99,10 @@ public class Sistema implements ISistema {
     
     // CASO DE USO 2: REGISTRAR PRODUCTO
     public boolean verificarUnicidadProducto(String nombreCategoria, int numRef, String titulo) {
-    	
     	Cat_Producto c = (Cat_Producto) this.categorias.get(nombreCategoria);
-    	
     	if(!c.verificarProducto(numRef, titulo)) {
     		return false;
     	}
-     	
     	return true;
     }
     public void agregarProducto(String titulo, int numRef, String descripcion, String especificaciones, float precio, String p, int stock) {    	
@@ -190,9 +187,13 @@ public class Sistema implements ISistema {
 	   this.arbolCategorias.put(nombre, nuevaCategoria);
    }
     public void asignarlePadreCategoria(String nombrePadre, String nombre) throws CategoriaException {
-	   Cat_Padre catPadre = (Cat_Padre) this.categorias.get(nombrePadre);
-	   Cat_Padre cat = (Cat_Padre) this.categorias.get(nombre);
+	   if(nombre == nombrePadre) {
+		   throw new CategoriaException("Una categoría no puede ser su propio padre");
+	   }
 	   
+	   Cat_Padre catPadre = (Cat_Padre) this.categorias.get(nombrePadre);
+	   Categoria cat = this.categorias.get(nombre);
+
 	   if(catPadre.verificarSiYaEsHijo(nombre)) {
 		   throw new CategoriaException("Esta categoria ya es su hijo");
 	   }
@@ -201,16 +202,7 @@ public class Sistema implements ISistema {
 	   catPadre.agregarHijo(cat);
 	   arbolCategorias.remove(cat.getNombre());
    }
-    public void asignarlePadreACategoriaProds(String nombrePadre, String nombre) throws CategoriaException {
-    	Cat_Padre catPadre = (Cat_Padre) this.categorias.get(nombrePadre);
-    	Cat_Producto cat = (Cat_Producto) this.categorias.get(nombre);
-    	if(catPadre.verificarSiYaEsHijo(nombre)) {
- 		   throw new CategoriaException("Esta categoria ya es su hijo");
-    	}
-    	cat.setPadre(catPadre);
-    	catPadre.agregarHijo(cat);
-    	arbolCategorias.remove(cat.getNombre());
-    }
+
     public List <String> listarSoloNombresPadresCat() {
     	List <String> listarPadres = new ArrayList<>();
     	for(Map.Entry<String, Categoria> entry : categorias.entrySet()) {
