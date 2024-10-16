@@ -676,6 +676,22 @@ public class Sistema implements ISistema {
 	 		
 	 		return nuevaLista;
 	 	}
+	 	
+	 	public OrdenDeCompra getOrden(int numero) {
+	 		return this.ordenes.get(numero);
+	 	}
+	 	
+	 	public void cambiarEstadoOrden(String estado, int numero, String cliente) {
+	 		Cliente cl = (Cliente) this.usuarios.get(cliente);
+	 		
+	 		if(cl != null) {
+	 			cl.getCompra(numero).setEstado(estado);
+	 			this.ordenes.get(numero).setEstado(estado);
+	 			return;
+	 		}
+	 		
+	 		System.out.print("no se pudo cambiar el estado");
+	 	}
 
 	 
 	 

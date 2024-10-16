@@ -74,6 +74,14 @@
 
 <div class="container mt-5">
     <h1>Detalles de la Orden N° <%= orden.getNumero() %></h1>
+    
+    <% if(orden.getEstado() == "enviado" || orden.getEstado() == "Enviado") {%>
+    	<form action="perfilOrden" method="post">
+    	<input type="hidden" name="numeroOrden" value="<%= orden.getNumero() %>">
+    	<input type="hidden" name="accion" value="confirmar">
+    	<button type="submit" class="btn btn-sucess">Confirmar</button>
+</form>
+    <%  } %>
 
     <div class="card mt-3">
         <div class="card-body">

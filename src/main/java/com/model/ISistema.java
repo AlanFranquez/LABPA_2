@@ -122,5 +122,9 @@ public interface ISistema {
 	  public void realizarCompra(OrdenDeCompra o, String nickCliente);
 	  
 	  public List<Usuario> listaUsuarios();
+	  
+	  public OrdenDeCompra getOrden(int numero);
+	  
+	  public void cambiarEstadoOrden(String estado, int numero, String cliente);
 
 }
