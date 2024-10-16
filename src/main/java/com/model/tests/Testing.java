@@ -1,5 +1,8 @@
 package com.model.tests;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
@@ -8,6 +11,9 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import com.exceptions.*;
+
+import javax.swing.tree.DefaultMutableTreeNode;
+
 import com.model.*;
 
 class Testing {
@@ -158,4 +164,52 @@ class Testing {
 		s.agregarProducto("titulo", 001, "descripcion", "especificaciones", 200, "nick1", 10);
 		s.agregarProducto("titulo", 001, "descripcion", "especificaciones", 200, "nick1", 10);
 	}
+	
+	@Test
+    public void testVerificarUnicidadProductoExistente() {
+        String categoria = "Electrónica";
+        int numRef = 12345;
+        String titulo = "Televisor 4K";
+
+        // Agregar un producto para la verificación
+        s.agregarProducto(titulo, numRef, "Descripción del producto", "Especificaciones", 999.99f, "proveedor1", 10);
+
+        // Probar la unicidad
+        boolean resultado = s.verificarUnicidadProducto(categoria, numRef, titulo);
+        assertFalse("El producto debería ser único pero no lo es.", resultado);
+    }
+
+    @Test
+    public void testVerificarUnicidadProductoNoExistente() {
+        String categoria = "Electrónica";
+        int numRef = 54321;
+        String titulo = "Laptop Gaming";
+
+        boolean resultado = s.verificarUnicidadProducto(categoria, numRef, titulo);
+        assertTrue("El producto debería ser único.", resultado);
+    }
+
+    @Test
+    public void testAgregarProductoCorrecto() {
+        String titulo = "Smartphone";
+        int numRef = 67890;
+        String descripcion = "Un smartphone de última generación";
+        String especificaciones = "Especificaciones del smartphone";
+        float precio = 499.99f;
+        String proveedorNick = "proveedor1";
+        int stock = 50;
+
+        // Agregar un producto
+        s.agregarProducto(titulo, numRef, descripcion, especificaciones, precio, proveedorNick, stock);
+
+        // Verificar que el producto se haya agregado correctamente
+        Producto p = s.getProducto(numRef);
+        Proveedor proveedor = p.getProveedor();
+        assertNotNull("El proveedor debería existir.", proveedor);
+        Producto producto = proveedor.obtenerProd(numRef);
+        assertNotNull("El producto debería ser agregado al proveedor.", producto);
+        assertEquals("El título del producto no coincide.", titulo, producto.getNombre());
+    }
 }
+
+    

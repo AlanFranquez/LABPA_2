@@ -46,10 +46,18 @@ public class Sistema implements ISistema {
     }
 
     // CASO DE USO 1: REGISTRAR USUARIO
-    public boolean verificarUnicidad(String nick, String correo) {
+	public boolean verificarUnicidad(String nick, String correo) {
     	Usuario u = this.usuarios.get(nick);
+<<<<<<< HEAD
         if (u != null) {
         	return false;
+=======
+        if (u == null) {
+        	return false;    
+        }
+        if (u.getCorreo() != null && u.getCorreo().equals(correo)) {
+            return false;
+>>>>>>> e2eeb13d20c1c8ca42e4f067a10b8877371367b7
         }
         for (Usuario usuario : this.usuarios.values()) {
             if (usuario.getCorreo() != null && usuario.getCorreo().equals(correo)) {
