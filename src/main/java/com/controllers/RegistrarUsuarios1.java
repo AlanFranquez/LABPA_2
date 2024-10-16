@@ -1,10 +1,6 @@
 package com.controllers;
 
 import java.io.IOException;
-import com.exceptions.UsuarioException;
-import com.model.Factory;
-import com.model.ISistema;
-import com.model.Usuario;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -16,17 +12,7 @@ import jakarta.servlet.http.HttpSession;
 public class RegistrarUsuarios1 extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    private ISistema sist;
-
-    @Override
-    public void init() throws ServletException {
-        try {
-            sist = Factory.getSistema();  // Inicializa el sistema
-        } catch (Exception e) {
-            throw new ServletException("No se pudo inicializar ISistema", e);
-        }
-    }
-
+   
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.getRequestDispatcher("/WEB-INF/RegistrarUsuario1.jsp").forward(request, response);

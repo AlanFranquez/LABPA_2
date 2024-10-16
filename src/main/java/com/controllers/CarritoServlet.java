@@ -9,7 +9,6 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-import com.model.Carrito;
 import com.model.Usuario;
 import com.model.Item;
 import com.model.Cliente;

@@ -9,10 +9,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.exceptions.UsuarioRepetidoException;
 import com.model.Cliente;
 import com.model.DTCliente;
-import com.model.DTFecha;
 import com.model.Factory;
 import com.model.ISistema;
 import com.model.Usuario;

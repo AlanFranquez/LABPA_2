@@ -85,7 +85,7 @@
             <% if (user.getImagen() == null) { %>
                 <p>No Hay imagen disponible :/</p>
             <% } else { %>
-                <img class="img-fluid rounded-circle" style="width: 200px; height: 200px; object-fit: cover;" src="media<%= user.getImagen() %>" alt="Imagen de cliente" />
+                <img class="img-fluid rounded-circle" style="width: 200px; height: 200px; object-fit: cover;" src="media<%= user.getImagen() %>" alt="Imagen de proveedor" />
             <% } %>            	
         </div>
         <div class="col-md-6 col-12">

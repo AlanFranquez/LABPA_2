@@ -1,7 +1,6 @@
 package com.controllers;
 import java.io.IOException;
 
-import com.exceptions.UsuarioException;
 import com.model.EstadoSesion;
 import com.model.Factory;
 import com.model.ISistema;
