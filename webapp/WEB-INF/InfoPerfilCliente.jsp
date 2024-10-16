@@ -117,10 +117,25 @@
                 <div class="row g-0">
                     <div class="col-md-8">
                         <div class="card-body">
-                            <h3 class="card-title"><%= dt.getNumero() %></h3>
+                            <h3 class="card-title"><%= dt.getNumero() %></h3> 
+                            
+                            <% if(dt.getEstado() == "Entregado")  {%>
+                            
+                            	<span class="badge mb-2" style="background-color: green; font-weight: normal; color: white"><%= dt.getEstado() %></span>
+                            
+                            <% } else {%>
+                            	<span class="badge mb-2" style="background-color: yellow; font-weight: normal; color: black"><%= dt.getEstado() %></span>
+                            
+                            <% }%>
+                            
+                            
+                            <br>
+                            
                             <p class="card-text"><b>Precio total: </b><%= dt.getPrecioTotal() %></p>
                             <p class="card-text"><b>Fecha de compra: </b><%= dt.getFechaString() %></p>
+                           
                             <button class="btn" style="border: none; background-color: #2C2C2C">
+                            
                             <a style="text-decoration: none; color: white" href="perfilOrden?nickname=<%= user.getNick() %>&orden=<%= dt.getNumero() %>" >VER DETALLES</a>
                             </button>
     

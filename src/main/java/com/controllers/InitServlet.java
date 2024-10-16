@@ -246,6 +246,11 @@ public class InitServlet extends HttpServlet {
              
              
              OrdenDeCompra o = new OrdenDeCompra(items, nuevoItem.getSubTotal());
+             
+             Cliente cl = (Cliente) s.getUsuario("Juan123");
+             s.realizarCompra(o, cl.getNick());
+             cl.agregarCompra(o);
+             s.cambiarEstadoOrden("Enviado", o.getNumero(), cl.getNick());
 
              s.agregarImagenUsuario("Juan123", "/images/p1.jpg");
              s.agregarImagenUsuario("albert1341", "/images/p2.jpg");

@@ -57,7 +57,7 @@
               </div>
             </div>
             <button id="submitBtn" type="submit" class="btn btn-submit">Iniciar Sesión</button>
-            <a href="#">¿Olvidó su contraseña?</a>
+            <a href="mostrarAlerta">¿Olvidó su contraseña?</a>
         </form>
         <section class="container-sm row g-3" id="registrarSection">
             <a href="registrarusuario1" class="btn"> 

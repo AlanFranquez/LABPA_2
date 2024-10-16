@@ -11,12 +11,15 @@ public class DTOrdenDeCompra {
     private float precioTotal;
     private LocalDateTime fecha;
     private Map<Integer, Item> items;
-
-    public DTOrdenDeCompra(int numero, Map <Integer, Item>items, float precioTotal) {
+    String estado;
+    
+    
+    public DTOrdenDeCompra(int numero, Map <Integer, Item>items, float precioTotal, String estado) {
     	fecha = LocalDateTime.now();
         this.numero = numero;
         this.precioTotal = precioTotal;
         this.items = items;
+        this.estado = estado;
     }
     
     
@@ -34,12 +37,15 @@ public class DTOrdenDeCompra {
     }
     
     // Getters y Setters:
+    
+    public String getEstado() {
+    	return this.estado;
+    }
+    
     public int getNumero() {
         return numero;
     }
-    public void setNumero(int numero) {
-        this.numero = numero;
-    }
+   
     public LocalDateTime getFecha() {
         return fecha;
     }

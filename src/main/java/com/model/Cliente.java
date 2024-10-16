@@ -25,6 +25,10 @@ public class Cliente extends Usuario {
         return listaCompras;
     }
     
+    public OrdenDeCompra getCompra(int numero) {
+    	return this.listaCompras.get(numero);
+    }
+    
     public Carrito getCarrito() {
     	return this.carrito;
     }

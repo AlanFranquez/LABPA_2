@@ -83,7 +83,7 @@
     <section class="row justify-content-center align-items-center">
         <div class="col-md-6 col-12 text-center">
             <% if (user.getImagen() == null) { %>
-                <h1>No Hay imagen disponible :/</h1>
+                <p>No Hay imagen disponible :/</p>
             <% } else { %>
                 <img class="img-fluid rounded-circle" style="width: 200px; height: 200px; object-fit: cover;" src="media<%= user.getImagen() %>" alt="Imagen de cliente" />
             <% } %>            	

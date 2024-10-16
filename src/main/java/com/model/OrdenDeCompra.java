@@ -11,11 +11,13 @@ public class OrdenDeCompra {
     private float precioTotal;
     private LocalDateTime fecha;
     private Map<Integer, Item> items;
+    private String estadoOrden;
 
     public OrdenDeCompra(int numero) {
     	fecha = LocalDateTime.now();
         this.numero = numero;
         this.precioTotal = 0;
+        this.estadoOrden = "En preparación";
         this.items = new HashMap<>();
     }
     
@@ -25,9 +27,20 @@ public class OrdenDeCompra {
     	this.numero = random.nextInt(1000);
     	this.precioTotal = precioTotal;
     	this.fecha = LocalDateTime.now();
+    	this.estadoOrden = "En preparación";
     }
     
+    
+    
     // Getters y Setters:
+    
+    public String getEstado() {
+    	return this.estadoOrden;
+    }
+    
+    public void setEstado(String estado) {
+    	this.estadoOrden = estado;
+    }
     public int getNumero() {
         return numero;
     }
@@ -73,7 +86,7 @@ public class OrdenDeCompra {
     }
     
     public DTOrdenDeCompra crearDT() {
-    	return new DTOrdenDeCompra(numero, getItems(), getPrecioTotal());
+    	return new DTOrdenDeCompra(numero, getItems(), getPrecioTotal(), this.getEstado());
     }
     
     

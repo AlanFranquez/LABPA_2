@@ -1,9 +1,6 @@
 package com.controllers;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.exceptions.UsuarioException;
 import com.model.Factory;
 import com.model.ISistema;
@@ -32,29 +29,23 @@ public class RegistrarUsuarios1 extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<Usuario> usuarios = sist.listaUsuarios();
-        List<String> usuariosStrings = new ArrayList<String>();
-        List<String> correos = new ArrayList<String>();
-        for(Usuario u : usuarios) {
-        	usuariosStrings.add(u.getNick());
-        	correos.add(u.getCorreo());
-        }
-        
-        
-        
-        request.setAttribute("usuariosLista", usuariosStrings);
-    	request.setAttribute("correos", correos);
-    	request.getRequestDispatcher("/WEB-INF/RegistrarUsuario1.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/RegistrarUsuario1.jsp").forward(request, response);
+        System.out.println("Redirigiendo a RegistrarUsuario1.jsp inicio Servlet");
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-      
+        
+        String nick = request.getParameter("nick");
+        String correo = request.getParameter("correo");
         HttpSession objSession = request.getSession();
         objSession.removeAttribute("errorMsg");
 
-        String nick = request.getParameter("nick");
-        String correo = request.getParameter("correo");
+        if (nick == null || nick.isEmpty() || correo == null || correo.isEmpty()) {
+            objSession.setAttribute("errorMsg", "El nickname o correo no pueden estar vacíos");
+            response.sendRedirect("/WEB-INF/Error.jsp");
+            return;
+        }
         
         
         objSession.setAttribute("nick", nick);

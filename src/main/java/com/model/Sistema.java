@@ -49,10 +49,16 @@ public class Sistema implements ISistema {
     public boolean verificarUnicidad(String nick, String correo) {
     	Usuario u = this.usuarios.get(nick);
         if (u != null) {
+<<<<<<< HEAD
         	return false;
+=======
+            if (u.getCorreo() != null && u.getCorreo().equals(correo)) {
+                return false;
+            }
+>>>>>>> 361130b532b07fd49b6a01d3338adf9bf1c94fae
         }
         for (Usuario usuario : this.usuarios.values()) {
-            if (usuario.getCorreo().equals(correo)) {
+            if (usuario.getCorreo() != null && usuario.getCorreo().equals(correo)) {
                 return false;
             }
         }
@@ -673,6 +679,22 @@ public class Sistema implements ISistema {
 	 		
 	 		
 	 		return nuevaLista;
+	 	}
+	 	
+	 	public OrdenDeCompra getOrden(int numero) {
+	 		return this.ordenes.get(numero);
+	 	}
+	 	
+	 	public void cambiarEstadoOrden(String estado, int numero, String cliente) {
+	 		Cliente cl = (Cliente) this.usuarios.get(cliente);
+	 		
+	 		if(cl != null) {
+	 			cl.getCompra(numero).setEstado(estado);
+	 			this.ordenes.get(numero).setEstado(estado);
+	 			return;
+	 		}
+	 		
+	 		System.out.print("no se pudo cambiar el estado");
 	 	}
 
 	 
