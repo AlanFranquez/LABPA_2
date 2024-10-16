@@ -44,7 +44,7 @@ public class FormLogin extends HttpServlet {
    
    
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		 
+		
 		request.getRequestDispatcher("/WEB-INF/IniciarSesion.jsp").forward(request, response);
 	}
 
@@ -55,7 +55,7 @@ public class FormLogin extends HttpServlet {
         String nickname = request.getParameter("nickname");
         String password = request.getParameter("password");
         
-      
+        
         
         EstadoSesion nuevoEstado;
      
