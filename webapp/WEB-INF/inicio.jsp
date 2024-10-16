@@ -120,7 +120,7 @@
                 
                 <div class="w-100 d-flex m-2 gap-1">
                     <button class="botonIndex mr-2">
-                        <a href="home" style="text-decoration: none;">
+                        <a href="buscarproductos" style="text-decoration: none;">
                            Empezar
                         </a>
                     </button>
