@@ -28,9 +28,9 @@ public class DTOrdenDeCompra {
     	
     	
     	for(Map.Entry<Integer, Item> entry : this.items.entrySet()) {
-    		Item it = entry.getValue();
+    		Item item = entry.getValue();
     		
-    		listarItems.add(it.crearDT());
+    		listarItems.add(item.crearDT());
     	}
     	
     	return listarItems;

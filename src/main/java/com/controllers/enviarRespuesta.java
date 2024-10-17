@@ -26,8 +26,8 @@ public class enviarRespuesta extends HttpServlet {
     public void init() throws ServletException {
         try {
             sist = Factory.getSistema();
-        } catch (Exception e) {
-            throw new ServletException("No se pudo inicializar ISistema", e);
+        } catch (Exception exeption) {
+            throw new ServletException("No se pudo inicializar ISistema", exeption);
         }
     }
 
@@ -61,8 +61,8 @@ int paramNum = Integer.parseInt(parametro);
        
         
         Cliente cli = (Cliente) session.getAttribute("usuarioLogueado");
-        Producto p1 = sist.getProducto(paramNum);
-        Comentario coment = p1.getComentario(comentarioId);
+        Producto producto1 = sist.getProducto(paramNum);
+        Comentario coment = producto1.getComentario(comentarioId);
         
         if (coment == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "Comentario no encontrado.");

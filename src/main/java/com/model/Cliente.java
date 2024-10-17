@@ -34,18 +34,18 @@ public class Cliente extends Usuario {
     }
     
     
-    public void agregarRespuesta(int numeroComentario, String nombreProducto, Comentario r) {
+    public void agregarRespuesta(int numeroComentario, String nombreProducto, Comentario respuesta) {
     	for(Map.Entry<Integer, OrdenDeCompra> entry : listaCompras.entrySet()) {
-    		OrdenDeCompra o = entry.getValue();
+    		OrdenDeCompra orden = entry.getValue();
     		
     		
     		
-    		for(Map.Entry<Integer, Item> entry2 : o.getItems().entrySet()) {
-        		Item it = entry2.getValue();
+    		for(Map.Entry<Integer, Item> entry2 : orden.getItems().entrySet()) {
+        		Item item = entry2.getValue();
         		
-        		if(it.getProducto().getNombre() == nombreProducto) {
-        			Producto p = it.getProducto();
-        			p.agregarRespuesta(numeroComentario, r);
+        		if(item.getProducto().getNombre() == nombreProducto) {
+        			Producto producto = item.getProducto();
+        			producto.agregarRespuesta(numeroComentario, respuesta);
         			return;
         		}
         	}
@@ -55,18 +55,18 @@ public class Cliente extends Usuario {
     
     
     
-    public void agregarComentario(Comentario c, String nombreProducto) throws ProductoException {
+    public void agregarComentario(Comentario comentario, String nombreProducto) throws ProductoException {
     	for(Map.Entry<Integer, OrdenDeCompra> entry : listaCompras.entrySet()) {
-    		OrdenDeCompra o = entry.getValue();
+    		OrdenDeCompra orden = entry.getValue();
     		
     		
     		
-    		for(Map.Entry<Integer, Item> entry2 : o.getItems().entrySet()) {
-        		Item it = entry2.getValue();
+    		for(Map.Entry<Integer, Item> entry2 : orden.getItems().entrySet()) {
+        		Item item = entry2.getValue();
         		
-        		if(it.getProducto().getNombre() == nombreProducto) {
-        			Producto p = it.getProducto();
-        			p.agregarComentario(c);
+        		if(item.getProducto().getNombre() == nombreProducto) {
+        			Producto producto = item.getProducto();
+        			producto.agregarComentario(comentario);
         			return;
         		}
         	}
@@ -86,9 +86,9 @@ public class Cliente extends Usuario {
     	List<DTOrdenDeCompra> lista = new ArrayList<DTOrdenDeCompra>();
     	
     	for(Map.Entry<Integer, OrdenDeCompra> entry : listaCompras.entrySet()) {
-    		OrdenDeCompra o = entry.getValue();
+    		OrdenDeCompra orden = entry.getValue();
     		
-    		lista.add(o.crearDT());
+    		lista.add(orden.crearDT());
     	}
     	
     	return lista;
@@ -125,16 +125,16 @@ public class Cliente extends Usuario {
     
     public Boolean comproProducto(int numeroRef) {
     	for(Map.Entry<Integer, OrdenDeCompra> entry : listaCompras.entrySet()) {
-    		OrdenDeCompra o = entry.getValue();
+    		OrdenDeCompra orden = entry.getValue();
     		
-    		Map<Integer, Item> items = o.getItems();
+    		Map<Integer, Item> items = orden.getItems();
     		
     		
     		for(Map.Entry<Integer, Item> entry2 : items.entrySet()) {
-    			Item it = entry2.getValue();
+    			Item item = entry2.getValue();
     			
     			
-    			if(it.getProducto().getNumRef() == numeroRef) {
+    			if(item.getProducto().getNumRef() == numeroRef) {
     				return true;
     			}
     		}

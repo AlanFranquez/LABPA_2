@@ -45,12 +45,12 @@ public class Sistema implements ISistema {
 
     // CASO DE USO 1: REGISTRAR USUARIO
 	public boolean verificarUnicidad(String nick, String correo) {
-    	Usuario u = this.usuarios.get(nick);
-        if (u != null) {
+    	Usuario usuario = this.usuarios.get(nick);
+        if (usuario != null) {
         	return false;
         }
-        for (Usuario usuario : this.usuarios.values()) {
-            if (usuario.getCorreo() != null && usuario.getCorreo().equals(correo)) {
+        for (Usuario user : this.usuarios.values()) {
+            if (user.getCorreo() != null && user.getCorreo().equals(correo)) {
                 return false;
             }
         }
@@ -59,7 +59,7 @@ public class Sistema implements ISistema {
     }
     public void agregarProveedor(String nick, String correo, String nombre, String apellido, DTFecha fechaNacimiento, String compania, String link, String contra, String confContra) throws UsuarioRepetidoException {
     	if (!verificarUnicidad(nick, correo)) {
-    		throw new UsuarioRepetidoException("Ya existe un usuario con nick: " + nick + " o email: " + correo);
+    		throw new UsuarioRepetidoException("Ya existe un usuario con nick: " + nick + " orden email: " + correo);
     	}
     	if(!contra.equals(confContra))
     		throw new UsuarioRepetidoException("Contraseñas Diferentes");
@@ -68,7 +68,7 @@ public class Sistema implements ISistema {
     }
     public void agregarCliente(String nombre, String nick, String apellido, String correo, DTFecha fecha, String contra, String confContra) throws UsuarioRepetidoException {
     	if (!verificarUnicidad(nick, correo)) {
-    		throw new UsuarioRepetidoException("Ya existe un usuario con nick: " + nick + " o email: " + correo);
+    		throw new UsuarioRepetidoException("Ya existe un usuario con nick: " + nick + " orden email: " + correo);
     	}
     	if(!contra.equals(confContra))
     		throw new UsuarioRepetidoException("Contraseñas Diferentes");
@@ -98,16 +98,16 @@ public class Sistema implements ISistema {
     
     // CASO DE USO 2: REGISTRAR PRODUCTO
     public boolean verificarUnicidadProducto(String nombreCategoria, int numRef, String titulo) {
-    	Cat_Producto c = (Cat_Producto) this.categorias.get(nombreCategoria);
-    	if(!c.verificarProducto(numRef, titulo)) {
+    	Cat_Producto cat = (Cat_Producto) this.categorias.get(nombreCategoria);
+    	if(!cat.verificarProducto(numRef, titulo)) {
     		return false;
     	}
     	return true;
     }
-    public void agregarProducto(String titulo, int numRef, String descripcion, String especificaciones, float precio, String p, int stock) {    	
-    	Proveedor proveedor = (Proveedor) usuarios.get(p);
-        Producto prod = new Producto(titulo, descripcion, precio, numRef, especificaciones, proveedor, stock);
-        proveedor.agregarProd(prod);
+    public void agregarProducto(String titulo, int numRef, String descripcion, String especificaciones, float precio, String prov, int stock) {    	
+    	Proveedor proveedor = (Proveedor) usuarios.get(prov);
+        Producto producto = new Producto(titulo, descripcion, precio, numRef, especificaciones, proveedor, stock);
+        proveedor.agregarProd(producto);
     }
     public DefaultMutableTreeNode arbolCategorias() {
       	 DefaultMutableTreeNode root = new DefaultMutableTreeNode("Cats");
@@ -139,15 +139,15 @@ public class Sistema implements ISistema {
     public void agregarProductoCategoria(String catName, int numRef) throws CategoriaException {
     	for (Usuario user : usuarios.values()) {
     		if (user instanceof Proveedor) {
-    			Proveedor p = (Proveedor) user;
-    			Producto prod = p.obtenerProd(numRef);
-    			if(prod != null) {
+    			Proveedor proveedor = (Proveedor) user;
+    			Producto producto = proveedor.obtenerProd(numRef);
+    			if(producto != null) {
     				Cat_Producto cat = (Cat_Producto) categorias.get(catName);
     				if(cat == null) {
     					throw new CategoriaException("Hubo un error en la Categoria, vuelva a intentarlo");
     				}
-    				prod.agregarCategorias(cat);
-    				cat.agregarProducto(prod);
+    				producto.agregarCategorias(cat);
+    				cat.agregarProducto(producto);
     			}
     		}
     	}
@@ -242,8 +242,8 @@ public class Sistema implements ISistema {
   	 	}else {
   	 		Map<Integer, Producto> productos = ((Cat_Producto) cat).getProductos();
   	 		if(productos.size() >= 1) {
-  	 			for(Producto prod : productos.values()) {
-  	 				DefaultMutableTreeNode child = new DefaultMutableTreeNode(prod.getNombre() + " - " + prod.getNumRef());
+  	 			for(Producto producto : productos.values()) {
+  	 				DefaultMutableTreeNode child = new DefaultMutableTreeNode(producto.getNombre() + " - " + producto.getNumRef());
   					rama.add(child);
   	 			}
   	 		}else {
@@ -260,10 +260,10 @@ public class Sistema implements ISistema {
     public Integer obtenerStockProducto(int numRef) {
     	for (Usuario user : usuarios.values()) {
     		if (user instanceof Proveedor) {
-    			Proveedor p = (Proveedor) user;
-    			Producto prod = p.obtenerProd(numRef);
-    			if(prod != null) {
-    				return prod.getStock();
+    			Proveedor proveedor = (Proveedor) user;
+    			Producto producto = proveedor.obtenerProd(numRef);
+    			if(producto != null) {
+    				return producto.getStock();
     			}
     		}
     	}
@@ -273,9 +273,9 @@ public class Sistema implements ISistema {
     	int keyOrden = ordenes.size();
     	ordenes.remove(keyOrden);
     }
-    public void asignarOrdenCliente(String cliente) {
-    	Cliente c = (Cliente) usuarios.get(cliente);
-    	c.agregarCompra(ordenes.get(ordenes.size()));
+    public void asignarOrdenCliente(String usuarioCliente) {
+    	Cliente cliente = (Cliente) usuarios.get(usuarioCliente);
+    	cliente.agregarCompra(ordenes.get(ordenes.size()));
     }
     
     
@@ -359,10 +359,10 @@ public class Sistema implements ISistema {
 
     	        while (prodIterator.hasNext()) {
     	            Map.Entry<Integer, Producto> prodEntry = prodIterator.next();
-    	            Producto p = prodEntry.getValue();
+    	            Producto producto = prodEntry.getValue();
 
     	            // Comparar el título del producto usando equals y el número de referencia
-    	            if (p.getNombre().equals(titulo) && p.getNumRef() == numero) {
+    	            if (producto.getNombre().equals(titulo) && producto.getNumRef() == numero) {
     	                // Remover el producto del mapa
     	                prodIterator.remove();
     	            }
@@ -381,8 +381,8 @@ public class Sistema implements ISistema {
     		throw new ProductoException("Esta categoría no cuenta con productos");
     	}
     	for(Entry<Integer, Producto> entry: prodC.getProductos().entrySet()) {
-    		Producto p = entry.getValue();
-    		listaProductos.add(p.crearDT());
+    		Producto producto = entry.getValue();
+    		listaProductos.add(producto.crearDT());
     	}	
     	return listaProductos;
     }
@@ -408,20 +408,20 @@ public class Sistema implements ISistema {
     	List<Integer> numRefs = new ArrayList<Integer>();
     	
     	for(Map.Entry<String, Categoria> entry : this.categorias.entrySet()) {
-    		Categoria c = entry.getValue();
+    		Categoria cat = entry.getValue();
     		
-    		if(c.getTipo() == "Producto") {
-    			Cat_Producto cProd = (Cat_Producto) c;
+    		if(cat.getTipo() == "Producto") {
+    			Cat_Producto cProd = (Cat_Producto) cat;
     			List<DtProducto> listaPerProducto = cProd.listarProductos();
     			
     			if(listaPerProducto.isEmpty()) {
     				continue;
     			}
     			
-    			for(DtProducto dt: listaPerProducto) {
-    				if(!numRefs.contains(dt.getNumRef())) {
-                		numRefs.add(dt.getNumRef());
-                		listaProductos.add(dt);
+    			for(DtProducto dtProducto: listaPerProducto) {
+    				if(!numRefs.contains(dtProducto.getNumRef())) {
+                		numRefs.add(dtProducto.getNumRef());
+                		listaProductos.add(dtProducto);
                 	}
     			}
     		}
@@ -434,10 +434,10 @@ public class Sistema implements ISistema {
     public DtProducto getDtProducto(int numRef) {
     	for (Usuario user : usuarios.values()) {
     		if (user instanceof Proveedor) {
-    			Proveedor p = (Proveedor) user;
-    			Producto prod = p.obtenerProd(numRef);
-    			if(prod != null) {
-    				return prod.crearDT();
+    			Proveedor proveedor = (Proveedor) user;
+    			Producto producto = proveedor.obtenerProd(numRef);
+    			if(producto != null) {
+    				return producto.crearDT();
     			}
     		}
     	}
@@ -447,10 +447,10 @@ public class Sistema implements ISistema {
     public Producto getProducto(int numRef) {
     	for (Usuario user : usuarios.values()) {
     		if (user instanceof Proveedor) {
-    			Proveedor p = (Proveedor) user;
-    			Producto prod = p.obtenerProd(numRef);
-    			if(prod != null) {
-    				return prod;
+    			Proveedor proveedor = (Proveedor) user;
+    			Producto producto = proveedor.obtenerProd(numRef);
+    			if(producto != null) {
+    				return producto;
     			}
     		}
     	}
@@ -466,9 +466,9 @@ public class Sistema implements ISistema {
     	List<DTOrdenDeCompra> lista = new ArrayList<>();
     	
     	for(Map.Entry<Integer, OrdenDeCompra> entry : this.ordenes.entrySet()) {
-    		OrdenDeCompra o = entry.getValue();
+    		OrdenDeCompra orden = entry.getValue();
     		
-    		lista.add(o.crearDT());
+    		lista.add(orden.crearDT());
     	}
     	
     	return lista;
@@ -479,19 +479,19 @@ public class Sistema implements ISistema {
         List<DTCliente> listaClientes = new ArrayList<>();
         for (Usuario usuario : usuarios.values()) {
             if (usuario instanceof Cliente) {
-            	Cliente cl = (Cliente) usuario;
-                listaClientes.add(cl.crearDt());
+            	Cliente cliente = (Cliente) usuario;
+                listaClientes.add(cliente.crearDt());
             }
         }
         return listaClientes;
     }
     */
-    public void addOrdenes(OrdenDeCompra o, String nickUsuario) {
-    	Usuario us = this.usuarios.get(nickUsuario);
+    public void addOrdenes(OrdenDeCompra orden, String nickUsuario) {
+    	Usuario user = this.usuarios.get(nickUsuario);
     	
-    	Cliente cl = (Cliente) us;
-    	ordenes.put(o.getNumero(), o);
-    	cl.agregarCompra(o);
+    	Cliente cliente = (Cliente) user;
+    	ordenes.put(orden.getNumero(), orden);
+    	cliente.agregarCompra(orden);
     }
     public boolean comprobarCat(String cat) throws CategoriaException {
     	if((Cat_Producto) this.categorias.get(cat) == null) {
@@ -508,23 +508,23 @@ public class Sistema implements ISistema {
 
 	 // MOSTRAR PERFIL CLIENTE
 	 public DTCliente mostrarPerfilCliente(String nick) {
-	 	Cliente cl = (Cliente) this.usuarios.get(nick);
+	 	Cliente cliente = (Cliente) this.usuarios.get(nick);
 	 	
-	 	return cl.crearDt();
+	 	return cliente.crearDt();
 	 }
 	 
 	 // MOSTRAR PERFIL PROVEEDOR
 	 public DTProveedor mostrarPerfilProveedor(String nick) {
-		 Proveedor pr = (Proveedor) this.usuarios.get(nick);
+		 Proveedor proveedor = (Proveedor) this.usuarios.get(nick);
 		 
-		 return pr.crearDt();
+		 return proveedor.crearDt();
 	 }
 	 
 	 // Traer Ordenes de compras de un cliente
 	 public List<DTOrdenDeCompra> getOrdenesCliente(String nick) {
-		 Cliente cl = (Cliente) this.usuarios.get(nick);
+		 Cliente cliente = (Cliente) this.usuarios.get(nick);
 		 
-		 return cl.mostrarCompras();
+		 return cliente.mostrarCompras();
 	 }
 	 
 	 
@@ -548,13 +548,13 @@ public class Sistema implements ISistema {
 			 return;
 		 }
 		 
-		 Producto p1 = usr.obtenerProd(numRef);
+		 Producto producto1 = usr.obtenerProd(numRef);
 		 
-		 if(p1 == null) {
+		 if(producto1 == null) {
 			 return;
 		 }
 		 
-		 p1.agregarImagen(imagen);
+		 producto1.agregarImagen(imagen);
 		 
 	 }
 	 /*
@@ -605,23 +605,23 @@ public class Sistema implements ISistema {
 		}
 	 
 	 
-	 public void realizarCompra(OrdenDeCompra o, String nickCliente) {
-		    Cliente cl = (Cliente) this.usuarios.get(nickCliente);
+	 public void realizarCompra(OrdenDeCompra orden, String nickCliente) {
+		    Cliente cliente = (Cliente) this.usuarios.get(nickCliente);
 		    System.out.println("Realizando compra para el cliente: " + nickCliente);
-		    System.out.println("Número de orden: " + o.getNumero());
+		    System.out.println("Número de orden: " + orden.getNumero());
 		    
-		    if (cl == null) {
+		    if (cliente == null) {
 		        System.out.println("Cliente no encontrado");
 		        return; 
 		    }
 
-		    this.ordenes.put(o.getNumero(), o);
-		    System.out.println("Orden guardada: " + o.getNumero());
+		    this.ordenes.put(orden.getNumero(), orden);
+		    System.out.println("Orden guardada: " + orden.getNumero());
 		    
 		    // Agregar compra al cliente
-		    cl.agregarCompra(this.ordenes.get(o.getNumero()));
+		    cliente.agregarCompra(this.ordenes.get(orden.getNumero()));
 		    
-		    Map<Integer, Item> itemsAdquiridos = o.getItems();
+		    Map<Integer, Item> itemsAdquiridos = orden.getItems();
 		    for (Map.Entry<Integer, Item> entry : itemsAdquiridos.entrySet()) {
 		        Item item = entry.getValue();
 		        int numeroRef = item.getProducto().getNumRef();
@@ -643,9 +643,9 @@ public class Sistema implements ISistema {
 	 		Map<String, Usuario> personas = this.usuarios;
 	 		List<Usuario> nuevaLista = new ArrayList<Usuario>();
 	 		for (Map.Entry<String, Usuario> entry : personas.entrySet()) { 
-	 			Usuario u = entry.getValue();
+	 			Usuario usuario = entry.getValue();
 	 			
-	 			nuevaLista.add(u);
+	 			nuevaLista.add(usuario);
 	 			
 	 		}
 	 		
@@ -658,10 +658,10 @@ public class Sistema implements ISistema {
 	 	}
 	 	
 	 	public void cambiarEstadoOrden(String estado, int numero, String cliente) {
-	 		Cliente cl = (Cliente) this.usuarios.get(cliente);
+	 		Cliente client = (Cliente) this.usuarios.get(cliente);
 	 		
-	 		if(cl != null) {
-	 			cl.getCompra(numero).setEstado(estado);
+	 		if(client != null) {
+	 			client.getCompra(numero).setEstado(estado);
 	 			this.ordenes.get(numero).setEstado(estado);
 	 			return;
 	 		}

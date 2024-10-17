@@ -70,13 +70,13 @@ public class OrdenDeCompra {
 	    }
     }
 
-    public void addItem(Producto p, int cant) {
-    	if(items.containsKey(p.getNumRef())) {
-    		Item item = items.get(p.getNumRef());
+    public void addItem(Producto producto, int cant) {
+    	if(items.containsKey(producto.getNumRef())) {
+    		Item item = items.get(producto.getNumRef());
     		item.setCant(item.getCant() + cant);
     	}else {
-    		Item item = new Item(cant, p);
-    		items.put(p.getNumRef(), item);    		
+    		Item item = new Item(cant, producto);
+    		items.put(producto.getNumRef(), item);    		
     	}
     	setPrecioTotal();
     }

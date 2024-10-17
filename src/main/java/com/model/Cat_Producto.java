@@ -20,10 +20,10 @@ private Map<Integer, Producto> productos;
 	    List<DtProducto> listaProds = new ArrayList<DtProducto>();
 	        
 	    for(Entry<Integer, Producto> entry: this.productos.entrySet()) {
-	    	Producto p = entry.getValue();
+	    	Producto producto = entry.getValue();
 	        	
-	    	DtProducto dtp = p.crearDT();
-	    	listaProds.add(dtp);
+	    	DtProducto dtProducto = producto.crearDT();
+	    	listaProds.add(dtProducto);
 	    }
 	    return listaProds;
 	}
@@ -36,8 +36,8 @@ private Map<Integer, Producto> productos;
 		return this.productos.get(intProd);
 	}
 
-	public void agregarProducto(Producto prod) {
-		productos.put(prod.getNumRef(), prod);
+	public void agregarProducto(Producto producto) {
+		productos.put(producto.getNumRef(), producto);
 	}
 	
 	public boolean verificarProducto(int numReferencia, String titulo) {
@@ -45,8 +45,8 @@ private Map<Integer, Producto> productos;
 	        return false; 
 	    }
 	  
-	    for (Producto p : this.productos.values()) {
-	        if (p.getNombre().equals(titulo)) {
+	    for (Producto producto : this.productos.values()) {
+	        if (producto.getNombre().equals(titulo)) {
 	            return false;
 	        }
 	    }

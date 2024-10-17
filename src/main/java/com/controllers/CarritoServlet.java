@@ -100,7 +100,7 @@ public class CarritoServlet extends HttpServlet {
         if("actualizarCant".equals(action)) {
         	Usuario user = (Usuario) session.getAttribute("usuarioLogueado");
         	
-        	Cliente cl = (Cliente) user;
+        	Cliente cliente = (Cliente) user;
         	int cantNum = 0;
         	
         	try {
@@ -114,11 +114,11 @@ public class CarritoServlet extends HttpServlet {
         	
         	
         	
-        	Item it = cl.getCarrito().getItem(paramNumero);
+        	Item item = cliente.getCarrito().getItem(paramNumero);
         	
-        	if(it != null) {
-        		it.setCant(cantNum);
-        		System.out.print(it.getCant());
+        	if(item != null) {
+        		item.setCant(cantNum);
+        		System.out.print(item.getCant());
         	}
         }
         

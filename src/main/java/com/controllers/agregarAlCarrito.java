@@ -37,8 +37,8 @@ public class agregarAlCarrito extends HttpServlet {
     public void init() throws ServletException {
         try {
             sist = Factory.getSistema();
-        } catch (Exception e) {
-            throw new ServletException("No se pudo inicializar ISistema", e);  
+        } catch (Exception exeption) {
+            throw new ServletException("No se pudo inicializar ISistema", exeption);  
         }
     }
     
@@ -71,8 +71,8 @@ public class agregarAlCarrito extends HttpServlet {
             		itemExistente.setCant(itemExistente.getCant() + cantidad);
             	} else {
             		
-            		Item it = new Item(cantidad, producto);
-            		carrito.agregarProducto(it);
+            		Item item = new Item(cantidad, producto);
+            		carrito.agregarProducto(item);
             	}
             	
                 

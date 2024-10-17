@@ -42,8 +42,8 @@ public class RealizarCompra extends HttpServlet {
     public void init() throws ServletException {
         try {
             sist = Factory.getSistema();
-        } catch (Exception e) {
-            throw new ServletException("No se pudo inicializar ISistema", e);
+        } catch (Exception exeption) {
+            throw new ServletException("No se pudo inicializar ISistema", exeption);
         }
     }
 
@@ -70,15 +70,15 @@ public class RealizarCompra extends HttpServlet {
 			return;
 		}
 		
-		Cliente cl = (Cliente) user;
-		if(cl.getCarrito() == null || cl.getCarrito().getProductos().isEmpty()) {
+		Cliente cliente = (Cliente) user;
+		if(cliente.getCarrito() == null || cliente.getCarrito().getProductos().isEmpty()) {
 			
 			response.sendRedirect("home");
 			return;
 		}
 		
 		request.setAttribute("usuarioLogueado", user);
-		request.setAttribute("carrito", cl.getCarrito());
+		request.setAttribute("carrito", cliente.getCarrito());
 		request.getRequestDispatcher("/WEB-INF/realizarCompra.jsp").forward(request, response);
 	}
 
@@ -99,35 +99,35 @@ public class RealizarCompra extends HttpServlet {
 			return;
 		}
 		
-		Cliente cl = (Cliente) user;
-		if(cl.getCarrito() == null || cl.getCarrito().getProductos().isEmpty()) {
+		Cliente cliente = (Cliente) user;
+		if(cliente.getCarrito() == null || cliente.getCarrito().getProductos().isEmpty()) {
 			
 			response.sendRedirect("home");
 			return;
 		}
 		
-		Carrito c = cl.getCarrito();
-		List<Item> items = c.getProductos();
+		Carrito carrito = cliente.getCarrito();
+		List<Item> items = carrito.getProductos();
 		float precioTotal = 0;
 		
-		for(Item i : items) {
-			precioTotal += i.getSubTotal();
+		for(Item item : items) {
+			precioTotal += item.getSubTotal();
 		}
         
         Map<Integer, Item> itemsMap = new HashMap<Integer, Item>();
         
-        for (Item i : items) {
-            itemsMap.put(i.getProducto().getNumRef(), i);
+        for (Item item : items) {
+            itemsMap.put(item.getProducto().getNumRef(), item);
             
         }
         
-        OrdenDeCompra o = new OrdenDeCompra(itemsMap, precioTotal);
-        sist.realizarCompra(o, cl.getNick());
-        cl.agregarCompra(o);
+        OrdenDeCompra ordenCompra = new OrdenDeCompra(itemsMap, precioTotal);
+        sist.realizarCompra(ordenCompra, cliente.getNick());
+        cliente.agregarCompra(ordenCompra);
         
-        c.vaciarCarrito();
+        carrito.vaciarCarrito();
         
-        Map<Integer, OrdenDeCompra> ordenes = cl.getCompras();
+        Map<Integer, OrdenDeCompra> ordenes = cliente.getCompras();
         
         for(Map.Entry<Integer, OrdenDeCompra> entry : ordenes.entrySet()) {
         	

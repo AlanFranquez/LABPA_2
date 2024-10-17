@@ -20,8 +20,8 @@ public class Comentario {
 		this.respuestas = new ArrayList<Comentario>();
 	}
 	
-	public void agregarRespuesta(Comentario r) {
-		this.respuestas.add(r);
+	public void agregarRespuesta(Comentario respuesta) {
+		this.respuestas.add(respuesta);
 	}
 	
 	public List<Comentario> getRespuestas() {

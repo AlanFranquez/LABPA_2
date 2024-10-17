@@ -7,41 +7,41 @@ public class Carrito {
 
 	
 
-	private List<Item> items;
+	private List<Item> listItems;
 
     public Carrito() {
-        items = new ArrayList<>();
+        listItems = new ArrayList<>();
     }
     
     public List<Item> getProductos() {
-    	return this.items;
+    	return this.listItems;
     }
 
     
-    public void agregarProducto(Item i) {
-        if (i.getProducto().getStock() >= i.getCant()) {
-            items.add(i);
+    public void agregarProducto(Item item) {
+        if (item.getProducto().getStock() >= item.getCant()) {
+            listItems.add(item);
         } else {
             System.out.println("No se puede agregar el producto. Stock insuficiente. ");
         }
     }
     
     public void vaciarCarrito() {
-        items.clear();
+        listItems.clear();
     }
     
     public void eliminarProd(int numRef) {
-    	 for (int i = 0; i < items.size(); i++) {
-             if (items.get(i).getProducto().getNumRef() == numRef) {
-                 items.remove(i);
+    	 for (int i = 0; i < listItems.size(); i++) {
+             if (listItems.get(i).getProducto().getNumRef() == numRef) {
+                 listItems.remove(i);
                  return;
              }
          }
     }
     
     public Boolean existeProducto(int numRef) {
-    	for(Item i : items) {
-    		if(i.getProducto().getNumRef() == numRef) {
+    	for(Item item : listItems) {
+    		if(item.getProducto().getNumRef() == numRef) {
     			return true;
     		}
     	}
@@ -50,9 +50,9 @@ public class Carrito {
     }
     
     public Item getItem(int numRef){
-    	for(Item i : items) {
-    		if(i.getProducto().getNumRef() == numRef) {
-    			return i;
+    	for(Item item : listItems) {
+    		if(item.getProducto().getNumRef() == numRef) {
+    			return item;
     		}
     	}
     	
@@ -60,10 +60,10 @@ public class Carrito {
     }
 
     public void verCarrito() {
-        if (items.isEmpty()) {
+        if (listItems.isEmpty()) {
             System.out.println("El carrito está vacío.");
         } else {
-            for (Item productoCarrito : items) {
+            for (Item productoCarrito : listItems) {
                 System.out.println(productoCarrito.getProducto().getNombre());
             }
         }

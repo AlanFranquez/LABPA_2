@@ -28,8 +28,8 @@ public class enviarComentario extends HttpServlet {
     public void init() throws ServletException {
         try {
             sist = Factory.getSistema();
-        } catch (Exception e) {
-            throw new ServletException("No se pudo inicializar ISistema", e);
+        } catch (Exception exeption) {
+            throw new ServletException("No se pudo inicializar ISistema", exeption);
         }
     }
 
@@ -52,13 +52,13 @@ public class enviarComentario extends HttpServlet {
 			return;
 		}
 		
-		Cliente cli = (Cliente) session.getAttribute("usuarioLogueado");
-		Producto p1 = sist.getProducto(paramNum);
+		Cliente cliente = (Cliente) session.getAttribute("usuarioLogueado");
+		Producto producto1 = sist.getProducto(paramNum);
 
 		// Crear el comentario
-		Comentario c = new Comentario(comentarioId, mensaje, cli, LocalDateTime.now());
+		Comentario comentario = new Comentario(comentarioId, mensaje, cliente, LocalDateTime.now());
 	
-		p1.agregarComentario(c);
+		producto1.agregarComentario(comentario);
 
 		// Redirigir a la página del producto
 		response.sendRedirect("perfilProducto?producto=" + paramNum);

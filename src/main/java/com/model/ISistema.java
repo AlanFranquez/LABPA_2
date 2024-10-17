@@ -52,7 +52,7 @@ public interface ISistema {
 
 	public abstract List<DTProveedor> listarProveedores();
 
-    public abstract void addOrdenes(OrdenDeCompra o, String nickUsuario);
+    public abstract void addOrdenes(OrdenDeCompra orden, String nickUsuario);
 
 	public abstract void agregarProductoCategoria(String catName, int numRef) throws CategoriaException;
 
@@ -73,11 +73,11 @@ public interface ISistema {
 
 	public abstract DtProducto getDtProducto(int numRef);
 
-	public abstract Icon resizeIcon(ImageIcon imageIcon, int i, int j);
+	public abstract Icon resizeIcon(ImageIcon imageIcon, int num1, int num2);
 
 	public abstract void eliminarOrdenDeCompra(int numero) throws OrdenDeCompraException;
 
-	public abstract boolean existeOrden(int i);
+	public abstract boolean existeOrden(int num);
 	
 	public abstract void eliminarUltimaOrden();
 	
@@ -113,7 +113,7 @@ public interface ISistema {
 	   
 	  public List<Producto> getAllProductos();
 	  
-	  public void realizarCompra(OrdenDeCompra o, String nickCliente);
+	  public void realizarCompra(OrdenDeCompra orden, String nickCliente);
 	  
 	  public List<Usuario> listaUsuarios();
 	  

@@ -48,13 +48,13 @@ public class Producto {
 		return this.imagenes;
 	}
 	
-	public void agregarComentario(Comentario c) {
-		this.comentarios.add(c);
+	public void agregarComentario(Comentario comentario) {
+		this.comentarios.add(comentario);
 	}
 	
-	public void agregarRespuesta(int numeroComentario, Comentario r) {
+	public void agregarRespuesta(int numeroComentario, Comentario respuesta) {
 		Comentario c = this.comentarios.get(numeroComentario);
-		c.agregarRespuesta(r);
+		c.agregarRespuesta(respuesta);
 	}
 	
 	public List<Comentario> getComentarios() {
@@ -62,11 +62,11 @@ public class Producto {
 	}
 	
 	public Comentario getComentario(int num) {
-		List<Comentario> coms = this.comentarios;
+		List<Comentario> listComentarios = this.comentarios;
 		
-		for(Comentario c: coms) {
-			if(c.getNumero() == num) {
-				return c;
+		for(Comentario comentario: listComentarios) {
+			if(comentario.getNumero() == num) {
+				return comentario;
 			}
 		}
 		
@@ -129,8 +129,8 @@ public class Producto {
 		return proveedor;
 	}
 
-	public void setProveedor(Proveedor prov) {
-		this.proveedor = prov;
+	public void setProveedor(Proveedor proveedor) {
+		this.proveedor = proveedor;
 	}
 
 	public String getEspecificaciones() {
@@ -143,8 +143,8 @@ public class Producto {
     		
     	for(Entry<String, Cat_Producto> entry : this.categorias.entrySet()) {
     		
-    		Categoria c = entry.getValue();
-    		Cat_Producto cProducto = (Cat_Producto) c;
+    		Categoria cat = entry.getValue();
+    		Cat_Producto cProducto = (Cat_Producto) cat;
     		arrString[contador++] = cProducto.getNombre();
     		
     	
