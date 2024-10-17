@@ -709,8 +709,78 @@ class Testing {
         assertEquals(it.getCant(), dtit.getCant());
         assertEquals(it.getProducto(), dtit.getProducto());
     }
-	
     
+   
+
+    @Test
+    public void testAgregarProducto_Success() {
+    	Proveedor p1 = new Proveedor("nombre", "nick3", "apellido", "correo", new DTFecha(12, 12, 2001), "comp", "link", "123");
+        Producto producto = new Producto("Producto1", "Descripción del producto", 30, 123, "Especificaciones aquí", p1, 10);
+        Item it = new Item(5, producto); 
+        Carrito carrito = new Carrito();
+        
+        carrito.agregarProducto(it);
+        assertTrue(carrito.existeProducto(1));
+    }
+
+
+    @Test
+    public void testEliminarProducto() {
+    	Proveedor p1 = new Proveedor("nombre", "nick3", "apellido", "correo", new DTFecha(12, 12, 2001), "comp", "link", "123");
+        Producto producto = new Producto("Producto1", "Descripción del producto", 30, 123, "Especificaciones aquí", p1, 10);
+        Item it = new Item(5, producto); 
+        Carrito carrito = new Carrito();
+        
+        carrito.agregarProducto(it);
+        carrito.eliminarProd(it.getProducto().getNumRef());
+        assertFalse(carrito.existeProducto(1));
+    }
+
+    @Test
+    public void testVaciarCarrito() {
+    	Proveedor p1 = new Proveedor("nombre", "nick3", "apellido", "correo", new DTFecha(12, 12, 2001), "comp", "link", "123");
+        Producto producto = new Producto("Producto1", "Descripción del producto", 30, 123, "Especificaciones aquí", p1, 10);
+        Item it = new Item(5, producto); 
+        Carrito carrito = new Carrito();
+        
+        carrito.agregarProducto(it);
+        carrito.eliminarProd(it.getProducto().getNumRef());
+        assertFalse(carrito.existeProducto(1));
+    }
+
+    @Test
+    public void testProductoExsite() {
+    	Proveedor p1 = new Proveedor("nombre", "nick3", "apellido", "correo", new DTFecha(12, 12, 2001), "comp", "link", "123");
+        Producto producto = new Producto("Producto1", "Descripción del producto", 30, 123, "Especificaciones aquí", p1, 10);
+        Item it = new Item(5, producto); 
+        Carrito carrito = new Carrito();
+        
+        carrito.agregarProducto(it);
+        
+        assertEquals(true, carrito.existeProducto(it.getProducto().getNumRef()));
+    }
+	
+    @Test
+    public void testCrearDTProveedor() {
+    	Proveedor p1 = new Proveedor("nombre", "nick3", "apellido", "correo", new DTFecha(12, 12, 2001), "comp", "link", "123");
+        
+    	
+    	assertEquals(p1.crearDt().getNombre(), p1.getNombre());
+    }
+    
+    @Test
+    public void testDTProveedorGetAtributos() {
+    	Proveedor p1 = new Proveedor("nombre", "nick3", "apellido", "correo", new DTFecha(12, 12, 2001), "comp", "link", "123");
+        
+    	
+    	assertEquals(p1.crearDt().getNombre(), p1.getNombre());
+    	assertEquals(p1.crearDt().getNick(), p1.getNick());
+    	assertEquals(p1.crearDt().getApellido(), p1.getApellido());
+    	assertEquals(p1.crearDt().getCompania(), p1.getCompania());
+    	assertEquals(p1.crearDt().getLink(), p1.getLink());
+    	assertEquals(p1.crearDt().cantProd(), 0);
+    }
+	
     
 }
 

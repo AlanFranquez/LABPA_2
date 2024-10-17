@@ -27,18 +27,13 @@ public class DTProveedor {
         return compania;
     }
 
-    public void setCompania(String comp) {
-        this.compania = comp;
-    }
+ 
 
     public String getLink() {
         return link;
     }
 
-    public void setLink(String lin) {
-        this.link = lin;
-    }
-
+   
     public Map<Integer, Producto> getProductos() {
         return listaProductos;//??????'
     }
@@ -47,9 +42,6 @@ public class DTProveedor {
     }
     public Producto obtenerProd(int id) {
         return listaProductos.get(id);
-    }
-    public void eliminarProd(int id) {
-        listaProductos.remove(id);
     }
     public boolean existeProd(int id) {
         return listaProductos.containsKey(id);
