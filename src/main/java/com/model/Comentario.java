@@ -13,10 +13,10 @@ public class Comentario {
 	List <Comentario> respuestas;
 	
 	public Comentario(int numero, String texto, Cliente autor, LocalDateTime fecha) {
-		this.setNumero(numero);
-		this.setTexto(texto);
-		this.setAutor(autor);
-		this.setFecha(fecha);
+		this.numero = numero;
+		this.texto = texto;
+		this.autor = autor;
+		this.fecha = fecha;
 		this.respuestas = new ArrayList<Comentario>();
 	}
 	

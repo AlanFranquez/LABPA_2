@@ -73,17 +73,6 @@ public class Carrito {
     	return numeroOrden++;
 	 }
 
-    /*public void generarOrdenDeCompra() {
-        if (productos.isEmpty()) {
-            System.out.println("El carrito está vacío. No se puede generar la orden de compra.");
-            return;
-        }
-        int numeroOrden = generarNumeroOrden();
-
-        OrdenDeCompra orden = new OrdenDeCompra(numeroOrden);
-        for (ProductoCarrito productoCarrito : productos) {
-            orden.addItem(productoCarrito.getProducto(), productoCarrito.getCantidad());
-        }
-    }*/
+    
 }
 
