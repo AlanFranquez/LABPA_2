@@ -141,11 +141,19 @@
     
 
                         </div>
+                        	
                         
                     </div>
                 </div>
             </div>
            </div>
+           <div class="part-final d-flex justify-content-center align-items-center" style="background-color: #2C2C2C;
+				width: 100%;
+				height: 200px; 
+				margin: 50px 0px 0px 0px;">
+    			<p class="text-center text-white">Todos los derechos reservados, 2024. <br> Laboratorio PA.</p>
+		   </div>
+           
           
       			
       	<% } %>

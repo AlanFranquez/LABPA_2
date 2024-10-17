@@ -11,6 +11,43 @@
 </head>
 <body>
 
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color: #2C2C2C; font-family: Arial, sans-serif;">
+    <div class="container">
+        <a href="home" class="navbar-brand">
+            ITSCODIGO
+        </a>
+        
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mx-auto align-items-center"></ul>
+
+            <ul class="navbar-nav align-items-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="registrarusuario1">
+                        Registrar
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link" href="formlogin">
+                        Login
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        Ayuda
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
 <div class="container">
     <div class="d-flex justify-content-center align-items-center">
         <div class="contenedor-form mt-5">
@@ -41,8 +78,8 @@
     </div>
 </div>
 
-<div class="part-final d-flex justify-content-center align-items-center">
-    <p class="text-center">Todos los derechos reservados, 2024. <br> Laboratorio PA.</p>
+<div class="part-final footer d-flex justify-content-center align-items-center">
+            <p class="text-center">Todos los derechos reservados, 2024. <br> Laboratorio PA.</p>
 </div>
 
 <script>
