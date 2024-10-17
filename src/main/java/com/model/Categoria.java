@@ -36,6 +36,14 @@ public class Categoria {
 	}
 
 	
-
+	public void recorrerCategorias(Categoria cat, List<String> nombres) { 
+        nombres.add(cat.getNombre());
+        if (cat instanceof Cat_Padre) {
+            Map<String, Categoria> hijos = ((Cat_Padre) cat).getHijos();
+            for (Categoria hijo : hijos.values()) {
+                recorrerCategorias(hijo, nombres);
+            }
+        }
+	}
 	
 }

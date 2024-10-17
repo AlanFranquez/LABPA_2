@@ -958,7 +958,7 @@ class Testing {
     	Cat_Producto c = new Cat_Producto("nom");
     	Cat_Padre p = new Cat_Padre("p");
     	p.agregarHijo(c);
-    	c.recorrerCategorias(p, new ArrayList<>());
+    	p.recorrerCategorias(p, new ArrayList<>());
     	c.setNombre("otro");
     	c.setTipo("tipo");
     	Producto prod = new Producto("titulo2", "descripcion", 200, 123, "especificaciones", (Proveedor) s.getUsuario("nick1"), 10);
