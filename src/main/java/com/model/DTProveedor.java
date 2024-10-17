@@ -35,24 +35,24 @@ public class DTProveedor {
         return link;
     }
 
-    public void setLink(String lin) {
-        this.link = lin;
+    public void setLink(String link) {
+        this.link = link;
     }
 
     public Map<Integer, Producto> getProductos() {
         return listaProductos;//??????'
     }
-    public void agregarProd(int id, Producto prod) {
-        listaProductos.put(id, prod);
+    public void agregarProd(int numRef, Producto prod) {
+        listaProductos.put(numRef, prod);
     }
-    public Producto obtenerProd(int id) {
-        return listaProductos.get(id);
+    public Producto obtenerProd(int numRef) {
+        return listaProductos.get(numRef);
     }
-    public void eliminarProd(int id) {
-        listaProductos.remove(id);
+    public void eliminarProd(int numRef) {
+        listaProductos.remove(numRef);
     }
-    public boolean existeProd(int id) {
-        return listaProductos.containsKey(id);
+    public boolean existeProd(int numRef) {
+        return listaProductos.containsKey(numRef);
     }
     public int cantProd() {
         return listaProductos.size();
