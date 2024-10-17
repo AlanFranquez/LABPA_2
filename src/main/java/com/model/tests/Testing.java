@@ -206,6 +206,10 @@ class Testing {
         assertNotNull("El proveedor debería existir.", proveedor);
         Producto producto = proveedor.obtenerProd(numRef);
         assertNotNull("El producto debería ser agregado al proveedor.", producto);
+        try {
+			s.agregarProductoCategoria("cat2", numRef);
+		} catch (CategoriaException e) { }
+        s.borrarProducto(numRef, titulo);
     }
     
     @Test
@@ -217,7 +221,6 @@ class Testing {
     public void testOrdenCompra() {
     	s.CrearOrden();
     	s.eliminarUltimaOrden();
-    	s.CrearOrden();
     	s.CrearOrden();
     	s.asignarOrdenCliente("nick2");
     	int i = s.obtenerStockProducto(1);
@@ -236,6 +239,70 @@ class Testing {
     	esperado.add(u.crearDt());
     	boolean eq = esperado.equals(clientes);
     	assertEquals(false, eq);
+    }
+    
+    @Test
+    public void testListarProveedores() {
+    	try {
+        	DTFecha f = new DTFecha(1, 1, 1111);
+        	s.agregarProveedor("nick1", "correo1", "nombre", "apellido", f, "compania", "link", "contra", "contra");
+		} catch (UsuarioRepetidoException e) { }
+    	List<DTProveedor> clientes = s.listarProveedores();
+    	List<DTProveedor> esperado = new ArrayList<>();
+    	Proveedor u = (Proveedor) s.getUsuario("nick1");
+    	esperado.add(u.crearDt());
+    	boolean eq = esperado.equals(clientes);
+    	assertEquals(false, eq);
+    }
+    
+    @Test
+    public void testGetClienteDeOrden() {
+    	try {
+    		s.CrearOrden();
+    		s.existeOrden(1);
+    		s.asignarOrdenCliente("nick2");
+			s.eliminarOrdenDeCompra(1);
+		} catch (OrdenDeCompraException e) { }
+    }
+    
+    @Test
+    public void testGetClienteDeOrdenInexistente() {
+    	try {
+			s.eliminarOrdenDeCompra(0);
+		} catch (OrdenDeCompraException e) {
+			System.out.print("testGetClienteDeOrdenInexistente: " + e.getMessage() + "\n");
+		}
+    }
+    @Test
+    public void testGetClienteDeOrdenUsuarioInexistente() {
+    	try {
+    		s.CrearOrden();
+			s.eliminarOrdenDeCompra(2);
+		} catch (OrdenDeCompraException e) {
+			System.out.print("testGetClienteDeOrdenUsuarioInexistente: " + e.getMessage() + "\n");
+		}
+    }
+    
+    @Test
+    public void testListarProductosPorCategoria() {
+    	try {
+    		List<DtProducto> prods = s.listarProductosPorCategoria("cat2");
+    		assertEquals(prods.size(), 1);
+		} catch (ProductoException e) { }
+    }
+    @Test
+    public void testListarProductosPorCategoriaVacia() {
+    	try {
+    		s.agregarCategoriaConProductos("cat3");
+    		List<DtProducto> prods = s.listarProductosPorCategoria("cat3");
+		} catch (ProductoException | CategoriaException e) {
+			System.out.print("testListarProductosPorCategoriaVacia: " + e.getMessage() + "\n");
+		}
+    }
+    
+    @Test
+    public void testGetProdByCateogria() {
+    	
     }
 }
 
