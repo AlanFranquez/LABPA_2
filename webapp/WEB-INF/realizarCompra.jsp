@@ -81,8 +81,8 @@ Carrito c = (Carrito) request.getAttribute("carrito");
     <ul class="list-group list-group-flush">
         <% List<Item> items = c.getProductos(); %>
         <% for(Item i : items) { %>
-            <li class="list-group-item d-flex column p-2 align-items-center mt-2" style="border: 1px solid gray; border-radius: 5px">
-                <div>
+            <li class="list-group-item d-flex column p-2 align-items-center mt-3" style="border: 1px solid gray; border-radius: 5px">
+                <div class="p-2">
                 	<%
     List<String> imagenes = i.getProducto().crearDT().getImagenes();
 %>
@@ -90,7 +90,7 @@ Carrito c = (Carrito) request.getAttribute("carrito");
 <% if (imagenes == null || imagenes.isEmpty()) { %>
     <img alt="Img del producto" src="https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png" style="height: 100px; width: 100px;">
 <% } else { %>
-    <img alt="Img del producto" src="media/<%= imagenes.getFirst() %>" style="height: 100px; width: 100px;">
+    <img alt="Img del producto" class="img-fluid mr-2"  style="max-width: 160px; height: auto;" src="media/<%= imagenes.getFirst() %>">
 <% } %>
                    
                 </div>
