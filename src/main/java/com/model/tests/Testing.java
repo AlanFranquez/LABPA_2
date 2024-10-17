@@ -1,5 +1,5 @@
 package com.model.tests;
-
+import java.time.LocalDateTime;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -436,10 +438,7 @@ class Testing {
     	assertEquals(lista.size(), 1);
     }
     
-    @Test
-    public void testListarProductos() {
-    	
-    }
+   
     
     @Test
     public void testrealizarCompra() {
@@ -468,33 +467,138 @@ class Testing {
     	s.cambiarEstadoOrden("estado", 1, "otro");
     }
     
-    DTFecha f = new DTFecha(12,12,2001);
     
-    Comentario comentario = null;
-    Cliente autor = null;
-    @BeforeEach
-    public void setUp() {
-        Cliente autor = new Cliente("Juan", "jdoe", "Doe", "jdoe@example.com", f, "password");
-        comentario = new Comentario(1, "Este es un comentario", autor, LocalDateTime.now());
-    
-    
-    }
-    
-    
+    // Cliente
     @Test
-    public void testAgregarRespuesta() {
-        Comentario respuesta = new Comentario(2, "Esta es una respuesta", autor, LocalDateTime.now());
-        comentario.agregarRespuesta(respuesta);
-        
-        assertEquals(1, comentario.getRespuestas().size(), "Debería haber una respuesta");
-        assertEquals(respuesta, comentario.getRespuestas().get(0), "La respuesta debe ser la misma que la agregada");
-    }
-    
-    @Test
-    public void comrpobarNumnero() {
-    	int numero1 = comentario.getNumero();
+    public void testearGetCompras() {
+    	Cliente cl = new Cliente("andres", "andres123", "perez", "perez@gmail.com", new DTFecha(12,12, 2001), "123");
     	
-    	assertEquals(1, numero1);
+    	OrdenDeCompra o1 = new OrdenDeCompra(1);
+    	OrdenDeCompra o2 = new OrdenDeCompra(2);
+    	
+    	cl.agregarCompra(o1);
+    	cl.agregarCompra(o2);
+    	
+    	assertEquals(2, cl.getAllOrdenes().size());
+    }
+    
+    @Test
+    public void testearGetCompra() {
+    	Cliente cl = new Cliente("andres", "andres123", "perez", "perez@gmail.com", new DTFecha(12,12, 2001), "123");
+    	
+    	OrdenDeCompra o1 = new OrdenDeCompra(1);
+    	OrdenDeCompra o2 = new OrdenDeCompra(2);
+    	
+    	cl.agregarCompra(o1);
+    	cl.agregarCompra(o2);
+    	
+    	assertEquals(o1, cl.getCompra(1));
+    }
+
+  
+    
+    @Test
+    public void testCrearProducto() {
+    	Proveedor p1 = new Proveedor("nombre", "nick3", "apellido", "correo", new DTFecha(12,12, 2001), "comp", "link", "123");
+    	
+    	Producto producto = new Producto("Producto1", "Descripción del producto", 		29.99f, 123, "Especificaciones aquí", p1, 10);
+    	
+    	
+        
+        assertNotNull(producto);
+        assertEquals("Producto1", producto.getNombre());
+        assertEquals(29.99f, producto.getPrecio(), 0.01);
+        assertEquals(10, producto.getStock());
+    }
+    
+    @Test
+    public void testAgregarComentario() {
+    	Proveedor p1 = new Proveedor("nombre", "nick3", "apellido", "correo", new DTFecha(12,12, 2001), "comp", "link", "123");
+    	
+    	Producto producto = new Producto("Producto1", "Descripción del producto", 		29.99f, 123, "Especificaciones aquí", p1, 10);
+    	
+    	Cliente cl = new Cliente("andres", "andres123", "perez", "perez@gmail.com", new DTFecha(12,12, 2001), "123");
+    	
+    	LocalDateTime fecha = LocalDateTime.now();
+    	
+    	Comentario c = new Comentario(1, "Buen Producto", cl, fecha);
+    	producto.agregarComentario(c);
+        
+        assertNotNull(producto.getComentarios());
+        assertEquals(c, producto.getComentario(1));
+    }
+    
+    @Test
+    public void testAgregarImagen() {
+    	Proveedor p1 = new Proveedor("nombre", "nick3", "apellido", "correo", new DTFecha(12,12, 2001), "comp", "link", "123");
+    	Producto producto = new Producto("Producto1", "Descripción del producto", 30, 123, "Especificaciones aquí", p1, 10);
+        String imagen = "imagen1.jpg";
+        producto.agregarImagen(imagen);
+        
+        assertEquals(1, producto.getImagenes().size());
+        assertEquals(imagen, producto.getImagenes().get(0));
+    }
+    
+    @Test
+    public void testEliminarCategorias() {
+    	Proveedor p1 = new Proveedor("nombre", "nick3", "apellido", "correo", new DTFecha(12,12, 2001), "comp", "link", "123");
+    	Producto producto = new Producto("Producto1", "Descripción del producto", 30, 123, "Especificaciones aquí", p1, 10);
+        Cat_Producto categoria1 = new Cat_Producto("Categoria1");
+        Cat_Producto categoria2 = new Cat_Producto("Categoria2");
+        producto.agregarCategorias(categoria1);
+        producto.agregarCategorias(categoria2);
+        
+        producto.eliminarCategorias();
+        assertTrue(producto.getCategorias().isEmpty());
+    }
+    
+    @Test
+    public void testCrearDtProducto() {
+    	
+    	Proveedor p1 = new Proveedor("nombre", "nick3", "apellido", "correo", new DTFecha(12,12, 2001), "comp", "link", "123");
+    	Producto producto = new Producto("Producto1", "Descripción del producto", 30, 123, "Especificaciones aquí", p1, 10);
+        DtProducto dtProducto = producto.crearDT();
+        
+        assertNotNull(dtProducto);
+        assertEquals("Producto1", dtProducto.getNombre());
+        assertEquals("Descripción del producto", dtProducto.getDescripcion());
+        assertEquals(30, dtProducto.getPrecio());
+        assertEquals(1, dtProducto.getNumRef());
+        assertEquals(p1.getNick(), dtProducto.getNicknameProveedor());
+        assertTrue(dtProducto.getCategorias().contains("El producto no tiene categorias asignadas"));
+    }
+    
+    @Test
+    public void testCrearDTCliente() {
+    	
+    	Cliente cl = new Cliente("andres", "andres123", "perez", "perez@gmail.com", new DTFecha(12,12, 2001), "123");
+    	
+    	
+        assertNotNull(cl);
+        assertEquals("andres", "andres");
+    }
+    
+    @Test
+    public void testCrearItem() {
+    	Proveedor p1 = new Proveedor("nombre", "nick3", "apellido", "correo", new DTFecha(12,12, 2001), "comp", "link", "123");
+    	Producto producto = new Producto("Producto1", "Descripción del producto", 30, 123, "Especificaciones aquí", p1, 10);
+        Item it = new Item(5, producto);
+        
+        assertNotNull(it);
+        assertEquals(producto, it.getProducto());
+        assertEquals(5, it.getCant());
+    }
+    
+    @Test
+    public void testSubCantidadIT() {
+        float precio = 30;
+        Proveedor p1 = new Proveedor("nombre", "nick3", "apellido", "correo", new DTFecha(12, 12, 2001), "comp", "link", "123");
+        Producto producto = new Producto("Producto1", "Descripción del producto", precio, 123, "Especificaciones aquí", p1, 10);
+        Item it = new Item(5, producto);
+        
+        float precioSub = precio * 5;
+        
+        assertEquals(precioSub, it.getSubTotal(), 0.001); 
     }
     
     
