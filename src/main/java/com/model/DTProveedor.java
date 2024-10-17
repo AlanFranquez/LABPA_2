@@ -33,14 +33,11 @@ public class DTProveedor {
         return link;
     }
 
-<<<<<<< HEAD
+
     public void setLink(String link) {
         this.link = link;
     }
 
-=======
-   
->>>>>>> branch 'main' of https://github.com/AlanFranquez/LABPA_2.git
     public Map<Integer, Producto> getProductos() {
         return listaProductos;//??????'
     }
@@ -50,16 +47,12 @@ public class DTProveedor {
     public Producto obtenerProd(int numRef) {
         return listaProductos.get(numRef);
     }
-<<<<<<< HEAD
+
     public void eliminarProd(int numRef) {
         listaProductos.remove(numRef);
     }
     public boolean existeProd(int numRef) {
         return listaProductos.containsKey(numRef);
-=======
-    public boolean existeProd(int id) {
-        return listaProductos.containsKey(id);
->>>>>>> branch 'main' of https://github.com/AlanFranquez/LABPA_2.git
     }
     public int cantProd() {
         return listaProductos.size();
