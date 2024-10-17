@@ -713,7 +713,7 @@ class Testing {
    
 
     @Test
-    public void testAgregarProducto_Success() {
+    public void testAgregarProductoExito() {
     	Proveedor p1 = new Proveedor("nombre", "nick3", "apellido", "correo", new DTFecha(12, 12, 2001), "comp", "link", "123");
         Producto producto = new Producto("Producto1", "Descripción del producto", 30, 123, "Especificaciones aquí", p1, 10);
         Item it = new Item(5, producto); 
@@ -780,7 +780,23 @@ class Testing {
     	assertEquals(p1.crearDt().getLink(), p1.getLink());
     	assertEquals(p1.crearDt().cantProd(), 0);
     }
-	
+    
+    @Test
+    public void testDTCliente() {
+    	Cliente cl = new Cliente("andres", "andres123", "perez", "perez@gmail.com", new DTFecha(12,12, 2001), "123");
+    	
+    	assertEquals(cl.crearDt().getNombre(), cl.getNombre());
+    }
+    
+    @Test
+    public void testDTClienteGets() {
+    	Cliente cl = new Cliente("andres", "andres123", "perez", "perez@gmail.com", new DTFecha(12,12, 2001), "123");
+    	
+    	assertEquals(cl.crearDt().getNombre(), cl.getNombre());
+    	assertEquals(cl.crearDt().getNick(), cl.getNick());
+    	assertEquals(cl.crearDt().getApellido(), cl.getApellido());
+    	assertEquals(cl.crearDt().getCorreo(), cl.crearDt().getCorreo());
+    }
     
 }
 
