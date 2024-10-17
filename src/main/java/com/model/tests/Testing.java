@@ -497,8 +497,6 @@ class Testing {
     	assertEquals(1, numero1);
     }
     
-    @Test 
-    public void 
     
 }
 
