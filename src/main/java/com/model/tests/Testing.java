@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
@@ -36,9 +37,6 @@ class Testing {
 	@Test
     public void testAgregarProveedor() {
 		DTFecha f = new DTFecha(1, 1, 1111);
-		try {
-			s.agregarProveedor("nick1", "correo1", "nombre", "apellido", f, "compania", "link", "contra", "contra");
-		} catch (UsuarioRepetidoException e) { }
 		
 		try {
 			s.agregarProveedor("nick2", "correo2", "nombre", "apellido", f, "compania", "link", "contra", "otracontra");
@@ -62,9 +60,6 @@ class Testing {
 	@Test
     public void testAgregarCliente() {
 		DTFecha f = new DTFecha(1, 1, 1111);
-		try {
-			s.agregarCliente("nombre", "nick2", "apellido", "correo2", f, "contra", "contra");
-		} catch (UsuarioRepetidoException e) { }
 		
 		try {
 			s.agregarCliente("nombre", "nick3", "apellido", "correo3", f, "contra", "otra");
@@ -172,8 +167,10 @@ class Testing {
 	@Test
 	public void testVerificarUnicidadProducto() {
 		try {
-			s.agregarProducto("titulo1", 1, "descripcion", "especificaciones", 200, "nick1", 10);
+			s.agregarProducto("TITULO1", 1, "descripcion", "especificaciones", 200, "nick1", 10);
 			s.agregarProducto("titulo2", 2, "descripcion", "especificaciones", 200, "nick1", 10);
+			List<Producto> lista = s.getAllProductos();
+	    	assertEquals(lista.size(), 1);
 			s.agregarProductoCategoria("cat2", 1);
 			s.arbolProductos();
 		} catch (CategoriaException e) { }
@@ -242,7 +239,10 @@ class Testing {
     	try {
         	DTFecha f = new DTFecha(1, 1, 1111);
 			s.agregarCliente("nombre", "nick2", "apellido", "correo2", f, "contra", "contra");
-		} catch (UsuarioRepetidoException e) { }
+			Usuario u = s.getUserByEmail("correo2");
+			Usuario esperado = s.getUsuario("nick2");
+			assertEquals(u, esperado);
+		} catch (UsuarioRepetidoException | UsuarioException e) { }
     	List<DTCliente> clientes = s.listarClientes();
     	List<DTCliente> esperado = new ArrayList<>();
     	Cliente u = (Cliente) s.getUsuario("nick2");
@@ -374,8 +374,96 @@ class Testing {
     @Test
     public void testComprobarCat() {
 		try {
-			s.comprobarCat("cat1");
-		} catch (CategoriaException e) { }
+			s.agregarCategoriaConProductos("cat20");
+			s.comprobarCat("cat20");
+			s.comprobarCat("cat100");
+		} catch (CategoriaException e) {
+			System.out.print("testComprobarCat: " + e.getMessage() + "\n");
+		}
+    }
+    
+    @Test
+    public void testEliminarPDesdeProveedor() {
+    	s.agregarProducto("titulo1", 100, "descripcion", "especificaciones", 200, "nick1", 10);
+    	s.eliminarPDesdeProveedor("nick1", 100);
+    	Producto p = s.getProducto(100);
+    	assertEquals(null, p);
+    }
+    
+    @Test
+    public void testMostrarPerfilCliente() {
+    	DTCliente dt = s.mostrarPerfilCliente("nick2");
+    	assertEquals(dt.getNick(), "nick2");
+    	DTProveedor dt2 = s.mostrarPerfilProveedor("nick1");
+    	assertEquals(dt2.getNick(), "nick1");
+    }
+    
+    @Test
+    public void testGetOrdenesCliente () {
+    	List<DTOrdenDeCompra> lista = s.getOrdenesCliente("nick2");
+    	assertEquals(lista.size(), 1);
+    }
+    
+    @Test
+    public void testGetUserByEmail() {
+    	try {
+			Usuario u = s.getUserByEmail("otro");
+		} catch (UsuarioException e) {
+			System.out.print("testGetUserByEmail: " + e.getMessage() + "\n");
+		}
+    }
+    
+    @Test
+    public void testagregarImagenes() {
+    	s.agregarImagenesDesdeProveedor("nick1", 1, "img");
+    	s.agregarImagenesDesdeProveedor("otro", 1, "img");
+    	s.agregarImagenesDesdeProveedor("nick1", 1000, "img");
+    }
+    
+    @Test
+    public void testGetCategoriasLista() {
+    	Map<String, Categoria> lista = s.getCategoriasLista();
+    	assertEquals(lista.size(), 4);
+    }
+    
+    @Test
+    public void testbuscarProductos() {
+    	List<Producto> lista = s.buscarProductos("titulo");
+    	assertEquals(lista.size(), 1);
+    	lista = s.buscarProductos("TItULO");
+    	assertEquals(lista.size(), 1);
+    }
+    
+    @Test
+    public void testListarProductos() {
+    	
+    }
+    
+    @Test
+    public void testrealizarCompra() {
+    	s.CrearOrden();
+    	s.asignarOrdenCliente("nick2");
+    	OrdenDeCompra ord = s.getOrden(1);
+    	Producto p = new Producto("nom", "des", 10, 12345, "esp", null, 10);
+    	ord.addItem(p, 3);
+    	s.realizarCompra(ord, "nick2");
+    	s.eliminarUltimaOrden();
+    	s.realizarCompra(ord, "nick232");
+    }
+    
+    @Test
+    public void testListaUsuarios() {
+    	List<Usuario> lista = s.listaUsuarios();
+    	assertEquals(lista.size(), 2);
+    }
+    
+    @Test
+    public void testCambiarEstadoOrden() {
+    	s.CrearOrden();
+    	s.asignarOrdenCliente("nick2");
+    	s.cambiarEstadoOrden("estado", 1, "nick2");
+    	s.eliminarUltimaOrden();
+    	s.cambiarEstadoOrden("estado", 1, "otro");
     }
 }
 

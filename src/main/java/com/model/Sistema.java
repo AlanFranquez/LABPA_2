@@ -558,11 +558,12 @@ public class Sistema implements ISistema {
 		 p1.agregarImagen(imagen);
 		 
 	 }
-	 
+	 /*
+	  * Creo que este no se utiliza
 	 public void agregarImagenesProducto(String cat, int num, String imagen) throws ProductoException {
 	    	this.getProdByCateogria(cat, num).getImagenes().add(imagen);
 	   }
-	 
+	 */
 	 public Map<String, Categoria> getCategoriasLista() {
 		 return this.categorias;
 	 }
@@ -668,9 +669,5 @@ public class Sistema implements ISistema {
 	 		
 	 		System.out.print("no se pudo cambiar el estado");
 	 	}
-
-	 
-	 
-
 	 
 }
