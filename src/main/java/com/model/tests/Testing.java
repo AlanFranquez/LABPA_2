@@ -737,7 +737,7 @@ class Testing {
     }
 
     @Test
-    public void testVaciarCarrito() {
+    public void testCarritoAgregar() {
     	Proveedor p1 = new Proveedor("nombre", "nick3", "apellido", "correo", new DTFecha(12, 12, 2001), "comp", "link", "123");
         Producto producto = new Producto("Producto1", "Descripción del producto", 30, 123, "Especificaciones aquí", p1, 10);
         Item it = new Item(5, producto); 
@@ -759,6 +759,20 @@ class Testing {
         
         assertEquals(true, carrito.existeProducto(it.getProducto().getNumRef()));
     }
+    
+    @Test
+    public void testGetProductos() {
+    	Carrito carrito = new Carrito();
+        
+    	assertNull(carrito.getProductos());
+    }
+    @Test
+    public void testVaciarCarrito1() {
+    	Carrito carrito = new Carrito();
+        carrito.vaciarCarrito();
+    	assertNull(carrito.getProductos());
+    }
+	
 	
     @Test
     public void testCrearDTProveedor() {
@@ -796,6 +810,131 @@ class Testing {
     	assertEquals(cl.crearDt().getNick(), cl.getNick());
     	assertEquals(cl.crearDt().getApellido(), cl.getApellido());
     	assertEquals(cl.crearDt().getCorreo(), cl.crearDt().getCorreo());
+    }
+    
+    @Test
+    public void testEstadoSesionValues() {
+        assertEquals(3, EstadoSesion.values().length);
+        assertEquals(EstadoSesion.NO_LOGIN, EstadoSesion.valueOf("NO_LOGIN"));
+        assertEquals(EstadoSesion.LOGIN_CORRECTO, EstadoSesion.valueOf("LOGIN_CORRECTO"));
+        assertEquals(EstadoSesion.LOGIN_INCORRECTO, EstadoSesion.valueOf("LOGIN_INCORRECTO"));
+    }
+
+    @Test
+    public void testEstadoSesionOrder() {
+        EstadoSesion estado = EstadoSesion.LOGIN_CORRECTO;
+        assertTrue(estado.ordinal() > EstadoSesion.NO_LOGIN.ordinal());
+        assertTrue(estado.ordinal() < EstadoSesion.LOGIN_INCORRECTO.ordinal());
+    }
+    
+    private DTCat_Padre categoria;
+
+    @BeforeEach
+    public void setUp1() {
+        categoria = new DTCat_Padre("Categoría 1");
+    }
+
+    @Test
+    public void testConstructor() {
+        assertEquals("Categoría 1", categoria.getNombre());
+    }
+
+    @Test
+    public void testSetNombre() {
+        categoria.setNombre("Categoría 2");
+        assertEquals("Categoría 2", categoria.getNombre());
+    }
+
+    @Test
+    public void testSetNombre_Null() {
+        categoria.setNombre(null);
+        assertNull(categoria.getNombre());
+    }
+    
+    private Administrador admin;
+    private DTFecha fechaNacimiento;
+
+    @BeforeEach
+    public void setUp2() {
+        fechaNacimiento = new DTFecha(1990, 1, 1);
+        admin = new Administrador("Nombre", "nickAdmin", "Apellido", "correo@example.com", fechaNacimiento, "contrasena123");
+    }
+
+    @Test
+    public void testAdministradorCreacion() {
+        assertNotNull(admin);
+        assertEquals("Nombre", admin.getNombre()); 
+        assertEquals("nickAdmin", admin.getNick());
+        assertEquals("Apellido", admin.getApellido());
+        assertEquals("correo@example.com", admin.getCorreo());
+        assertEquals(fechaNacimiento, admin.getNacimiento()); 
+
+    }
+
+    @Test
+    public void testContrasena() {
+        assertEquals("contrasena123", admin.getContrasena());
+    }
+    
+    @Test
+    public void testGetSistema() {
+        ISistema sistema = Factory.getSistema();
+        assertNotNull(sistema);
+        assertTrue(sistema instanceof Sistema);
+    }
+    
+    private DTOrdenDeCompra orden;
+    private Map<Integer, Item> items;
+    
+    @BeforeEach
+    public void setUp3() {
+        items = new HashMap<>();
+        // Crea un Item de ejemplo y añádelo al mapa
+        Proveedor p1 = new Proveedor("nombre", "nick3", "apellido", "correo", new DTFecha(12, 12, 2001), "comp", "link", "123");
+        Producto producto = new Producto("Producto1", "Descripción del producto", 30, 123, "Especificaciones aquí", p1, 10);
+        Item it = new Item(5, producto); // Cantidad 2
+        items.put(1, it);
+        orden = new DTOrdenDeCompra(123, items, 200.0f, "Pendiente");
+    }
+
+    @Test
+    public void testGetNumero() {
+        assertEquals(123, orden.getNumero());
+    }
+
+    @Test
+    public void testGetPrecioTotal() {
+        assertEquals(200.0f, orden.getPrecioTotal());
+    }
+
+    @Test
+    public void testGetEstado() {
+        assertEquals("Pendiente", orden.getEstado());
+    }
+
+    @Test
+    public void testListarItems() {
+        assertEquals(1, orden.listarItems().size());
+    }
+
+    @Test
+    public void testGetFecha() {
+        LocalDateTime fecha = orden.getFecha();
+        assertNotNull(fecha);
+        assertEquals(LocalDateTime.now().getDayOfYear(), fecha.getDayOfYear()); 
+    }
+
+    @Test
+    public void testGetFechaString() {
+        String fechaString = orden.getFechaString();
+        assertTrue(fechaString.matches("\\d{2}-\\d{2}-\\d{4}")); 
+    }
+
+    @Test
+    public void testToString() {
+        String resultado = orden.toString();
+        assertTrue(resultado.contains("Orden número = 123"));
+        assertTrue(resultado.contains("precioTotal = 200.0"));
     }
     
 }
