@@ -61,11 +61,22 @@ public class agregarAlCarrito extends HttpServlet {
             
             Producto producto = sist.getProducto(Integer.parseInt(numRef));
             
+            
+            
             if (producto != null && cantidad > 0 && cantidad <= producto.getStock()) {
-                Item it = new Item(cantidad, producto);
-                carrito.agregarProducto(it);
                 
-                session.setAttribute("usuarioLogueado", cliente);
+            	if(carrito.existeProducto(Integer.parseInt(numRef))) {
+            		Item itemExistente = carrito.getItem(Integer.parseInt(numRef));
+            		
+            		itemExistente.setCant(itemExistente.getCant() + cantidad);
+            	} else {
+            		
+            		Item it = new Item(cantidad, producto);
+            		carrito.agregarProducto(it);
+            	}
+            	
+                
+            	session.setAttribute("usuarioLogueado", cliente);
                 
                response.sendRedirect("Carrito");
             } else {

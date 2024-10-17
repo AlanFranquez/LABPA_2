@@ -1,14 +1,20 @@
 package com.model;
 
 
-
+// Clase usuario
 public class Usuario {
-    private String nombre, nick, apellido, correo, tipo, contrasena;
+	// atributos
+    private String nombre;
+    private String nick;
+    private String apellido;
+    private String correo;
+    private String tipo;
+    private String contrasena;
     private DTFecha nacimiento;
     private String imagen;
     
     // Constructor:
-    public Usuario(String nombre, String nick, String apellido, String correo, DTFecha nacimiento, String tipo, String contrasena) {
+    public Usuario(final String nombre, final String nick, final String apellido, final String correo, final DTFecha nacimiento, final String tipo, final String contrasena) {
         this.nombre = nombre;
         this.nick = nick;
         this.apellido = apellido;
@@ -45,25 +51,25 @@ public class Usuario {
     }
     
     
-    public void setNombre(String Nombre){
-        this.nombre = Nombre;
+    public void setNombre(final String nombre){
+        this.nombre = nombre;
     }
-    public void setNick(String Nick){
-        this.nick = Nick;
+    public void setNick(final String nick){
+        this.nick = nick;
     }
-    public void setApellido(String Apellido){
-        this.apellido = Apellido;
+    public void setApellido(final String apellido){
+        this.apellido = apellido;
     }
-    public void setCorreo(String Correo){
-        this.correo = Correo;
+    public void setCorreo(final String correo){
+        this.correo = correo;
     }
-    public void setNacimiento(DTFecha nacimiento){
+    public void setNacimiento(final DTFecha nacimiento){
         this.nacimiento = nacimiento;
     }
-    public void setContrasena(String contra){
+    public void setContrasena(final String contra){
         this.contrasena = contra;
     }
-    public void setImagen(String imagen) { 
+    public void setImagen(final String imagen) { 
         this.imagen = imagen;
     }
 }
