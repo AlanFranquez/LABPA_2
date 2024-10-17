@@ -1,5 +1,13 @@
 <%@page import="com.model.Usuario"%>
+<%@page import="com.model.Producto"%>
+<%@page import="com.model.DtProducto"%>
 <%@page import="com.model.DTCliente" %>
+<%@ page import="java.util.List" %>
+<%@page import="com.model.Sistema"%>
+<%@page import="com.model.DTCliente" %>
+<%@page import="com.model.Carrito" %>
+<%@page import="com.model.Cliente" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -13,6 +21,13 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 <body>
+
+<% 
+
+
+List<Producto> prods = (List<Producto>) request.getAttribute("prods");
+
+ %>
 
     <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2C2C2C;">
         <div class="container">
@@ -74,6 +89,58 @@
             </div>
         </div>
     </main>
+    
+      <section style="background-color: #eee;" class="mt-5">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+        
+        <%
+        for(Producto p : prods) {
+            DtProducto dtp = p.crearDT();
+        %>
+            <div class="col-md-8 col-lg-6 col-xl-4 d-flex">
+                <div class="card flex-fill" style="border-radius: 15px; min-height: 400px;">
+                    <div class="overflow-hidden" style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
+                        <% if(dtp.getImagenes() != null && !dtp.getImagenes().isEmpty())  {%>
+                        
+                          <img src="media/<%= dtp.getImagenes().getFirst() %>"
+                             class="img-fluid" alt="Producto" 
+                             style="width: 100%; height: 200px; object-fit: cover;" />
+                        
+                        <% } else { %>
+                        	<img src="https://thumbs.dreamstime.com/b/image-not-available-icon-set-default-missing-photo-stock-vector-symbol-black-filled-outlined-style-no-found-white-332183016.jpg"
+                             class="img-fluid" alt="Producto" 
+                             style="width: 100%; height: 200px; object-fit: cover;" />
+                        
+                        <% } %>
+                        
+                      
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <p><a href="#!" class="text-dark"><%= dtp.getNombre() %></a></p>
+                            <p class="text-dark">#<%= dtp.getNumRef() %></p>
+                        </div>
+                            <p style="color: gray"><%= dtp.getDescripcion() %></p>
+                        
+                       
+                        <div class="">
+                            <p class="text-dark">$<%= dtp.getPrecio() %></p>
+                      
+                            <p class="alert alert-danger">Cantidad disponible: <%= dtp.getStock() %></p>
+                        </div>
+                        <div class="d-flex justify-content-center align-items-center">
+                       
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+        
+        </div>
+    </div>
+</section>
+
     	
 
 

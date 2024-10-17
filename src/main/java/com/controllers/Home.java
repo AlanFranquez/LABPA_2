@@ -44,6 +44,7 @@ public class Home extends HttpServlet {
 
         
         if (session == null || session.getAttribute("usuarioLogueado") == null) {
+        	request.setAttribute("prods", productos);
             request.getRequestDispatcher("/WEB-INF/inicioNoLogueado.jsp").forward(request, response);
             return;
         }
