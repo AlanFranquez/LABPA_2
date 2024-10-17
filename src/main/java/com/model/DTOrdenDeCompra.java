@@ -27,7 +27,7 @@ public class DTOrdenDeCompra {
     	List <DTItem> listarItems = new ArrayList<>();
     	
     	
-    	for(Map.Entry<Integer, Item> entry : this.items.entrySet()) {
+    	for (Map.Entry<Integer, Item> entry : this.items.entrySet()) {
     		Item item = entry.getValue();
     		
     		listarItems.add(item.crearDT());

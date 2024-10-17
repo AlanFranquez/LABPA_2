@@ -64,8 +64,8 @@ public class Producto {
 	public Comentario getComentario(int num) {
 		List<Comentario> listComentarios = this.comentarios;
 		
-		for(Comentario comentario: listComentarios) {
-			if(comentario.getNumero() == num) {
+		for (Comentario comentario: listComentarios) {
+			if (comentario.getNumero() == num) {
 				return comentario;
 			}
 		}
@@ -141,7 +141,7 @@ public class Producto {
     	int contador = 0;
     	String[] arrString = new String[contador];
     		
-    	for(Entry<String, Cat_Producto> entry : this.categorias.entrySet()) {
+    	for (Entry<String, Cat_Producto> entry : this.categorias.entrySet()) {
     		
     		Categoria cat = entry.getValue();
     		Cat_Producto cProducto = (Cat_Producto) cat;
@@ -150,7 +150,7 @@ public class Producto {
     	
     		Cat_Padre cPadre = cProducto.getPadre();
     		
-    		while(cPadre.getPadre() != null) {
+    		while (cPadre.getPadre() != null) {
     			arrString[contador++] = cPadre.getNombre();
     			
     			
@@ -165,7 +165,7 @@ public class Producto {
 	public DtProducto crearDT() {
 		String tab = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;•";
 		String catStr = "";
-		if(this.categorias.isEmpty()) {
+		if (this.categorias.isEmpty()) {
 			catStr = "El producto no tiene categorias asignadas";
 		}
 		for (Cat_Producto cat : this.categorias.values()) {	

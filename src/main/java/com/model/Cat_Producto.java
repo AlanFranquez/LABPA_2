@@ -19,7 +19,7 @@ private Map<Integer, Producto> productos;
 	public List<DtProducto> listarProductos() {
 	    List<DtProducto> listaProds = new ArrayList<DtProducto>();
 	        
-	    for(Entry<Integer, Producto> entry: this.productos.entrySet()) {
+	    for (Entry<Integer, Producto> entry: this.productos.entrySet()) {
 	    	Producto producto = entry.getValue();
 	        	
 	    	DtProducto dtProducto = producto.crearDT();

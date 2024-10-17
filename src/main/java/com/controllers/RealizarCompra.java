@@ -51,12 +51,12 @@ public class RealizarCompra extends HttpServlet {
 		HttpSession session = request.getSession();
 		
 		
-		if(session == null || session.getAttribute("usuarioLogueado") == null) {
+		if (session == null || session.getAttribute("usuarioLogueado") == null) {
 			response.sendRedirect("home");
 			return;
 		}
 		
-		if(session.getAttribute("mensajeExito") != null && session.getAttribute("mensajeExito") != "Su compra se ha realizado con éxito.") {
+		if (session.getAttribute("mensajeExito") != null && session.getAttribute("mensajeExito") != "Su compra se ha realizado con éxito.") {
 			response.sendRedirect("home");
 			return;
 		}
@@ -65,13 +65,13 @@ public class RealizarCompra extends HttpServlet {
 		
 		Usuario user = (Usuario) session.getAttribute("usuarioLogueado");
 		
-		if(!user.getTipo().equals("cliente")) {
+		if (!user.getTipo().equals("cliente")) {
 			response.sendRedirect("home");
 			return;
 		}
 		
 		Cliente cliente = (Cliente) user;
-		if(cliente.getCarrito() == null || cliente.getCarrito().getProductos().isEmpty()) {
+		if (cliente.getCarrito() == null || cliente.getCarrito().getProductos().isEmpty()) {
 			
 			response.sendRedirect("home");
 			return;
@@ -87,20 +87,20 @@ public class RealizarCompra extends HttpServlet {
 	
         HttpSession session = request.getSession();
         
-        if(session == null || session.getAttribute("usuarioLogueado") == null) {
+        if (session == null || session.getAttribute("usuarioLogueado") == null) {
 			response.sendRedirect("home");
 			return;
 		}
 		
 		Usuario user = (Usuario) session.getAttribute("usuarioLogueado");
 		
-		if(!user.getTipo().equals("cliente")) {
+		if (!user.getTipo().equals("cliente")) {
 			response.sendRedirect("home");
 			return;
 		}
 		
 		Cliente cliente = (Cliente) user;
-		if(cliente.getCarrito() == null || cliente.getCarrito().getProductos().isEmpty()) {
+		if (cliente.getCarrito() == null || cliente.getCarrito().getProductos().isEmpty()) {
 			
 			response.sendRedirect("home");
 			return;
@@ -110,7 +110,7 @@ public class RealizarCompra extends HttpServlet {
 		List<Item> items = carrito.getProductos();
 		float precioTotal = 0;
 		
-		for(Item item : items) {
+		for (Item item : items) {
 			precioTotal += item.getSubTotal();
 		}
         
@@ -129,7 +129,7 @@ public class RealizarCompra extends HttpServlet {
         
         Map<Integer, OrdenDeCompra> ordenes = cliente.getCompras();
         
-        for(Map.Entry<Integer, OrdenDeCompra> entry : ordenes.entrySet()) {
+        for (Map.Entry<Integer, OrdenDeCompra> entry : ordenes.entrySet()) {
         	
         	OrdenDeCompra orden = entry.getValue();
         	

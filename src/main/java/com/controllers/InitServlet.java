@@ -197,8 +197,8 @@ public class InitServlet extends HttpServlet {
              
             
              ;
-             sistema.agregarProveedor("Perez", "AndresPerez@gmail.com", "Andres", "Perez", fecha3 ,"Bamboo.inc" , "www.bamboo.com", "123", "123");
-             sistema.agregarProveedor("Jorge", "Jorge@gmail.com", "Jorge", "Urrutia", fecha3 ,"Google.inc" , "www.google.com", "123", "123");
+             sistema.agregarProveedor("Perez", "AndresPerez@gmail.com", "Andres", "Perez", fecha3 , "Bamboo.inc" , "www.bamboo.com", "123", "123");
+             sistema.agregarProveedor("Jorge", "Jorge@gmail.com", "Jorge", "Urrutia", fecha3 , "Google.inc" , "www.google.com", "123", "123");
              
              sistema.agregarImagenUsuario("Perez", "/images/p1.jpg");
              
@@ -222,7 +222,7 @@ public class InitServlet extends HttpServlet {
              
              List<String> lista = sistema.getProdByCateogria("Tecno", 2).crearDT().getImagenes();
              
-             for(String data : lista) {
+             for (String data : lista) {
             	 System.out.print(data);
              }
              
@@ -246,7 +246,7 @@ public class InitServlet extends HttpServlet {
              
              List<Producto> prodlist = sistema.getAllProductos();
              
-             for(Producto producto : prodlist) {
+             for (Producto producto : prodlist) {
             	 System.out.print(producto.getNombre());
              }
              

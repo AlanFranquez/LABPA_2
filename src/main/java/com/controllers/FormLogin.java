@@ -62,7 +62,7 @@ public class FormLogin extends HttpServlet {
         
         Usuario usr = sist.getUsuario(nickname);
         
-        if(usr == null) {
+        if (usr == null) {
         	objSession.setAttribute("errorMsg", "Los datos no son válidos");
         	response.sendRedirect("formlogin");
         	return;

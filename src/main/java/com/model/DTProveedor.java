@@ -39,7 +39,7 @@ public class DTProveedor {
     }
 
     public Map<Integer, Producto> getProductos() {
-        return listaProductos;//??????'
+        return listaProductos; //??????'
     }
     public void agregarProd(int numRef, Producto prod) {
         listaProductos.put(numRef, prod);

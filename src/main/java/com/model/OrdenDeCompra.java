@@ -71,10 +71,10 @@ public class OrdenDeCompra {
     }
 
     public void addItem(Producto producto, int cant) {
-    	if(items.containsKey(producto.getNumRef())) {
+    	if (items.containsKey(producto.getNumRef())) {
     		Item item = items.get(producto.getNumRef());
     		item.setCant(item.getCant() + cant);
-    	}else {
+    	} else {
     		Item item = new Item(cant, producto);
     		items.put(producto.getNumRef(), item);    		
     	}

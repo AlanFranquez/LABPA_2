@@ -79,15 +79,14 @@ public class CarritoServlet extends HttpServlet {
 
         
         int paramNumero = 0;
-        if("eliminar".equals(action)) {
+        if ("eliminar".equals(action)) {
               try {
               	paramNumero = Integer.parseInt(param);
-              }catch (Exception e) {
-              	System.out.print("Hubo un error");
-              	resp.sendRedirect("home");
-              	return;
+              } catch (Exception e) {
+              	 System.out.print("Hubo un error");
+              	 resp.sendRedirect("home");
+              	 return;
       		}
-
               Usuario user = (Usuario) session.getAttribute("usuarioLogueado");
 
               if (user instanceof Cliente) {
@@ -97,7 +96,7 @@ public class CarritoServlet extends HttpServlet {
               }
         }
         
-        if("actualizarCant".equals(action)) {
+        if ("actualizarCant".equals(action)) {
         	Usuario user = (Usuario) session.getAttribute("usuarioLogueado");
         	
         	Cliente cliente = (Cliente) user;
@@ -106,17 +105,17 @@ public class CarritoServlet extends HttpServlet {
         	try {
         		cantNum = Integer.parseInt(cant);
               	paramNumero = Integer.parseInt(param);
-              }catch (Exception e) {
-              	System.out.print("Hubo un error");
-              	resp.sendRedirect("home");
-              	return;
+              } catch (Exception e) {
+              	 System.out.print("Hubo un error");
+              	 resp.sendRedirect("home");
+              	 return;
       		}
         	
         	
         	
         	Item item = cliente.getCarrito().getItem(paramNumero);
         	
-        	if(item != null) {
+        	if (item != null) {
         		item.setCant(cantNum);
         		System.out.print(item.getCant());
         	}

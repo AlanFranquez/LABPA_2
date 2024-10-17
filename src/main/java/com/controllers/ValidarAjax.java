@@ -39,8 +39,8 @@ public class ValidarAjax extends HttpServlet {
             
             
             
-            for(Usuario u: usuarios) {
-            	if(nick.equals(u.getNick())) {
+            for (Usuario u: usuarios) {
+            	if (nick.equals(u.getNick())) {
             		nickExiste = true;
             		break;
             	}
@@ -57,8 +57,8 @@ public class ValidarAjax extends HttpServlet {
         if (correo != null && !correo.isEmpty()) {
             boolean correoExiste = false;
             
-            for(Usuario u: usuarios) {
-            	if(correo.equals(u.getCorreo())) {
+            for (Usuario u: usuarios) {
+            	if (correo.equals(u.getCorreo())) {
             		correoExiste = true;
             		break;
             	}

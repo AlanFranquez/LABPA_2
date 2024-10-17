@@ -50,7 +50,7 @@ public class Home extends HttpServlet {
 
         Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
         
-        if(productos != null) {
+        if (productos != null) {
         	request.setAttribute("prods", productos);
         }
         

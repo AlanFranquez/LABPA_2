@@ -43,7 +43,7 @@ public class Usuarios extends HttpServlet {
         
 		
         Usuario usr = sistema.getUsuario("agusmari");
-        if(usr == null) {
+        if (usr == null) {
         	System.out.print("Hubo un problema");
         } else {
         	System.out.print("No hubo problemas");
@@ -55,7 +55,7 @@ public class Usuarios extends HttpServlet {
 		String user = request.getParameter("usuario");
 		clientesPredeterminados = sistema.listarClientes();
 		
-		if(user == null) {
+		if (user == null) {
 			request.setAttribute("clientes", clientesPredeterminados);
 			 request.getRequestDispatcher("/WEB-INF/listaUsuarios.jsp").forward(request, response);
 			 

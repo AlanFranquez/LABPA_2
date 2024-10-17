@@ -55,7 +55,7 @@ public class RegistrarUsuarios2 extends HttpServlet {
          String nick = (String) session.getAttribute("nick");
          
          System.out.print(nick);
-         if(nick == null) {
+         if (nick == null) {
         	 response.sendRedirect("registrarusuario1");
         	 return;
          }
@@ -82,7 +82,9 @@ public class RegistrarUsuarios2 extends HttpServlet {
         if (img != null && img.getSize() > 0) { 
             String uploadDir = getServletContext().getRealPath("") + File.separator + "media";
             File uploads = new File(uploadDir);
-            if (!uploads.exists()) uploads.mkdirs();
+            if (!uploads.exists()) {
+            	uploads.mkdirs();
+            }
 
             fileName = img.getSubmittedFileName();
             File file = new File(uploads, fileName);
@@ -140,7 +142,7 @@ public class RegistrarUsuarios2 extends HttpServlet {
                 sist.agregarCliente(nombre, nick, apellido, correo, fechaNueva, contraseña, contraseña2);
                 usr = cliente;
             }
-            if(fileName != null) {
+            if (fileName != null) {
             	
             	sist.agregarImagenUsuario(usr.getNick(), fileName);
             	usr.setImagen(fileName);

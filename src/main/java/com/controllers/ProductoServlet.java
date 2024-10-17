@@ -127,7 +127,9 @@ public class ProductoServlet extends HttpServlet {
             if (part.getName().equals("imagenes") && part.getSize() > 0) {
                 String uploadDir = getServletContext().getRealPath("") + File.separator + "media";
                 File uploads = new File(uploadDir);
-                if (!uploads.exists()) uploads.mkdirs();
+                if (!uploads.exists()) { 
+                	uploads.mkdirs();
+                }
 
                 // Guardar la imagen
                 String fileName = part.getSubmittedFileName();

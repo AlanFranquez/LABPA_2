@@ -53,7 +53,7 @@ public class PerfilProducto extends HttpServlet {
 
         Object usuarioLogueado = session.getAttribute("usuarioLogueado");
         
-        if(usuarioLogueado == null) {
+        if (usuarioLogueado == null) {
         	response.sendRedirect("formlogin");
         }
         Usuario user = (Usuario) usuarioLogueado;

@@ -50,8 +50,8 @@ public class Carrito {
     }
     
     public Item getItem(int numRef){
-    	for(Item item : listItems) {
-    		if(item.getProducto().getNumRef() == numRef) {
+    	for (Item item : listItems) {
+    		if (item.getProducto().getNumRef() == numRef) {
     			return item;
     		}
     	}

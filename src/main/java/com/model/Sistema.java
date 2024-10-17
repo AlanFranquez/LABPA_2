@@ -61,8 +61,9 @@ public class Sistema implements ISistema {
     	if (!verificarUnicidad(nick, correo)) {
     		throw new UsuarioRepetidoException("Ya existe un usuario con nick: " + nick + " orden email: " + correo);
     	}
-    	if(!contra.equals(confContra))
+    	if (!contra.equals(confContra)) {
     		throw new UsuarioRepetidoException("Contraseñas Diferentes");
+    	}	
     	Proveedor nuevoProveedor = new Proveedor(nombre, nick, apellido, correo, fechaNacimiento, compania, link, contra);
     	usuarios.put(nick, nuevoProveedor);
     }
@@ -70,8 +71,9 @@ public class Sistema implements ISistema {
     	if (!verificarUnicidad(nick, correo)) {
     		throw new UsuarioRepetidoException("Ya existe un usuario con nick: " + nick + " orden email: " + correo);
     	}
-    	if(!contra.equals(confContra))
+    	if (!contra.equals(confContra)) {
     		throw new UsuarioRepetidoException("Contraseñas Diferentes");
+    	}
 
     	Cliente nuevoCliente = new Cliente(nombre, nick, apellido, correo, fecha, contra);
     	usuarios.put(nick, nuevoCliente);
@@ -99,7 +101,7 @@ public class Sistema implements ISistema {
     // CASO DE USO 2: REGISTRAR PRODUCTO
     public boolean verificarUnicidadProducto(String nombreCategoria, int numRef, String titulo) {
     	Cat_Producto cat = (Cat_Producto) this.categorias.get(nombreCategoria);
-    	if(!cat.verificarProducto(numRef, titulo)) {
+    	if (!cat.verificarProducto(numRef, titulo)) {
     		return false;
     	}
     	return true;
@@ -111,7 +113,7 @@ public class Sistema implements ISistema {
     }
     public DefaultMutableTreeNode arbolCategorias() {
       	 DefaultMutableTreeNode root = new DefaultMutableTreeNode("Cats");
-      	 for(Categoria cat : arbolCategorias.values()) {
+      	 for (Categoria cat : arbolCategorias.values()) {
       		 DefaultMutableTreeNode child = arbolCategorias(cat);
       		 root.add(child);
       	 }
@@ -119,14 +121,14 @@ public class Sistema implements ISistema {
     }
     public DefaultMutableTreeNode arbolCategorias(Categoria cat) {
      	 	DefaultMutableTreeNode rama = new DefaultMutableTreeNode(cat.getNombre());
-     	 	if(cat.getTipo() == "Padre") {
+     	 	if (cat.getTipo() == "Padre") {
      	 		Map<String, Categoria> hijos = ((Cat_Padre) cat).getHijos();
-     	 		if(hijos.size() >= 1) {
-     	 			for(Categoria hijo : hijos.values()) {
+     	 		if (hijos.size() >= 1) {
+     	 			for (Categoria hijo : hijos.values()) {
      	 				DefaultMutableTreeNode child = arbolCategorias(hijo);
      	 				rama.add(child);
      	 			}
-     	 		}else {
+     	 		} else {
      	 			rama.add(new DefaultMutableTreeNode("Sin Elementos"));
      	 		}
      	 	}
@@ -141,9 +143,9 @@ public class Sistema implements ISistema {
     		if (user instanceof Proveedor) {
     			Proveedor proveedor = (Proveedor) user;
     			Producto producto = proveedor.obtenerProd(numRef);
-    			if(producto != null) {
+    			if (producto != null) {
     				Cat_Producto cat = (Cat_Producto) categorias.get(catName);
-    				if(cat == null) {
+    				if (cat == null) {
     					throw new CategoriaException("Hubo un error en la Categoria, vuelva a intentarlo");
     				}
     				producto.agregarCategorias(cat);
@@ -169,7 +171,7 @@ public class Sistema implements ISistema {
     
     // CASO DE USO 3: ALTA DE CATEGORIA
     public void agregarCategoria(String nombre) throws CategoriaException {
-	   if(existeCategoria(nombre)) {
+	   if (existeCategoria(nombre)) {
 		   throw new CategoriaException("El nombre de la categoria ya existe");
 	   }
 	   Cat_Padre nuevaCategoria = new Cat_Padre(nombre);
@@ -177,7 +179,7 @@ public class Sistema implements ISistema {
 	   this.arbolCategorias.put(nombre, nuevaCategoria);
     }
     public void agregarCategoriaConProductos(String nombre) throws CategoriaException{
-	   if(existeCategoria(nombre)) {
+	   if (existeCategoria(nombre)) {
 		   throw new CategoriaException("Esta categoria ya existe");
 	   }
 	   Cat_Producto nuevaCategoria = new Cat_Producto(nombre);
@@ -185,14 +187,14 @@ public class Sistema implements ISistema {
 	   this.arbolCategorias.put(nombre, nuevaCategoria);
    }
     public void asignarlePadreCategoria(String nombrePadre, String nombre) throws CategoriaException {
-	   if(nombre == nombrePadre) {
+	   if (nombre == nombrePadre) {
 		   throw new CategoriaException("Una categoría no puede ser su propio padre");
 	   }
 	   
 	   Cat_Padre catPadre = (Cat_Padre) this.categorias.get(nombrePadre);
 	   Categoria cat = this.categorias.get(nombre);
 
-	   if(catPadre.verificarSiYaEsHijo(nombre)) {
+	   if (catPadre.verificarSiYaEsHijo(nombre)) {
 		   throw new CategoriaException("Esta categoria ya es su hijo");
 	   }
 	   
@@ -203,9 +205,9 @@ public class Sistema implements ISistema {
 
     public List <String> listarSoloNombresPadresCat() {
     	List <String> listarPadres = new ArrayList<>();
-    	for(Map.Entry<String, Categoria> entry : categorias.entrySet()) {
+    	for (Map.Entry<String, Categoria> entry : categorias.entrySet()) {
     		Categoria cat = entry.getValue();
-    		if(cat.getTipo() == "Padre") {
+    		if (cat.getTipo() == "Padre") {
     			Cat_Padre catPadre = (Cat_Padre) cat;
     			listarPadres.add(catPadre.getNombre());
     		}
@@ -221,7 +223,7 @@ public class Sistema implements ISistema {
     // CASO DE USO 4: GENERAR ORDEN DE COMPRA
     public DefaultMutableTreeNode arbolProductos() {
    	 DefaultMutableTreeNode root = new DefaultMutableTreeNode("Cats");
-   	 for(Categoria cat : arbolCategorias.values()) {
+   	 for (Categoria cat : arbolCategorias.values()) {
    		 DefaultMutableTreeNode child = arbolProductos(cat);
    		 root.add(child);
    	 }
@@ -229,24 +231,24 @@ public class Sistema implements ISistema {
     }
     public DefaultMutableTreeNode arbolProductos(Categoria cat) {
   	 	DefaultMutableTreeNode rama = new DefaultMutableTreeNode(cat.getNombre());
-  	 	if(cat.getTipo() == "Padre") {
+  	 	if (cat.getTipo() == "Padre") {
   	 		Map<String, Categoria> hijos = ((Cat_Padre) cat).getHijos();
-  	 		if(hijos.size() >= 1) {
-  	 			for(Categoria hijo : hijos.values()) {
+  	 		if (hijos.size() >= 1) {
+  	 			for (Categoria hijo : hijos.values()) {
   	 				DefaultMutableTreeNode child = arbolProductos(hijo);
   	 				rama.add(child);
   	 			}
-  	 		}else {
+  	 		} else {
   	 			rama.add(new DefaultMutableTreeNode("Sin Elementos"));
   	 		}
-  	 	}else {
+  	 	} else {
   	 		Map<Integer, Producto> productos = ((Cat_Producto) cat).getProductos();
-  	 		if(productos.size() >= 1) {
-  	 			for(Producto producto : productos.values()) {
+  	 		if (productos.size() >= 1) {
+  	 			for (Producto producto : productos.values()) {
   	 				DefaultMutableTreeNode child = new DefaultMutableTreeNode(producto.getNombre() + " - " + producto.getNumRef());
   					rama.add(child);
   	 			}
-  	 		}else {
+  	 		} else {
   	 			rama.add(new DefaultMutableTreeNode("Sin Elementos"));
   	 		}
   	 	}
@@ -262,7 +264,7 @@ public class Sistema implements ISistema {
     		if (user instanceof Proveedor) {
     			Proveedor proveedor = (Proveedor) user;
     			Producto producto = proveedor.obtenerProd(numRef);
-    			if(producto != null) {
+    			if (producto != null) {
     				return producto.getStock();
     			}
     		}
@@ -298,9 +300,9 @@ public class Sistema implements ISistema {
     // CASO DE USO 6: VER INFORMACION DE PROVEEDOR
     public List<DTProveedor> listarProveedores(){
     	List<DTProveedor> listaProveedor = new ArrayList<>();
-    	for(Map.Entry<String, Usuario> entry : usuarios.entrySet()) {
+    	for (Map.Entry<String, Usuario> entry : usuarios.entrySet()) {
     		Usuario usuario = entry.getValue();
-    		if(usuario.getTipo().equals("proveedor")) {
+    		if (usuario.getTipo().equals("proveedor")) {
     			Proveedor usuarioProveedor = (Proveedor) usuario;
     			listaProveedor.add(usuarioProveedor.crearDt());
     		}
@@ -315,8 +317,9 @@ public class Sistema implements ISistema {
     	for (Usuario usuario : usuarios.values()) {
             if (usuario instanceof Cliente) {
                 Cliente cliente = (Cliente) usuario;
-                if (cliente.existeOrden(orden))
+                if (cliente.existeOrden(orden)) {
                     return cliente;
+                }
             }
         }
         return null;
@@ -377,10 +380,10 @@ public class Sistema implements ISistema {
     public List<DtProducto> listarProductosPorCategoria(String cat) throws ProductoException {
     	List <DtProducto> listaProductos = new ArrayList<>();
     	Cat_Producto prodC = (Cat_Producto) this.categorias.get(cat);
-    	if(prodC.getProductos().isEmpty()) {
+    	if (prodC.getProductos().isEmpty()) {
     		throw new ProductoException("Esta categoría no cuenta con productos");
     	}
-    	for(Entry<Integer, Producto> entry: prodC.getProductos().entrySet()) {
+    	for (Entry<Integer, Producto> entry: prodC.getProductos().entrySet()) {
     		Producto producto = entry.getValue();
     		listaProductos.add(producto.crearDT());
     	}	
@@ -407,26 +410,26 @@ public class Sistema implements ISistema {
     	List<DtProducto> listaProductos = new ArrayList<>();
     	List<Integer> numRefs = new ArrayList<Integer>();
     	
-    	for(Map.Entry<String, Categoria> entry : this.categorias.entrySet()) {
+    	for (Map.Entry<String, Categoria> entry : this.categorias.entrySet()) {
     		Categoria cat = entry.getValue();
     		
-    		if(cat.getTipo() == "Producto") {
+    		if (cat.getTipo() == "Producto") {
     			Cat_Producto cProd = (Cat_Producto) cat;
     			List<DtProducto> listaPerProducto = cProd.listarProductos();
     			
-    			if(listaPerProducto.isEmpty()) {
+    			if (listaPerProducto.isEmpty()) {
     				continue;
     			}
     			
-    			for(DtProducto dtProducto: listaPerProducto) {
-    				if(!numRefs.contains(dtProducto.getNumRef())) {
+    			for (DtProducto dtProducto: listaPerProducto) {
+    				if (!numRefs.contains(dtProducto.getNumRef())) {
                 		numRefs.add(dtProducto.getNumRef());
                 		listaProductos.add(dtProducto);
                 	}
     			}
     		}
     	}
-    	if(listaProductos.isEmpty()) {
+    	if (listaProductos.isEmpty()) {
     		throw new ProductoException("No se ha encontrado ningun producto para listar");
     	}
     	return listaProductos;
@@ -436,7 +439,7 @@ public class Sistema implements ISistema {
     		if (user instanceof Proveedor) {
     			Proveedor proveedor = (Proveedor) user;
     			Producto producto = proveedor.obtenerProd(numRef);
-    			if(producto != null) {
+    			if (producto != null) {
     				return producto.crearDT();
     			}
     		}
@@ -449,7 +452,7 @@ public class Sistema implements ISistema {
     		if (user instanceof Proveedor) {
     			Proveedor proveedor = (Proveedor) user;
     			Producto producto = proveedor.obtenerProd(numRef);
-    			if(producto != null) {
+    			if (producto != null) {
     				return producto;
     			}
     		}
@@ -465,7 +468,7 @@ public class Sistema implements ISistema {
     public List<DTOrdenDeCompra> listarOrdenes() {
     	List<DTOrdenDeCompra> lista = new ArrayList<>();
     	
-    	for(Map.Entry<Integer, OrdenDeCompra> entry : this.ordenes.entrySet()) {
+    	for (Map.Entry<Integer, OrdenDeCompra> entry : this.ordenes.entrySet()) {
     		OrdenDeCompra orden = entry.getValue();
     		
     		lista.add(orden.crearDT());
@@ -494,7 +497,7 @@ public class Sistema implements ISistema {
     	cliente.agregarCompra(orden);
     }
     public boolean comprobarCat(String cat) throws CategoriaException {
-    	if((Cat_Producto) this.categorias.get(cat) == null) {
+    	if ((Cat_Producto) this.categorias.get(cat) == null) {
     		throw new CategoriaException("Esta categoria no existe");
     	}
     	return true;
@@ -530,7 +533,7 @@ public class Sistema implements ISistema {
 	 
 	 public Usuario getUserByEmail(String email) throws UsuarioException {
 		 for (Usuario usuario : usuarios.values()) {
-			 	if(usuario.getCorreo() == email) {
+			 	if (usuario.getCorreo() == email) {
 			 		return usuario;
 			 	}
 	     }
@@ -544,13 +547,13 @@ public class Sistema implements ISistema {
 	 
 	 public void agregarImagenesDesdeProveedor(String proveedor, int numRef, String imagen) {
 		 Proveedor usr = (Proveedor) this.getUsuario(proveedor);
-		 if(usr == null) {
+		 if (usr == null) {
 			 return;
 		 }
 		 
 		 Producto producto1 = usr.obtenerProd(numRef);
 		 
-		 if(producto1 == null) {
+		 if (producto1 == null) {
 			 return;
 		 }
 		 
@@ -660,7 +663,7 @@ public class Sistema implements ISistema {
 	 	public void cambiarEstadoOrden(String estado, int numero, String cliente) {
 	 		Cliente client = (Cliente) this.usuarios.get(cliente);
 	 		
-	 		if(client != null) {
+	 		if (client != null) {
 	 			client.getCompra(numero).setEstado(estado);
 	 			this.ordenes.get(numero).setEstado(estado);
 	 			return;
