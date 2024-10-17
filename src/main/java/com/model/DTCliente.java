@@ -50,7 +50,7 @@ public class DTCliente {
         return correo;
     }
     
-    DTCliente mostrarPerfil() {
+    public DTCliente mostrarPerfil() {
 		return this;
     	
     }

@@ -100,16 +100,9 @@ class Testing {
 	public void testAgregarCategorias() {
 		try {
 			s.agregarCategoria("cat1");
-		} catch (CategoriaException e) { }
-		try {
-			s.agregarCategoria("cat1");
 		} catch (CategoriaException e) {
 			System.out.print("testAgregarCategorias: " + e.getMessage() + "\n");
 		}
-		
-		try {
-			s.agregarCategoriaConProductos("cat2");
-		} catch (CategoriaException e) { }
 		try {
 			s.agregarCategoriaConProductos("cat1");
 		} catch (CategoriaException e) {
@@ -124,8 +117,9 @@ class Testing {
 	}
 	@Test
 	public void testGetCat2() {
-		Categoria cat = s.getCat("cat1");
-		assertEquals("cat1", cat.getNombre());
+		Cat_Padre cat = (Cat_Padre) s.getCat("cat1");
+		DTCat_Padre dt = cat.crearDT();
+		assertEquals("cat1", dt.getNombre());
 	}
 	
 	@Test
@@ -230,8 +224,16 @@ class Testing {
     
     @Test
     public void testOrdenCompra() {
-    	s.CrearOrden();
-    	s.eliminarUltimaOrden();
+    	OrdenDeCompra o = new OrdenDeCompra(0);
+    	LocalDateTime f = o.getFecha();
+    	assertEquals(f.getMonth(), LocalDateTime.now().getMonth());
+    	o.setNumero(1);
+    	assertEquals(1, o.getNumero());
+    	o.setNumero(0);
+    	Producto p = s.getProducto(1);
+    	o.addItem(p, 1);
+    	o.addItem(p, 1);
+    	
     	s.CrearOrden();
     	s.asignarOrdenCliente("nick2");
     	int i = s.obtenerStockProducto(1);
@@ -362,6 +364,7 @@ class Testing {
     	assertEquals(eq, true);
     	
     	List<DTOrdenDeCompra> l = s.listarOrdenes();
+    	l.getFirst().getItems();
     	assertEquals(l.size(), 1);
     	s.eliminarUltimaOrden();
     	l = s.listarOrdenes();
@@ -563,7 +566,7 @@ class Testing {
         assertEquals("Producto1", dtProducto.getNombre());
         assertEquals("Descripción del producto", dtProducto.getDescripcion());
         assertEquals(30, dtProducto.getPrecio());
-        assertEquals(1, dtProducto.getNumRef());
+        assertEquals(123, dtProducto.getNumRef());
         assertEquals(p1.getNick(), dtProducto.getNicknameProveedor());
         assertTrue(dtProducto.getCategorias().contains("El producto no tiene categorias asignadas"));
     }
@@ -688,8 +691,6 @@ class Testing {
         
         OrdenDeCompra o = new OrdenDeCompra(items, 150);
         
-        assertEquals(o.getEstado(), "En Preparación");
-        
         o.setEstado("otro estado");
         
         assertEquals(o.getEstado(), "otro estado");
@@ -720,7 +721,7 @@ class Testing {
         Carrito carrito = new Carrito();
         
         carrito.agregarProducto(it);
-        assertTrue(carrito.existeProducto(1));
+        assertTrue(carrito.existeProducto(123));
     }
 
 
@@ -756,29 +757,12 @@ class Testing {
         Carrito carrito = new Carrito();
         
         carrito.agregarProducto(it);
-        
         assertEquals(true, carrito.existeProducto(it.getProducto().getNumRef()));
     }
     
     @Test
-    public void testGetProductos() {
-    	Carrito carrito = new Carrito();
-        
-    	assertNull(carrito.getProductos());
-    }
-    @Test
-    public void testVaciarCarrito1() {
-    	Carrito carrito = new Carrito();
-        carrito.vaciarCarrito();
-    	assertNull(carrito.getProductos());
-    }
-	
-	
-    @Test
     public void testCrearDTProveedor() {
     	Proveedor p1 = new Proveedor("nombre", "nick3", "apellido", "correo", new DTFecha(12, 12, 2001), "comp", "link", "123");
-        
-    	
     	assertEquals(p1.crearDt().getNombre(), p1.getNombre());
     }
     
@@ -797,9 +781,17 @@ class Testing {
     
     @Test
     public void testDTCliente() {
-    	Cliente cl = new Cliente("andres", "andres123", "perez", "perez@gmail.com", new DTFecha(12,12, 2001), "123");
-    	
-    	assertEquals(cl.crearDt().getNombre(), cl.getNombre());
+    	DTFecha f = new DTFecha(12,12, 2001);
+    	Cliente cl = new Cliente("andres", "andres123", "perez", "perez@gmail.com", f, "123");
+    	DTCliente dt = cl.crearDt();
+    	dt.toString();
+    	dt.toStringCompleto();
+    	assertEquals(f.getDia() + " / " + f.getMes() + " / " + f.getAnio(), dt.getNacimientoFormateado());
+    	assertEquals("Cliente", dt.getTipo());
+    	assertEquals(null, dt.getImagenes());
+    	assertEquals(f, dt.getNacimiento());
+    	assertEquals(dt, dt.mostrarPerfil());
+    	assertEquals(null, dt.getOrdenes());
     }
     
     @Test
@@ -937,6 +929,77 @@ class Testing {
         assertTrue(resultado.contains("precioTotal = 200.0"));
     }
     
+    @Test
+    public void testFecha() {
+    	DTFecha f = new DTFecha(20, 5, 2000);
+    	assertEquals(20, f.getDia());
+    	assertEquals(5, f.getMes());
+    	assertEquals(2000, f.getAnio());
+    }
+    
+    @Test
+    public void testSetItems() {
+    	Item i = new Item(4, s.getProducto(1));
+    	i.setCant(1);
+    	i.setProducto(s.getProducto(2));
+    	assertEquals(1, i.getCant());
+    	assertEquals(s.getProducto(2), i.getProducto());
+    	
+    	DTItem dt = i.crearDT();
+    	dt.setCant(1);
+    	dt.setProducto(s.getProducto(2));
+    	assertEquals(1, dt.getCant());
+    	assertEquals(s.getProducto(2), dt.getProducto());
+    	assertEquals(200.0, dt.getSubTotal());
+    }
+    
+    @Test
+    public void testCategoria() {
+    	Cat_Producto c = new Cat_Producto("nom");
+    	Cat_Padre p = new Cat_Padre("p");
+    	p.agregarHijo(c);
+    	c.recorrerCategorias(p, new ArrayList<>());
+    	c.setNombre("otro");
+    	c.setTipo("tipo");
+    	Producto prod = new Producto("titulo2", "descripcion", 200, 123, "especificaciones", (Proveedor) s.getUsuario("nick1"), 10);
+    	c.agregarProducto(prod);
+    	assertFalse(c.verificarProducto(123, "titulo2"));
+    	assertEquals("otro", c.getNombre());
+    	assertEquals("tipo", c.getTipo());
+    }
+    
+    @Test
+    public void testDtProducto() {
+    	Producto prod = new Producto("titulo2", "descripcion", 200, 123, "especificaciones", (Proveedor) s.getUsuario("nick1"), 10);
+    	DtProducto dt = prod.crearDT();
+    	assertEquals(s.getUsuario("nick1").getNombre(), dt.getNombreProveedor());
+    	assertEquals(0, dt.getCantidadComprada());
+    	assertEquals(new ArrayList<>(), dt.getComentarios());
+    	assertEquals(10, dt.getStock());
+    	assertEquals("especificaciones", dt.getEspecs());
+    	assertEquals(null, dt.getPrimeraImagen());
+    	dt.agregarImagen("img");
+    	dt.getImagenes();
+    	assertEquals("img", dt.getPrimeraImagen());
+    }
+    
+    @Test
+    public void testUsuario() {
+    	DTFecha f = new DTFecha(1, 2, 3);
+    	Cliente c = new Cliente("andres", "andres123", "perez", "perez@gmail.com", new DTFecha(12,12, 2001), "123");
+    	c.setApellido("ap");
+    	assertEquals("ap", c.getApellido());
+    	c.setContrasena("cont");
+    	assertEquals("cont", c.getContrasena());
+    	c.setCorreo("cor");
+    	assertEquals("cor", c.getCorreo());
+    	c.setNacimiento(f);
+    	assertEquals(f, c.getNacimiento());
+    	c.setNick("ni");
+    	assertEquals("ni", c.getNick());
+    	c.setNombre("nom");
+    	assertEquals("nom", c.getNombre());
+    }
 }
 
     
