@@ -474,7 +474,8 @@ public class Sistema implements ISistema {
     	
     	return lista;
     }
-    
+    /*
+     * Creo que esto no se usa
     public List<DTCliente> obtenerSoloClientes() {
         List<DTCliente> listaClientes = new ArrayList<>();
         for (Usuario usuario : usuarios.values()) {
@@ -485,7 +486,7 @@ public class Sistema implements ISistema {
         }
         return listaClientes;
     }
-    
+    */
     public void addOrdenes(OrdenDeCompra o, String nickUsuario) {
     	Usuario us = this.usuarios.get(nickUsuario);
     	

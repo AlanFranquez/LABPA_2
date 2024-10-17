@@ -25,6 +25,15 @@ class Testing {
     }
 	
 	@Test
+    public void testListarALLProductosVacio() {
+		try {
+			s.listarALLProductos();
+		} catch (ProductoException e) {
+			System.out.print("testListarALLProductosVacio: " + e.getMessage() + "\n");
+		}
+    }
+	
+	@Test
     public void testAgregarProveedor() {
 		DTFecha f = new DTFecha(1, 1, 1111);
 		try {
@@ -206,6 +215,7 @@ class Testing {
         assertNotNull("El proveedor debería existir.", proveedor);
         Producto producto = proveedor.obtenerProd(numRef);
         assertNotNull("El producto debería ser agregado al proveedor.", producto);
+        DtProducto dt = s.getDtProducto(numRef);
         try {
 			s.agregarProductoCategoria("cat2", numRef);
 		} catch (CategoriaException e) { }
@@ -294,7 +304,7 @@ class Testing {
     public void testListarProductosPorCategoriaVacia() {
     	try {
     		s.agregarCategoriaConProductos("cat3");
-    		List<DtProducto> prods = s.listarProductosPorCategoria("cat3");
+    		s.listarProductosPorCategoria("cat3");
 		} catch (ProductoException | CategoriaException e) {
 			System.out.print("testListarProductosPorCategoriaVacia: " + e.getMessage() + "\n");
 		}
@@ -302,7 +312,70 @@ class Testing {
     
     @Test
     public void testGetProdByCateogria() {
+    	try {
+			Producto prod = s.getProdByCateogria("cat2", 1);
+			assertEquals(prod.getNumRef(), 1);
+			s.getProdByCateogria("cat3", 1);
+		} catch (ProductoException e) {
+			System.out.print("testGetProdByCateogria: " + e.getMessage() + "\n");
+		}
+    }
+    @Test
+    public void testGetProdByCateogria2() {
+    	try {
+    		s.agregarProducto("titulo3", 3, "desc", "esp", 10, "nick1", 10);
+			s.getProdByCateogria("cat2", 3);
+    	} catch (ProductoException e) {
+			System.out.print("testGetProdByCateogria2: " + e.getMessage() + "\n");
+		}
+    }
+    
+    @Test
+    public void testListarALLProductos() {
+		try {
+			List<DtProducto> lista = s.listarALLProductos();
+			assertEquals(lista.size(), 1);
+		} catch (ProductoException e) { }
+    }
+    
+    @Test
+    public void testGetDtProductoNull() {
+    	DtProducto dt = s.getDtProducto(1000);
+    	assertNull(dt);
+    }
+    @Test
+    public void testGetProductoNull() {
+    	Producto p= s.getProducto(1000);
+    	assertNull(p);
+    }
+    
+    @Test
+    public void testExistenOrdenesParaListar() {
+    	boolean eq = s.existenOrdenesParaListar();
+    	assertEquals(eq, false);
+    	s.CrearOrden();
+    	eq = s.existenOrdenesParaListar();
+    	assertEquals(eq, true);
     	
+    	List<DTOrdenDeCompra> l = s.listarOrdenes();
+    	assertEquals(l.size(), 1);
+    	s.eliminarUltimaOrden();
+    	l = s.listarOrdenes();
+    	assertEquals(l.size(), 0);
+    }
+    
+    @Test
+    public void testAddOrdenes() {
+    	s.CrearOrden();
+    	OrdenDeCompra ord = s.getOrden(1);
+    	s.addOrdenes(ord, "nick2");
+    }
+    
+    @Test
+    public void testComprobarCat() {
+		try {
+			s.comprobarCat("cat1");
+		} catch (CategoriaException e) { }
     }
 }
 
