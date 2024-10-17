@@ -167,7 +167,6 @@ public class Sistema implements ISistema {
         return collection.toArray(new Categoria[collection.size()]); // Convierte a un arreglo
     }
     
-    
     // CASO DE USO 3: ALTA DE CATEGORIA
     public void agregarCategoria(String nombre) throws CategoriaException {
 	   if(existeCategoria(nombre)) {

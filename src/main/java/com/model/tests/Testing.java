@@ -5,10 +5,12 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.exceptions.*;
@@ -465,6 +467,39 @@ class Testing {
     	s.eliminarUltimaOrden();
     	s.cambiarEstadoOrden("estado", 1, "otro");
     }
+    
+    DTFecha f = new DTFecha(12,12,2001);
+    
+    Comentario comentario = null;
+    Cliente autor = null;
+    @BeforeEach
+    public void setUp() {
+        Cliente autor = new Cliente("Juan", "jdoe", "Doe", "jdoe@example.com", f, "password");
+        comentario = new Comentario(1, "Este es un comentario", autor, LocalDateTime.now());
+    
+    
+    }
+    
+    
+    @Test
+    public void testAgregarRespuesta() {
+        Comentario respuesta = new Comentario(2, "Esta es una respuesta", autor, LocalDateTime.now());
+        comentario.agregarRespuesta(respuesta);
+        
+        assertEquals(1, comentario.getRespuestas().size(), "Debería haber una respuesta");
+        assertEquals(respuesta, comentario.getRespuestas().get(0), "La respuesta debe ser la misma que la agregada");
+    }
+    
+    @Test
+    public void comrpobarNumnero() {
+    	int numero1 = comentario.getNumero();
+    	
+    	assertEquals(1, numero1);
+    }
+    
+    @Test 
+    public void 
+    
 }
 
     
