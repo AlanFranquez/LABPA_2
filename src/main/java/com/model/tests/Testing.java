@@ -602,6 +602,116 @@ class Testing {
     }
     
     
+    @Test
+    public void generarOrdenDeCompra() {
+        OrdenDeCompra o = new OrdenDeCompra(1);
+        
+        
+        Cliente cl = new Cliente("andres", "andres123", "perez", "perez@gmail.com", new DTFecha(12,12, 2001), "123");
+    	cl.agregarCompra(o);
+    	
+    	assertEquals(o, cl.getCompra(1));
+    }
+    
+    @Test
+    public void agregarItem() {
+        OrdenDeCompra o = new OrdenDeCompra(1);
+        
+        Proveedor p1 = new Proveedor("nombre", "nick3", "apellido", "correo", new DTFecha(12, 12, 2001), "comp", "link", "123");
+        Producto producto = new Producto("Producto1", "Descripción del producto", 30, 123, "Especificaciones aquí", p1, 10);
+        
+        Cliente cl = new Cliente("andres", "andres123", "perez", "perez@gmail.com", new DTFecha(12,12, 2001), "123");
+    	cl.agregarCompra(o);
+    	
+    	o.addItem(producto,5);
+    	
+    	assertEquals(1, o.getItems().size());
+    }
+    
+    
+    @Test
+    public void testRemoverItem() {
+        OrdenDeCompra o = new OrdenDeCompra(1);
+        
+        Proveedor p1 = new Proveedor("nombre", "nick3", "apellido", "correo", new DTFecha(12, 12, 2001), "comp", "link", "123");
+        Producto producto = new Producto("Producto1", "Descripción del producto", 30, 123, "Especificaciones aquí", p1, 10);
+        
+        Cliente cl = new Cliente("andres", "andres123", "perez", "perez@gmail.com", new DTFecha(12,12, 2001), "123");
+    	cl.agregarCompra(o);
+    	
+    	o.addItem(producto,5);
+    	o.removeItem(producto.getNumRef());
+    	
+    	assertEquals(0, o.getItems().size());
+    	assertNull(o.getItems().get(producto.getNumRef()));
+    }
+    
+    @Test
+    public void testComprobarEstado() {
+        OrdenDeCompra o = new OrdenDeCompra(1);
+        
+        Proveedor p1 = new Proveedor("nombre", "nick3", "apellido", "correo", new DTFecha(12, 12, 2001), "comp", "link", "123");
+        Producto producto = new Producto("Producto1", "Descripción del producto", 30, 123, "Especificaciones aquí", p1, 10);
+        
+        Cliente cl = new Cliente("andres", "andres123", "perez", "perez@gmail.com", new DTFecha(12,12, 2001), "123");
+    	cl.agregarCompra(o);
+    	
+    	assertNotNull(o.getEstado());
+    }
+    
+    @Test
+    public void testDTOrden() {
+        OrdenDeCompra o = new OrdenDeCompra(1);
+        
+        Proveedor p1 = new Proveedor("nombre", "nick3", "apellido", "correo", new DTFecha(12, 12, 2001), "comp", "link", "123");
+        Producto producto = new Producto("Producto1", "Descripción del producto", 30, 123, "Especificaciones aquí", p1, 10);
+        
+        DTOrdenDeCompra ordendt = o.crearDT();
+        
+        
+        assertEquals(ordendt.getNumero(), o.getNumero());
+        assertEquals(ordendt.getEstado(), o.getEstado());
+    }
+
+    
+    @Test
+    public void testCambiarEstado() {
+        
+        
+        Proveedor p1 = new Proveedor("nombre", "nick3", "apellido", "correo", new DTFecha(12, 12, 2001), "comp", "link", "123");
+        Producto producto = new Producto("Producto1", "Descripción del producto", 30, 123, "Especificaciones aquí", p1, 10);
+        
+        
+        Map<Integer, Item> items = new HashMap<Integer, Item>();
+        Item it = new Item(5, producto);
+        items.put(producto.getNumRef(), it);
+        
+        OrdenDeCompra o = new OrdenDeCompra(items, 150);
+        
+        assertEquals(o.getEstado(), "En Preparación");
+        
+        o.setEstado("otro estado");
+        
+        assertEquals(o.getEstado(), "otro estado");
+    }
+    
+    @Test
+    public void testDTItem() {
+    	Proveedor p1 = new Proveedor("nombre", "nick3", "apellido", "correo", new DTFecha(12, 12, 2001), "comp", "link", "123");
+        Producto producto = new Producto("Producto1", "Descripción del producto", 30, 123, "Especificaciones aquí", p1, 10);
+        
+        
+        Map<Integer, Item> items = new HashMap<Integer, Item>();
+        Item it = new Item(5, producto);
+        
+        DTItem dtit = it.crearDT();
+        
+        assertEquals(it.getCant(), dtit.getCant());
+        assertEquals(it.getProducto(), dtit.getProducto());
+    }
+	
+    
+    
 }
 
     
