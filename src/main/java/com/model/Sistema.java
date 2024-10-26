@@ -1,6 +1,7 @@
 package com.model;
 
 import java.awt.Image;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -20,6 +21,7 @@ import com.exceptions.OrdenDeCompraException;
 import com.exceptions.ProductoException;
 import com.exceptions.UsuarioException;
 import com.exceptions.UsuarioRepetidoException;
+import com.exceptions.ReclamoException;
 
 public class Sistema implements ISistema {
     private static Sistema instance = null;
@@ -670,6 +672,18 @@ public class Sistema implements ISistema {
 	 		}
 	 		
 	 		System.out.print("no se pudo cambiar el estado");
+	 	}
+	 	
+	 	// Caso de uso: alta reclamo
+	 	
+	 	public void agregarReclamo(String texto, LocalDateTime fecha, Producto p, Proveedor prov, Cliente autor) throws ReclamoException {
+	 		
+	 		
+	 		Reclamo r = new Reclamo(texto, fecha, p, prov, autor);
+	 		
+	 		
+	 		
+	 		this.getProducto(p.getNumRef()).agregarReclamo(r);
 	 	}
 	 
 }

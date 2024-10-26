@@ -1,5 +1,6 @@
 package com.model;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +11,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import com.exceptions.CategoriaException;
 import com.exceptions.OrdenDeCompraException;
 import com.exceptions.ProductoException;
+import com.exceptions.ReclamoException;
 import com.exceptions.UsuarioException;
 import com.exceptions.UsuarioRepetidoException;
 
@@ -120,5 +122,7 @@ public interface ISistema {
 	  public OrdenDeCompra getOrden(int numero);
 	  
 	  public void cambiarEstadoOrden(String estado, int numero, String cliente);
+	  
+	  public void agregarReclamo(String texto, LocalDateTime fecha, Producto p, Proveedor prov, Cliente autor) throws ReclamoException;
 
 }

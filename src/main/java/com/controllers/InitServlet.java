@@ -4,6 +4,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,8 @@ import com.model.ISistema;
 import com.model.Item;
 import com.model.OrdenDeCompra;
 import com.model.Producto;
+import com.model.Proveedor;
+import com.model.Reclamo;
 
 @WebServlet(urlPatterns = {"/initServlet"}, loadOnStartup = 1)
 public class InitServlet extends HttpServlet {
@@ -250,7 +253,15 @@ public class InitServlet extends HttpServlet {
             	 System.out.print(producto.getNombre());
              }
              
+             Producto prod = sistema.getProducto(1);
+             sistema.agregarReclamo("Mal producto", LocalDateTime.now(), prod, (Proveedor) sistema.getUsuario("Perez"), (Cliente) sistema.getUsuario("Juan123"));
              
+             sistema.agregarReclamo("Muy malooooo", LocalDateTime.now(), prod, (Proveedor) sistema.getUsuario("Perez"), (Cliente) sistema.getUsuario("Juan123"));
+             
+             System.out.println();
+             for(Reclamo r : sistema.getProducto(1).getReclamos()) {
+            	 System.out.print(r.getTexto());
+             }
 
          } catch (Exception exeption) {
              exeption.printStackTrace();
