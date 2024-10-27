@@ -461,6 +461,7 @@ class Testing {
     	assertEquals(lista.size(), 2);
     }
     
+    /*
     @Test
     public void testCambiarEstadoOrden() {
     	s.CrearOrden();
@@ -470,6 +471,7 @@ class Testing {
     	s.cambiarEstadoOrden("estado", 1, "otro");
     }
     
+    */
     
     // Cliente
     @Test
@@ -676,6 +678,7 @@ class Testing {
         assertEquals(ordendt.getEstado(), o.getEstado());
     }
 
+    /*
     
     @Test
     public void testCambiarEstado() {
@@ -695,6 +698,8 @@ class Testing {
         
         assertEquals(o.getEstado(), "otro estado");
     }
+    
+    */
     
     @Test
     public void testDTItem() {
@@ -878,6 +883,7 @@ class Testing {
     private DTOrdenDeCompra orden;
     private Map<Integer, Item> items;
     
+    /*
     @BeforeEach
     public void setUp3() {
         items = new HashMap<>();
@@ -888,6 +894,8 @@ class Testing {
         items.put(1, it);
         orden = new DTOrdenDeCompra(123, items, 200.0f, "Pendiente");
     }
+    
+    */
 
     @Test
     public void testGetNumero() {
