@@ -121,7 +121,7 @@ public interface ISistema {
 	  
 	  public OrdenDeCompra getOrden(int numero);
 	  
-	  public void cambiarEstadoOrden(String estado, int numero, String cliente);
+	  public void cambiarEstadoOrden(String estado, int numero, String cliente, String com);
 	  
 	  public void agregarReclamo(String texto, LocalDateTime fecha, Producto p, Proveedor prov, Cliente autor) throws ReclamoException;
 

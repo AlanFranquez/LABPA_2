@@ -14,14 +14,12 @@ public class DTOrdenDeCompra {
     private List<DTEstado> estadoOrden;
     
     
-    public DTOrdenDeCompra(int numero, Map <Integer, Item>items, float precioTotal, String estado) {
+    public DTOrdenDeCompra(int numero, Map <Integer, Item>items, float precioTotal, List<DTEstado> estados) {
     	fecha = LocalDateTime.now();
         this.numero = numero;
         this.precioTotal = precioTotal;
         this.items = items;
-        this.estadoOrden = new ArrayList<>();
-        DTEstado ordentmp = new DTEstado();
-        estadoOrden.add(ordentmp);
+        this.estadoOrden = estados;
     }
     
     

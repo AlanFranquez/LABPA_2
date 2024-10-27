@@ -8,17 +8,12 @@ public class DTEstado {
     private LocalDateTime fecha;
     private String comentario;
     
-    // Constructor
-    public DTEstado(String nombre) {
-        this.nombre = nombre;
-        this.fecha = LocalDateTime.now();
-        this.comentario = "LALALA1";
-    }
+
     
     public DTEstado() {
-        this.nombre = "En preparacion";
+        this.nombre = "En Preparacion";
         this.fecha = LocalDateTime.now();
-        this.comentario = "Lalala2";
+        this.comentario = "PREPARANDO PAQUETE";
     }
 
     // Getters

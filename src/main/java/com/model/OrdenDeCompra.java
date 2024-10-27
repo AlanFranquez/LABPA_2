@@ -40,16 +40,18 @@ public class OrdenDeCompra {
     
     // Getters y Setters:
     
-    public String getEstado() {
-    	return this.estadoOrden.getLast().getNombre();
+    public DTEstado getEstado() {
+    	return this.estadoOrden.getLast();
     }
     
     public List<DTEstado> getHistorialEstado() {
     	return this.estadoOrden;
     }
     
-    public void setEstado(String estado) {
-    	DTEstado ordentmp = new DTEstado(estado);
+    public void setEstado(String estado, String com) {
+    	DTEstado ordentmp = new DTEstado();
+    	ordentmp.setNombre(estado);
+    	ordentmp.setComentario(com);
     	this.estadoOrden.add(ordentmp);
     }
     public int getNumero() {
@@ -101,7 +103,7 @@ public class OrdenDeCompra {
     }
     
     public DTOrdenDeCompra crearDT() {
-    	return new DTOrdenDeCompra(numero, getItems(), getPrecioTotal(), this.getEstado());
+    	return new DTOrdenDeCompra(numero, getItems(), getPrecioTotal(), this.getHistorialEstado());
     }
     
     
