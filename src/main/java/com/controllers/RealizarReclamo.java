@@ -16,6 +16,7 @@ import com.model.Factory;
 import com.model.ISistema;
 import com.model.Producto;
 import com.model.Proveedor;
+import com.model.Reclamo;
 import com.model.Usuario;
 
 /**
@@ -68,8 +69,9 @@ public class RealizarReclamo extends HttpServlet {
 		Producto p1 = sist.getProducto(numeroRef);
 		Proveedor proveedor = p1.getProveedor();
 		Usuario usr = (Usuario) session.getAttribute("usuarioLogueado");
-		if(usr == null || usr.getTipo() != "cliente") {
+		if(usr == null || !usr.getTipo().equals("cliente")) {
 			response.sendRedirect("home");
+			return;
 		}
 		
 		
@@ -95,6 +97,7 @@ public class RealizarReclamo extends HttpServlet {
 		Cliente cl = (Cliente) session.getAttribute("usuarioLogueado");
 		if(cl == null) {
 			response.sendRedirect("home");
+			return;
 		}
 		
 		String numRef = request.getParameter("prodReclamo");
@@ -124,8 +127,10 @@ public class RealizarReclamo extends HttpServlet {
 		}
 		
 		// Recordar cambiarlo"
-		response.sendRedirect("home");
-		
+		request.getRequestDispatcher("/WEB-INF/ReclamoExitoso.jsp").forward(request, response);;
+		for(Reclamo r: p1.getReclamos()) {
+			System.out.println(r.getTexto());
+		}
 		
 		
 	}
