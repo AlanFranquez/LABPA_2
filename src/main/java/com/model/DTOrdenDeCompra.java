@@ -11,7 +11,7 @@ public class DTOrdenDeCompra {
     private float precioTotal;
     private LocalDateTime fecha;
     private Map<Integer, Item> items;
-    String estado;
+    private List<DTEstado> estadoOrden;
     
     
     public DTOrdenDeCompra(int numero, Map <Integer, Item>items, float precioTotal, String estado) {
@@ -19,7 +19,9 @@ public class DTOrdenDeCompra {
         this.numero = numero;
         this.precioTotal = precioTotal;
         this.items = items;
-        this.estado = estado;
+        this.estadoOrden = new ArrayList<>();
+        DTEstado ordentmp = new DTEstado();
+        estadoOrden.add(ordentmp);
     }
     
     
@@ -39,7 +41,7 @@ public class DTOrdenDeCompra {
     // Getters y Setters:
     
     public String getEstado() {
-    	return this.estado;
+    	return this.estadoOrden.getLast().getNombre();
     }
     
     public int getNumero() {
@@ -59,6 +61,10 @@ public class DTOrdenDeCompra {
     public String getFechaString() {
     	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     	return fecha.format(formatter).toString();
+    }
+    
+    public List<DTEstado> getHistorialEstado() {
+    	return this.estadoOrden;
     }
 
 

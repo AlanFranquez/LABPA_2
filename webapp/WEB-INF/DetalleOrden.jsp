@@ -2,7 +2,9 @@
 <%@page import="com.model.DTOrdenDeCompra"%>
 <%@page import="com.model.DTFecha"%>
 <%@page import="com.model.DTCliente" %>
+<%@page import="com.model.DTEstado" %>
 <%@page import="java.util.Map"%>
+<%@page import="java.util.List"%>
 <%@page import="com.model.Item"%>
 
 <%
@@ -17,6 +19,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalles de la Orden</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="media/styles/Estado.css" rel="stylesheet">
 </head>
 <body>
 
@@ -75,13 +78,37 @@
 <div class="container mt-5">
     <h1>Detalles de la Orden N° <%= orden.getNumero() %></h1>
     
-    <% if(orden.getEstado() == "enviado" || orden.getEstado() == "Enviado") {%>
+    <section>
+    <h2 class="text-center mt-5">Información de seguimiento de Envío</h2>
+    <p class="text-center">Paquete: <b><%= orden.getNumero() %></b></p>
+
+    <div class="timeline">
+        <%
+    List<DTEstado> estados = orden.getHistorialEstado();
+    for (DTEstado estado : estados) { 
+%>
+        <div class="timeline-item">
+            <div class="timeline-icon">
+                <span class="dot" style="background-color: <%= "Entregado".equals(estado.getNombre()) ? "green" : "orange" %>;"></span>
+            </div>
+            <div class="timeline-content">
+                <h5><b><%= estado.getNombre() %></b> - <%= estado.getFechaDetalle() %></h5>
+                <p>Comentarios: <%= estado.getCom() %></p>
+            </div>
+        </div>
+<% 
+    } 
+%>
+<% if(orden.getEstado() == "enviado" || orden.getEstado() == "Enviado") {%>
     	<form action="perfilOrden" method="post">
     	<input type="hidden" name="numeroOrden" value="<%= orden.getNumero() %>">
     	<input type="hidden" name="accion" value="confirmar">
     	<button type="submit" class="btn btn-success">Confirmar</button>
 </form>
     <%  } %>
+    </div>
+</section>
+
 
     <div class="card mt-3">
         <div class="card-body">

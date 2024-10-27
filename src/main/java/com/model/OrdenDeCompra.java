@@ -1,8 +1,10 @@
 package com.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -11,13 +13,15 @@ public class OrdenDeCompra {
     private float precioTotal;
     private LocalDateTime fecha;
     private Map<Integer, Item> items;
-    private String estadoOrden;
+    private List<DTEstado> estadoOrden;
 
     public OrdenDeCompra(int numero) {
     	fecha = LocalDateTime.now();
         this.numero = numero;
         this.precioTotal = 0;
-        this.estadoOrden = "En preparación";
+        this.estadoOrden = new ArrayList<>();
+        DTEstado ordentmp = new DTEstado();
+        estadoOrden.add(ordentmp);
         this.items = new HashMap<>();
     }
     
@@ -27,7 +31,9 @@ public class OrdenDeCompra {
     	this.numero = random.nextInt(1000);
     	this.precioTotal = precioTotal;
     	this.fecha = LocalDateTime.now();
-    	this.estadoOrden = "En preparación";
+    	this.estadoOrden = new ArrayList<>();
+        DTEstado ordentmp = new DTEstado();
+        estadoOrden.add(ordentmp);
     }
     
     
@@ -35,24 +41,33 @@ public class OrdenDeCompra {
     // Getters y Setters:
     
     public String getEstado() {
+    	return this.estadoOrden.getLast().getNombre();
+    }
+    
+    public List<DTEstado> getHistorialEstado() {
     	return this.estadoOrden;
     }
     
     public void setEstado(String estado) {
-    	this.estadoOrden = estado;
+    	DTEstado ordentmp = new DTEstado(estado);
+    	this.estadoOrden.add(ordentmp);
     }
     public int getNumero() {
         return numero;
     }
+    
     public void setNumero(int numero) {
         this.numero = numero;
     }
+    
     public LocalDateTime getFecha() {
         return fecha;
     }
+    
     public float getPrecioTotal() {
         return precioTotal;
     }
+    
     public Map<Integer, Item> getItems() {
         return items;
     }
