@@ -28,9 +28,9 @@ if (usr.getTipo() == "cliente") {
 
 }
 Boolean comproProducto = false;
-if(cl != null) {
-	
-comproProducto = cl.comproProducto(id);
+if (cl != null) {
+
+	comproProducto = cl.comproProducto(id);
 }
 %>
 
@@ -96,9 +96,9 @@ comproProducto = cl.comproProducto(id);
 					%>
 
 
-					<li class="nav-item"><a class="nav-link" href="Carrito">
-							<svg xmlns="http://www.w3.org/2000/svg" width="30px"
-								height="30px" viewBox="0 0 24 24">
+					<li class="nav-item"><a class="nav-link" href="Carrito"> <svg
+								xmlns="http://www.w3.org/2000/svg" width="30px" height="30px"
+								viewBox="0 0 24 24">
                             <path fill="white"
 									d="M17 18c-1.11 0-2 .89-2 2a2 2 0 0 0 2 2a2 2 0 0 0 2-2a2 2 0 0 0-2-2M1 2v2h2l3.6 7.59l-1.36 2.45c-.15.28-.24.61-.24.96a2 2 0 0 0 2 2h12v-2H7.42a.25.25 0 0 1-.25-.25q0-.075.03-.12L8.1 13h7.45c.75 0 1.41-.42 1.75-1.03l3.58-6.47c.07-.16.12-.33.12-.5a1 1 0 0 0-1-1H5.21l-.94-2M7 18c-1.11 0-2 .89-2 2a2 2 0 0 0 2 2a2 2 0 0 0 2-2a2 2 0 0 0-2-2" />
                         </svg>
@@ -142,10 +142,11 @@ comproProducto = cl.comproProducto(id);
 						// Si no hay imágenes, mostramos una por defecto
 						%>
 						<div class="carousel-item active">
-							<img src="https://thumbs.dreamstime.com/b/image-not-available-icon-set-default-missing-photo-stock-vector-symbol-black-filled-outlined-style-no-found-white-332183016.jpg"
-                             class="img-fluid" alt="Producto" 
-                             style="width: 100%; height: 200px; object-fit: cover;" />
-                        
+							<img
+								src="https://thumbs.dreamstime.com/b/image-not-available-icon-set-default-missing-photo-stock-vector-symbol-black-filled-outlined-style-no-found-white-332183016.jpg"
+								class="img-fluid" alt="Producto"
+								style="width: 100%; height: 200px; object-fit: cover;" />
+
 						</div>
 						<%
 						}
@@ -173,11 +174,10 @@ comproProducto = cl.comproProducto(id);
 					<strong>Número de Referencia:</strong>
 					<%=prod != null ? prod.getNumRef() : "N/A"%></p>
 				<p>
-					<strong>Categorías:</strong> <%=prod != null ? prod.getCategorias() : "N/A"%>
+					<strong>Categorías:</strong>
+					<%=prod != null ? prod.getCategorias() : "N/A"%>
 				</p>
-				<div>
-					
-				</div>
+				<div></div>
 				<p>
 					<strong>Especificaciones:</strong>
 					<%=prod != null ? prod.getEspecs() : "N/A"%></p>
@@ -206,10 +206,27 @@ comproProducto = cl.comproProducto(id);
 						<%
 						}
 						%>
+
+
 					</div>
 				</form>
+
+				
+
 			</div>
 		</div>
+		
+		<%
+				if (usr.getTipo() == "cliente" && comproProducto) {
+				%>
+				<div class="mt-5">
+					<a
+						href="RealizarReclamo?numRef=<%=prod != null ? prod.getNumRef() : ""%>"
+						class="btn btn-warning">Realizar Reclamo</a>
+				</div>
+				<%
+				}
+				%>
 	</main>
 
 	<br>
@@ -239,7 +256,7 @@ comproProducto = cl.comproProducto(id);
 					<div class="card shadow-sm" style="border: none;">
 						<div class="card-body">
 							<div class="d-flex align-items-start">
-							
+
 								<img src="media/<%=c.getAutor().crearDt().getImagenes()%>"
 									alt="Autor" class="mr-3"
 									style="width: 80px; height: 80px; object-fit: cover; border-radius: 50%;">
@@ -248,7 +265,9 @@ comproProducto = cl.comproProducto(id);
 									<p style="font-size: 1em;"><%=c.getTexto()%></p>
 									<small class="text-muted"><%=c.getFecha().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))%></small>
 									<br>
-									<% if(comproProducto) { %>
+									<%
+									if (comproProducto) {
+									%>
 									<div class="accordion" id="accordion<%=comentarioId%>">
 										<div class="accordion-item">
 											<h2 class="accordion-header" id="heading<%=comentarioId%>">
@@ -277,8 +296,10 @@ comproProducto = cl.comproProducto(id);
 											</div>
 										</div>
 									</div>
-									
-									<% } %>
+
+									<%
+									}
+									%>
 									<div class="mt-3">
 										<h6>Respuestas:</h6>
 										<%
