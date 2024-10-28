@@ -1,5 +1,7 @@
 /build/
 /bin/
+/apache-tomcat**
+/Servers
 
 # Ignorar archivos y carpetas generados por el sistema operativo
 .DS_Store
