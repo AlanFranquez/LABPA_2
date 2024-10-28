@@ -1,0 +1,52 @@
+# Archivos y carpetas generados por el sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivos de configuración de IDEs
+/.idea/
+/*.iml
+/.vscode/
+/*.class
+
+# Archivos de compilación
+/out/
+/bin/
+/target/
+
+# Archivos y carpetas generados por herramientas de compilación
+/.gradle/
+/.gradle/
+/build/
+/dist/
+
+# Archivos de configuración específicos de IntelliJ
+/.idea/
+/*.iws
+/*.ipr
+/*.iml
+
+# Archivos de configuración específicos de Eclipse
+/.settings/
+/.project
+.classpath
+
+# Archivos de configuración específicos de NetBeans
+/nbproject/private/
+/build/
+/nbbuild/
+/dist/
+/nbdist/
+/.nbm/
+
+# Archivos temporales
+*.log
+*.tmp
+
+# Archivos de Java
+*.class
+*.jar
+*.war
+*.ear
+
+# Configuraciones de entorno
+.env
