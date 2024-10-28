@@ -1,2 +1,55 @@
 /build/
 /bin/
+
+# Ignorar archivos y carpetas generados por el sistema operativo
+.DS_Store
+Thumbs.db
+
+# Ignorar archivos y carpetas de configuración de Eclipse
+/.metadata/
+/*.classpath
+/*.project
+/.recommenders/
+/.settings/
+
+# Ignorar configuraciones específicas de IntelliJ IDEA
+/.idea/
+/*.iml
+
+# Ignorar configuraciones de VSCode
+/.vscode/
+
+# Ignorar archivos de compilación y salida de Maven o Gradle en cualquier subcarpeta
+**/target/
+**/build/
+
+# Ignorar archivos generados por Maven
+**/pom.xml.tag
+**/pom.xml.releaseBackup
+**/pom.xml.versionsBackup
+**/pom.xml.next
+**/release.properties
+
+# Ignorar archivos de salida y temporales
+*.log
+*.tmp
+
+# Ignorar archivos de Java compilados
+**/*.class
+**/*.jar
+**/*.war
+**/*.ear
+
+# Ignorar carpetas específicas de NetBeans
+/nbproject/private/
+/build/
+/nbbuild/
+/dist/
+/nbdist/
+/.nbm/
+
+# Ignorar archivos de configuración de entornos
+.env
+
+# Ignorar archivos relacionados con herramientas de control de versiones locales
+/.git/
