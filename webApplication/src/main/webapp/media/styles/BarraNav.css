@@ -1,0 +1,46 @@
+/* Reset de estilos y configuración general */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Barra de navegación personalizada */
+.navbar {
+    z-index: 1000;
+}
+
+.nav-titulo {
+    font-weight: normal;
+    font-size: 30px!important;
+    text-decoration: none!important;
+    color: white!important;
+}
+
+
+.nav-link svg {
+    fill: white;
+    transition: fill 0.3s;
+}
+
+.nav-link svg:hover {
+    fill: #ddd;
+}
+
+.barraBusqueda {
+    border-radius: 10px;
+    height: 45px;
+}
+
+.botonBuscar {
+    border: none;
+    padding: 10px 20px;
+    background-color: gray;
+    color: white;
+}
+
+.botonBuscar:hover {
+    color: white;
+    background-color: black;
+}

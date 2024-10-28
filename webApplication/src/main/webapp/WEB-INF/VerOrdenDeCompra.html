@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles de la Orden</title>
+    <link href="VerOrdenDeCompra.css" rel="stylesheet">
+</head>
+<body>
+
+    <div id="barra-nav"></div>
+    
+
+    <main>
+        <section class="order-details">
+            <h2>Detalles de la Orden</h2>
+            <div class="order-info">
+                <div>
+                    <p><strong>Número de Orden:</strong> #12345678</p>
+                    <p><strong>Fecha de Compra:</strong> 28 de Septiembre, 2024</p>
+                </div>
+                <div>
+                    <p><strong>Estado:</strong> Enviando</p>
+                </div>
+            </div>
+
+            <div class="product-list">
+                <h3>Productos Comprados:</h3>
+
+                <div class="product-item">
+                    <img src="https://via.placeholder.com/100" alt="Producto 1">
+                    <div>
+                        <h4>Nombre del Producto 1</h4>
+                        <p><strong>Cantidad:</strong> 2</p>
+                        <p><strong>Precio Unitario:</strong> $50.00</p>
+                    </div>
+                    <p><strong>Total:</strong> $100.00</p>
+                </div>
+
+                <div class="product-item">
+                    <img src="https://via.placeholder.com/100" alt="Producto 2">
+                    <div>
+                        <h4>Nombre del Producto 2</h4>
+                        <p><strong>Cantidad:</strong> 1</p>
+                        <p><strong>Precio Unitario:</strong> $200.00</p>
+                    </div>
+                    <p><strong>Total:</strong> $200.00</p>
+                </div>
+            </div>
+
+            <div class="order-summary">
+                <h3>Resumen del Pedido</h3>
+                <p><strong>Subtotal:</strong> $300.00</p>
+                <p><strong>Envío:</strong> $15.00</p>
+                <p><strong>Total:</strong> $315.00</p>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Cargar el contenido de BarraNav.html usando fetch
+        fetch('BarraNav.html')
+            .then(response => response.text())  // Convertir la respuesta a texto
+            .then(data => {
+                // Insertar el contenido en el div con el id 'barra-nav'
+                document.getElementById('barra-nav').innerHTML = data;
+            })
+            .catch(error => console.error('Error al cargar BarraNav:', error));
+    </script>
+
+</body>
+</html>
