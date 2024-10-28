@@ -9,10 +9,10 @@ Thumbs.db
 
 # Ignorar archivos y carpetas de configuración de Eclipse
 /.metadata/
-/*.classpath
-/*.project
+# /*.classpath
+# /*.project
 /.recommenders/
-/.settings/
+# /.settings/
 
 # Ignorar configuraciones específicas de IntelliJ IDEA
 /.idea/
