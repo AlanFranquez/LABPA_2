@@ -1,6 +1,7 @@
 package com.market.svcentral;
 
 import java.awt.Image;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -18,6 +19,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import com.market.svcentral.exceptions.CategoriaException;
 import com.market.svcentral.exceptions.OrdenDeCompraException;
 import com.market.svcentral.exceptions.ProductoException;
+import com.market.svcentral.exceptions.ReclamoException;
 import com.market.svcentral.exceptions.UsuarioException;
 import com.market.svcentral.exceptions.UsuarioRepetidoException;
 
@@ -671,5 +673,17 @@ public class Sistema implements ISistema {
 	 		
 	 		System.out.print("no se pudo cambiar el estado");
 	 	}
+	 	
+	 // Caso de uso: alta reclamo
+	 	
+	 	 	public void agregarReclamo(String texto, LocalDateTime fecha, Producto p, Proveedor prov, Cliente autor) throws ReclamoException {
+	 	 		
+	 	 		
+	 	 		Reclamo r = new Reclamo(texto, fecha, p, prov, autor);
+	 	 		
+	 	 		
+	 	 		
+	 	 		this.getProducto(p.getNumRef()).agregarReclamo(r);
+	 	 	}
 	 
 }

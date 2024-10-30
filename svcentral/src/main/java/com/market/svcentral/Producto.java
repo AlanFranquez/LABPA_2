@@ -1,5 +1,4 @@
 package com.market.svcentral;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +16,7 @@ public class Producto {
 	private String especificaciones;
 	private List<String> imagenes;
 	private int cantidadCompras = 0; 
+	List <Reclamo> reclamos;
 	
 	// Constructor:
 	public Producto(String nombre, String descripcion, float precio, Integer numRef, String especificaciones, Proveedor prov, int stock) {
@@ -30,6 +30,11 @@ public class Producto {
 		this.proveedor = prov;
 		this.comentarios = new ArrayList<>();
 		this.imagenes = new ArrayList<>();
+		this.reclamos = new ArrayList<Reclamo>();
+	}
+	
+	public List<Reclamo> getReclamos() {
+		return this.reclamos;
 	}
 	
 	public int getCantidadComprada() {
@@ -46,6 +51,10 @@ public class Producto {
 	
 	public List<String> getImagenes() {
 		return this.imagenes;
+	}
+	
+	public void agregarReclamo(Reclamo r) {
+		this.reclamos.add(r);
 	}
 	
 	public void agregarComentario(Comentario comentario) {
@@ -177,6 +186,6 @@ public class Producto {
             }
 		}
 		catStr = catStr + "</html>";
-		return new DtProducto(this.getNombre(), this.getDescripcion(), this.getPrecio(), this.getNumRef(), this.getEspecificaciones(), this.getProveedor(), catStr, this.getImagenes(), this.getStock(), this.getComentarios(), this.getCantidadComprada());
+		return new DtProducto(this.getNombre(), this.getDescripcion(), this.getPrecio(), this.getNumRef(), this.getEspecificaciones(), this.getProveedor(), catStr, this.getImagenes(), this.getStock(), this.getComentarios(), this.getCantidadComprada(), this.getReclamos());
 	}
 }

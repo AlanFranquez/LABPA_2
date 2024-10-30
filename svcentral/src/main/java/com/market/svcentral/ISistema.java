@@ -1,5 +1,6 @@
 package com.market.svcentral;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +11,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import com.market.svcentral.exceptions.CategoriaException;
 import com.market.svcentral.exceptions.OrdenDeCompraException;
 import com.market.svcentral.exceptions.ProductoException;
+import com.market.svcentral.exceptions.ReclamoException;
 import com.market.svcentral.exceptions.UsuarioException;
 import com.market.svcentral.exceptions.UsuarioRepetidoException;
 
@@ -121,4 +123,5 @@ public interface ISistema {
 	  
 	  public void cambiarEstadoOrden(String estado, int numero, String cliente);
 
+	  public void agregarReclamo(String texto, LocalDateTime fecha, Producto p, Proveedor prov, Cliente autor) throws ReclamoException;
 }
