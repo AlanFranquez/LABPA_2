@@ -32,6 +32,7 @@ public class OrdenDeCompra {
         this.fecha = LocalDateTime.now();
         this.estados = new ArrayList<>();
         this.estados.add(new DTEstado("En preparación", "PREPARANDO PAQUETE"));
+        this.estados.add(new DTEstado("Enviado", "LISTO PARA RETIRAR"));
     }
 
     // Métodos para gestionar los estados
