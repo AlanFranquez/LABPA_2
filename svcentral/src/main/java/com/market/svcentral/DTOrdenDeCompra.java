@@ -7,71 +7,83 @@ import java.util.List;
 import java.util.Map;
 
 public class DTOrdenDeCompra {
-	private int numero;
+    private int numero;
     private float precioTotal;
     private LocalDateTime fecha;
     private Map<Integer, Item> items;
-    String estado;
-    
-    
-    public DTOrdenDeCompra(int numero, Map <Integer, Item>items, float precioTotal, String estado) {
-    	fecha = LocalDateTime.now();
+    private List<DTEstado> estados;
+
+    public DTOrdenDeCompra(int numero, Map<Integer, Item> items, float precioTotal, String estado) {
+        this.fecha = LocalDateTime.now();
         this.numero = numero;
         this.precioTotal = precioTotal;
         this.items = items;
-        this.estado = estado;
+        this.estados = new ArrayList<>(); 
+        DTEstado tmp = new DTEstado("En Preparacion", "PREPARANDO PAQUETE");
+        this.estados.add(tmp); 
     }
     
-    
+    public DTOrdenDeCompra(int numero, Map<Integer, Item> items, float precioTotal, List<DTEstado> estadosLista) {
+        this.fecha = LocalDateTime.now();
+        this.numero = numero;
+        this.precioTotal = precioTotal;
+        this.items = items;
+        this.estados = estadosLista;
+    }
+
     public List<DTItem> listarItems() {
-    	List <DTItem> listarItems = new ArrayList<>();
-    	
-    	
-    	for (Map.Entry<Integer, Item> entry : this.items.entrySet()) {
-    		Item item = entry.getValue();
-    		
-    		listarItems.add(item.crearDT());
-    	}
-    	
-    	return listarItems;
+        List<DTItem> listarItems = new ArrayList<>();
+
+        for (Map.Entry<Integer, Item> entry : this.items.entrySet()) {
+            Item item = entry.getValue();
+            listarItems.add(item.crearDT());
+        }
+
+        return listarItems;
     }
-    
-    // Getters y Setters:
-    
+
+    // Getters y Setters
+
     public String getEstado() {
-    	return this.estado;
+        return this.estados.getLast().getEstado();
     }
-    
+
+    public List<DTEstado> getHistorialEstado() {
+        return this.estados;
+    }
+
     public int getNumero() {
         return numero;
     }
-   
+
     public LocalDateTime getFecha() {
         return fecha;
     }
+
     public float getPrecioTotal() {
         return precioTotal;
     }
+
     public Map<Integer, Item> getItems() {
         return items;
     }
-    
+
     public String getFechaString() {
-    	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-    	return fecha.format(formatter).toString();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        return fecha.format(formatter);
     }
 
+    @Override
+    public String toString() {
+        String tab = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+        String itemsStr = "";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
-	@Override
-	public String toString() {
-		String tab = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-		String items = "";
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-		for (Item item : this.items.values()) {
-			items = items + tab + tab + item.getProducto().getNombre() + ": " + item.getCant() + "<br />"; 
-		}
-		return "<html>Orden número = " + numero + "<br />" + tab + "precioTotal = " + precioTotal + "<br />" + tab + "fecha = "
-				+ fecha.format(formatter).toString() + "<br />" + tab + "items:<br />" + items + "</html>";
-	}
-    
+        for (Item item : this.items.values()) {
+            itemsStr += tab + tab + item.getProducto().getNombre() + ": " + item.getCant() + "<br />";
+        }
+
+        return "<html>Orden número = " + numero + "<br />" + tab + "precioTotal = " + precioTotal + "<br />" + tab + "fecha = "
+                + fecha.format(formatter) + "<br />" + tab + "items:<br />" + itemsStr + "</html>";
+    }
 }

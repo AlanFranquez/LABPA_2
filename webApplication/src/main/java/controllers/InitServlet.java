@@ -238,7 +238,8 @@ public class InitServlet extends HttpServlet {
              Cliente cliente = (Cliente) sistema.getUsuario("Juan123");
              sistema.realizarCompra(orden, cliente.getNick());
              cliente.agregarCompra(orden);
-             sistema.cambiarEstadoOrden("Enviado", orden.getNumero(), cliente.getNick());
+             sistema.cambiarEstadoOrden("Enviado", "ENVIANDO PAQUETE", orden.getNumero(), cliente.getNick());
+         	 
 
              sistema.agregarImagenUsuario("Juan123", "/images/p1.jpg");
              sistema.agregarImagenUsuario("albert1341", "/images/p2.jpg");

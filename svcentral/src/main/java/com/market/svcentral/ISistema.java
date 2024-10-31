@@ -119,6 +119,6 @@ public interface ISistema {
 	  
 	  public OrdenDeCompra getOrden(int numero);
 	  
-	  public void cambiarEstadoOrden(String estado, int numero, String cliente);
+	  public void cambiarEstadoOrden(String estado, String com, int numero, String cliente);
 
 }
