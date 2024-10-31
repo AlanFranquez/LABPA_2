@@ -109,7 +109,6 @@ public class PerfilOrden extends HttpServlet {
             if ("confirmar".equals(accion)) {
                 DTOrdenDeCompra orden = cliente.mostrarCompras(numeroOrden);
                 if (orden != null) {
-                	sist.cambiarEstadoOrden("Enviado", "LISTO PARA RETIRAR", orden.getNumero(), cliente.getNick());
                 	sist.cambiarEstadoOrden("Entregado", "GRACIAS POR COMPRAR <3", orden.getNumero(), cliente.getNick());
                 } else {
                     response.sendError(HttpServletResponse.SC_NOT_FOUND, "Orden no encontrada.");
