@@ -18,7 +18,6 @@ import com.market.svcentral.Usuario;
 @WebServlet("/home")
 public class Home extends HttpServlet {
     private static final long serialVersionUID = 1L;
-
     private ISistema sist;
 
     public Home() {
@@ -36,15 +35,36 @@ public class Home extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
         String userAgent = request.getHeader("User-Agent");
         boolean isMobile = isMobileDevice(userAgent);
 
-        if (isMobile) {
-        	request.getRequestDispatcher("/WEB-INF/inicioMOBILE.jsp").forward(request, response);
+        // Manejo de productos
+        List<Producto> productos = sist.getAllProductos();
+        request.setAttribute("prods", productos);
+
+        // Comprobación de sesión
+        if (session == null || session.getAttribute("usuarioLogueado") == null) {
+            // Si no hay sesión, redirigir a la página de inicio no logueado
+            if (isMobile) {
+                request.getRequestDispatcher("/WEB-INF/inicioMOBILE.jsp").forward(request, response);
+            } else {
+                request.getRequestDispatcher("/WEB-INF/inicioNoLogueado.jsp").forward(request, response);
+            }
             return;
         }
 
-        handleSession(request, response);
+        // Si hay sesión, obtener usuario logueado
+        Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
+        request.setAttribute("usuario", usuarioLogueado);
+        request.setAttribute("estado", "logueado");
+
+        // Redirigir según el tipo de dispositivo
+        if (isMobile) {
+            request.getRequestDispatcher("/WEB-INF/inicioLogeadoMOBILE.jsp").forward(request, response);
+        } else {
+            request.getRequestDispatcher("/WEB-INF/inicio.jsp").forward(request, response);
+        }
     }
 
     private boolean isMobileDevice(String userAgent) {
@@ -56,26 +76,5 @@ public class Home extends HttpServlet {
             userAgent.contains("Windows Phone") || 
             userAgent.contains("BlackBerry")
         );
-    }
-
-    private void handleSession(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession(false);
-        List<Producto> productos = sist.getAllProductos();
-        request.setAttribute("prods", productos);
-
-        if (session == null || session.getAttribute("usuarioLogueado") == null) {
-            request.getRequestDispatcher("/WEB-INF/inicioNoLogueado.jsp").forward(request, response);
-            return;
-        }
-
-        Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
-        if (usuarioLogueado != null) {
-            request.setAttribute("usuario", usuarioLogueado);
-            request.setAttribute("estado", "logueado");
-            request.getRequestDispatcher("/WEB-INF/inicio.jsp").forward(request, response);
-        } else {
-            response.sendRedirect("formlogin");
-            request.setAttribute("estado", "noLogueado");
-        }
     }
 }

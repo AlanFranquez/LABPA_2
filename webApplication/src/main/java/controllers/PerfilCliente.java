@@ -48,7 +48,7 @@ public class PerfilCliente extends HttpServlet {
         if (usuarioLogueado.getNick().equals(parametro)) {
         	request.setAttribute("usuarioLogueado", usuarioLogueado);
             request.setAttribute("usuario", dtcli);
-            request.getRequestDispatcher("/WEB-INF/InfoPerfilCliente.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/InfoPerfilCilente.jsp").forward(request, response);
             return;
         }
         
