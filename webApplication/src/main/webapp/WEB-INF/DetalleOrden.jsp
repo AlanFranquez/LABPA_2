@@ -1,13 +1,15 @@
+<%@page import="com.market.svcentral.DTEstado"%>
+<%@page import="java.util.List"%>
 <%@page import="com.market.svcentral.DTItem"%>
 <%@page import="com.market.svcentral.DTOrdenDeCompra"%>
-<%@page import="com.market.svcentral.DTFecha"%>
-<%@page import="com.market.svcentral.DTCliente" %>
+<%@page import="com.market.svcentral.DTCliente"%>
 <%@page import="java.util.Map"%>
 <%@page import="com.market.svcentral.Item"%>
 
 <%
     DTOrdenDeCompra orden = (DTOrdenDeCompra) request.getAttribute("ordencompra");
     Map<Integer, Item> items = orden.getItems();
+    List<DTEstado> estados = orden.getHistorialEstado();
 %>
 
 <!DOCTYPE html>
@@ -23,14 +25,12 @@
 <%
     DTCliente user = (DTCliente) request.getAttribute("usuario");
 %>
-   <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2C2C2C;">
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2C2C2C;">
     <div class="container">
         <a href="home" class="navbar-brand">ITSCODIGO</a>
-        
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav mx-auto align-items-center">
                 <li class="nav-item">
@@ -40,19 +40,15 @@
                     </form>
                 </li>
             </ul>
-
             <ul class="navbar-nav align-items-center">
                 <li class="nav-item">
-                    <% if (user != null && user.getTipo() == "proveedor") { %>
+                    <% if (user != null && user.getTipo().equals("proveedor")) { %>
                         <a class="nav-link" href="perfilProveedor?nickname=<%= user.getNick() %>">Perfil</a>
-                    <% } else if(user != null && user.getTipo() == "cliente"){ %>
+                    <% } else if (user != null && user.getTipo().equals("cliente")) { %>
                         <a class="nav-link" href="perfilCliente?nickname=<%= user.getNick() %>">Perfil</a>
                     <% } %>
                 </li>
-                
-                <%
-                if (user != null && user.getTipo() == "cliente") {
-                %>
+                <% if (user != null && user.getTipo().equals("cliente")) { %>
                 <li class="nav-item">
                     <a class="nav-link" href="Carrito.html">
                         <svg xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" viewBox="0 0 24 24">
@@ -61,10 +57,9 @@
                     </a>
                 </li>
                 <% } %>
-
                 <li class="nav-item">
                     <button class="btn btn-danger">
-                        <a class="nav-link" href="logout">Cerrar Sesi�n</a>
+                        <a class="nav-link" href="logout">Cerrar Sesión</a>
                     </button>
                 </li>
             </ul>
@@ -73,40 +68,91 @@
 </nav>
 
 <div class="container mt-5">
-    <h1>Detalles de la Orden N� <%= orden.getNumero() %></h1>
+    <h1>Detalles de la Orden Nº <%= orden.getNumero() %></h1>
     
-    <% if(orden.getEstado() == "enviado" || orden.getEstado() == "Enviado") {%>
-    	<form action="perfilOrden" method="post">
-    	<input type="hidden" name="numeroOrden" value="<%= orden.getNumero() %>">
-    	<input type="hidden" name="accion" value="confirmar">
-    	<button type="submit" class="btn btn-success">Confirmar</button>
-</form>
-    <%  } %>
+    <div style="
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    text-align: center;">
+    
+    <h3>Seguimiento de la Orden</h3>
+    <ul style="list-style-type: none; margin: 0; padding: 0; position: relative; text-align: left;">
+        <% for (DTEstado estado : estados) { %>
+            <li style="padding: 10px 0; position: relative; padding-left: 30px;">
+                <span style="
+                    font-weight: bold; 
+                    color: <%= estado.getEstado().equalsIgnoreCase("Entregado") ? "#00b200" : "#FFA500" %>;">
+                    Estado:
+                </span> 
+                <%= estado.getEstado() %> - <%= estado.getFecha() %> <br>
+                <span style="color: #666; font-weight: bold; ">Comentarios:</span> <%= estado.getComentarios() %>
+                
+                <!-- Punto de estado con color condicional -->
+                <span style="
+                    position: absolute;
+                    left: 10px;
+                    top: 5px;
+                    width: 10px;
+                    height: 10px;
+                    background-color: <%= estado.getEstado().equalsIgnoreCase("Entregado") ? "#00b200" : "#FFA500" %>;
+                    border-radius: 50%;
+                    border: 2px solid white;"></span>
+                
+                <!-- Línea vertical con color condicional -->
+                <% if (!estado.equals(estados.get(estados.size() - 1))) { %>
+                    <span style="
+                        position: absolute;
+                        left: 14px;
+                        top: 20px;
+                        bottom: 0;
+                        width: 2px;
+                        background-color: <%= estado.getEstado().equalsIgnoreCase("Entregado") ? "#00b200" : "#FFA500" %>;">
+                    </span>
+                <% } %>
+            </li>
+        <% } %>
+    </ul>
+</div>
+
+
+            
+    
+
+    <% if(orden.getEstado().equalsIgnoreCase("Enviado")) { %>
+        <form action="perfilOrden" method="post">
+            <input type="hidden" name="numeroOrden" value="<%= orden.getNumero() %>">
+            <input type="hidden" name="accion" value="confirmar">
+            <button type="submit" class="btn btn-success">Confirmar</button>
+        </form>
+    <% } %>
 
     <div class="card mt-3">
         <div class="card-body">
             <p><strong>Precio Total: </strong><%= orden.getPrecioTotal() %> USD</p>
             <p><strong>Fecha de Compra: </strong><%= orden.getFechaString() %></p>
-            <p><strong>Detalles de Productos:</strong></p>
-            <hr></hr>
+
+            
+
+            <h4>Detalles de Productos:</h4>
+            <hr>
             <ul>
                 <% for (Map.Entry<Integer, Item> entry : items.entrySet()) { 
-                	DTItem dtit = entry.getValue().crearDT();
-                
+                    DTItem dtit = entry.getValue().crearDT();
                 %>
-                	<a class="link"  href="perfilProducto?producto=<%=dtit.getProducto().crearDT().getNumRef()%>">Ver Producto</a>
-                	
+                    <a class="link" href="perfilProducto?producto=<%=dtit.getProducto().crearDT().getNumRef()%>">Ver Producto</a>
                     <li>
                         <p><strong>Nombre: </strong> <%= dtit.getProducto().crearDT().getNombre() %></p> 
                         <p><strong>Precio Unitario: </strong> $<%= dtit.getProducto().crearDT().getPrecio() %> USD</p>
                         <p><strong>Cantidad:</strong> <%= dtit.getCant() %></p>
                         <p><strong>Subtotal: </strong> $<%= dtit.getSubTotal() %></p>
-                        <p></p>
-                        <p><strong>Total de la orden:</strong> $<%= orden.getPrecioTotal() %></p>
-                        
                     </li>
                 <% } %>
             </ul>
+            <p><strong>Total de la orden:</strong> $<%= orden.getPrecioTotal() %></p>
         </div>
     </div>
 

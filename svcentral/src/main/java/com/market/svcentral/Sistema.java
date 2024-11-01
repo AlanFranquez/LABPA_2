@@ -660,12 +660,11 @@ public class Sistema implements ISistema {
 	 		return this.ordenes.get(numero);
 	 	}
 	 	
-	 	public void cambiarEstadoOrden(String estado, int numero, String cliente) {
+	 	public void cambiarEstadoOrden(String estado, String com, int numero, String cliente) {
 	 		Cliente client = (Cliente) this.usuarios.get(cliente);
 	 		
 	 		if (client != null) {
-	 			client.getCompra(numero).setEstado(estado);
-	 			this.ordenes.get(numero).setEstado(estado);
+	 			this.ordenes.get(numero).setEstado(estado, com);
 	 			return;
 	 		}
 	 		
