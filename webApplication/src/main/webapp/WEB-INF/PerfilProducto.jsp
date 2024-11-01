@@ -31,6 +31,7 @@ Boolean comproProducto = false;
 if(cl != null) {
 	
 comproProducto = cl.comproProducto(id);
+
 }
 %>
 
@@ -41,13 +42,44 @@ comproProducto = cl.comproProducto(id);
 	rel="stylesheet"
 	integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
 	crossorigin="anonymous">
-
-<link href="media/styles/InfoProducto.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+<link rel="stylesheet" type="text/css" href="./media/styles/InfoProducto.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link
 	href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
 	rel="stylesheet">
+	
+	<style>
+	.star-widget{
+		position:relative;
+
+	}
+	#puntaje{
+	position: absolute;
+	}
+	#puntaje input {
+  		display: none;
+	}
+	.star-widget form label {
+	  font-size: 30px;
+	  color: #444;
+	  float: right;
+	  padding: 70px;
+	  transition: all 0.2s ease;
+	}
+	input:not(:checked) ~ label:hover,
+	input:not(:checked) ~ label:hover ~ label {
+	  color: #fd4;
+	}
+	input:checked ~ label {
+	  color: #fd4;
+	}
+	input#rate-5:checked ~ label {
+	  color: #fe7;
+	  text-shadow: 0 0 20px #952;
+	}
+	</style>
 </head>
 <body>
 
@@ -200,9 +232,8 @@ comproProducto = cl.comproProducto(id);
 								onchange="validarCantidad(this.form)">
 						</div>
 						<div class="col-auto">
-							<button type="submit" class="btn btn-primary">Agregar al
-								Carrito</button>
-						</div>
+							<button type="submit" class="btn btn-primary">Agregar al Carrito</button>
+						</div>	
 						<%
 						}
 						%>
@@ -211,6 +242,28 @@ comproProducto = cl.comproProducto(id);
 			</div>
 		</div>
 	</main>
+
+	<%
+	if (usr != null && usr.getTipo().equals("cliente") && comproProducto) {
+	%>
+	<div class="col-auto star-widget">
+		<form id="puntaje" action="agragarValoracion" method="post" onsubmit="return validarCantidad(this)">
+			<span id="valoracion">Valoración</span><br>
+	        <input type="radio" name="rate" id="rate-5">
+	        <label for="rate-5" class="bi bi-star"></label>
+	        <input type="radio" name="rate" id="rate-4">
+	        <label for="rate-4" class="bi bi-star"></label>
+	        <input type="radio" name="rate" id="rate-3">
+	        <label for="rate-3" class="bi bi-star"></label>
+	        <input type="radio" name="rate" id="rate-2">
+	        <label for="rate-2" class="bi bi-star"></label>
+	        <input type="radio" name="rate" id="rate-1">
+	        <label for="rate-1" class="bi bi-star"></label>
+	        <button type="submit" class="btn btn-primary">Enviar</button>
+	        <header></header>
+		</form>
+	</div>
+	<% } %>
 
 	<br>
 	<br>
@@ -411,5 +464,32 @@ document.getElementById("formulario").addEventListener("submit", function(event)
 });
 
 </script>
+
+<script type="text/javascript">
+	document.getElementById("puntaje").addEventListener("submit", function(event) {
+    	event.preventDefault(); 
+
+    	const comentario = document.getElementById("comentario").value;
+    	const formData = new FormData();
+    	formData.append("comentario", comentario);
+
+    	fetch("enviarComentario", {
+	        method: "POST",
+        	body: formData
+    	})
+    	.then(response => response.text())
+    	.then(data => {
+        	const commentSection = document.getElementById("commentSection");
+        	const newComment = document.createElement("div");
+        	newComment.innerHTML = `<p>${comentario}</p>`;
+        	commentSection.appendChild(newComment);
+
+        	document.getElementById("comentario").value = '';
+    	})
+    	.catch(error => console.error('Error:', error));
+	});
+	});
+
+	</script>
 </body>
 </html>

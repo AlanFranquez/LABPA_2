@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 public class Producto {
 	private Map<String, Cat_Producto> categorias;
 	private List <Comentario> comentarios;
+	private List <Puntaje> puntajes;
 	private Proveedor proveedor;
 	
 	private String nombre, descripcion;
@@ -29,6 +30,7 @@ public class Producto {
 		this.categorias = new HashMap<>();
 		this.proveedor = prov;
 		this.comentarios = new ArrayList<>();
+		this.puntajes = new ArrayList<>();
 		this.imagenes = new ArrayList<>();
 	}
 	
@@ -69,10 +71,8 @@ public class Producto {
 				return comentario;
 			}
 		}
-		
 		return null;
 	}
-	
 	
 	public void agregarCategorias(Cat_Producto cat) {
 		categorias.put(cat.getNombre(), cat);
@@ -152,9 +152,6 @@ public class Producto {
     		
     		while (cPadre.getPadre() != null) {
     			arrString[contador++] = cPadre.getNombre();
-    			
-    			
-    			
     			cPadre = cPadre.getPadre();
     		}
     	}
@@ -178,5 +175,20 @@ public class Producto {
 		}
 		catStr = catStr + "</html>";
 		return new DtProducto(this.getNombre(), this.getDescripcion(), this.getPrecio(), this.getNumRef(), this.getEspecificaciones(), this.getProveedor(), catStr, this.getImagenes(), this.getStock(), this.getComentarios(), this.getCantidadComprada());
+	}
+
+	public void agregarPuntaje(Puntaje puntaje) {
+		this.puntajes.add(puntaje);
+	}
+	
+	public int[] obtenerPuntaje() {
+		int total = 0;
+		int varios[] = {0, 0, 0, 0, 0, 0};
+		for (Puntaje p : this.puntajes) {
+			varios[p.getValor()] += 1;
+			total += p.getValor();
+		}
+		varios[0] = total / this.puntajes.size();
+		return varios;
 	}
 }

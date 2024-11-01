@@ -7,10 +7,12 @@ import java.util.Map;
 import java.util.Set;
 
 import com.market.svcentral.exceptions.ProductoException;
+import com.market.svcentral.exceptions.PuntajeInvalidoException;
 
 public class Cliente extends Usuario {
     private Map<Integer, OrdenDeCompra> listaCompras;
     private Map<Integer, Comentario> listaComentarios;
+    private Map<Integer, Puntaje> listaPuntajes;
     private Carrito carrito;
     
     // Constructor
@@ -18,6 +20,7 @@ public class Cliente extends Usuario {
         super(nombre, nick, apellido, correo, fecha, "cliente", contrasena);
         this.listaCompras = new HashMap<>();
         this.listaComentarios = new HashMap<>();
+        this.listaPuntajes = new HashMap<>();
         this.carrito = new Carrito();
     }
     // gets, sets
@@ -29,6 +32,14 @@ public class Cliente extends Usuario {
     	return this.listaCompras.get(numero);
     }
     
+    public Map<Integer, Puntaje> getPuntajes() {
+        return this.listaPuntajes;
+    }
+    
+    public Puntaje getPuntaje(int numero) {
+    	return this.listaPuntajes.get(numero);
+    }
+    
     public Carrito getCarrito() {
     	return this.carrito;
     }
@@ -38,8 +49,6 @@ public class Cliente extends Usuario {
     	for (Map.Entry<Integer, OrdenDeCompra> entry : listaCompras.entrySet()) {
     		OrdenDeCompra orden = entry.getValue();
     		
-    		
-    		
     		for (Map.Entry<Integer, Item> entry2 : orden.getItems().entrySet()) {
         		Item item = entry2.getValue();
         		
@@ -48,36 +57,47 @@ public class Cliente extends Usuario {
         			producto.agregarRespuesta(numeroComentario, respuesta);
         			return;
         		}
-        	}
-    		
+        	}	
     	}
     }
-    
-    
     
     public void agregarComentario(Comentario comentario, String nombreProducto) throws ProductoException {
     	for (Map.Entry<Integer, OrdenDeCompra> entry : listaCompras.entrySet()) {
     		OrdenDeCompra orden = entry.getValue();
     		
-    		
-    		
     		for (Map.Entry<Integer, Item> entry2 : orden.getItems().entrySet()) {
         		Item item = entry2.getValue();
-        		
         		if (item.getProducto().getNombre() == nombreProducto) {
         			Producto producto = item.getProducto();
         			producto.agregarComentario(comentario);
         			return;
         		}
         	}
-    		
     	}
-    	
     	throw new ProductoException("El cliente no compró el producto");
-    	
-    	
     }
 
+    public void agregarPuntaje(Integer valor, Integer numRef) throws ProductoException {
+    	for (Map.Entry<Integer, OrdenDeCompra> entry : listaCompras.entrySet()) {
+    		OrdenDeCompra orden = entry.getValue();
+    		for (Map.Entry<Integer, Item> entry2 : orden.getItems().entrySet()) {
+        		Item item = entry2.getValue();
+        		if (item.getProducto().getNumRef() == numRef) {
+        			try {
+        				Producto producto = item.getProducto();
+        				Puntaje puntaje = new Puntaje(valor, numRef);
+        				producto.agregarPuntaje(puntaje);
+        				this.listaPuntajes.put(numRef, puntaje);
+        				return;        				
+        			}catch (PuntajeInvalidoException e) {
+        				System.out.println(e.getMessage());
+        			}
+        		}
+        	}
+    	}
+    	throw new ProductoException("El cliente no compró el producto");
+    }
+    
     public OrdenDeCompra getCompraParticular(int numero) {
         return this.listaCompras.get(numero);
     }
@@ -90,12 +110,10 @@ public class Cliente extends Usuario {
     		
     		lista.add(orden.crearDT());
     	}
-    	
     	return lista;
     }
     
     public DTOrdenDeCompra mostrarCompras(int numero) {
-    	
     	return this.listaCompras.get(numero).crearDT();
     }
     
@@ -129,22 +147,17 @@ public class Cliente extends Usuario {
     		
     		Map<Integer, Item> items = orden.getItems();
     		
-    		
     		for (Map.Entry<Integer, Item> entry2 : items.entrySet()) {
-    			Item item = entry2.getValue();
-    			
+    			Item item = entry2.getValue();	
     			
     			if (item.getProducto().getNumRef() == numeroRef) {
     				return true;
     			}
     		}
         }
-    	
     	return false;
     }
     
-    
-   
     // Mas que un set de integers creo que debería de ser un arreglo de dtOrdenCompra
     public Set<Integer> getAllOrdenes() {
         Set<Integer> res = new HashSet<>();
@@ -158,4 +171,3 @@ public class Cliente extends Usuario {
         return new DTCliente(this.getNombre(), this.getNick(), this.getApellido(), this.getCorreo(), this.getNacimiento(), this.getImagen(), this.getCompras());
     }
 }
-

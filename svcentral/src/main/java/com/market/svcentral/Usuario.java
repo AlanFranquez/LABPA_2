@@ -1,7 +1,5 @@
 package com.market.svcentral;
 
-
-// Clase usuario
 public class Usuario {
 	// atributos
     private String nombre;
