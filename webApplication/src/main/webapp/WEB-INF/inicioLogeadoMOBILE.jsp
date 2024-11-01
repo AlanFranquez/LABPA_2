@@ -31,7 +31,15 @@
 		
 	<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2C2C2C;">
     <div class="container">
-        <a href="home" class="navbar-brand">ITSCODIGO</a>
+        <a href="home" class="navbar-brand">
+    			ITSCODIGO <span class="texto-pequeno">MOBILE</span>
+			</a>
+
+	<style>
+    	.texto-pequeno {
+        font-size: 0.6em; /* Ajusta el tamaño según lo necesites */
+    	}
+	</style>
         
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -50,7 +58,7 @@
                 </li>
                 <li class="nav-item">
                     <button class="btn btn-danger">
-                        <a class="nav-link" href="logout">Cerrar Sesión</a>
+                        <a class="nav-link" href="logoutMOBILE">Cerrar Sesión</a>
                     </button>
                 </li>
             </ul>
@@ -62,7 +70,7 @@
 
 	
     <% if(usr != null)  {%>
-    <div style="position: relative; background-image: url('media/images/fondo1.jpg'); background-size: cover; background-position: center center;">
+    <div style="position: relative; background-image: url('media/images/fondo1 (2).jpg'); background-size: cover; background-position: center center;">
     <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); z-index: 1;"></div>
     <main class="container d-flex justify-content-center align-items-center vh-90" style="position: relative; z-index: 2;">
         <div class="row w-100">

@@ -13,7 +13,7 @@ import com.market.svcentral.ISistema;
 import com.market.svcentral.Producto;
 import com.market.svcentral.Usuario;
 
-@WebServlet("/inicioMOBILE")
+@WebServlet("/homeMOBILE")
 public class inicioMOBILE extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private ISistema sist;
@@ -36,12 +36,21 @@ public class inicioMOBILE extends HttpServlet {
         HttpSession session = request.getSession(false);
         List<Producto> productos = sist.getAllProductos();
         request.setAttribute("prods", productos);
+        
+        String userAgent = request.getHeader("User-Agent");
+        boolean isMobile = isMobileDevice(userAgent);
 
         if (session == null || session.getAttribute("usuarioLogueado") == null) {
-            // Redirigir a la página de inicio no logueado
+        	if(!isMobile) {
+        		request.getRequestDispatcher("/WEB-INF/inicioNoLogueado.jsp").forward(request, response);
+                return;
+            }
+        	// Redirigir a la página de inicio no logueado
             request.getRequestDispatcher("/WEB-INF/inicioMOBILE.jsp").forward(request, response);
             return;
         }
+        
+        
 
         Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
         if (usuarioLogueado != null) {
@@ -50,5 +59,16 @@ public class inicioMOBILE extends HttpServlet {
             // Redirigir a la página de inicio logueado
             request.getRequestDispatcher("/WEB-INF/inicioLogeadoMOBILE.jsp").forward(request, response);
         }
+    }
+    
+    private boolean isMobileDevice(String userAgent) {
+        return userAgent != null && (
+            userAgent.contains("Mobile") || 
+            userAgent.contains("Android") || 
+            userAgent.contains("iPhone") || 
+            userAgent.contains("iPad") || 
+            userAgent.contains("Windows Phone") || 
+            userAgent.contains("BlackBerry")
+        );
     }
 }

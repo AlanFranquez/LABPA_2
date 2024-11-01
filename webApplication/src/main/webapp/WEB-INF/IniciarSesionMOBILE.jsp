@@ -17,8 +17,14 @@
 	<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color: #2C2C2C;">
     <div class="container">
         <a href="home" class="navbar-brand">
-            LALALA
-        </a>
+    			ITSCODIGO <span class="texto-pequeno">MOBILE</span>
+			</a>
+
+	<style>
+    	.texto-pequeno {
+        font-size: 0.6em; /* Ajusta el tamaño según lo necesites */
+    	}
+	</style>
         
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -71,7 +77,7 @@
             %>
         <% } %>
         
-        <form class="row g-3 container-sm needs-validation" method="post" action="formlogin" id="form" novalidate>
+        <form class="row g-3 container-sm needs-validation" method="post" action="formloginMOBILE" id="form" novalidate>
             <div class="form-group">
               <label for="nickname">Nickname</label>
               <input type="text" class="form-control" name="nickname" id="nickname" placeholder="NickName" required>

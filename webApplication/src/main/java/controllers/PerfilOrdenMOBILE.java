@@ -15,16 +15,10 @@ import com.market.svcentral.DTOrdenDeCompra;
 import com.market.svcentral.Factory;
 import com.market.svcentral.ISistema;
 
-/**
- * Servlet implementation class PerfilOrden
- */
 @WebServlet("/perfilOrdenMOBILE")
 public class PerfilOrdenMOBILE extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
     public PerfilOrdenMOBILE() {
         super();
     }
@@ -40,22 +34,27 @@ public class PerfilOrdenMOBILE extends HttpServlet {
         }
     }
 
-    /**
-     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-     */
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //String nickname = request.getParameter("nickname");
+        // Detectar si el acceso proviene de un dispositivo móvil
+        String userAgent = request.getHeader("User-Agent");
+        boolean isMobile = isMobileDevice(userAgent);
+        
+        if (!isMobile) {
+            response.sendRedirect("home");
+            return;
+        }
+
         String ordenParam = request.getParameter("orden");
 
         HttpSession sess = request.getSession(false); // No crear una nueva sesión
         if (sess == null || sess.getAttribute("usuarioLogueado") == null) {
-            response.sendRedirect("formlogin");
+            response.sendRedirect("formloginMOBILE");
             return;
         }
 
         Cliente cliente = (Cliente) sess.getAttribute("usuarioLogueado");
 
-        // Comprobar que el parámetro de la orden no sea nulo y convertirlo a entero
         if (ordenParam != null && !ordenParam.isEmpty()) {
             int numeroOrden;
             try {
@@ -65,7 +64,6 @@ public class PerfilOrdenMOBILE extends HttpServlet {
                 return;
             }
 
-            // Obtener la orden específica
             DTOrdenDeCompra orden = cliente.mostrarCompras(numeroOrden);
             if (orden != null) {
                 DTCliente dtcli = (DTCliente) cliente.crearDt();
@@ -80,18 +78,23 @@ public class PerfilOrdenMOBILE extends HttpServlet {
         }
     }
 
-
-    /**
-     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-     */
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	String accion = request.getParameter("accion");
+        String accion = request.getParameter("accion");
         String ordenParam = request.getParameter("numeroOrden");
 
-        // Obtener el cliente de la sesión
+        // Detectar si el acceso proviene de un dispositivo móvil
+        String userAgent = request.getHeader("User-Agent");
+        boolean isMobile = isMobileDevice(userAgent);
+
+        if (!isMobile) {
+            response.sendRedirect("home");
+            return;
+        }
+
         HttpSession sess = request.getSession(false);
         if (sess == null || sess.getAttribute("usuarioLogueado") == null) {
-            response.sendRedirect("formlogin");
+            response.sendRedirect("formloginMOBILE");
             return;
         }
 
@@ -109,7 +112,7 @@ public class PerfilOrdenMOBILE extends HttpServlet {
             if ("confirmar".equals(accion)) {
                 DTOrdenDeCompra orden = cliente.mostrarCompras(numeroOrden);
                 if (orden != null) {
-                	sist.cambiarEstadoOrden("Entregado", "GRACIAS POR COMPRAR <3", orden.getNumero(), cliente.getNick());
+                    sist.cambiarEstadoOrden("Entregado", "GRACIAS POR COMPRAR <3", orden.getNumero(), cliente.getNick());
                 } else {
                     response.sendError(HttpServletResponse.SC_NOT_FOUND, "Orden no encontrada.");
                     return;
@@ -124,4 +127,15 @@ public class PerfilOrdenMOBILE extends HttpServlet {
         }
     }
     
+    // Método auxiliar para detectar si el dispositivo es móvil
+    private boolean isMobileDevice(String userAgent) {
+        return userAgent != null && (
+            userAgent.contains("Mobile") || 
+            userAgent.contains("Android") || 
+            userAgent.contains("iPhone") || 
+            userAgent.contains("iPad") || 
+            userAgent.contains("Windows Phone") || 
+            userAgent.contains("BlackBerry")
+        );
+    }
 }

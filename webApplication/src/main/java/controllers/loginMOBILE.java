@@ -4,6 +4,7 @@ import java.io.IOException;
 import com.market.svcentral.EstadoSesion;
 import com.market.svcentral.Factory;
 import com.market.svcentral.ISistema;
+import com.market.svcentral.Proveedor;
 import com.market.svcentral.Usuario;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -45,19 +46,50 @@ public class loginMOBILE extends HttpServlet {
         EstadoSesion nuevoEstado;
         Usuario usr = sist.getUsuario(nickname);
 
+        // Verifica si el acceso es desde un dispositivo móvil
+        String userAgent = request.getHeader("User-Agent");
+        boolean isMobile = isMobileDevice(userAgent);
+
+        // Validación de usuario no encontrado o contraseña incorrecta
         if (usr == null || !usr.getContrasena().equals(password)) {
             nuevoEstado = EstadoSesion.LOGIN_INCORRECTO;
             objSession.setAttribute("estado", nuevoEstado);
             objSession.setAttribute("errorMsg", "Los datos no son válidos");
             request.getRequestDispatcher("/WEB-INF/IniciarSesionMOBILE.jsp").forward(request, response);
-            response.sendRedirect("formloginMOBILE");  // Redirigir a la página de login con error
             return;
         }
+
+     // Validación de usuario tipo Proveedor o cliente en dispositivo no móvil
+        if (usr instanceof Proveedor) {
+            nuevoEstado = EstadoSesion.LOGIN_INCORRECTO;
+            objSession.setAttribute("estado", nuevoEstado);
+            objSession.setAttribute("errorMsg", "No se permite acceso a Proveedores");
+            request.getRequestDispatcher("/WEB-INF/IniciarSesionMOBILE.jsp").forward(request, response);
+            return;
+        } else if (!isMobile) {
+            nuevoEstado = EstadoSesion.LOGIN_INCORRECTO;
+            objSession.setAttribute("estado", nuevoEstado);
+            objSession.setAttribute("errorMsg", "No se permite acceso desde este dispositivo");
+            request.getRequestDispatcher("/WEB-INF/IniciarSesionMOBILE.jsp").forward(request, response);
+            return;
+        }
+
 
         // Inicio de sesión exitoso
         nuevoEstado = EstadoSesion.LOGIN_CORRECTO;
         objSession.setAttribute("estado", nuevoEstado);
         objSession.setAttribute("usuarioLogueado", usr);
-        response.sendRedirect("inicioLogueadoMOBILE");  // Redirigir a inicio logueado
+        response.sendRedirect("home");  // Redirigir a inicio logueado
+    }
+
+    private boolean isMobileDevice(String userAgent) {
+        return userAgent != null && (
+            userAgent.contains("Mobile") || 
+            userAgent.contains("Android") || 
+            userAgent.contains("iPhone") || 
+            userAgent.contains("iPad") || 
+            userAgent.contains("Windows Phone") || 
+            userAgent.contains("BlackBerry")
+        );
     }
 }

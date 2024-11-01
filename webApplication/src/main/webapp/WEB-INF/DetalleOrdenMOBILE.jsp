@@ -29,7 +29,15 @@
 %>
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2C2C2C;">
     <div class="container">
-        <a href="home" class="navbar-brand">ITSCODIGO</a>
+        <a href="home" class="navbar-brand">
+    			ITSCODIGO <span class="texto-pequeno">MOBILE</span>
+			</a>
+
+	<style>
+    	.texto-pequeno {
+        font-size: 0.6em; /* Ajusta el tamaño según lo necesites */
+    	}
+	</style>
         
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -109,7 +117,7 @@
     </div>
 
     <div class="text-center my-4">
-        <a href="perfilCliente?nickname=<%= request.getParameter("nickname") %>" class="btn btn-secondary">Volver al Perfil</a>
+        <a href="perfilClienteMOBILE?nickname=<%= request.getParameter("nickname") %>" class="btn btn-secondary">Volver al Perfil</a>
     </div>
 </div>
 

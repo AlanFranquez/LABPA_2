@@ -44,10 +44,18 @@ public class perfilProductoMOBILE extends HttpServlet {
 	
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false); // Cambiado a false para no crear una nueva sesión
+        
+     // Detectar si el acceso proviene de un dispositivo móvil
+        String userAgent = request.getHeader("User-Agent");
+        boolean isMobile = isMobileDevice(userAgent);
 
+        if (!isMobile) {
+            response.sendRedirect("home");
+            return;
+        }
        
         if (session == null) {
-            response.sendRedirect("formlogin");
+            response.sendRedirect("formloginMOBILE");
             return;
         }
 
@@ -81,13 +89,25 @@ public class perfilProductoMOBILE extends HttpServlet {
             // Manejar otras excepciones si es necesario
             response.sendRedirect("errorPage"); // O una página de error adecuada
         }
+        
+        
+    }
+    
+ // Método auxiliar para detectar si el dispositivo es móvil
+    private boolean isMobileDevice(String userAgent) {
+        return userAgent != null && (
+            userAgent.contains("Mobile") || 
+            userAgent.contains("Android") || 
+            userAgent.contains("iPhone") || 
+            userAgent.contains("iPad") || 
+            userAgent.contains("Windows Phone") || 
+            userAgent.contains("BlackBerry")
+        );
     }
 
-
-	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
-
+	
 }

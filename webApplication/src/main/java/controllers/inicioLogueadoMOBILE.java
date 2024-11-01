@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpSession;
 import com.market.svcentral.Factory;
 import com.market.svcentral.ISistema;
 import com.market.svcentral.Producto;
+import com.market.svcentral.Proveedor;
 import com.market.svcentral.Usuario;
 
 @WebServlet("/inicioLogueadoMOBILE")
@@ -38,21 +39,55 @@ public class inicioLogueadoMOBILE extends HttpServlet {
             throw new ServletException("ISistema no está inicializado.");
         }
         
-        if (session == null || session.getAttribute("usuarioLogueado") == null) {
-            // Usuario no logueado
+        String userAgent = request.getHeader("User-Agent");
+        boolean isMobile = isMobileDevice(userAgent);
+
+        // Obtener usuario logueado y verificar tipo de usuario
+        Usuario usuarioLogueado = (Usuario) (session != null ? session.getAttribute("usuarioLogueado") : null);
+
+        if (usuarioLogueado == null) {
+            // Si no hay usuario logueado, mostrar productos y redirigir al inicio móvil
             List<Producto> productos = sist.getAllProductos();
             request.setAttribute("prods", productos);
-            request.getRequestDispatcher("/WEB-INF/inicioNoLogueado.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/inicioMOBILE.jsp").forward(request, response);
             return;
         }
 
-        Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
+        // Restricción para proveedores en cualquier dispositivo
+        if (usuarioLogueado instanceof Proveedor) {
+            session.setAttribute("estado", "LOGIN_INCORRECTO");
+            session.setAttribute("errorMsg", "Acceso no permitido para proveedores.");
+            response.sendRedirect("formloginMOBILE"); // Redirigir al formulario de login con error
+            return;
+        }
+
+        // Restricción para clientes en PC (solo permiten dispositivos móviles)
+        if (!isMobile && !(usuarioLogueado instanceof Proveedor)) {
+            session.setAttribute("estado", "LOGIN_INCORRECTO");
+            session.setAttribute("errorMsg", "Acceso permitido solo desde dispositivos móviles.");
+            response.sendRedirect("formloginMOBILE"); // Redirigir al formulario de login con error
+            return;
+        }
+
+        // Configuración para inicio de sesión exitoso desde móvil
         request.setAttribute("usuario", usuarioLogueado);
         request.setAttribute("estado", "logueado");
         List<Producto> productos = sist.getAllProductos();
         request.setAttribute("prods", productos);
-
-        // Redirigir a la página de inicio logueado
+        
+        // Redirigir a la página de inicio logueado móvil
         request.getRequestDispatcher("/WEB-INF/inicioLogueadoMOBILE.jsp").forward(request, response);
+    }
+
+    
+    private boolean isMobileDevice(String userAgent) {
+        return userAgent != null && (
+            userAgent.contains("Mobile") || 
+            userAgent.contains("Android") || 
+            userAgent.contains("iPhone") || 
+            userAgent.contains("iPad") || 
+            userAgent.contains("Windows Phone") || 
+            userAgent.contains("BlackBerry")
+        );
     }
 }
