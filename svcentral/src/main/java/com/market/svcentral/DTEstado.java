@@ -11,7 +11,8 @@ public class DTEstado {
     public DTEstado(String estado, String comentarios) {
         this.estado = estado;
         this.fecha = LocalDateTime.now();
-        this.comentarios = comentarios;
+        //this.comentarios = comentarios;
+        this.comentarios = (comentarios != null) ? comentarios : "Sin comentarios";
     }
 
     // Getters y setters
@@ -23,6 +24,8 @@ public class DTEstado {
     public void setEstado(String estado) {
         this.estado = estado;
     }
+
+  
 
     public String getFecha() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");

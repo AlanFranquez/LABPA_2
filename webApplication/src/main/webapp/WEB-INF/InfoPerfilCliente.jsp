@@ -72,7 +72,7 @@
 
                 <li class="nav-item">
                     <button class="btn btn-danger">
-                        <a class="nav-link" href="logout">Cerrar Sesiï¿½n</a>
+                        <a class="nav-link" href="logout">Cerrar Sesión</a>
                     </button>
                 </li>
             </ul>
@@ -121,8 +121,8 @@
                         <div class="card-body">
                             <h3 class="card-title"><%= dt.getNumero() %></h3> 
                             
-                            <% if(dt.getEstado() == "Entregado")  {%>
-                            
+                            <% if(dt.getEstado() == "Entregado") {%>
+
                             	<span class="badge mb-2" style="background-color: green; font-weight: normal; color: white"><%= dt.getEstado() %></span>
                             
                             <% } else {%>
@@ -130,6 +130,7 @@
                             
                             <% }%>
                             
+                             
                             
                             <br>
                             

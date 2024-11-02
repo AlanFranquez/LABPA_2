@@ -50,6 +50,11 @@ public class DTCliente {
         return correo;
     }
     
+    public void setCorreo(String correo) {
+        this.correo = correo;
+        System.out.println("Correo establecido: " + correo);
+    }
+    
     public DTCliente mostrarPerfil() {
 		return this;
     	

@@ -22,7 +22,7 @@ public class InitServlet extends HttpServlet {
 
 	@Override
     public void init() throws ServletException {
-    	System.out.print("El SISTEMA INCIIO VAMO ARRIBA");
+    	System.out.print("El SISTEMA INICIO VAMO ARRIBA");
     	ISistema sistema = Factory.getSistema();
     	
          try {
@@ -31,7 +31,8 @@ public class InitServlet extends HttpServlet {
              DTFecha fecha2 = new DTFecha(15, 6, 1985);
              DTFecha fecha3 = new DTFecha(5, 6, 1990);
 
-             sistema.agregarCliente("Juan", "Juan123", "Perez", "Juan@gmail.com", fecha1, "123", "123");
+             sistema.agregarCliente("Juan", "Juan123", "Perez", "milagrosvairo.dev@gmail.com", fecha1, "123", "123");
+             //sistema.agregarCliente("Mili", "Mili123", "Vairo", "milagrosvairo.dev@gmail.com", fecha1, "123", "123");
              sistema.agregarCliente("Alberto", "albert1341", "Hernandez", "Ahernandez@gmail.com", fecha2, "123", "123");
              sistema.agregarCliente("Maria", "agusmari", "Agustina", "mariaagustina@gmail.com", fecha1, "123", "123");
 

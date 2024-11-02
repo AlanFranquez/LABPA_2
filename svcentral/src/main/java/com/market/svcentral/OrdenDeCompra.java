@@ -22,6 +22,7 @@ public class OrdenDeCompra {
         this.items = new HashMap<>();
         this.estados = new ArrayList<>();
         this.estados.add(new DTEstado("En preparación", "PREPARANDO PAQUETE"));
+        
     }
 
     public OrdenDeCompra(Map<Integer, Item> itemsAdquiridos, float precioTotal) {
@@ -42,9 +43,12 @@ public class OrdenDeCompra {
     }
 
     public void setEstado(String nuevoEstado, String comentarios) {
-        estados.addLast(new DTEstado(nuevoEstado, comentarios));
+        estados.add(new DTEstado(nuevoEstado, comentarios));
     }
+   
+   
 
+    
     public List<DTEstado> getHistorialEstado() {
         return estados;
     }

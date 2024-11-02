@@ -656,24 +656,30 @@ public class Sistema implements ISistema {
 	 		return this.ordenes.get(numero);
 	 	}
 	 	
-	 	public void cambiarEstadoOrden(String estado, String com, int numero, String cliente) {
+	 public void cambiarEstadoOrden(String estado, String com, int numero, String cliente) {
 	 		Cliente client = (Cliente) this.usuarios.get(cliente);
 	 		
 	 		if (client != null) {
 	 			this.ordenes.get(numero).setEstado(estado, com);
 	 			
-	 	        String recipientEmail = "maria.vairo@estudiantes.utec.edu.uy";
+	 			String recipientEmail = client.getCorreo();
+	 	        //String recipientEmail = "maria.vairo@estudiantes.utec.edu.uy";
+	 			System.out.println("Correo del cliente: " + recipientEmail);
+
 
 	 	        try {
 	 	            if (recipientEmail != null && !recipientEmail.isEmpty()) {
 	 	                // Enviar el correo de bienvenida
+	 	            	System.out.println("Estado: " + estado);
+	 	            	System.out.println("recipientEmail: " + recipientEmail);
 	 	                emailService.sendChangeState(recipientEmail, estado);
 	 	                System.out.println("Correo de cambio de estado enviado a " + recipientEmail);
 	 	            } else {
 	 	                System.out.println("Cambio de estado Error: No se proporcionó una dirección de correo válida.");
 	 	            }
 	 	        } catch (Exception e) {
-	 	            System.out.println("Error al intentar enviar el correo de cambio de estado: " + e.getMessage());
+	 	            System.out.println("Error al intentar enviar el correo de cambio de estado: " + e.toString());
+	 	            e.printStackTrace();  // Imprime el rastro completo de la excepción en la consola
 	 	            // e.printStackTrace();
 	 	        }
 	 	        
@@ -682,6 +688,35 @@ public class Sistema implements ISistema {
 	 		
 	 		System.out.print("no se pudo cambiar el estado");
 	 	}
+
+	 	/*public void cambiarEstadoOrden(String estado, String com, int numero, String cliente) {
+	 	    Cliente client = (Cliente) this.usuarios.get(cliente);
+	 	    
+	 	    if (client != null) {
+	 	        this.ordenes.get(numero).setEstado(estado, com);
+	 	        String recipientEmail = client.getCorreo();
+	 	        recipientEmail = recipientEmail != null ? recipientEmail.trim() : null;
+
+	 	        System.out.println("Estado después de cambiar: " + estado); // Imprime el estado antes de la llamada
+	 	        System.out.println("Correo del cliente: " + recipientEmail);
+	 	        
+	 	        try {
+	 	            if (recipientEmail != null && !recipientEmail.isEmpty()) {
+	 	                emailService.sendChangeState(recipientEmail, estado); // Usa 'estado' directamente aquí
+	 	                System.out.println("Correo de cambio de estado enviado a " + recipientEmail);
+	 	            } else {
+	 	                System.out.println("Cambio de estado Error: No se proporcionó una dirección de correo válida.");
+	 	            }
+	 	        } catch (Exception e) {
+	 	            System.out.println("Error al intentar enviar el correo de cambio de estado: " + e.getMessage());
+	 	        }
+	 	        return;
+	 	    }
+	 	    
+	 	    System.out.print("No se pudo cambiar el estado");
+	 	}*/
+
+
 
 	 
 }

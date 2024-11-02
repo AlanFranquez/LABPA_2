@@ -18,7 +18,7 @@ public class DTOrdenDeCompra {
         this.numero = numero;
         this.precioTotal = precioTotal;
         this.items = items;
-        this.estados = new ArrayList<>(); 
+        this.estados = new ArrayList<DTEstado>(); 
         DTEstado tmp = new DTEstado("En Preparacion", "PREPARANDO PAQUETE");
         this.estados.add(tmp); 
     }

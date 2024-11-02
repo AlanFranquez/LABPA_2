@@ -39,11 +39,22 @@ public class EmailService {
      * @param body Contenido del mensaje de correo
      */
     public void sendEmail(String recipientEmail, String subject, String body) {
+    	
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.port", "587");
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
+    
+        if (recipientEmail == null || recipientEmail.trim().isEmpty()) {
+            System.out.println("Error: Dirección de correo nula o vacía.");
+            return;
+        }
+        if (body == null) {
+            System.out.println("Error: El cuerpo del mensaje es nulo. Estableciendo contenido predeterminado.");
+            body = "<html><body><p>Contenido del mensaje no disponible.</p></body></html>";
+        }
+        
 
         Session session = Session.getInstance(props, new javax.mail.Authenticator() {
             @Override
@@ -88,14 +99,28 @@ public class EmailService {
     }
     
     public void sendChangeState(String recipientEmail, String newState) {
+        System.out.println("Estado recibido en sendChangeState: " + newState); // Para depuración
+
+        if (recipientEmail == null || recipientEmail.trim().isEmpty()) {
+            System.out.println("Error: Dirección de correo nula o vacía.");
+            return;
+        }
+
+        if (newState == null) {
+            System.out.println("Error: El estado de la orden es nulo."); // Añade este log para claridad
+            throw new IllegalArgumentException("El estado no puede ser nulo");
+        }
+
+        // Asegúrate de que el contenido del correo se establece correctamente
         String subject = "Hubo un cambio en una orden de compra!";
         String body = "<html>"
                 + "<body>"
                 + "<h1>Orden</h1>"
-                + "<p>Estimado "  + newState + "</p>"
+                + "<p>Estado actualizado: " + newState + "</p>" // Usa el estado aquí
                 + "</body>"
                 + "</html>";
 
         sendEmail(recipientEmail, subject, body);
     }
+
 }
