@@ -232,30 +232,34 @@ public class Sistema implements ISistema {
    	return root;
     }
     public DefaultMutableTreeNode arbolProductos(Categoria cat) {
-  	 	DefaultMutableTreeNode rama = new DefaultMutableTreeNode(cat.getNombre());
-  	 	if (cat.getTipo() == "Padre") {
-  	 		Map<String, Categoria> hijos = ((Cat_Padre) cat).getHijos();
-  	 		if (hijos.size() >= 1) {
-  	 			for (Categoria hijo : hijos.values()) {
-  	 				DefaultMutableTreeNode child = arbolProductos(hijo);
-  	 				rama.add(child);
-  	 			}
-  	 		} else {
-  	 			rama.add(new DefaultMutableTreeNode("Sin Elementos"));
-  	 		}
-  	 	} else {
-  	 		Map<Integer, Producto> productos = ((Cat_Producto) cat).getProductos();
-  	 		if (productos.size() >= 1) {
-  	 			for (Producto producto : productos.values()) {
-  	 				DefaultMutableTreeNode child = new DefaultMutableTreeNode(producto.getNombre() + " - " + producto.getNumRef());
-  					rama.add(child);
-  	 			}
-  	 		} else {
-  	 			rama.add(new DefaultMutableTreeNode("Sin Elementos"));
-  	 		}
-  	 	}
-  	return rama;
-  }
+        DefaultMutableTreeNode rama = new DefaultMutableTreeNode(cat.getNombre());
+        if (cat.getTipo().equals("Padre")) {
+            Map<String, Categoria> hijos = ((Cat_Padre) cat).getHijos();
+            if (hijos.size() >= 1) {
+                for (Categoria hijo : hijos.values()) {
+                    DefaultMutableTreeNode child = arbolProductos(hijo);
+                    rama.add(child);
+                }
+            } else {
+                rama.add(new DefaultMutableTreeNode("Sin Elementos"));
+            }
+        } else {
+            Map<Integer, Producto> productos = ((Cat_Producto) cat).getProductos();
+            if (productos.size() >= 1) {
+                for (Producto producto : productos.values()) {
+                    int stock = producto.getStock(); // Obtener el stock
+                    DefaultMutableTreeNode child = new DefaultMutableTreeNode(
+                        producto.getNombre() + " - " + producto.getNumRef() + " (" + stock + " disponibles)"
+                    );
+                    rama.add(child);
+                }
+            } else {
+                rama.add(new DefaultMutableTreeNode("Sin Elementos"));
+            }
+        }
+        return rama;
+    }
+
     public void CrearOrden() {
     	int maxKey = ordenes.keySet().stream().max(Integer::compare).orElse(0);
     	OrdenDeCompra orden = new OrdenDeCompra(maxKey + 1);
