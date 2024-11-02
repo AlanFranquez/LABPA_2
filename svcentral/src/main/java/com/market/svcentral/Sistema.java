@@ -27,6 +27,7 @@ public class Sistema implements ISistema {
     private Map<String, Categoria> categorias;
     private Map<Integer, OrdenDeCompra> ordenes;
     private Map<String, Categoria> arbolCategorias;
+    private final EmailService emailService = new EmailService();
 
     private Sistema() {
         // Inicialización de colecciones
@@ -665,6 +666,22 @@ public class Sistema implements ISistema {
 	 		
 	 		if (client != null) {
 	 			this.ordenes.get(numero).setEstado(estado, com);
+	 			
+	 	        String recipientEmail = "maria.vairo@estudiantes.utec.edu.uy";
+
+	 	        try {
+	 	            if (recipientEmail != null && !recipientEmail.isEmpty()) {
+	 	                // Enviar el correo de bienvenida
+	 	                emailService.sendChangeState(recipientEmail, estado);
+	 	                System.out.println("Correo de cambio de estado enviado a " + recipientEmail);
+	 	            } else {
+	 	                System.out.println("Cambio de estado Error: No se proporcionó una dirección de correo válida.");
+	 	            }
+	 	        } catch (Exception e) {
+	 	            System.out.println("Error al intentar enviar el correo de cambio de estado: " + e.getMessage());
+	 	            // e.printStackTrace();
+	 	        }
+	 	        
 	 			return;
 	 		}
 	 		
