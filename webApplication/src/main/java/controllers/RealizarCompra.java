@@ -136,6 +136,7 @@ public class RealizarCompra extends HttpServlet {
         	System.out.print(orden.getNumero());
         }
         
+        
         session.setAttribute("mensajeExito", "Su compra se ha realizado con éxito.");
         session.setAttribute("precioTotal", String.valueOf(precioTotal));
         
