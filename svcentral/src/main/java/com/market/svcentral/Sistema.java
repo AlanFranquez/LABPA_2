@@ -71,7 +71,7 @@ public class Sistema implements ISistema {
     }
     public void agregarCliente(String nombre, String nick, String apellido, String correo, DTFecha fecha, String contra, String confContra) throws UsuarioRepetidoException {
     	if (!verificarUnicidad(nick, correo)) {
-    		throw new UsuarioRepetidoException("Ya existe un usuario con nick: " + nick + " orden email: " + correo);
+    		throw new UsuarioRepetidoException("Ya existe un usuario con este nick o correo");
     	}
     	if (!contra.equals(confContra)) {
     		throw new UsuarioRepetidoException("Contraseñas Diferentes");

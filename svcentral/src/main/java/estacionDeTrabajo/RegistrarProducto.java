@@ -33,7 +33,7 @@ import com.market.svcentral.exceptions.*;
 @SuppressWarnings("serial")
 public class RegistrarProducto extends JInternalFrame{
 	private static ISistema s = Factory.getSistema();
-	private List<File> imagenesSeleccionadas = new ArrayList<>();
+	private List<String> imagenesSeleccionadas = new ArrayList<String>();
 	
 	public RegistrarProducto(DtProducto prod) {
 		setResizable(true);
@@ -201,10 +201,9 @@ public class RegistrarProducto extends JInternalFrame{
                     StringBuilder imagenesNombres = new StringBuilder();
                     
                     for (File archivo : archivosSeleccionados) {
-                        String nombreArchivo = archivo.getName().toLowerCase();
+                        String nombreArchivo = archivo.getAbsolutePath();
                         if (nombreArchivo.endsWith(".jpg") || nombreArchivo.endsWith(".png")|| nombreArchivo.endsWith(".jpeg")) {
-                            imagenesSeleccionadas.add(archivo);
-                            imagenesNombres.append(archivo.getName()).append("; ");
+                            imagenesSeleccionadas.add(nombreArchivo);
                         } else {
                         	imagenesSeleccionadas.clear();
                             JOptionPane.showMessageDialog(null, "El archivo " + archivo.getName() + " no es válido. Seleccione archivos .jpg o .png", "Archivo no válido", JOptionPane.ERROR_MESSAGE);
@@ -312,7 +311,6 @@ public class RegistrarProducto extends JInternalFrame{
 				}	
             }
             
-            boolean images = false;
             for (TreePath path : selectedPaths) {
             	DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) path.getLastPathComponent();
             	String catName = selectedNode.getUserObject().toString();            	
@@ -346,12 +344,10 @@ public class RegistrarProducto extends JInternalFrame{
                 
                 	try {
                     	s.agregarProductoCategoria(catName, numRef);
-                        for(File imgs: imagenesSeleccionadas) {
-                        	if(! images) {
-                        		s.agregarImagenesProducto(catName, numRef, imgs);
-                        	}
+                        Producto producto = s.getProducto(numRef);
+                    	for(String img: imagenesSeleccionadas) {
+                        	producto.agregarImagen(img);
                         }
-                        images = true;
                     	
                     } catch(CategoriaException e1) {
                     	JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);

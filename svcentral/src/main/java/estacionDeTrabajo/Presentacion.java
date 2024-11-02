@@ -64,7 +64,7 @@ public class Presentacion {
 
     private JFrame frame;
     private File imagenSeleccionada;
-    private ImageIcon imagenSelecc;
+    private String imagenSelecc;
     private JDesktopPane desktopPane;
     private static ISistema s = Factory.getSistema();
     private JFileChooser fileChooser;
@@ -339,10 +339,10 @@ public class Presentacion {
                             imagenSeleccionada = fileChooser.getSelectedFile();
                             // Verificar que imagenSeleccionada no sea null
                             if (imagenSeleccionada != null) {
-                                String nombreArchivo = imagenSeleccionada.getName().toLowerCase();
+                                String nombreArchivo = imagenSeleccionada.getAbsolutePath();
                                 if (nombreArchivo.endsWith(".jpg") || nombreArchivo.endsWith(".png")) {
                                     imagenLabel.setText(imagenSeleccionada.getName());
-                                    imagenSelecc = new ImageIcon(imagenSeleccionada.getAbsolutePath());
+                                    imagenSelecc = nombreArchivo;
                                 } else {
                                     // Mostrar mensaje de error si el archivo no es válido
                                     JOptionPane.showMessageDialog(null, "Por favor, selecciona un archivo con extensión .jpg o .png", "Archivo no válido", JOptionPane.ERROR_MESSAGE);
@@ -451,8 +451,8 @@ public class Presentacion {
 								return;
 							}
                         	
-                        	Usuario u = s.getUsuario(nickname);
-                        	u.setImagen(imagenSelecc);
+                        	
+                        	s.agregarImagenUsuario(nickname, imagenSelecc);
                         	
                         }
                         
@@ -625,7 +625,7 @@ public class Presentacion {
 							if(tieneProds) {
 								s.agregarCategoriaConProductos(textCat);
 								if(tienePadre) {
-									s.asignarlePadreACategoriaProds(nombreCatPadre, textCat);
+									s.asignarlePadreCategoria(nombreCatPadre, textCat);
 								}
 								
 							} else {
@@ -710,13 +710,6 @@ public class Presentacion {
         //Opcion Mostrar Proveedor
         JMenuItem mntmMostrarProveedor = new JMenuItem("Mostrar Proveedor");
         
-    	mntmMostrarProveedor.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-            MostrarProveedor();
-        	}
-    	});
-    	
-
         JMenuItem mntmListarProductos = new JMenuItem("Listar Productos");
         mntmListarProductos.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -762,14 +755,14 @@ public class Presentacion {
                             detallePanel.add(new JLabel("=================================================="));
                             detallePanel.add(new JLabel("<html><br />Categorias de los productos: " + dt.getCategorias()));
 
-                            List<File> imagenes = dt.getImagenes();
+                            List<String> imagenes = dt.getImagenes();
                             if (imagenes != null && !imagenes.isEmpty()) {
                             	JPanel imagePanel = new JPanel();
                                 imagePanel.setLayout(new GridLayout(0, 2, 10, 10));
 
-                                for (File imagenFile : imagenes) {
+                                for (String imagenFile : imagenes) {
                                     try {
-                                        ImageIcon imageIcon = new ImageIcon(imagenFile.getAbsolutePath());
+                                        ImageIcon imageIcon = new ImageIcon(imagenFile);
                                         Image imagenAjuste = imageIcon.getImage();
                                         Image reajuste = imagenAjuste.getScaledInstance(200, 100, Image.SCALE_SMOOTH);
                                         ImageIcon imagenIconAjustada = new ImageIcon(reajuste);
@@ -936,17 +929,24 @@ public class Presentacion {
 
                                     // Verificar si el nodo es una hoja
                                     if (selectedNode.isLeaf()) {
-                                        // Disparar el evento deseado
                                     	String selection = (String) selectedNode.getUserObject();
-                                    	String[] parts = selection.split(" - "); 
-                                    	int numRef = 0;
-                                    	
-                                    	try {
-                                    		numRef = Integer.parseInt(parts[1]);
-                                    	} catch(ArrayIndexOutOfBoundsException e2) {
-                                    		
-                                    		return;
-                                    	}
+                                        String[] parts = selection.split(" - ");
+
+                                        if (parts.length < 2) {
+                                            JOptionPane.showMessageDialog(null, "Selección inválida.");
+                                            return;
+                                        }
+
+                                        // Suponiendo que el número de referencia está antes de los paréntesis
+                                        String numRefStr = parts[1].trim().split(" ")[0]; // Obtiene solo el número antes del primer espacio
+                                        int numRef;
+
+                                        try {
+                                            numRef = Integer.parseInt(numRefStr);
+                                        } catch (NumberFormatException ex) {
+                                            JOptionPane.showMessageDialog(null, "Error al parsear el número de referencia.");
+                                            return;
+                                        }
                                     	DtProducto dt = s.getDtProducto(numRef);
                                     	
                                     	System.out.print(numRef);
@@ -970,14 +970,14 @@ public class Presentacion {
                                         
                                         detallePanel.add(new JLabel("=============================================================\n"));
                                         detallePanel.add(new JLabel("<html><br />Categorias de los productos: " + dt.getCategorias()));
-                                        List<File> imagenes = dt.getImagenes();
+                                        List<String> imagenes = dt.getImagenes();
                                         if (imagenes != null && !imagenes.isEmpty()) {
                                         	JPanel imagePanel = new JPanel();
                                             imagePanel.setLayout(new GridLayout(0, 2, 10, 10)); // 3 columnas, espaciado de 10px
 
-                                            for (File imagenFile : imagenes) {
+                                            for (String imagenFile : imagenes) {
                                                 try {
-                                                    ImageIcon imageIcon = new ImageIcon(imagenFile.getAbsolutePath());
+                                                    ImageIcon imageIcon = new ImageIcon(imagenFile);
                                                     Image imagenAjuste = imageIcon.getImage();
                                                     Image reajuste = imagenAjuste.getScaledInstance(200, 100, Image.SCALE_SMOOTH);
                                                     ImageIcon imagenIconAjustada = new ImageIcon(reajuste);
@@ -1016,6 +1016,7 @@ public class Presentacion {
                 ventanaProductos.setLocation(100, 100);
             }
         });
+
 		
         
         
@@ -1109,14 +1110,14 @@ public class Presentacion {
                                 detallePanel.add(new JLabel("=================================================="));
                                 detallePanel.add(new JLabel("<html><br />Categorias de los productos: " + dt.getCategorias()));
 
-                                List<File> imagenes = dt.getImagenes();
+                                List<String> imagenes = dt.getImagenes();
                                 if (imagenes != null && !imagenes.isEmpty()) {
                                 	JPanel imagePanel = new JPanel();
                                     imagePanel.setLayout(new GridLayout(0, 2, 10, 10)); // 3 columnas, espaciado de 10px
 
-                                    for (File imagenFile : imagenes) {
+                                    for (String imagenFile : imagenes) {
                                         try {
-                                            ImageIcon imageIcon = new ImageIcon(imagenFile.getAbsolutePath());
+                                            ImageIcon imageIcon = new ImageIcon(imagenFile);
                                             Image imagenAjuste = imageIcon.getImage();
                                             Image reajuste = imagenAjuste.getScaledInstance(200, 100, Image.SCALE_SMOOTH);
                                             ImageIcon imagenIconAjustada = new ImageIcon(reajuste);
@@ -1264,17 +1265,18 @@ public class Presentacion {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
         // Agregar la información del cliente al panel
-        ImageIcon imagenIcon = cliente.getImagenes();
+        String ruta = cliente.getImagenes();
         
         
         
-        if (imagenIcon != null) {
-        	Image imagen = imagenIcon.getImage();
+        if (ruta != null) {
+        	ImageIcon icon = new ImageIcon(ruta);
+        	Image imagen = icon.getImage();
             Image imagenRedimensionada = imagen.getScaledInstance(200, 150, Image.SCALE_SMOOTH);
             
-            imagenIcon = new ImageIcon(imagenRedimensionada);
+            icon = new ImageIcon(imagenRedimensionada);
             // Crear nuevo ImageIcon con la imagen redimensionada
-            JLabel imagenLabel = new JLabel(imagenIcon);
+            JLabel imagenLabel = new JLabel(icon);
             
             panel.add(imagenLabel);
         } else {
@@ -1385,7 +1387,7 @@ public class Presentacion {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
         // Agregar la información del cliente al panel
-        ImageIcon imagenIcon = proveedor.getImagen();
+        ImageIcon imagenIcon = new ImageIcon(proveedor.getImagen());
         
         
         
