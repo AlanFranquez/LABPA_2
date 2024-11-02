@@ -122,6 +122,7 @@ public class RealizarCompra extends HttpServlet {
         }
         
         OrdenDeCompra ordenCompra = new OrdenDeCompra(itemsMap, precioTotal);
+        ordenCompra.setEstado("Enviado", "LISTO PARA RECOGER");
         sist.realizarCompra(ordenCompra, cliente.getNick());
         cliente.agregarCompra(ordenCompra);
         

@@ -235,7 +235,9 @@ public class InitServlet extends HttpServlet {
              
              OrdenDeCompra orden = new OrdenDeCompra(items, nuevoItem.getSubTotal());
              
+             
              Cliente cliente = (Cliente) sistema.getUsuario("Juan123");
+             orden.setEstado("Enviado", "LISTO PARA RECOGER");
              sistema.realizarCompra(orden, cliente.getNick());
              cliente.agregarCompra(orden);
              
