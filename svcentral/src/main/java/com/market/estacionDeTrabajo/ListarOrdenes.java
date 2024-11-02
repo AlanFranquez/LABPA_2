@@ -1,4 +1,4 @@
-package estacionDeTrabajo;
+package com.market.estacionDeTrabajo;
 
 import java.awt.BorderLayout;
 import java.time.format.DateTimeFormatter;
