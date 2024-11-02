@@ -32,17 +32,17 @@ public class OrdenDeCompra {
         this.fecha = LocalDateTime.now();
         this.estados = new ArrayList<>();
         this.estados.add(new DTEstado("En preparación", "PREPARANDO PAQUETE"));
-        this.estados.add(new DTEstado("Enviado", "LISTO PARA RETIRAR"));
+        
     }
 
     // Métodos para gestionar los estados
 
     public String getEstado() {
-        return estados.get(estados.size() - 1).getEstado(); // Devuelve el último estado
+        return estados.getLast().getEstado(); // Devuelve el último estado
     }
 
     public void setEstado(String nuevoEstado, String comentarios) {
-        estados.add(new DTEstado(nuevoEstado, comentarios));
+        estados.addLast(new DTEstado(nuevoEstado, comentarios));
     }
 
     public List<DTEstado> getHistorialEstado() {

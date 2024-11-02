@@ -11,7 +11,6 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.tree.DefaultMutableTreeNode;
 
@@ -154,11 +153,7 @@ public class Sistema implements ISistema {
     		}
     	}
     }
-    public Icon resizeIcon(ImageIcon icon, int width, int height) {
-        Image img = icon.getImage();
-        Image resizedImage = img.getScaledInstance(width, height,  java.awt.Image.SCALE_SMOOTH);
-        return new ImageIcon(resizedImage);
-    }
+    
     
     public Categoria getCat(String nombre) {
     	return this.categorias.get(nombre);
@@ -661,14 +656,22 @@ public class Sistema implements ISistema {
 	 	}
 	 	
 	 	public void cambiarEstadoOrden(String estado, String com, int numero, String cliente) {
-	 		Cliente client = (Cliente) this.usuarios.get(cliente);
-	 		
-	 		if (client != null) {
-	 			this.ordenes.get(numero).setEstado(estado, com);
-	 			return;
-	 		}
-	 		
-	 		System.out.print("no se pudo cambiar el estado");
+	 	    Cliente client = (Cliente) this.usuarios.get(cliente);
+
+	 	    if (client != null) {
+	 	        OrdenDeCompra orden = this.ordenes.get(numero);
+	 	        
+	 	        if (orden != null) {
+	 	            orden.setEstado(estado, com);
+	 	        } else {
+	 	            System.out.println("La orden con número " + numero + " no existe.");
+	 	        }
+	 	        
+	 	        return;
+	 	    }
+	 	    
+	 	    System.out.println("No se pudo cambiar el estado, cliente no encontrado");
 	 	}
+
 	 
 }
