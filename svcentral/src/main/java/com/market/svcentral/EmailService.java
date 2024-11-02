@@ -1,5 +1,7 @@
 package com.market.svcentral;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -11,8 +13,23 @@ import javax.mail.internet.MimeMessage;
 
 public class EmailService {
 
-    private final String username = "directmarket.utec@gmail.com"; // Cambia esto por tu correo
-    private final String password = "jpjm tdjl rrsx kldi"; // Cambia esto por tu contraseña o token de aplicación
+    private String username;
+    private String password;
+    
+    public EmailService() {
+        Properties properties = new Properties();
+        try (InputStream input = getClass().getClassLoader().getResourceAsStream("config.properties")) {
+            if (input == null) {
+                System.out.println("No se pudo cargar el archivo config.properties");
+                return;
+            }
+            properties.load(input);
+            this.username = properties.getProperty("correo.email");
+            this.password = properties.getProperty("correo.clave");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
 
     /**
      * Envía un correo electrónico al destinatario especificado
@@ -64,6 +81,18 @@ public class EmailService {
                 + "<p>Gracias por unirse a Direct Market. Esperamos que disfrute de una experiencia de compra satisfactoria con nosotros.</p>"
                 + "<br>"
                 + "<p>Saludos,<br>El equipo de Direct Market</p>"
+                + "</body>"
+                + "</html>";
+
+        sendEmail(recipientEmail, subject, body);
+    }
+    
+    public void sendChangeState(String recipientEmail, String newState) {
+        String subject = "Hubo un cambio en una orden de compra!";
+        String body = "<html>"
+                + "<body>"
+                + "<h1>Orden</h1>"
+                + "<p>Estimado "  + newState + "</p>"
                 + "</body>"
                 + "</html>";
 
