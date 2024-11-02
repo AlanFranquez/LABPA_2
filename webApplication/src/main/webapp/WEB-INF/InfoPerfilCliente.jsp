@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
 <%@page import="java.util.HashMap"%>
 <%@page import="com.market.svcentral.DTCliente"%>
 <%@page import="com.market.svcentral.DTOrdenDeCompra"%>
@@ -70,7 +72,7 @@
 
                 <li class="nav-item">
                     <button class="btn btn-danger">
-                        <a class="nav-link" href="logout">Cerrar Sesi�n</a>
+                        <a class="nav-link" href="logout">Cerrar Sesiï¿½n</a>
                     </button>
                 </li>
             </ul>

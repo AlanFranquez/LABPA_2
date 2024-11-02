@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
 <%@page import="com.market.svcentral.Sistema"%>
 <%@page import="com.market.svcentral.Usuario"%>
 <%@page import="com.market.svcentral.Producto"%>
@@ -7,8 +9,7 @@
 <%@page import="com.market.svcentral.Cliente" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <html>
 <head>

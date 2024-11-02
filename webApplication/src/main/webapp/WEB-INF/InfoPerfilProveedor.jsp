@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
 <%@page import="java.util.HashMap"%>
 <%@page import="com.market.svcentral.Producto"%>
 <%@page import="com.market.svcentral.DTCliente"%>
@@ -71,7 +73,7 @@
 
                 <li class="nav-item">
                     <button class="btn btn-danger">
-                        <a class="nav-link" href="logout">Cerrar Sesi�n</a>
+                        <a class="nav-link" href="logout">Cerrar Sesiï¿½n</a>
                     </button>
                 </li>
             </ul>
@@ -95,7 +97,7 @@
             <p>Apellido: <b><%= user.getApellido() %></b></p>
             <p>Fecha de Nacimiento: <b><%= user.getNacimientoFormateado() %></b></p>                 
             <p>Sitio WEB: <a href="<%= user.getLink() %>"><%= user.getLink() %></a></p>
-            <p>Compa��a: <b><%= user.getCompania() %></b></p>
+            <p>Compaï¿½ï¿½a: <b><%= user.getCompania() %></b></p>
         </div>
     </section>
 </main>
@@ -127,7 +129,7 @@
 <% } %>
                         <h5 class="card-title mt-2"><%= dt != null ? dt.getNombre() : "Producto no encontrado" %></h5>
                         <p class="card-text"><strong>Precio:</strong> $<%= dt != null ? dt.getPrecio() : "N/A" %></p>
-                        <p class="card-text"><strong>N�mero de Referencia:</strong> <%= dt != null ? dt.getNumRef() : "N/A" %></p>
+                        <p class="card-text"><strong>Nï¿½mero de Referencia:</strong> <%= dt != null ? dt.getNumRef() : "N/A" %></p>
                         <a href="perfilProducto?producto=<%= user.obtenerProd(dt.getNumRef()).getNumRef() %>" class="btn btn-primary">Ver Detalles</a>
                     </div>
                 </div>
