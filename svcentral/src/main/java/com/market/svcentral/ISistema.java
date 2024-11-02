@@ -3,7 +3,7 @@ package com.market.svcentral;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.Icon;
+
 import javax.swing.ImageIcon;
 import javax.swing.tree.DefaultMutableTreeNode;
 
@@ -72,8 +72,6 @@ public interface ISistema {
 	public abstract void asignarOrdenCliente(String cliente);
 
 	public abstract DtProducto getDtProducto(int numRef);
-
-	public abstract Icon resizeIcon(ImageIcon imageIcon, int num1, int num2);
 
 	public abstract void eliminarOrdenDeCompra(int numero) throws OrdenDeCompraException;
 

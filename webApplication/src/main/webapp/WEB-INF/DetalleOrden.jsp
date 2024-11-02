@@ -61,7 +61,7 @@
                 <% } %>
                 <li class="nav-item">
                     <button class="btn btn-danger">
-                        <a class="nav-link" href="logout">Cerrar Sesión</a>
+                        <a class="nav-link" href="logout">Cerrar Sesion</a>
                     </button>
                 </li>
             </ul>
@@ -70,7 +70,7 @@
 </nav>
 
 <div class="container mt-5">
-    <h1>Detalles de la Orden Nº <%= orden.getNumero() %></h1>
+    <h1>Detalles de la Orden Nro <%= orden.getNumero() %></h1>
     
     <div style="
     background-color: #fff;
@@ -121,8 +121,9 @@
 </div>
 
 
-            
-    
+    <% if(orden.getEstado().equalsIgnoreCase("En Preparacion")) { %>        
+    		request.setAttribute("agregarEstado", "si");
+    <% } %>
 
     <% if(orden.getEstado().equalsIgnoreCase("Enviado")) { %>
         <form action="perfilOrden" method="post">

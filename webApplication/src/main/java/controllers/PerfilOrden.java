@@ -105,9 +105,12 @@ public class PerfilOrden extends HttpServlet {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Número de orden inválido.");
                 return;
             }
+            
+            
+            
 
             if ("confirmar".equals(accion)) {
-                DTOrdenDeCompra orden = cliente.mostrarCompras(numeroOrden);
+            	DTOrdenDeCompra orden = cliente.mostrarCompras(numeroOrden);
                 if (orden != null) {
                 	sist.cambiarEstadoOrden("Entregado", "GRACIAS POR COMPRAR <3", orden.getNumero(), cliente.getNick());
                 } else {
