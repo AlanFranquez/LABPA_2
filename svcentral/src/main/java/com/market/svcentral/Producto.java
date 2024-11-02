@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
 public class Producto {
 	private Map<String, Cat_Producto> categorias;
 	private List <Comentario> comentarios;
@@ -12,7 +15,10 @@ public class Producto {
 	
 	private String nombre, descripcion;
 	private float precio;
-	private Integer numRef, stock;
+	
+	private Integer numRef;
+	
+	private Integer stock;
 	private String especificaciones;
 	private List<String> imagenes;
 	private int cantidadCompras = 0; 
