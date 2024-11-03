@@ -6,13 +6,24 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+@Entity
 public class OrdenDeCompra {
-    private int numero;
+    @Id
+	private int numero;
     private float precioTotal;
     private LocalDateTime fecha;
+    @OneToMany
     private Map<Integer, Item> items;
     private String estadoOrden;
 
+    public OrdenDeCompra(){
+    	
+    }
+    
     public OrdenDeCompra(int numero) {
     	fecha = LocalDateTime.now();
         this.numero = numero;

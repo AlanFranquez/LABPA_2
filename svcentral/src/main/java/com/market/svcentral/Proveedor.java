@@ -3,6 +3,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class Proveedor extends Usuario {
     private Map<Integer, Producto> listaProductos;  
     private String compania, link;

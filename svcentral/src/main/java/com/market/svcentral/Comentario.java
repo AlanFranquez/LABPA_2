@@ -4,13 +4,27 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
+@Entity
 public class Comentario {
+	@Id
 	private int numero;
 	private String texto;
+	@ManyToOne
+	@JoinColumn(name = "cliente_id")
 	private Cliente autor;
 	private LocalDateTime fecha;
+	@OneToMany
 	List <Comentario> respuestas;
+	
+	public Comentario() {
+		
+	}
 	
 	public Comentario(int numero, String texto, Cliente autor, LocalDateTime fecha) {
 		this.numero = numero;

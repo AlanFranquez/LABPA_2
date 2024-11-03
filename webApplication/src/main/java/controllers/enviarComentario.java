@@ -7,8 +7,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
+import java.beans.PersistenceDelegate;
 import java.io.IOException;
 import java.time.LocalDateTime;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 import com.market.svcentral.Cliente;
 import com.market.svcentral.Comentario;
@@ -19,6 +24,9 @@ import com.market.svcentral.Producto;
 @WebServlet("/enviarComentario")
 public class enviarComentario extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private EntityManagerFactory emf;
+	private EntityManager em;
+	
        
     private ISistema sist;
  // Contador de comentarios
@@ -59,6 +67,17 @@ public class enviarComentario extends HttpServlet {
 		Comentario comentario = new Comentario(comentarioId, mensaje, cliente, LocalDateTime.now());
 	
 		producto1.agregarComentario(comentario);
+		emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+		em = emf.createEntityManager();
+		
+		em.getTransaction().begin();
+		
+		em.persist(comentario);
+		System.out.print("Datos guardados en la base de datos");
+		
+		em.getTransaction().commit();
+		emf.close();
+		
 
 		// Redirigir a la página del producto
 		response.sendRedirect("perfilProducto?producto=" + paramNum);

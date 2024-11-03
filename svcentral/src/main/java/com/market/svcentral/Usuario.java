@@ -1,17 +1,39 @@
 package com.market.svcentral;
 
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
 // Clase usuario
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "tipo")
 public class Usuario {
 	// atributos
+	 @Id
+	 @GeneratedValue(strategy = GenerationType.IDENTITY)
+	    private Long id;
+	
+	
     private String nombre;
     private String nick;
     private String apellido;
     private String correo;
     private String tipo;
     private String contrasena;
+   @Transient
     private DTFecha nacimiento;
     private String imagen;
+    
+    public Usuario() {
+    	
+    }
     
     // Constructor:
     public Usuario(final String nombre, final String nick, final String apellido, final String correo, final DTFecha nacimiento, final String tipo, final String contrasena) {

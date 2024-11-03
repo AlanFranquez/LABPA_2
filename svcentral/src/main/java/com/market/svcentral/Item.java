@@ -1,9 +1,25 @@
 package com.market.svcentral;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Transient;
+
+@Entity
 public class Item {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
     private int cant;
     private float subTotal;
+    @Transient
     private Producto producto;
+    
+    public Item() {
+    	
+    }
 
     public Item(int cant, Producto prod) {
         this.cant = cant;

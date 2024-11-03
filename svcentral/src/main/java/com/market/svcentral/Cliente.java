@@ -6,12 +6,30 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.market.svcentral.exceptions.ProductoException;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
+import com.market.svcentral.exceptions.ProductoException;
+@Entity
+@DiscriminatorValue("cliente")
 public class Cliente extends Usuario {
+	
+	@Id
+    private Long id;
+	
+	@OneToMany
     private Map<Integer, OrdenDeCompra> listaCompras;
+    
+    @OneToMany(mappedBy = "autor")
     private Map<Integer, Comentario> listaComentarios;
+    @Transient
     private Carrito carrito;
+    public Cliente() {
+        
+    }
     
     // Constructor
     public Cliente(String nombre, String nick, String apellido, String correo, DTFecha fecha, String contrasena) {
