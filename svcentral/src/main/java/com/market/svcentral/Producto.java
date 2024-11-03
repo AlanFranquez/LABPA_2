@@ -28,10 +28,14 @@ public class Producto {
 		this.especificaciones = especificaciones;
 		this.categorias = new HashMap<>();
 		this.proveedor = prov;
-		this.comentarios = new ArrayList<>();
+		this.comentarios = new ArrayList<Comentario>();
 		this.imagenes = new ArrayList<>();
 	}
 	
+	public void agregarComentario(Comentario comentario) {
+	    this.comentarios.add(comentario);
+	}
+
 	public int getCantidadComprada() {
 		return this.cantidadCompras;
 	}
@@ -46,10 +50,6 @@ public class Producto {
 	
 	public List<String> getImagenes() {
 		return this.imagenes;
-	}
-	
-	public void agregarComentario(Comentario comentario) {
-		this.comentarios.add(comentario);
 	}
 	
 	public void agregarRespuesta(int numeroComentario, Comentario respuesta) {

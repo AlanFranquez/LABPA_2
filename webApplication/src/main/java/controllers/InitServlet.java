@@ -32,7 +32,7 @@ public class InitServlet extends HttpServlet {
              DTFecha fecha3 = new DTFecha(5, 6, 1990);
 
              sistema.agregarCliente("Juan", "Juan123", "Perez", "milagrosvairo.dev@gmail.com", fecha1, "123", "123");
-             //sistema.agregarCliente("Mili", "Mili123", "Vairo", "milagrosvairo.dev@gmail.com", fecha1, "123", "123");
+             sistema.agregarCliente("Mili", "Mili123", "Vairo", "maria.vairo@estudiantes.utec.edu.uy", fecha1, "123", "123");
              sistema.agregarCliente("Alberto", "albert1341", "Hernandez", "Ahernandez@gmail.com", fecha2, "123", "123");
              sistema.agregarCliente("Maria", "agusmari", "Agustina", "mariaagustina@gmail.com", fecha1, "123", "123");
 

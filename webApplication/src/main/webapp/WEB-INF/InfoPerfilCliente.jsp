@@ -121,7 +121,9 @@
                         <div class="card-body">
                             <h3 class="card-title"><%= dt.getNumero() %></h3> 
                             
-                            <% if(dt.getEstado() == "Entregado") {%>
+                         
+                            <% if ("Entregado".equals(dt.getEstado())) { %>
+                            
 
                             	<span class="badge mb-2" style="background-color: green; font-weight: normal; color: white"><%= dt.getEstado() %></span>
                             

@@ -33,6 +33,10 @@ public class Cliente extends Usuario {
     	return this.carrito;
     }
     
+    public OrdenDeCompra getOrden(int numero) {
+        return this.listaCompras.get(numero);
+    }
+
     
     public void agregarRespuesta(int numeroComentario, String nombreProducto, Comentario respuesta) {
     	for (Map.Entry<Integer, OrdenDeCompra> entry : listaCompras.entrySet()) {

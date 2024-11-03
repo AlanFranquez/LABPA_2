@@ -12,6 +12,7 @@ public class Comentario {
 	private LocalDateTime fecha;
 	List <Comentario> respuestas;
 	
+	
 	public Comentario(int numero, String texto, Cliente autor, LocalDateTime fecha) {
 		this.numero = numero;
 		this.texto = texto;
@@ -19,7 +20,8 @@ public class Comentario {
 		this.fecha = fecha;
 		this.respuestas = new ArrayList<Comentario>();
 	}
-	
+
+
 	public void agregarRespuesta(Comentario respuesta) {
 		this.respuestas.add(respuesta);
 	}

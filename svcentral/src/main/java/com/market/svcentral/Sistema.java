@@ -1,6 +1,7 @@
 package com.market.svcentral;
 
 import java.awt.Image;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -310,16 +311,23 @@ public class Sistema implements ISistema {
     
     // CASO DE USO 7: CANCELAR ORDEN DE COMPRA
     public Cliente getClienteDeOrden(Integer orden) {
-    	for (Usuario usuario : usuarios.values()) {
+        for (Usuario usuario : usuarios.values()) {
             if (usuario instanceof Cliente) {
                 Cliente cliente = (Cliente) usuario;
+                System.out.println("Verificando cliente: " + cliente.getCorreo()); // Debug
                 if (cliente.existeOrden(orden)) {
+                    System.out.println("Cliente encontrado con orden: " + orden); // Debug
                     return cliente;
                 }
             }
         }
+        System.out.println("No se encontró cliente con la orden: " + orden); // Debug
         return null;
     }
+
+  
+
+    
     public void eliminarOrdenDeCompra(int numero) throws OrdenDeCompraException {
     	OrdenDeCompra orden = this.ordenes.get(numero);
         if (orden == null) {
@@ -688,35 +696,38 @@ public class Sistema implements ISistema {
 	 		
 	 		System.out.print("no se pudo cambiar el estado");
 	 	}
-
-	 	/*public void cambiarEstadoOrden(String estado, String com, int numero, String cliente) {
-	 	    Cliente client = (Cliente) this.usuarios.get(cliente);
-	 	    
-	 	    if (client != null) {
-	 	        this.ordenes.get(numero).setEstado(estado, com);
-	 	        String recipientEmail = client.getCorreo();
-	 	        recipientEmail = recipientEmail != null ? recipientEmail.trim() : null;
-
-	 	        System.out.println("Estado después de cambiar: " + estado); // Imprime el estado antes de la llamada
-	 	        System.out.println("Correo del cliente: " + recipientEmail);
-	 	        
-	 	        try {
-	 	            if (recipientEmail != null && !recipientEmail.isEmpty()) {
-	 	                emailService.sendChangeState(recipientEmail, estado); // Usa 'estado' directamente aquí
-	 	                System.out.println("Correo de cambio de estado enviado a " + recipientEmail);
-	 	            } else {
-	 	                System.out.println("Cambio de estado Error: No se proporcionó una dirección de correo válida.");
-	 	            }
-	 	        } catch (Exception e) {
-	 	            System.out.println("Error al intentar enviar el correo de cambio de estado: " + e.getMessage());
-	 	        }
-	 	        return;
-	 	    }
-	 	    
-	 	    System.out.print("No se pudo cambiar el estado");
-	 	}*/
-
-
-
 	 
+	 
+	 public void notificarComentaristas(Producto producto, String nuevoComentarioTexto, Cliente autorComentario) {
+		    System.out.println("Iniciando notificación a los comentaristas.");
+
+		    // Verificar que los parámetros no sean nulos
+		    if (producto == null || nuevoComentarioTexto == null || autorComentario == null) {
+		        System.out.println("Error: Parámetros inválidos. Asegúrate de que el producto, el comentario y el autor no sean nulos.");
+		        return;
+		    }
+
+		    List<Comentario> comentarios = producto.getComentarios();
+		    if (comentarios == null || comentarios.isEmpty()) {
+		        System.out.println("No hay comentarios previos en el producto.");
+		        return;
+		    }
+
+		    // Notificar a los comentaristas
+		    for (Comentario comentario : comentarios) {
+		        Cliente comentarista = comentario.getAutor();
+
+		        // Enviar notificación solo si el comentarista no es el autor del nuevo comentario
+		        if (!comentarista.getCorreo().equals(autorComentario.getCorreo())) {
+		            String recipientEmail = comentarista.getCorreo();
+		            try {
+		                // Enviar la notificación
+		                emailService.sendCommentNotification(recipientEmail, producto.getNombre(), autorComentario.getNombre(), nuevoComentarioTexto);
+		            } catch (Exception e) {
+		                System.out.println("Error al intentar enviar la notificación a " + recipientEmail + ": " + e.getMessage());
+		                e.printStackTrace();
+		            }
+		        }
+		    }
+		}
 }

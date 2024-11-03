@@ -107,20 +107,47 @@ public class EmailService {
         }
 
         if (newState == null) {
-            System.out.println("Error: El estado de la orden es nulo."); // Añade este log para claridad
+            System.out.println("Error: El estado de la orden es nulo."); 
             throw new IllegalArgumentException("El estado no puede ser nulo");
         }
 
-        // Asegúrate de que el contenido del correo se establece correctamente
         String subject = "Hubo un cambio en una orden de compra!";
         String body = "<html>"
                 + "<body>"
                 + "<h1>Orden</h1>"
-                + "<p>Estado actualizado: " + newState + "</p>" // Usa el estado aquí
+                + "<p>Estado actualizado: " + newState + "</p>" 
                 + "</body>"
                 + "</html>";
 
         sendEmail(recipientEmail, subject, body);
     }
+
+    
+
+    public void sendCommentNotification(String recipientEmail, String productName, String commenterName, String newCommentText) {
+        if (recipientEmail == null || recipientEmail.trim().isEmpty()) {
+            System.out.println("Error: Dirección de correo nula o vacía.");
+            return;
+        }
+
+        String subject = "Nuevo comentario sobre un producto que compraste!";
+        String body = "<html>"
+                    + "<body>"
+                    + "<h1>Comentario sobre " + productName + "</h1>"
+                    + "<p><strong>" + commenterName + "</strong> ha comentado: " + newCommentText + "</p>"
+                    + "</body>"
+                    + "</html>";
+
+        try {
+            sendEmail(recipientEmail, subject, body);
+            System.out.println("Notificación de nuevo comentario enviada a " + recipientEmail);
+        } catch (Exception e) {
+            System.out.println("Error al enviar el correo a " + recipientEmail + ": " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+
+    
 
 }

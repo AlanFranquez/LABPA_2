@@ -118,5 +118,7 @@ public interface ISistema {
 	  public OrdenDeCompra getOrden(int numero);
 	  
 	  public void cambiarEstadoOrden(String estado, String com, int numero, String cliente);
+	  
+	  public void notificarComentaristas(Producto producto, String nuevoComentarioTexto, Cliente autorComentario);
 
 }

@@ -45,7 +45,10 @@ public class DTOrdenDeCompra {
     // Getters y Setters
 
     public String getEstado() {
-        return this.estados.getLast().getEstado();
+        if (estados != null && !estados.isEmpty()) {
+            return estados.get(estados.size() - 1).getEstado(); // Accede al último elemento
+        }
+        return "Sin estado"; // Retorno por defecto en caso de que la lista esté vacía
     }
 
     public List<DTEstado> getHistorialEstado() {

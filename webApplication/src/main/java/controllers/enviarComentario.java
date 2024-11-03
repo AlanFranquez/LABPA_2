@@ -60,6 +60,8 @@ public class enviarComentario extends HttpServlet {
 	
 		producto1.agregarComentario(comentario);
 
+		sist.notificarComentaristas(producto1, mensaje, cliente);
+		
 		// Redirigir a la página del producto
 		response.sendRedirect("perfilProducto?producto=" + paramNum);
 	}
