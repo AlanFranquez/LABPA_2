@@ -3,10 +3,28 @@ package com.market.svcentral;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Categoria {
+	@Id
 	private String nombre;
+
 	private String tipo;
+	
+	@ManyToOne
+	@JoinColumn(name = "cat_padre_nombre")
 	Cat_Padre padre;
+	
+	public Categoria() {
+		
+	}
 	
 	// Constructor:
 	public Categoria(String nombre, String tipo) {

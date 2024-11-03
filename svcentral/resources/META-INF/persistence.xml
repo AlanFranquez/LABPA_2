@@ -12,13 +12,24 @@
         <class>com.market.svcentral.DTFecha</class>
         <class>com.market.svcentral.OrdenDeCompra</class>
         <class>com.market.svcentral.Item</class>
+        <class>com.market.svcentral.Reclamo</class>
+        <class>com.market.svcentral.Producto</class>
+        <class>com.market.svcentral.Proveedor</class>
+        <class>com.market.svcentral.Categoria</class>
+        <class>com.market.svcentral.Cat_Producto</class>
+        <class>com.market.svcentral.Cat_Padre</class>
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
             <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/db"/>
             <property name="javax.persistence.jdbc.user" value="myuser"/>
             <property name="javax.persistence.jdbc.password" value="mypassword"/>
             <property name="eclipselink.logging.level" value="FINE"/>
-            <property name="eclipselink.ddl-generation" value="create"/>
+			
+           <!-- 
+            --> 
+            <property name="eclipselink.ddl-generation" value="drop-and-create-tables" />
+<property name="eclipselink.ddl-generation.output-mode" value="database" />
+
             <property name="eclipselink.show.sql" value="true"/>
         </properties>
     </persistence-unit>

@@ -25,26 +25,7 @@ import com.market.svcentral.usuarioRandom;
 public class InitServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     
-    private void crearTablaUsuario(EntityManager em) {
-        try {
-            em.getTransaction().begin();
-            em.createNativeQuery("CREATE TABLE IF NOT EXISTS usuario (" +
-                "id SERIAL PRIMARY KEY, " +
-                "nick VARCHAR(255), " +
-                "apellido VARCHAR(255), " +
-                "contrasena VARCHAR(255), " +
-                "correo VARCHAR(255), " +
-                "imagen VARCHAR(255), " +
-                "nombre VARCHAR(255), " +
-                "tipo VARCHAR(255))").executeUpdate();
-            em.getTransaction().commit();
-        } catch (Exception e) {
-            if (em.getTransaction().isActive()) {
-                em.getTransaction().rollback();
-            }
-            e.printStackTrace();
-        }
-    }
+  
 
 
 	@Override
@@ -61,19 +42,22 @@ public class InitServlet extends HttpServlet {
         	 DTFecha fecha1 = new DTFecha(1, 1, 1990);
              DTFecha fecha2 = new DTFecha(15, 6, 1985);
              DTFecha fecha3 = new DTFecha(5, 6, 1990);
-             crearTablaUsuario(em);
+             
              
              em.getTransaction().begin();
              
              sistema.agregarCliente("Juan", "Juan123", "Perez", "Juan@gmail.com", fecha1, "123", "123");
-             em.persist(sistema.getUsuario("Juan123"));
+             sistema.agregarImagenUsuario("Juan123", "/images/p1.jpg");
+             sistema.agregarCliente("Alberto", "albert1341", "Hernandez", "Ahernandez@gmail.com", fecha2, "123", "123");
+             sistema.agregarCliente("Maria", "agusmari", "Agustina", "mariaagustina@gmail.com", fecha1, "123", "123");
+             
+             
+             
+             em.persist((Cliente) sistema.getUsuario("Juan123"));
              em.getTransaction().commit();
             
              
-             sistema.agregarCliente("Alberto", "albert1341", "Hernandez", "Ahernandez@gmail.com", fecha2, "123", "123");
-             sistema.agregarCliente("Maria", "agusmari", "Agustina", "mariaagustina@gmail.com", fecha1, "123", "123");
 
-             sistema.agregarImagenUsuario("Juan123", "/images/p1.jpg");
              sistema.agregarImagenUsuario("albert1341", "/images/p2.jpg");
              sistema.agregarImagenUsuario("agusmari", "/images/p3.jpg");
              

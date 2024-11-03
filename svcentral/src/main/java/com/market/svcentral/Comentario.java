@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -15,8 +16,8 @@ public class Comentario {
 	@Id
 	private int numero;
 	private String texto;
-	@ManyToOne
-	@JoinColumn(name = "cliente_id")
+	@ManyToOne(cascade = CascadeType.PERSIST) 
+	@JoinColumn(name = "cliente_nick")
 	private Cliente autor;
 	private LocalDateTime fecha;
 	@OneToMany

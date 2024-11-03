@@ -2,12 +2,37 @@ package com.market.svcentral;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
+
+@Entity
 public class Reclamo {
+	@Id
+	private Long id;
+	
+	
 	private LocalDateTime fecha;
+	
 	private String texto;
+	
+	@ManyToOne
+	@JoinColumn(name = "producto_numref")
 	Producto producto;
+	
+	@ManyToOne
+	@JoinColumn(name = "proveedor_nick")
 	Proveedor proveedor;
+	
+	@ManyToOne
+	@JoinColumn(name = "cliente_id")
 	Cliente autor;
+	
+	public Reclamo() {
+		
+	}
 
 	public Reclamo(String texto, LocalDateTime fecha, Producto producto, Proveedor proveedor, Cliente autor) {
 		this.texto = texto;

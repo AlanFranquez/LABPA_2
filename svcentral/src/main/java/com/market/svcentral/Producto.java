@@ -5,24 +5,50 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
+@Entity
 public class Producto {
-	private Map<String, Cat_Producto> categorias;
-	private List <Comentario> comentarios;
-	private Proveedor proveedor;
-	
-	private String nombre, descripcion;
-	private float precio;
-	
+	@Id
 	private Integer numRef;
 	
+	@ManyToMany
+	private Map<String, Cat_Producto> categorias;
+	
+	@OneToMany
+	private List <Comentario> comentarios;
+	
+	@ManyToOne
+	private Proveedor proveedor;
+	
+	private String nombre;
+	
+	private String descripcion;
+	
+	private float precio;
+	
+	
 	private Integer stock;
+	
 	private String especificaciones;
+	
+	@ElementCollection
 	private List<String> imagenes;
+	
 	private int cantidadCompras = 0; 
+	
+	@OneToMany(mappedBy = "producto")
 	List <Reclamo> reclamos;
+	
+	public Producto() {
+		
+	}
 	
 	// Constructor:
 	public Producto(String nombre, String descripcion, float precio, Integer numRef, String especificaciones, Proveedor prov, int stock) {

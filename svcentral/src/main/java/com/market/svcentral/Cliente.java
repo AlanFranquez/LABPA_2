@@ -17,8 +17,6 @@ import com.market.svcentral.exceptions.ProductoException;
 @DiscriminatorValue("cliente")
 public class Cliente extends Usuario {
 	
-	@Id
-    private Long id;
 	
 	@OneToMany
     private Map<Integer, OrdenDeCompra> listaCompras;

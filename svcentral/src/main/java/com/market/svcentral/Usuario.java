@@ -2,40 +2,34 @@ package com.market.svcentral;
 
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
 // Clase usuario
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "tipo")
 public class Usuario {
-	// atributos
-	 @Id
-	 @GeneratedValue(strategy = GenerationType.IDENTITY)
-	    private Long id;
-	
-	
+    // Atributos
+    @Id
+    private String nick; // Cambiado a String y será el identificador único
+
     private String nombre;
-    private String nick;
     private String apellido;
     private String correo;
     private String tipo;
     private String contrasena;
-   @Transient
+    @Transient
     private DTFecha nacimiento;
+    
     private String imagen;
-    
+
     public Usuario() {
-    	
     }
-    
-    // Constructor:
+
+    // Constructor
     public Usuario(final String nombre, final String nick, final String apellido, final String correo, final DTFecha nacimiento, final String tipo, final String contrasena) {
         this.nombre = nombre;
         this.nick = nick;
@@ -45,53 +39,65 @@ public class Usuario {
         this.tipo = tipo;
         this.contrasena = contrasena;
     }
-    
-    // gets, sets
-    public String getNombre(){
+
+    // Getters y Setters
+    public String getNombre() {
         return nombre;
     }
-    public String getNick(){
+
+    public String getNick() {
         return nick;
     }
-    public String getApellido(){
+
+    public String getApellido() {
         return apellido;
     }
-    public String getCorreo(){
+
+    public String getCorreo() {
         return correo;
     }
+
     public String getTipo() {
-    	return tipo;
+        return tipo;
     }
-    public DTFecha getNacimiento(){
+
+    public DTFecha getNacimiento() {
         return nacimiento;
     }
-    public String getContrasena(){
+
+    public String getContrasena() {
         return contrasena;
     }
+
     public String getImagen() {
         return imagen;
     }
-    
-    
-    public void setNombre(final String nombre){
+
+    public void setNombre(final String nombre) {
         this.nombre = nombre;
     }
-    public void setNick(final String nick){
+
+    public void setNick(final String nick) {
         this.nick = nick;
     }
-    public void setApellido(final String apellido){
+
+    public void setApellido(final String apellido) {
         this.apellido = apellido;
     }
-    public void setCorreo(final String correo){
+
+    public void setCorreo(final String correo) {
         this.correo = correo;
     }
-    public void setNacimiento(final DTFecha nacimiento){
+
+    public void setNacimiento(final DTFecha nacimiento) {
         this.nacimiento = nacimiento;
     }
-    public void setContrasena(final String contra){
+
+    public void setContrasena(final String contra) {
         this.contrasena = contra;
     }
-    public void setImagen(final String imagen) { 
+
+    public void setImagen(final String imagen) {
         this.imagen = imagen;
     }
 }

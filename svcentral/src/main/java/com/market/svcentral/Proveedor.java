@@ -3,10 +3,25 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 
+@Entity
+@DiscriminatorValue("proveedor")
 public class Proveedor extends Usuario {
+	
+	@OneToMany(mappedBy = "proveedor")
     private Map<Integer, Producto> listaProductos;  
-    private String compania, link;
+    
+	private String compania;
+    
+	private String link;
+	
+	public Proveedor() {
+		
+	}
+	
     // Constructor:
     public Proveedor(String nom, String nick, String ape, String correo, DTFecha nacimiento, String comp, String link, String contrasena) {
         super(nom, nick, ape, correo, nacimiento, "proveedor", contrasena);
