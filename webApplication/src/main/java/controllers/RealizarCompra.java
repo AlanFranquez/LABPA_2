@@ -18,6 +18,7 @@ import com.market.svcentral.Factory;
 import com.market.svcentral.ISistema;
 import com.market.svcentral.Item;
 import com.market.svcentral.OrdenDeCompra;
+import com.market.svcentral.Proveedor;
 import com.market.svcentral.Usuario;
 
 /**
@@ -84,64 +85,71 @@ public class RealizarCompra extends HttpServlet {
 
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	
-        HttpSession session = request.getSession();
-        
-        if (session == null || session.getAttribute("usuarioLogueado") == null) {
-			response.sendRedirect("home");
-			return;
-		}
-		
-		Usuario user = (Usuario) session.getAttribute("usuarioLogueado");
-		
-		if (!user.getTipo().equals("cliente")) {
-			response.sendRedirect("home");
-			return;
-		}
-		
-		Cliente cliente = (Cliente) user;
-		if (cliente.getCarrito() == null || cliente.getCarrito().getProductos().isEmpty()) {
-			
-			response.sendRedirect("home");
-			return;
-		}
-		
-		Carrito carrito = cliente.getCarrito();
-		List<Item> items = carrito.getProductos();
-		float precioTotal = 0;
-		
-		for (Item item : items) {
-			precioTotal += item.getSubTotal();
-		}
-        
-        Map<Integer, Item> itemsMap = new HashMap<Integer, Item>();
-        
-        for (Item item : items) {
-            itemsMap.put(item.getProducto().getNumRef(), item);
-            
-        }
-        
-        OrdenDeCompra ordenCompra = new OrdenDeCompra(itemsMap, precioTotal);
-        ordenCompra.setEstado("Enviado", "LISTO PARA RECOGER");
-        sist.realizarCompra(ordenCompra, cliente.getNick());
-        cliente.agregarCompra(ordenCompra);
-        
-        carrito.vaciarCarrito();
-        
-        Map<Integer, OrdenDeCompra> ordenes = cliente.getCompras();
-        
-        for (Map.Entry<Integer, OrdenDeCompra> entry : ordenes.entrySet()) {
-        	
-        	OrdenDeCompra orden = entry.getValue();
-        	
-        	System.out.print(orden.getNumero());
-        }
-        
-        session.setAttribute("mensajeExito", "Su compra se ha realizado con éxito.");
-        session.setAttribute("precioTotal", String.valueOf(precioTotal));
-        
-        request.getRequestDispatcher("/WEB-INF/paginaExito.jsp").forward(request, response);
-
+	    HttpSession session = request.getSession();
+	    
+	    if (session == null || session.getAttribute("usuarioLogueado") == null) {
+	        response.sendRedirect("home");
+	        return;
+	    }
+	    
+	    Usuario user = (Usuario) session.getAttribute("usuarioLogueado");
+	    
+	    if (!user.getTipo().equals("cliente")) {
+	        response.sendRedirect("home");
+	        return;
+	    }
+	    
+	    Cliente cliente = (Cliente) user;
+	    if (cliente.getCarrito() == null || cliente.getCarrito().getProductos().isEmpty()) {
+	        response.sendRedirect("home");
+	        return;
+	    }
+	    
+	    Carrito carrito = cliente.getCarrito();
+	    List<Item> items = carrito.getProductos();
+	    
+	    // Mapa para almacenar las órdenes de compra por proveedor
+	    Map<Proveedor, Map<Integer, Item>> ordenesPorProveedor = new HashMap<>();
+	    
+	    // Organizar los productos por proveedor
+	    for (Item item : items) {
+	        Proveedor proveedor = item.getProveedor();
+	        ordenesPorProveedor.putIfAbsent(proveedor, new HashMap<>());
+	        ordenesPorProveedor.get(proveedor).put(item.getProducto().getNumRef(), item);
+	    }
+	    
+	    // Variable para acumular el precio total de todas las órdenes de compra
+	    float precioTotalGeneral = 0;
+	    
+	    // Procesar cada proveedor y crear una OrdenDeCompra
+	    for (Map.Entry<Proveedor, Map<Integer, Item>> entry : ordenesPorProveedor.entrySet()) {
+	        Proveedor proveedor = entry.getKey();
+	        Map<Integer, Item> itemsPorProveedor = entry.getValue();
+	        
+	        // Calcular el precio total para este proveedor
+	        float precioTotalPorProveedor = 0;
+	        for (Item item : itemsPorProveedor.values()) {
+	            precioTotalPorProveedor += item.getSubTotal();
+	        }
+	        
+	        // Sumar el precio total del proveedor al total general
+	        precioTotalGeneral += precioTotalPorProveedor;
+	        
+	        // Crear la OrdenDeCompra
+	        OrdenDeCompra ordenCompra = new OrdenDeCompra(itemsPorProveedor, precioTotalPorProveedor, proveedor);
+	        ordenCompra.setEstado("Enviado", "LISTO PARA RECOGER");
+	        sist.realizarCompra(ordenCompra, cliente.getNick());
+	        cliente.agregarCompra(ordenCompra);
+	    }
+	    
+	    // Vaciar el carrito después de la compra
+	    carrito.vaciarCarrito();
+	    
+	    // Guardar el precio total general en la sesión
+	    session.setAttribute("mensajeExito", "Su compra se ha realizado con éxito.");
+	    session.setAttribute("precioTotal", String.valueOf(precioTotalGeneral)); // Total general de todas las órdenes
+	    
+	    request.getRequestDispatcher("/WEB-INF/paginaExito.jsp").forward(request, response);
 	}
 
 }

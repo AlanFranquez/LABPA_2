@@ -15,6 +15,7 @@ import com.market.svcentral.ISistema;
 import com.market.svcentral.Item;
 import com.market.svcentral.OrdenDeCompra;
 import com.market.svcentral.Producto;
+import com.market.svcentral.Proveedor;
 
 @WebServlet(urlPatterns = {"/initServlet"}, loadOnStartup = 1)
 public class InitServlet extends HttpServlet {
@@ -198,7 +199,7 @@ public class InitServlet extends HttpServlet {
              
             
              ;
-             sistema.agregarProveedor("Perez", "AndresPerez@gmail.com", "Andres", "Perez", fecha3 , "Bamboo.inc" , "www.bamboo.com", "123", "123");
+             sistema.agregarProveedor("Perez", "milivairo2303@gmail.com", "Andres", "Perez", fecha3 , "Bamboo.inc" , "www.bamboo.com", "123", "123");
              sistema.agregarProveedor("Jorge", "Jorge@gmail.com", "Jorge", "Urrutia", fecha3 , "Google.inc" , "www.google.com", "123", "123");
              
              sistema.agregarImagenUsuario("Perez", "/images/p1.jpg");
@@ -228,13 +229,21 @@ public class InitServlet extends HttpServlet {
              }
              
              
+             //Map<Integer, Item> items = new HashMap<>();
+             //Item nuevoItem = new Item(5, sistema.getProducto(1));
+             //items.put(1, nuevoItem);
+             
+             
+             
+          // Crear un nuevo Item y obtener su Proveedor
              Map<Integer, Item> items = new HashMap<>();
-             Item nuevoItem = new Item(5, sistema.getProducto(1));
+             Producto producto = sistema.getProducto(1); // Obtener el producto
+             Proveedor proveedor = producto.getProveedor(); // Obtener el proveedor del producto
+             Item nuevoItem = new Item(5, producto);
              items.put(1, nuevoItem);
-             
-             
-             
-             OrdenDeCompra orden = new OrdenDeCompra(items, nuevoItem.getSubTotal());
+
+             // Crear la OrdenDeCompra con el proveedor
+             OrdenDeCompra orden = new OrdenDeCompra(items, nuevoItem.getSubTotal(), proveedor);
              
              
              Cliente cliente = (Cliente) sistema.getUsuario("Juan123");
@@ -250,8 +259,8 @@ public class InitServlet extends HttpServlet {
              
              List<Producto> prodlist = sistema.getAllProductos();
              
-             for (Producto producto : prodlist) {
-            	 System.out.print(producto.getNombre());
+             for (Producto producto1 : prodlist) {
+            	 System.out.print(producto1.getNombre());
              }
              
              

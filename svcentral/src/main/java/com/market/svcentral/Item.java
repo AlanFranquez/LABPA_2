@@ -4,6 +4,7 @@ public class Item {
     private int cant;
     private float subTotal;
     private Producto producto;
+    
 
     public Item(int cant, Producto prod) {
         this.cant = cant;
@@ -31,5 +32,9 @@ public class Item {
     
     public DTItem crearDT() {
     	return new DTItem(this.getCant(), this.getProducto());
+    }
+
+    public Proveedor getProveedor() {
+        return producto.getProveedor();
     }
 }

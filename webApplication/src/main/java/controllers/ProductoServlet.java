@@ -164,6 +164,9 @@ public class ProductoServlet extends HttpServlet {
 			}
             prov.agregarProd(sist.getProducto(referencia));
 
+            // Notificar a los clientes sobre el nuevo producto
+            sist.notificarClientesNuevoProducto(sist.getProducto(referencia), prov);
+
             // Redirigir al perfil del proveedor
             response.sendRedirect("perfilProveedor?nickname=" + prov.getNickname());
         } else {

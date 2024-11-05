@@ -120,5 +120,11 @@ public interface ISistema {
 	  public void cambiarEstadoOrden(String estado, String com, int numero, String cliente);
 	  
 	  public void notificarComentaristas(Producto producto, String nuevoComentarioTexto, Cliente autorComentario);
+	  
+	  //public void agregarCliente(Cliente cliente);
+	  
+	  List<Cliente> obtenerClientesQueHanCompradoDelProveedor(Proveedor proveedor);
+	  
+	  public void notificarClientesNuevoProducto(Producto nuevoProducto, Proveedor proveedor);
 
 }

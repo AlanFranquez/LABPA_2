@@ -13,6 +13,7 @@ public class Cliente extends Usuario {
     private Map<Integer, Comentario> listaComentarios;
     private Carrito carrito;
     
+    
     // Constructor
     public Cliente(String nombre, String nick, String apellido, String correo, DTFecha fecha, String contrasena) {
         super(nombre, nick, apellido, correo, fecha, "cliente", contrasena);
@@ -158,8 +159,32 @@ public class Cliente extends Usuario {
         return res;
     }
     
+    public List<OrdenDeCompra> getOrdenes() {
+        return new ArrayList<>(listaCompras.values());
+    }
+    
     public DTCliente crearDt() {
         return new DTCliente(this.getNombre(), this.getNick(), this.getApellido(), this.getCorreo(), this.getNacimiento(), this.getImagen(), this.getCompras());
     }
+	/*public boolean haCompradoDelProveedor(Proveedor proveedor) {
+		// TODO Auto-generated method stub
+		return false;
+	}*/
+    
+    
+    public boolean haCompradoDelProveedor(Proveedor proveedor) {
+        for (OrdenDeCompra orden : this.listaCompras.values()) {
+            // Imprimir el proveedor de la orden para depuración
+            System.out.println("Comparando con proveedor: " + orden.getProveedor().getNombre());
+            
+            // Usar equals para la comparación
+            if (orden.getProveedor().equals(proveedor)) {
+                return true; // Se encontró al menos una compra del proveedor
+            }
+        }
+        return false; // No se encontraron compras del proveedor
+    }
+
+	 
 }
 

@@ -15,6 +15,7 @@ public class OrdenDeCompra {
     private Map<Integer, Item> items;
     private List<DTEstado> estados;
     private List<Comentario> comentarios; 
+    private Proveedor proveedor;
 
     public OrdenDeCompra(int numero) {
         this.fecha = LocalDateTime.now();
@@ -27,7 +28,7 @@ public class OrdenDeCompra {
         
     }
 
-    public OrdenDeCompra(Map<Integer, Item> itemsAdquiridos, float precioTotal) {
+    public OrdenDeCompra(Map<Integer, Item> itemsAdquiridos, float precioTotal, Proveedor proveedor) {
         Random random = new Random();
         this.items = itemsAdquiridos;
         this.numero = random.nextInt(1000);
@@ -35,7 +36,11 @@ public class OrdenDeCompra {
         this.fecha = LocalDateTime.now();
         this.estados = new ArrayList<>();
         this.estados.add(new DTEstado("En preparación", "PREPARANDO PAQUETE"));
-        
+        this.proveedor = proveedor;
+    }
+    
+    public Proveedor getProveedor() {
+        return proveedor;
     }
     
     public List<Comentario> getComentarios() {
@@ -124,5 +129,7 @@ public class OrdenDeCompra {
         return new DTOrdenDeCompra(numero, getItems(), getPrecioTotal(), getHistorialEstado());
     }
 
+   
+    
 
 }

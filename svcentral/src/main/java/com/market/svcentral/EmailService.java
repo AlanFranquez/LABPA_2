@@ -147,7 +147,34 @@ public class EmailService {
         }
     }
 
+    public void sendNewProductNotification(String recipientEmail, String proveedorNombre, String clienteNombre, String productoNombre) {
+        if (recipientEmail == null || recipientEmail.trim().isEmpty()) {
+            System.out.println("Error: Dirección de correo nula o vacía.");
+            return;
+        }
 
-    
+        String subject = "Notificación de Nuevo Producto Registrado";
+        String body = "<html>"
+                    + "<body>"
+                    + "<h1>Nuevo Producto Registrado: " + productoNombre + "</h1>"
+                    + "<p>Estimado/a " + clienteNombre + ",</p>"
+                    + "<p>Nos complace informarle que el proveedor " + proveedorNombre + " ha registrado un nuevo producto: <strong>" + productoNombre + "</strong>.</p>"
+                    + "<p>Como cliente que ha adquirido productos de este proveedor anteriormente, pensamos que esta información puede ser de su interés.</p>"
+                    + "<p>Para más detalles, por favor ingrese a su cuenta en nuestra plataforma.</p>"
+                    + "<br><p>Atentamente,</p>"
+                    + "<p>Equipo de Notificaciones</p>"
+                    + "</body>"
+                    + "</html>";
+
+        try {
+            sendEmail(recipientEmail, subject, body);
+            System.out.println("Notificación de nuevo producto enviada a " + recipientEmail);
+        } catch (Exception e) {
+            System.out.println("Error al enviar el correo a " + recipientEmail + ": " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 
 }
+
+

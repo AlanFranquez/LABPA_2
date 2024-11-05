@@ -28,12 +28,14 @@ public class Sistema implements ISistema {
     private Map<Integer, OrdenDeCompra> ordenes;
     private Map<String, Categoria> arbolCategorias;
     private final EmailService emailService = new EmailService();
+    private List<Cliente> listaClientes;
 
     private Sistema() {
         // Inicialización de colecciones
         this.usuarios = new HashMap<>();
         this.categorias = new HashMap<>();
         this.ordenes = new HashMap<>();
+        this.listaClientes = new ArrayList<>();
         this.arbolCategorias = new HashMap<>();
     }
 
@@ -730,4 +732,85 @@ public class Sistema implements ISistema {
 		        }
 		    }
 		}
+
+	 //public void agregarCliente(Cliente cliente) {
+	  //      listaClientes.add(cliente);
+	   // }
+
+	    
+	 public List<Cliente> obtenerClientesQueHanCompradoDelProveedor(Proveedor proveedor) {
+	    List<Cliente> clientesQueHanComprado = new ArrayList<Cliente>();
+	    
+	    for (Cliente cliente : getAllClientes()) {
+	        for (OrdenDeCompra orden : cliente.getOrdenes()) {
+	            if (orden.getProveedor().equals(proveedor)) {
+	                clientesQueHanComprado.add(cliente);
+	                break;
+	            }
+	        }
+	    }
+	    
+	    return clientesQueHanComprado;
+	}
+	 
+	 
+	 public void notificarClientesNuevoProducto(Producto nuevoProducto, Proveedor proveedor) {
+	    System.out.println("Iniciando notificación de registro de nuevo producto a los clientes.");
+
+	    // Verificar que los parámetros no sean nulos
+	    if (nuevoProducto == null || proveedor == null) {
+	        System.out.println("Error: Parámetros inválidos. Asegúrate de que el producto y el proveedor no sean nulos.");
+	        return;
+	    }
+
+	    // Obtener la lista de clientes que han comprado productos del proveedor
+	    List<Cliente> clientes = obtenerClientesQueHanCompradoDelProveedor(proveedor);
+
+	    // Debug: Mostrar todos los clientes que han comprado al proveedor
+	    if (clientes.isEmpty()) {
+	        System.out.println("No hay clientes que hayan comprado productos de este proveedor.");
+	    } else {
+	        System.out.println("Clientes que han comprado al proveedor " + proveedor.getNombre() + ":");
+	        for (Cliente cliente : clientes) {
+	            System.out.println("- " + cliente.getNombre() + " (" + cliente.getCorreo() + ")");
+	        }
+	    }
+
+	    // Notificar a cada cliente
+	    for (Cliente cliente : clientes) {
+	        String recipientEmail = cliente.getCorreo();
+	        
+	        // Verificar si el cliente tiene un correo válido
+	        if (recipientEmail == null || recipientEmail.isEmpty()) {
+	            System.out.println("El cliente " + cliente.getNombre() + " no tiene un correo registrado para notificaciones.");
+	            continue;
+	        }
+
+	        try {
+	            // Llamada al servicio de email para enviar la notificación del nuevo producto
+	            emailService.sendNewProductNotification(
+	                recipientEmail,
+	                proveedor.getNombre(),
+	                cliente.getNombre(),
+	                nuevoProducto.getNombre()
+	            );
+	            System.out.println("Notificación enviada a " + cliente.getNombre());
+	        } catch (Exception e) {
+	            System.out.println("Error al enviar la notificación a " + cliente.getNombre() + ": " + e.getMessage());
+	        }
+	    }
+	}
+
+	 
+	 public List<Cliente> getAllClientes() {
+		 List<Cliente> clientes = new ArrayList<Cliente>();
+		 for (Map.Entry<String, Usuario> entry : usuarios.entrySet()) {
+			 Usuario usuario = entry.getValue();
+			 if (usuario.getTipo().equals("cliente")) {
+				 Cliente cliente = (Cliente) usuario;
+				 clientes.add(cliente);
+			 }
+		 }
+		 return clientes;
+	 }
 }
