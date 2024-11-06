@@ -171,7 +171,7 @@ public class CrearOrdenCompra extends JInternalFrame {
 
             float precioTotal = (float) itemsAgregados.values().stream().mapToDouble(Item::getSubTotal).sum();
             try {
-                OrdenDeCompra orden = new OrdenDeCompra(itemsAgregados, precioTotal);
+                OrdenDeCompra orden = new OrdenDeCompra(itemsAgregados, precioTotal, null);
                 s.realizarCompra(orden, cliente);
                 model.setRowCount(1); // Reiniciar la tabla dejando el encabezado
             } catch (Exception ex) {

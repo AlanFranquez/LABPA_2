@@ -12,6 +12,7 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.tree.DefaultMutableTreeNode;
 
@@ -830,4 +831,10 @@ public class Sistema implements ISistema {
 		 }
 		 return clientes;
 	 }
+
+	 public Icon resizeIcon(ImageIcon icon, int width, int height) {
+	        Image img = icon.getImage();
+	        Image resizedImage = img.getScaledInstance(width, height,  java.awt.Image.SCALE_SMOOTH);
+	        return new ImageIcon(resizedImage);
+	    }
 }

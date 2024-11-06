@@ -71,14 +71,6 @@ public class Producto {
 		return this.reclamos;
 	}
 	
-	public void agregarComentario(Comentario comentario) {
-	    this.comentarios.add(comentario);
-	}
-
-	public int getCantidadComprada() {
-		return this.cantidadCompras;
-	}
-	
 	public void setCantidadComprada(int cantidadComprada) {
 		this.cantidadCompras = cantidadComprada;
 	}
@@ -144,7 +136,6 @@ public class Producto {
 	public String getDescripcion() {
 		return descripcion;
 	}
-
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
 	}
@@ -225,5 +216,9 @@ public class Producto {
 		}
 		catStr = catStr + "</html>";
 		return new DtProducto(this.getNombre(), this.getDescripcion(), this.getPrecio(), this.getNumRef(), this.getEspecificaciones(), this.getProveedor(), catStr, this.getImagenes(), this.getStock(), this.getComentarios(), this.getCantidadComprada(), this.getReclamos());
+	}
+
+	public int getCantidadComprada() {
+		return this.cantidadCompras;
 	}
 }

@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
-
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.tree.DefaultMutableTreeNode;
 
@@ -130,4 +130,6 @@ public interface ISistema {
 	  public void notificarClientesNuevoProducto(Producto nuevoProducto, Proveedor proveedor);
 
 	  public void agregarReclamo(String texto, LocalDateTime fecha, Producto p, Proveedor prov, Cliente autor) throws ReclamoException;
+
+	public abstract Icon resizeIcon(ImageIcon imageIcon, int i, int j);
 }

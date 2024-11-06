@@ -17,27 +17,6 @@ public class Comentario {
     private int numero;
     
 	private String texto;
-	private Cliente autor;
-	private LocalDateTime fecha;
-	List <Comentario> respuestas;
-	
-	
-	public Comentario(int numero, String texto, Cliente autor, LocalDateTime fecha) {
-		this.numero = numero;
-		this.texto = texto;
-		this.autor = autor;
-		this.fecha = fecha;
-		this.respuestas = new ArrayList<Comentario>();
-	}
-
-
-	public void agregarRespuesta(Comentario respuesta) {
-		this.respuestas.add(respuesta);
-	}
-	
-	public List<Comentario> getRespuestas() {
-		return this.respuestas;
-	}
 
     @ManyToOne(cascade = CascadeType.MERGE) 
     @JoinColumn(name = "cliente_nick")
