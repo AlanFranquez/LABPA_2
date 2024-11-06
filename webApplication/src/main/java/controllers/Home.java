@@ -103,7 +103,6 @@ public class Home extends HttpServlet {
         }
 
         // Si hay sesión, obtener usuario logueado
-        Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
         request.setAttribute("usuario", usuarioLogueado);
         request.setAttribute("estado", "logueado");
 
