@@ -17,6 +17,7 @@
 DtProducto prod = (DtProducto) request.getAttribute("dtprod");
 Usuario usr = (Usuario) request.getAttribute("usuario");
 List<String> imagenes = prod.getImagenes();
+List<Comentario> comentarios = (List<Comentario>) request.getAttribute("comentarios");
 int id = prod.getNumRef();
 
 Cliente cl = null;
@@ -223,7 +224,6 @@ if (usr != null && usr.getTipo().equals("proveedor")) {
 		<h2>Comentarios</h2>
 		<div id="commentSection">
 			<%
-			List<Comentario> comentarios = prod.getComentarios();
 			%>
 
 			<%
@@ -237,7 +237,7 @@ if (usr != null && usr.getTipo().equals("proveedor")) {
 			<div class="column">
 				<%
 				for (Comentario c : comentarios) {
-					String comentarioId = "comment" + c.getNumero();
+					int comentarioId = c.getNumero();
 				%>
 				<div class="col-md-6 mb-4">
 					<div class="card shadow-sm" style="border: none;">

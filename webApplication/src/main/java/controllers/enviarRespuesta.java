@@ -42,6 +42,11 @@ public class enviarRespuesta extends HttpServlet {
         String respuestaTexto = request.getParameter("respuesta");
         String comentarioIdStr = request.getParameter("comentarioId");
         
+    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+		EntityManager em = emf.createEntityManager();
+		
+		em.getTransaction().begin();
+        
         String parametro = request.getParameter("dtprod");
 
 		if (parametro == null || parametro.isEmpty()) {
@@ -49,8 +54,8 @@ public class enviarRespuesta extends HttpServlet {
 		    return;
 		}
 		
-int paramNum = Integer.parseInt(parametro);
-		
+		int paramNum = Integer.parseInt(parametro);
+		Producto producto1 = em.find(Producto.class, paramNum);
 		if (session == null || session.getAttribute("usuarioLogueado") == null) {
 			response.sendRedirect("formlogin");
 			return;
@@ -63,10 +68,10 @@ int paramNum = Integer.parseInt(parametro);
         }
 
         int comentarioId = Integer.parseInt(comentarioIdStr);
+        System.out.print("ESTE ES EL COMENTARIO: " + producto1.getComentario(comentarioId).getTexto());
        
         
         Cliente cli = (Cliente) session.getAttribute("usuarioLogueado");
-        Producto producto1 = sist.getProducto(paramNum);
         Comentario coment = producto1.getComentario(comentarioId);
         
         if (coment == null) {
@@ -79,13 +84,7 @@ int paramNum = Integer.parseInt(parametro);
 
         Comentario respuesta = new Comentario(numeroRandom, respuestaTexto, cli, LocalDateTime.now());
         coment.agregarRespuesta(respuesta);
-        
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-		EntityManager em = emf.createEntityManager();
-		
-		em.getTransaction().begin();
-		
-		em.persist(respuesta);
+       
 		
 		em.getTransaction().commit();
 		

@@ -15,6 +15,7 @@ import javax.persistence.OneToMany;
 public class Comentario {
     @Id
     private int numero;
+    
     private String texto;
 
     @ManyToOne(cascade = CascadeType.MERGE) 

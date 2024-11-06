@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpSession;
 import java.beans.PersistenceDelegate;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Random;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -43,10 +44,16 @@ public class enviarComentario extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
-		contadorComentarios++;
-        int comentarioId = contadorComentarios;
+		Random numRandom = new Random();
+        int comentarioId = numRandom.nextInt(10000);
 		String mensaje = request.getParameter("comentario");
 		String parametro = request.getParameter("dtprod");
+		
+		emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+		em = emf.createEntityManager();
+		
+		em.getTransaction().begin();
+		
 
 		if (parametro == null || parametro.isEmpty()) {
 		    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "El producto no está disponible.");
@@ -61,19 +68,15 @@ public class enviarComentario extends HttpServlet {
 		}
 		
 		Cliente cliente = (Cliente) session.getAttribute("usuarioLogueado");
-		Producto producto1 = sist.getProducto(paramNum);
+		Producto producto1 = em.find(Producto.class, paramNum);
 
 		// Crear el comentario
 		Comentario comentario = new Comentario(comentarioId, mensaje, cliente, LocalDateTime.now());
-	
 		producto1.agregarComentario(comentario);
-		emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-		em = emf.createEntityManager();
-		
-		em.getTransaction().begin();
-		
 		em.persist(comentario);
-		System.out.print("Datos guardados en la base de datos");
+		System.out.print("Comentario guardado en la base de datos");
+	
+		
 		
 		em.getTransaction().commit();
 		em.close();

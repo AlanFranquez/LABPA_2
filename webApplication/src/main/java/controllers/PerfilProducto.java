@@ -8,11 +8,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
+import com.market.svcentral.Comentario;
 import com.market.svcentral.DtProducto;
 import com.market.svcentral.Factory;
 import com.market.svcentral.ISistema;
@@ -79,14 +81,23 @@ public class PerfilProducto extends HttpServlet {
 
             Producto producto = em.find(Producto.class, paramNumero);
 
+            for(Comentario c: producto.getComentarios()) {
+            	
+            	System.out.println();
+            	System.out.println(c.getTexto());
+            }
+            
             if (producto == null) {
                 response.sendRedirect("perfilCliente");
                 return;
             }
 
             DtProducto dtprod = producto.crearDT();
+            
+            List<Comentario> comentarios = producto.getComentarios();
 
             request.setAttribute("dtprod", dtprod);
+            request.setAttribute("comentarios", comentarios);
             request.getRequestDispatcher("/WEB-INF/PerfilProducto.jsp").forward(request, response);
         } catch (NumberFormatException e) {
             // Si el parámetro no es un número válido, redirigir al perfil del cliente
