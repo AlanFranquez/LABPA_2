@@ -3,6 +3,10 @@ package controllers;
 import java.io.IOException;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -14,6 +18,8 @@ import com.market.svcentral.Factory;
 import com.market.svcentral.ISistema;
 import com.market.svcentral.Producto;
 import com.market.svcentral.Usuario;
+import com.market.svcentral.Carrito;
+import com.market.svcentral.Cliente;
 
 @WebServlet("/home")
 public class Home extends HttpServlet {
@@ -34,36 +40,67 @@ public class Home extends HttpServlet {
         }
     }
 
-  
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        
-        List<Producto> productos = sist.getAllProductos();
 
-        
+        // Inicia el EntityManager
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+        EntityManager em = emf.createEntityManager();
+        List<Producto> productos = null;
+
+        em.getTransaction().begin();
+
+        try {
+            productos = em.createQuery("SELECT p FROM Producto p", Producto.class).getResultList();
+            System.out.println("Busqueda en la base de datos :)");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return;
+        }
+
         if (session == null || session.getAttribute("usuarioLogueado") == null) {
-        	request.setAttribute("prods", productos);
+            System.out.println("No hay usuario logueado. Redirigiendo a inicio no logueado.");
+            request.setAttribute("prods", productos);
             request.getRequestDispatcher("/WEB-INF/inicioNoLogueado.jsp").forward(request, response);
             return;
         }
 
-        Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
-        
-        if (productos != null) {
-        	request.setAttribute("prods", productos);
-        }
-        
-        
+        Usuario user = (Usuario) session.getAttribute("usuarioLogueado");
+        System.out.println("Usuario logueado: " + (user != null ? user.getNick() : "null"));
 
-        if (usuarioLogueado != null) {
-            request.setAttribute("usuario", usuarioLogueado); 
-            request.setAttribute("estado", "logueado");
-            request.getRequestDispatcher("/WEB-INF/inicio.jsp").forward(request, response);
+        Usuario usuarioLogueado = em.find(Usuario.class, user.getNick());
+        if (usuarioLogueado != null && usuarioLogueado instanceof Cliente) {
+            Cliente clienteLogueado = (Cliente) usuarioLogueado;
+            System.out.println("Cliente logueado: " + clienteLogueado.getNick());
+
+            if (clienteLogueado.getCarrito() == null) {
+                System.out.println("Carrito no encontrado para el cliente, creando nuevo carrito.");
+                Carrito nuevoCarrito = new Carrito();
+                clienteLogueado.setCarrito(nuevoCarrito);
+                em.persist(nuevoCarrito);
+                System.out.println("Nuevo carrito creado y persistido.");
+            } else {
+                System.out.println("Carrito existente para el cliente: " + clienteLogueado.getCarrito().getId());
+            }
+
+            session.setAttribute("carrito", clienteLogueado.getCarrito());
         } else {
-            response.sendRedirect("formlogin");
-            request.setAttribute("estado", "noLogueado");
+            System.out.println("El usuario logueado no es un cliente.");
         }
+
+        if (productos != null) {
+            request.setAttribute("prods", productos);
+        }
+
+        System.out.println("Entra aca");
+        request.setAttribute("usuario", usuarioLogueado);
+        request.setAttribute("estado", "logueado");
+
+        request.getRequestDispatcher("/WEB-INF/inicio.jsp").forward(request, response);
+
+        em.getTransaction().commit();
+        em.close();
+        emf.close();
     }
 }

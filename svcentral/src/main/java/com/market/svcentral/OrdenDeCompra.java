@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -16,7 +17,7 @@ public class OrdenDeCompra {
 	private int numero;
     private float precioTotal;
     private LocalDateTime fecha;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.PERSIST)
     private Map<Integer, Item> items;
     private String estadoOrden;
 

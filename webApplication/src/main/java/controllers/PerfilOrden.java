@@ -52,6 +52,7 @@ public class PerfilOrden extends HttpServlet {
             response.sendRedirect("formlogin");
             return;
         }
+        
 
         Cliente cliente = (Cliente) sess.getAttribute("usuarioLogueado");
 

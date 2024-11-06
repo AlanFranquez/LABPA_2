@@ -10,6 +10,10 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
 import com.market.svcentral.*;
 import com.market.svcentral.exceptions.*;
 
@@ -114,7 +118,19 @@ public class RealizarReclamo extends HttpServlet {
 		}
 		
 		try {
+			Reclamo nuevoReclamo = new Reclamo(mensaje, LocalDateTime.now(), p1, prov, cl);
 			sist.agregarReclamo(mensaje, LocalDateTime.now(), p1, prov, cl);
+			
+			EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+			EntityManager em = emf.createEntityManager();
+			
+			em.getTransaction().begin();
+			
+			em.persist(nuevoReclamo);
+			
+			em.getTransaction().commit();
+			
+			emf.close();
 		} catch (ReclamoException e) {
 			System.out.print(e.getMessage());
 			e.printStackTrace();

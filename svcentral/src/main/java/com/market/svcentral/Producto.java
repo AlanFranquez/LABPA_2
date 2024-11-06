@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.persistence.CascadeType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -19,12 +20,13 @@ public class Producto {
 	private Integer numRef;
 	
 	@ManyToMany
-	private Map<String, Cat_Producto> categorias;
+	private List<Cat_Producto> categorias;
 	
-	@OneToMany
+	@OneToMany(cascade = CascadeType.PERSIST)
 	private List <Comentario> comentarios;
 	
 	@ManyToOne
+	@JoinColumn(name = "proveedor_nick")
 	private Proveedor proveedor;
 	
 	private String nombre;
@@ -43,7 +45,7 @@ public class Producto {
 	
 	private int cantidadCompras = 0; 
 	
-	@OneToMany(mappedBy = "producto")
+	@OneToMany(cascade = CascadeType.PERSIST, mappedBy = "producto")
 	List <Reclamo> reclamos;
 	
 	public Producto() {
@@ -58,7 +60,7 @@ public class Producto {
 		this.numRef = numRef;
 		this.stock = stock;
 		this.especificaciones = especificaciones;
-		this.categorias = new HashMap<>();
+		this.categorias = new ArrayList<>();
 		this.proveedor = prov;
 		this.comentarios = new ArrayList<>();
 		this.imagenes = new ArrayList<>();
@@ -116,13 +118,13 @@ public class Producto {
 	
 	
 	public void agregarCategorias(Cat_Producto cat) {
-		categorias.put(cat.getNombre(), cat);
+		categorias.add(cat);
 	}
 	public void eliminarCategorias() {
 		categorias.clear();
 	}
 	
-	public Map<String, Cat_Producto> getCategorias() {
+	public List<Cat_Producto> getCategorias() {
 		return this.categorias;
 	}
 	
@@ -182,9 +184,9 @@ public class Producto {
     	int contador = 0;
     	String[] arrString = new String[contador];
     		
-    	for (Entry<String, Cat_Producto> entry : this.categorias.entrySet()) {
+    	for (Categoria entry: this.categorias) {
     		
-    		Categoria cat = entry.getValue();
+    		Categoria cat = entry;
     		Cat_Producto cProducto = (Cat_Producto) cat;
     		arrString[contador++] = cProducto.getNombre();
     		
@@ -209,7 +211,7 @@ public class Producto {
 		if (this.categorias.isEmpty()) {
 			catStr = "El producto no tiene categorias asignadas";
 		}
-		for (Cat_Producto cat : this.categorias.values()) {	
+		for (Cat_Producto cat : this.categorias) {	
 			catStr = catStr + "<br>" + tab + cat.getNombre();
 			Cat_Padre cPadre = cat.getPadre();
             while (cPadre != null) {

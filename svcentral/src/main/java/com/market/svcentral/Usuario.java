@@ -1,6 +1,7 @@
 package com.market.svcentral;
 
 import javax.persistence.DiscriminatorColumn;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
@@ -21,7 +22,7 @@ public class Usuario {
     private String correo;
     private String tipo;
     private String contrasena;
-    @Transient
+    @Embedded
     private DTFecha nacimiento;
     
     private String imagen;

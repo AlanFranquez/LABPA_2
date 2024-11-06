@@ -5,6 +5,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -156,6 +161,13 @@ public class ProductoServlet extends HttpServlet {
 
             Cat_Producto catp1 = new Cat_Producto(categoriaSeleccionada);
             catp1.agregarProducto(sist.getProducto(referencia));
+            
+            EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+            EntityManager em = emf.createEntityManager();
+            
+            em.getTransaction().begin();
+            
+            
             try {
 				sist.agregarProductoCategoria(catp1.getNombre(), referencia);
 			} catch (CategoriaException e) {
@@ -163,9 +175,12 @@ public class ProductoServlet extends HttpServlet {
 				e.printStackTrace();
 			}
             prov.agregarProd(sist.getProducto(referencia));
-
-            // Redirigir al perfil del proveedor
-            response.sendRedirect("perfilProveedor?nickname=" + prov.getNickname());
+            em.persist(sist.getProducto(referencia));
+            response.sendRedirect("perfilProveedor?nickname=" + prov.getNick());
+            em.getTransaction().commit();
+            em.close();
+            emf.close();
+            
         } else {
             request.setAttribute("error", "El precio debe ser mayor a cero.");
             request.getRequestDispatcher("/WEB-INF/RegistrarProducto.jsp").forward(request, response);

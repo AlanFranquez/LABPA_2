@@ -76,6 +76,7 @@ public class enviarComentario extends HttpServlet {
 		System.out.print("Datos guardados en la base de datos");
 		
 		em.getTransaction().commit();
+		em.close();
 		emf.close();
 		
 

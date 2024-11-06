@@ -6,10 +6,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
 import com.market.svcentral.exceptions.ProductoException;
@@ -21,10 +24,12 @@ public class Cliente extends Usuario {
 	@OneToMany
     private Map<Integer, OrdenDeCompra> listaCompras;
     
-    @OneToMany(mappedBy = "autor")
+    @OneToMany(mappedBy = "autor", cascade = CascadeType.MERGE)
     private Map<Integer, Comentario> listaComentarios;
-    @Transient
+    
+    @OneToOne(cascade = CascadeType.ALL)
     private Carrito carrito;
+    
     public Cliente() {
         
     }
@@ -45,9 +50,6 @@ public class Cliente extends Usuario {
     	return this.listaCompras.get(numero);
     }
     
-    public Carrito getCarrito() {
-    	return this.carrito;
-    }
     
     
     public void agregarRespuesta(int numeroComentario, String nombreProducto, Comentario respuesta) {
@@ -170,6 +172,13 @@ public class Cliente extends Usuario {
         return res;
     }
     
+    public Carrito getCarrito() {
+        return this.carrito;
+    }
+
+    public void setCarrito(Carrito c1) {
+        this.carrito = c1;
+    }
     public DTCliente crearDt() {
         return new DTCliente(this.getNombre(), this.getNick(), this.getApellido(), this.getCorreo(), this.getNacimiento(), this.getImagen(), this.getCompras());
     }

@@ -1,4 +1,4 @@
-package Filters;
+/*package Filters;
 
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
@@ -31,3 +31,4 @@ public class RootRedirectFilter implements Filter {
 
     public void destroy() {}
 }
+*/

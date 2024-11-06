@@ -1,5 +1,10 @@
 package controllers;
+
 import java.io.IOException;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 import com.market.svcentral.EstadoSesion;
 import com.market.svcentral.Factory;
@@ -13,77 +18,72 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-
 /**
  * Servlet implementation class Home
  */
 @WebServlet ("/formlogin")
 public class FormLogin extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public FormLogin() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
-
+    private static final long serialVersionUID = 1L;
 
     private ISistema sist;
 
     @Override
     public void init() throws ServletException {
         try {
-            sist = Factory.getSistema();  // Aquí puede estar fallando
+            sist = Factory.getSistema();
         } catch (Exception e) {
-            throw new ServletException("No se pudo inicializar ISistema", e);  // Manejar la excepción
+            throw new ServletException("No se pudo inicializar ISistema", e);
         }
     }
-   
-   
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		request.getRequestDispatcher("/WEB-INF/IniciarSesion.jsp").forward(request, response);
-	}
 
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.getRequestDispatcher("/WEB-INF/IniciarSesion.jsp").forward(request, response);
+    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession objSession = request.getSession();
         String nickname = request.getParameter("nickname");
         String password = request.getParameter("password");
-        
-        
-        
+
+        if (nickname == null || nickname.isEmpty() || password == null || password.isEmpty()) {
+            objSession.setAttribute("errorMsg", "Por favor, ingrese todos los datos.");
+            response.sendRedirect("formlogin");
+            return;
+        }
+
         EstadoSesion nuevoEstado;
-     
-        
-        
-        Usuario usr = sist.getUsuario(nickname);
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+        EntityManager em = emf.createEntityManager();
+
+        Usuario usr = em.find(Usuario.class, nickname);
         
         if (usr == null) {
-        	objSession.setAttribute("errorMsg", "Los datos no son válidos");
-        	response.sendRedirect("formlogin");
-        	return;
+            objSession.setAttribute("errorMsg", "Los datos no son válidos");
+            response.sendRedirect("formlogin");
+            return;
         }
-        
-        
-		
-		if (usr.getNick().equals(nickname) && usr.getContrasena().equals(password)) {
-		    System.out.print("Identificaodo correctamente");
-			nuevoEstado = EstadoSesion.LOGIN_CORRECTO;
-		    request.setAttribute("logueado", usr);
-		    objSession.setAttribute("usuarioLogueado", usr); 
-		    response.sendRedirect("home");
-		} else {
-		    nuevoEstado = EstadoSesion.LOGIN_INCORRECTO;
-		    System.out.print("Identificaodo ");
-		    objSession.setAttribute("errorMsg", "Los datos no son válidos");
-		    request.getRequestDispatcher("/WEB-INF/IniciarSesion.jsp").forward(request, response);
-		}
-        
-        objSession.setAttribute("estado", nuevoEstado);
-    }
 
+        if (usr.getNick().equals(nickname) && usr.getContrasena().equals(password)) {
+            nuevoEstado = EstadoSesion.LOGIN_CORRECTO;
+            request.setAttribute("logueado", usr);
+            objSession.setAttribute("usuarioLogueado", usr);
+            response.sendRedirect("home");
+        } else {
+            nuevoEstado = EstadoSesion.LOGIN_INCORRECTO;
+            objSession.setAttribute("errorMsg", "Los datos no son válidos");
+            request.getRequestDispatcher("/WEB-INF/IniciarSesion.jsp").forward(request, response);
+        }
+
+        objSession.setAttribute("estado", nuevoEstado);
+        
+        // Cerrar recursos
+        try {
+            em.close();
+            emf.close();
+        } catch (Exception e) {
+            e.printStackTrace();  // Manejo de errores
+        }
+    }
 }

@@ -9,6 +9,11 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Random;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 import com.market.svcentral.Cliente;
 import com.market.svcentral.Comentario;
@@ -68,9 +73,23 @@ int paramNum = Integer.parseInt(parametro);
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "Comentario no encontrado.");
             return;
         }
+        
+        Random rand = new Random();
+        int numeroRandom = rand.nextInt(20000);
 
-        Comentario respuesta = new Comentario(comentarioId, respuestaTexto, cli, LocalDateTime.now());
+        Comentario respuesta = new Comentario(numeroRandom, respuestaTexto, cli, LocalDateTime.now());
         coment.agregarRespuesta(respuesta);
+        
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+		EntityManager em = emf.createEntityManager();
+		
+		em.getTransaction().begin();
+		
+		em.persist(respuesta);
+		
+		em.getTransaction().commit();
+		
+		emf.close();
 
         // Redirigir a la página del producto
         response.sendRedirect("perfilProducto?producto=" + paramNum);

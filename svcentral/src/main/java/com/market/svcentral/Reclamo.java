@@ -2,7 +2,10 @@ package com.market.svcentral;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -11,6 +14,7 @@ import javax.persistence.ManyToOne;
 @Entity
 public class Reclamo {
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	
@@ -26,8 +30,8 @@ public class Reclamo {
 	@JoinColumn(name = "proveedor_nick")
 	Proveedor proveedor;
 	
-	@ManyToOne
-	@JoinColumn(name = "cliente_id")
+	@ManyToOne(cascade = CascadeType.MERGE) // Agregar cascade PERSIST
+    @JoinColumn(name = "cliente_id")
 	Cliente autor;
 	
 	public Reclamo() {

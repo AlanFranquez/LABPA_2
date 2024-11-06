@@ -9,6 +9,9 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 import com.market.svcentral.Factory;
 import com.market.svcentral.ISistema;
@@ -47,11 +50,29 @@ public class ListaProductos extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		List<Producto> productos = sist.getAllProductos();
-        
-        request.setAttribute("productos", productos); // Guardar la lista de productos en el request
+		//List<Producto> productos = sist.getAllProductos();
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+		EntityManager em = emf.createEntityManager();
+		List<Producto> productos = null;
+		em.getTransaction().begin();
+		
+		try {
+			productos = em.createQuery("SELECT p FROM Producto p", Producto.class)
+				    .getResultList();
+			
+		} catch (Exception e) {
+			System.out.print(e);
+			return;
+		}
+		System.out.print("Productos traidos de la base de datos correctamente");
+		
+        request.setAttribute("productos", productos);
         request.getSession().setAttribute("sistema", sist);
         request.getRequestDispatcher("/WEB-INF/listaProductos.jsp").forward(request, response);
+        em.getTransaction().commit();
+        em.close();
+        em.close();
+	
 	}
 
 	/**
@@ -68,10 +89,8 @@ public class ListaProductos extends HttpServlet {
 	private void agregarAlCarrito(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
 
-        // Obtener la sesión actual
         HttpSession session = request.getSession();
      
-        // Obtener el carrito de la sesión o crear uno nuevo si no existe
         Carrito carrito = (Carrito) session.getAttribute("carrito");
         if (carrito == null) {
             carrito = new Carrito(); 
