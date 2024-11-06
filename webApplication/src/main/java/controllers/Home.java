@@ -86,36 +86,35 @@ public class Home extends HttpServlet {
             session.setAttribute("carrito", clienteLogueado.getCarrito());
         } else {
             System.out.println("El usuario logueado no es un cliente.");
-        String userAgent = request.getHeader("User-Agent");
-        boolean isMobile = isMobileDevice(userAgent);
+            String userAgent = request.getHeader("User-Agent");
+            boolean isMobile = isMobileDevice(userAgent);
+       request.setAttribute("prods", productos);
 
-        request.setAttribute("prods", productos);
+       // Comprobación de sesión
+       if (session == null || session.getAttribute("usuarioLogueado") == null) {
+    	   // Si no hay sesión, redirigir a la página de inicio no logueado
+    	   if (isMobile) {
+    		   request.getRequestDispatcher("/WEB-INF/inicioMOBILE.jsp").forward(request, response);
+    	   } else {
+    		   request.getRequestDispatcher("/WEB-INF/inicioNoLogueado.jsp").forward(request, response);
+    	   }
+    	   return;
+       }
 
-        // Comprobación de sesión
-        if (session == null || session.getAttribute("usuarioLogueado") == null) {
-            // Si no hay sesión, redirigir a la página de inicio no logueado
-            if (isMobile) {
-                request.getRequestDispatcher("/WEB-INF/inicioMOBILE.jsp").forward(request, response);
-            } else {
-                request.getRequestDispatcher("/WEB-INF/inicioNoLogueado.jsp").forward(request, response);
+            // Si hay sesión, obtener usuario logueado
+       request.setAttribute("usuario", usuarioLogueado);
+       request.setAttribute("estado", "logueado");
+
+       // Redirigir según el tipo de dispositivo
+       if (isMobile) {
+    	   request.getRequestDispatcher("/WEB-INF/inicioLogeadoMOBILE.jsp").forward(request, response);
+       } else {
+    	   request.getRequestDispatcher("/WEB-INF/inicio.jsp").forward(request, response);
+       }
+
+            if (productos != null) {
+            	request.setAttribute("prods", productos);
             }
-            return;
-        }
-
-        // Si hay sesión, obtener usuario logueado
-        request.setAttribute("usuario", usuarioLogueado);
-        request.setAttribute("estado", "logueado");
-
-        // Redirigir según el tipo de dispositivo
-        if (isMobile) {
-            request.getRequestDispatcher("/WEB-INF/inicioLogeadoMOBILE.jsp").forward(request, response);
-        } else {
-            request.getRequestDispatcher("/WEB-INF/inicio.jsp").forward(request, response);
-        }
-
-        if (productos != null) {
-            request.setAttribute("prods", productos);
-        }
 
         System.out.println("Entra aca");
         request.setAttribute("usuario", usuarioLogueado);
@@ -126,6 +125,7 @@ public class Home extends HttpServlet {
         em.getTransaction().commit();
         em.close();
         emf.close();
+    }
     }
 
     private boolean isMobileDevice(String userAgent) {

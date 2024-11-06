@@ -186,7 +186,7 @@ public class ProductoServlet extends HttpServlet {
             sist.notificarClientesNuevoProducto(sist.getProducto(referencia), prov);
 
             // Redirigir al perfil del proveedor
-            response.sendRedirect("perfilProveedor?nickname=" + prov.getNickname());
+            response.sendRedirect("perfilProveedor?nickname=" + prov.getNick());
         } else {
             request.setAttribute("error", "El precio debe ser mayor a cero.");
             request.getRequestDispatcher("/WEB-INF/RegistrarProducto.jsp").forward(request, response);

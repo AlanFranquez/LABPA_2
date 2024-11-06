@@ -159,23 +159,7 @@ public class InitServlet extends HttpServlet {
              //sistema.asignarlePadreCategoria("Electrónica", "Celulares y Accesorios");
              //sistema.agregarCategoriaConProductos("Computadoras y Laptops");
              //sistema.asignarlePadreCategoria("Electrónica", "Computadoras y Laptops");
-             //sistema.agregarCategoriaConProductos("Cámaras");
-
-           
-            
-             for (Producto producto1 : prodlist) {
-            	 System.out.print(producto1.getNombre());
-             }
-             
-
-        
-             
-             
-             
-          
-
-          
-             
+             //sistema.agregarCategoriaConProductos("Cámaras");      
 
          } catch (Exception exeption) {
              exeption.printStackTrace();
