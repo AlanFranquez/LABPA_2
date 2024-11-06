@@ -2,9 +2,12 @@ package com.model;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Proveedor extends Usuario {
-    private Map<Integer, Producto> listaProductos;  
+    private Map<Integer, Producto> listaProductos; 
+    private Map<Integer, Reclamo> listaReclamos;
     private String compania, link;
     // Constructor:
     public Proveedor(String nom, String nick, String ape, String correo, DTFecha nacimiento, String comp, String link, String contrasena) {
@@ -95,6 +98,19 @@ public class Proveedor extends Usuario {
         // for (File imagen : archivosImagenes) {
         //     prod.agregarImagen(imagen); // Suponiendo que tienes un método para manejar imágenes
         // }
+    }
+    
+    public Map<Integer, Reclamo> getReclamo() {
+    	return this.listaReclamos;
+    }
+    
+    public List<Reclamo> ObtenerListaReclamos() {
+    	List<Reclamo> listaReclamos = new ArrayList<>();
+       
+        if (this.listaReclamos != null) {
+            listaReclamos.addAll(this.listaReclamos.values());
+        }
+        return listaReclamos;
     }
 
 }

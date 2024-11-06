@@ -147,6 +147,12 @@
 <button class="btn btn-primary bg-black" style="border:none; color: white;">
 	AGREGAR PRODUCTO	
 </button>
+<br>
+<br>
+<a href="VerReclamos" style="text-decoration: none; color: white;">
+<button class="btn btn-primary bg-black" style="border:none; color: white;">
+	VER RECLAMOS	
+</button>
 	</a>
 </div>
 
