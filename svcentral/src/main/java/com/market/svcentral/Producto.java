@@ -62,7 +62,7 @@ public class Producto {
 		this.especificaciones = especificaciones;
 		this.categorias = new ArrayList<>();
 		this.proveedor = prov;
-		this.comentarios = new ArrayList<>();
+		this.comentarios = new ArrayList<Comentario>();
 		this.imagenes = new ArrayList<>();
 		this.reclamos = new ArrayList<Reclamo>();
 	}
@@ -71,6 +71,10 @@ public class Producto {
 		return this.reclamos;
 	}
 	
+	public void agregarComentario(Comentario comentario) {
+	    this.comentarios.add(comentario);
+	}
+
 	public int getCantidadComprada() {
 		return this.cantidadCompras;
 	}

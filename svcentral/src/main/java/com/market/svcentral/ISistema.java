@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.Icon;
+
 import javax.swing.ImageIcon;
 import javax.swing.tree.DefaultMutableTreeNode;
 
@@ -75,8 +75,6 @@ public interface ISistema {
 
 	public abstract DtProducto getDtProducto(int numRef);
 
-	public abstract Icon resizeIcon(ImageIcon imageIcon, int num1, int num2);
-
 	public abstract void eliminarOrdenDeCompra(int numero) throws OrdenDeCompraException;
 
 	public abstract boolean existeOrden(int num);
@@ -121,7 +119,15 @@ public interface ISistema {
 	  
 	  public OrdenDeCompra getOrden(int numero);
 	  
-	  public void cambiarEstadoOrden(String estado, int numero, String cliente);
+	  public void cambiarEstadoOrden(String estado, String com, int numero, String cliente);
+	  
+	  public void notificarComentaristas(Producto producto, String nuevoComentarioTexto, Cliente autorComentario);
+	  
+	  //public void agregarCliente(Cliente cliente);
+	  
+	  List<Cliente> obtenerClientesQueHanCompradoDelProveedor(Proveedor proveedor);
+	  
+	  public void notificarClientesNuevoProducto(Producto nuevoProducto, Proveedor proveedor);
 
 	  public void agregarReclamo(String texto, LocalDateTime fecha, Producto p, Proveedor prov, Cliente autor) throws ReclamoException;
 }

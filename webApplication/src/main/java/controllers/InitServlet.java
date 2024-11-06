@@ -22,6 +22,7 @@ import com.market.svcentral.Item;
 import com.market.svcentral.OrdenDeCompra;
 import com.market.svcentral.Producto;
 import com.market.svcentral.usuarioRandom;
+import com.market.svcentral.Proveedor;
 
 @WebServlet(urlPatterns = {"/initServlet"}, loadOnStartup = 1)
 public class InitServlet extends HttpServlet {
@@ -32,7 +33,7 @@ public class InitServlet extends HttpServlet {
 
 	@Override
     public void init() throws ServletException {
-    	System.out.print("El SISTEMA INCIIO VAMO ARRIBA");
+    	System.out.print("El SISTEMA INICIO VAMO ARRIBA");
     	ISistema sistema = Factory.getSistema();
     
     	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
@@ -49,6 +50,9 @@ public class InitServlet extends HttpServlet {
              em.getTransaction().begin();
              
              sistema.agregarCliente("Juan", "Juan123", "Perez", "Juan@gmail.com", fecha1, "123", "123");
+
+             sistema.agregarCliente("Juan", "Juan123", "Perez", "milagrosvairo.dev@gmail.com", fecha1, "123", "123");
+             sistema.agregarCliente("Mili", "Mili123", "Vairo", "maria.vairo@estudiantes.utec.edu.uy", fecha1, "123", "123");
              sistema.agregarCliente("Alberto", "albert1341", "Hernandez", "Ahernandez@gmail.com", fecha2, "123", "123");
              sistema.agregarCliente("Maria", "agusmari", "Agustina", "mariaagustina@gmail.com", fecha1, "123", "123");
              
@@ -79,6 +83,8 @@ public class InitServlet extends HttpServlet {
              sistema.agregarCategoriaConProductos("Bazar");
              
             
+             sistema.agregarProveedor("Perez", "milivairo2303@gmail.com", "Andres", "Perez", fecha3 , "Bamboo.inc" , "www.bamboo.com", "123", "123");
+             sistema.agregarProveedor("Jorge", "Jorge@gmail.com", "Jorge", "Urrutia", fecha3 , "Google.inc" , "www.google.com", "123", "123");
              
              sistema.agregarProducto("Pelota", 1, "Pelota inflable ideal", "Increible", 120, "Perez", 100);
              sistema.agregarProducto("Cargador", 2, "Cargador tipo c", "Muy bueno", 220, "Perez", 20);
@@ -106,15 +112,25 @@ public class InitServlet extends HttpServlet {
              em.persist(sistema.getCat("Bazar"));
              
              
+             //Map<Integer, Item> items = new HashMap<>();
+             //Item nuevoItem = new Item(5, sistema.getProducto(1));
+             //items.put(1, nuevoItem);
+             
+             
+             
+          // Crear un nuevo Item y obtener su Proveedor
              Map<Integer, Item> items = new HashMap<>();
-             Item nuevoItem = new Item(5, sistema.getProducto(1));
+             Producto producto = sistema.getProducto(1); // Obtener el producto
+             Proveedor proveedor = producto.getProveedor(); // Obtener el proveedor del producto
+             Item nuevoItem = new Item(5, producto);
              items.put(1, nuevoItem);
+
+             // Crear la OrdenDeCompra con el proveedor
+             OrdenDeCompra orden = new OrdenDeCompra(items, nuevoItem.getSubTotal(), proveedor);
              
-             
-             
-             OrdenDeCompra orden = new OrdenDeCompra(items, nuevoItem.getSubTotal());
              
              Cliente cliente = (Cliente) sistema.getUsuario("Juan123");
+             orden.setEstado("Enviado", "LISTO PARA RECOGER");
              sistema.realizarCompra(orden, cliente.getNick());
              cliente.agregarCompra(orden);
              sistema.cambiarEstadoOrden("Enviado", orden.getNumero(), cliente.getNick());
@@ -129,6 +145,8 @@ public class InitServlet extends HttpServlet {
              em.getTransaction().commit();
             
              
+             
+         	 
 
              
             
@@ -145,6 +163,9 @@ public class InitServlet extends HttpServlet {
 
            
             
+             for (Producto producto1 : prodlist) {
+            	 System.out.print(producto1.getNombre());
+             }
              
 
         

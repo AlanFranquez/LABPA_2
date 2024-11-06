@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
 <%@ page import="com.market.svcentral.DTCliente"%>
 <%@ page import="com.market.svcentral.DTFecha" %>
 <%@ page import="java.util.Collection"%>
@@ -6,8 +8,6 @@
 <%@ page import="java.util.Map"%>  <!-- Añadir esta línea -->
 <%@ page import="java.io.File"%>
 
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>

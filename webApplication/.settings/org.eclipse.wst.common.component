@@ -19,22 +19,37 @@
         
         
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+                                
+        
+        
         <dependent-module archiveName="svcentral-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/svcentral/svcentral">
+                                                
+            
+            
             <dependency-type>uses</dependency-type>
+                                            
+        
+        
         </dependent-module>
-                                
+                                                        
         
         
-        <property name="context-root" value="webApplication"/>
-                                
+        
         
         
         <property name="java-output-path" value="/webApplication/target/classes"/>
-                            
+        <property name="context-root" value="webApplication"/>
+                                                    
+    
+    
+    
     
     
     </wb-module>
-            
+                        
+
+
+
 
 
 </project-modules>

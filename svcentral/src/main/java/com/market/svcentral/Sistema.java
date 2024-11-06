@@ -12,7 +12,6 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.tree.DefaultMutableTreeNode;
 
@@ -29,12 +28,15 @@ public class Sistema implements ISistema {
     private Map<String, Categoria> categorias;
     private Map<Integer, OrdenDeCompra> ordenes;
     private Map<String, Categoria> arbolCategorias;
+    private final EmailService emailService = new EmailService();
+    private List<Cliente> listaClientes;
 
     private Sistema() {
         // Inicialización de colecciones
         this.usuarios = new HashMap<>();
         this.categorias = new HashMap<>();
         this.ordenes = new HashMap<>();
+        this.listaClientes = new ArrayList<>();
         this.arbolCategorias = new HashMap<>();
     }
 
@@ -156,11 +158,7 @@ public class Sistema implements ISistema {
     		}
     	}
     }
-    public Icon resizeIcon(ImageIcon icon, int width, int height) {
-        Image img = icon.getImage();
-        Image resizedImage = img.getScaledInstance(width, height,  java.awt.Image.SCALE_SMOOTH);
-        return new ImageIcon(resizedImage);
-    }
+    
     
     public Categoria getCat(String nombre) {
     	return this.categorias.get(nombre);
@@ -320,16 +318,23 @@ public class Sistema implements ISistema {
     
     // CASO DE USO 7: CANCELAR ORDEN DE COMPRA
     public Cliente getClienteDeOrden(Integer orden) {
-    	for (Usuario usuario : usuarios.values()) {
+        for (Usuario usuario : usuarios.values()) {
             if (usuario instanceof Cliente) {
                 Cliente cliente = (Cliente) usuario;
+                System.out.println("Verificando cliente: " + cliente.getCorreo()); // Debug
                 if (cliente.existeOrden(orden)) {
+                    System.out.println("Cliente encontrado con orden: " + orden); // Debug
                     return cliente;
                 }
             }
         }
+        System.out.println("No se encontró cliente con la orden: " + orden); // Debug
         return null;
     }
+
+  
+
+    
     public void eliminarOrdenDeCompra(int numero) throws OrdenDeCompraException {
     	OrdenDeCompra orden = this.ordenes.get(numero);
         if (orden == null) {
@@ -666,12 +671,33 @@ public class Sistema implements ISistema {
 	 		return this.ordenes.get(numero);
 	 	}
 	 	
-	 	public void cambiarEstadoOrden(String estado, int numero, String cliente) {
+	 public void cambiarEstadoOrden(String estado, String com, int numero, String cliente) {
 	 		Cliente client = (Cliente) this.usuarios.get(cliente);
 	 		
 	 		if (client != null) {
-	 			client.getCompra(numero).setEstado(estado);
-	 			this.ordenes.get(numero).setEstado(estado);
+	 			this.ordenes.get(numero).setEstado(estado, com);
+	 			
+	 			String recipientEmail = client.getCorreo();
+	 	        //String recipientEmail = "maria.vairo@estudiantes.utec.edu.uy";
+	 			System.out.println("Correo del cliente: " + recipientEmail);
+
+
+	 	        try {
+	 	            if (recipientEmail != null && !recipientEmail.isEmpty()) {
+	 	                // Enviar el correo de bienvenida
+	 	            	System.out.println("Estado: " + estado);
+	 	            	System.out.println("recipientEmail: " + recipientEmail);
+	 	                emailService.sendChangeState(recipientEmail, estado);
+	 	                System.out.println("Correo de cambio de estado enviado a " + recipientEmail);
+	 	            } else {
+	 	                System.out.println("Cambio de estado Error: No se proporcionó una dirección de correo válida.");
+	 	            }
+	 	        } catch (Exception e) {
+	 	            System.out.println("Error al intentar enviar el correo de cambio de estado: " + e.toString());
+	 	            e.printStackTrace();  // Imprime el rastro completo de la excepción en la consola
+	 	            // e.printStackTrace();
+	 	        }
+	 	        
 	 			return;
 	 		}
 	 		
@@ -690,4 +716,118 @@ public class Sistema implements ISistema {
 	 	 		this.getProducto(p.getNumRef()).agregarReclamo(r);
 	 	 	}
 	 
+	 
+	 public void notificarComentaristas(Producto producto, String nuevoComentarioTexto, Cliente autorComentario) {
+		    System.out.println("Iniciando notificación a los comentaristas.");
+
+		    // Verificar que los parámetros no sean nulos
+		    if (producto == null || nuevoComentarioTexto == null || autorComentario == null) {
+		        System.out.println("Error: Parámetros inválidos. Asegúrate de que el producto, el comentario y el autor no sean nulos.");
+		        return;
+		    }
+
+		    List<Comentario> comentarios = producto.getComentarios();
+		    if (comentarios == null || comentarios.isEmpty()) {
+		        System.out.println("No hay comentarios previos en el producto.");
+		        return;
+		    }
+
+		    // Notificar a los comentaristas
+		    for (Comentario comentario : comentarios) {
+		        Cliente comentarista = comentario.getAutor();
+
+		        // Enviar notificación solo si el comentarista no es el autor del nuevo comentario
+		        if (!comentarista.getCorreo().equals(autorComentario.getCorreo())) {
+		            String recipientEmail = comentarista.getCorreo();
+		            try {
+		                // Enviar la notificación
+		                emailService.sendCommentNotification(recipientEmail, producto.getNombre(), autorComentario.getNombre(), nuevoComentarioTexto);
+		            } catch (Exception e) {
+		                System.out.println("Error al intentar enviar la notificación a " + recipientEmail + ": " + e.getMessage());
+		                e.printStackTrace();
+		            }
+		        }
+		    }
+		}
+
+	 //public void agregarCliente(Cliente cliente) {
+	  //      listaClientes.add(cliente);
+	   // }
+
+	    
+	 public List<Cliente> obtenerClientesQueHanCompradoDelProveedor(Proveedor proveedor) {
+	    List<Cliente> clientesQueHanComprado = new ArrayList<Cliente>();
+	    
+	    for (Cliente cliente : getAllClientes()) {
+	        for (OrdenDeCompra orden : cliente.getOrdenes()) {
+	            if (orden.getProveedor().equals(proveedor)) {
+	                clientesQueHanComprado.add(cliente);
+	                break;
+	            }
+	        }
+	    }
+	    
+	    return clientesQueHanComprado;
+	}
+	 
+	 
+	 public void notificarClientesNuevoProducto(Producto nuevoProducto, Proveedor proveedor) {
+	    System.out.println("Iniciando notificación de registro de nuevo producto a los clientes.");
+
+	    // Verificar que los parámetros no sean nulos
+	    if (nuevoProducto == null || proveedor == null) {
+	        System.out.println("Error: Parámetros inválidos. Asegúrate de que el producto y el proveedor no sean nulos.");
+	        return;
+	    }
+
+	    // Obtener la lista de clientes que han comprado productos del proveedor
+	    List<Cliente> clientes = obtenerClientesQueHanCompradoDelProveedor(proveedor);
+
+	    // Debug: Mostrar todos los clientes que han comprado al proveedor
+	    if (clientes.isEmpty()) {
+	        System.out.println("No hay clientes que hayan comprado productos de este proveedor.");
+	    } else {
+	        System.out.println("Clientes que han comprado al proveedor " + proveedor.getNombre() + ":");
+	        for (Cliente cliente : clientes) {
+	            System.out.println("- " + cliente.getNombre() + " (" + cliente.getCorreo() + ")");
+	        }
+	    }
+
+	    // Notificar a cada cliente
+	    for (Cliente cliente : clientes) {
+	        String recipientEmail = cliente.getCorreo();
+	        
+	        // Verificar si el cliente tiene un correo válido
+	        if (recipientEmail == null || recipientEmail.isEmpty()) {
+	            System.out.println("El cliente " + cliente.getNombre() + " no tiene un correo registrado para notificaciones.");
+	            continue;
+	        }
+
+	        try {
+	            // Llamada al servicio de email para enviar la notificación del nuevo producto
+	            emailService.sendNewProductNotification(
+	                recipientEmail,
+	                proveedor.getNombre(),
+	                cliente.getNombre(),
+	                nuevoProducto.getNombre()
+	            );
+	            System.out.println("Notificación enviada a " + cliente.getNombre());
+	        } catch (Exception e) {
+	            System.out.println("Error al enviar la notificación a " + cliente.getNombre() + ": " + e.getMessage());
+	        }
+	    }
+	}
+
+	 
+	 public List<Cliente> getAllClientes() {
+		 List<Cliente> clientes = new ArrayList<Cliente>();
+		 for (Map.Entry<String, Usuario> entry : usuarios.entrySet()) {
+			 Usuario usuario = entry.getValue();
+			 if (usuario.getTipo().equals("cliente")) {
+				 Cliente cliente = (Cliente) usuario;
+				 clientes.add(cliente);
+			 }
+		 }
+		 return clientes;
+	 }
 }

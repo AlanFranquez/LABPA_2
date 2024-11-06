@@ -51,6 +51,10 @@ public class Cliente extends Usuario {
     }
     
     
+    public OrdenDeCompra getOrden(int numero) {
+        return this.listaCompras.get(numero);
+    }
+
     
     public void agregarRespuesta(int numeroComentario, String nombreProducto, Comentario respuesta) {
     	for (Map.Entry<Integer, OrdenDeCompra> entry : listaCompras.entrySet()) {
@@ -179,8 +183,32 @@ public class Cliente extends Usuario {
     public void setCarrito(Carrito c1) {
         this.carrito = c1;
     }
+    public List<OrdenDeCompra> getOrdenes() {
+        return new ArrayList<>(listaCompras.values());
+    }
+    
     public DTCliente crearDt() {
         return new DTCliente(this.getNombre(), this.getNick(), this.getApellido(), this.getCorreo(), this.getNacimiento(), this.getImagen(), this.getCompras());
     }
+	/*public boolean haCompradoDelProveedor(Proveedor proveedor) {
+		// TODO Auto-generated method stub
+		return false;
+	}*/
+    
+    
+    public boolean haCompradoDelProveedor(Proveedor proveedor) {
+        for (OrdenDeCompra orden : this.listaCompras.values()) {
+            // Imprimir el proveedor de la orden para depuración
+            System.out.println("Comparando con proveedor: " + orden.getProveedor().getNombre());
+            
+            // Usar equals para la comparación
+            if (orden.getProveedor().equals(proveedor)) {
+                return true; // Se encontró al menos una compra del proveedor
+            }
+        }
+        return false; // No se encontraron compras del proveedor
+    }
+
+	 
 }
 

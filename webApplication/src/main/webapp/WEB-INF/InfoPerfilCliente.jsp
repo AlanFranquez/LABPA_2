@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
 <%@page import="java.util.HashMap"%>
 <%@page import="com.market.svcentral.DTCliente"%>
 <%@page import="com.market.svcentral.DTOrdenDeCompra"%>
@@ -75,7 +77,7 @@ if (usr != null && usr.getTipo().equals("proveedor")) {
                 %>
                 <li class="nav-item">
                     <button class="btn btn-danger">
-                        <a class="nav-link" href="logout">Cerrar Sesión</a>
+                        <a class="nav-link" href="logout">Cerrar SesiÃ³n</a>
                     </button>
                 </li>
             </ul>
@@ -117,8 +119,10 @@ if (usr != null && usr.getTipo().equals("proveedor")) {
                         <div class="card-body">
                             <h3 class="card-title"><%= dt.getNumero() %></h3> 
                             
-                            <% if(dt.getEstado() == "Entregado")  {%>
+                         
+                            <% if ("Entregado".equals(dt.getEstado())) { %>
                             
+
                             	<span class="badge mb-2" style="background-color: green; font-weight: normal; color: white"><%= dt.getEstado() %></span>
                             
                             <% } else {%>
@@ -126,6 +130,7 @@ if (usr != null && usr.getTipo().equals("proveedor")) {
                             
                             <% }%>
                             
+                             
                             
                             <br>
                             

@@ -50,4 +50,8 @@ public class Item {
     public DTItem crearDT() {
     	return new DTItem(this.getCant(), this.getProducto());
     }
+
+    public Proveedor getProveedor() {
+        return producto.getProveedor();
+    }
 }

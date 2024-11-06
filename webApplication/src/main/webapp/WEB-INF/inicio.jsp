@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
 <%@page import="com.market.svcentral.Sistema"%>
 <%@page import="com.market.svcentral.Usuario"%>
 <%@page import="com.market.svcentral.Producto"%>
@@ -7,8 +9,7 @@
 <%@page import="com.market.svcentral.Cliente" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -84,6 +85,7 @@ if (usr != null && usr.getTipo().equals("proveedor")) {
                 <li class="nav-item">
                     <button class="btn btn-danger">
                         <a class="nav-link" href="logout">Cerrar Sesión</a>
+                        
                     </button>
                 </li>
             </ul>
@@ -95,7 +97,7 @@ if (usr != null && usr.getTipo().equals("proveedor")) {
 
 	
     <% if(usr != null)  {%>
-    <div style="position: relative; background-image: url('media/images/fondo1.jpg'); background-size: cover; background-position: center center;">
+    <div style="position: relative; background-image: url('media/images/fondo1 (2).jpg'); background-size: cover; background-position: center center;">
     <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); z-index: 1;"></div>
     <main class="container d-flex justify-content-center align-items-center vh-90" style="position: relative; z-index: 2;">
         <div class="row w-100">

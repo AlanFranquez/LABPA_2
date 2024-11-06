@@ -24,12 +24,11 @@ import com.market.svcentral.Cliente;
 @WebServlet("/home")
 public class Home extends HttpServlet {
     private static final long serialVersionUID = 1L;
+    private ISistema sist;
 
     public Home() {
         super();
     }
-    
-    private ISistema sist;
 
     @Override
     public void init() throws ServletException {
@@ -87,6 +86,32 @@ public class Home extends HttpServlet {
             session.setAttribute("carrito", clienteLogueado.getCarrito());
         } else {
             System.out.println("El usuario logueado no es un cliente.");
+        String userAgent = request.getHeader("User-Agent");
+        boolean isMobile = isMobileDevice(userAgent);
+
+        request.setAttribute("prods", productos);
+
+        // Comprobación de sesión
+        if (session == null || session.getAttribute("usuarioLogueado") == null) {
+            // Si no hay sesión, redirigir a la página de inicio no logueado
+            if (isMobile) {
+                request.getRequestDispatcher("/WEB-INF/inicioMOBILE.jsp").forward(request, response);
+            } else {
+                request.getRequestDispatcher("/WEB-INF/inicioNoLogueado.jsp").forward(request, response);
+            }
+            return;
+        }
+
+        // Si hay sesión, obtener usuario logueado
+        Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
+        request.setAttribute("usuario", usuarioLogueado);
+        request.setAttribute("estado", "logueado");
+
+        // Redirigir según el tipo de dispositivo
+        if (isMobile) {
+            request.getRequestDispatcher("/WEB-INF/inicioLogeadoMOBILE.jsp").forward(request, response);
+        } else {
+            request.getRequestDispatcher("/WEB-INF/inicio.jsp").forward(request, response);
         }
 
         if (productos != null) {
@@ -102,5 +127,16 @@ public class Home extends HttpServlet {
         em.getTransaction().commit();
         em.close();
         emf.close();
+    }
+
+    private boolean isMobileDevice(String userAgent) {
+        return userAgent != null && (
+            userAgent.contains("Mobile") || 
+            userAgent.contains("Android") || 
+            userAgent.contains("iPhone") || 
+            userAgent.contains("iPad") || 
+            userAgent.contains("Windows Phone") || 
+            userAgent.contains("BlackBerry")
+        );
     }
 }
