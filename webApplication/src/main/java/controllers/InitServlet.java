@@ -133,7 +133,7 @@ public class InitServlet extends HttpServlet {
              orden.setEstado("Enviado", "LISTO PARA RECOGER");
              sistema.realizarCompra(orden, cliente.getNick());
              cliente.agregarCompra(orden);
-             sistema.cambiarEstadoOrden("Enviado", orden.getNumero(), cliente.getNick());
+             sistema.cambiarEstadoOrden("Enviado", "se está enviando, confíe", orden.getNumero(), cliente.getNick());
              
              Producto p1 = sistema.getProducto(1);
              Comentario c = new Comentario(22, "lalala", cliente, LocalDateTime.now());
