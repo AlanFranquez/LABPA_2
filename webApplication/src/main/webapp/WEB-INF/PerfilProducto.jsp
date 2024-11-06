@@ -49,37 +49,6 @@ comproProducto = cl.comproProducto(id);
 <link
 	href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
 	rel="stylesheet">
-	
-	<style>
-	.star-widget{
-		position:relative;
-
-	}
-	#puntaje{
-	position: absolute;
-	}
-	#puntaje input {
-  		display: none;
-	}
-	.star-widget form label {
-	  font-size: 30px;
-	  color: #444;
-	  float: right;
-	  padding: 70px;
-	  transition: all 0.2s ease;
-	}
-	input:not(:checked) ~ label:hover,
-	input:not(:checked) ~ label:hover ~ label {
-	  color: #fd4;
-	}
-	input:checked ~ label {
-	  color: #fd4;
-	}
-	input#rate-5:checked ~ label {
-	  color: #fe7;
-	  text-shadow: 0 0 20px #952;
-	}
-	</style>
 </head>
 <body>
 
@@ -243,22 +212,37 @@ comproProducto = cl.comproProducto(id);
 		</div>
 	</main>
 
+	<div>
+		<%
+		int[] puntajes = prod.obtenerPuntaje();
+		%>
+		<h3>Puntaje Medio: <%=puntajes[0]%></h3>
+		<ul>
+		<li>1:<%=puntajes[1]%></li>
+		<li>2:<%=puntajes[2]%></li>
+		<li>3:<%=puntajes[3]%></li>
+		<li>4:<%=puntajes[4]%></li>
+		<li>5:<%=puntajes[5]%></li>
+		</ul>
+	</div>
+
 	<%
 	if (usr != null && usr.getTipo().equals("cliente") && comproProducto) {
 	%>
 	<div class="col-auto star-widget">
-		<form id="puntaje" action="agragarValoracion" method="post" onsubmit="return validarCantidad(this)">
+		<form id="puntaje" action="agregarValoracion" method="post">
 			<span id="valoracion">Valoración</span><br>
-	        <input type="radio" name="rate" id="rate-5">
+	        <input type="radio" name="rate" id="rate-5" value="5">
 	        <label for="rate-5" class="bi bi-star"></label>
-	        <input type="radio" name="rate" id="rate-4">
+	        <input type="radio" name="rate" id="rate-4" value="4">
 	        <label for="rate-4" class="bi bi-star"></label>
-	        <input type="radio" name="rate" id="rate-3">
+	        <input type="radio" name="rate" id="rate-3" value="3">
 	        <label for="rate-3" class="bi bi-star"></label>
-	        <input type="radio" name="rate" id="rate-2">
+	        <input type="radio" name="rate" id="rate-2" value="2">
 	        <label for="rate-2" class="bi bi-star"></label>
-	        <input type="radio" name="rate" id="rate-1">
+	        <input type="radio" name="rate" id="rate-1" value="1">
 	        <label for="rate-1" class="bi bi-star"></label>
+	        <input type="hidden" name="dtprod" value="<%=id%>">
 	        <button type="submit" class="btn btn-primary">Enviar</button>
 	        <header></header>
 		</form>

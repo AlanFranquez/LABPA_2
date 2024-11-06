@@ -174,13 +174,15 @@ public class Producto {
             }
 		}
 		catStr = catStr + "</html>";
-		return new DtProducto(this.getNombre(), this.getDescripcion(), this.getPrecio(), this.getNumRef(), this.getEspecificaciones(), this.getProveedor(), catStr, this.getImagenes(), this.getStock(), this.getComentarios(), this.getCantidadComprada());
+		return new DtProducto(this.getNombre(), this.getDescripcion(), this.getPrecio(), this.getNumRef(), this.getEspecificaciones(), this.getProveedor(), catStr, this.getImagenes(), this.getStock(), this.getComentarios(), this.getCantidadComprada(), this.obtenerPuntajes());
 	}
 
 	public void agregarPuntaje(Puntaje puntaje) {
 		this.puntajes.add(puntaje);
 	}
-	
+	public List<Puntaje> obtenerPuntajes() {
+		return this.puntajes;
+	}
 	public int[] obtenerPuntaje() {
 		int total = 0;
 		int varios[] = {0, 0, 0, 0, 0, 0};
@@ -191,4 +193,5 @@ public class Producto {
 		varios[0] = total / this.puntajes.size();
 		return varios;
 	}
+
 }

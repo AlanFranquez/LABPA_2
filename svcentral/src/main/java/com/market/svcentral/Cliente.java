@@ -85,9 +85,14 @@ public class Cliente extends Usuario {
         		if (item.getProducto().getNumRef() == numRef) {
         			try {
         				Producto producto = item.getProducto();
-        				Puntaje puntaje = new Puntaje(valor, numRef);
-        				producto.agregarPuntaje(puntaje);
-        				this.listaPuntajes.put(numRef, puntaje);
+        				if(this.listaPuntajes.containsKey(numRef)) {
+        					Puntaje p = this.listaPuntajes.get(numRef);
+        					p.setvalor(valor);
+        				}else {
+        					Puntaje puntaje = new Puntaje(valor, numRef);
+        					producto.agregarPuntaje(puntaje);
+        					this.listaPuntajes.put(numRef, puntaje);        					
+        				}
         				return;        				
         			}catch (PuntajeInvalidoException e) {
         				System.out.println(e.getMessage());

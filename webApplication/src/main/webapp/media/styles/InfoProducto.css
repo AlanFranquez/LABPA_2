@@ -45,7 +45,7 @@ a {
 
 /* Estilos para el widget de estrellas */
 #puntaje{
-	background:#000;
+	width:50vw;
 }
 #puntaje input {
   display: none;
@@ -68,7 +68,7 @@ input#rate-5:checked ~ label {
   color: #fe7;
   text-shadow: 0 0 20px #952;
 }
-/* Estilos para las etiquetas de encabezado según la puntuación 
+
 #rate-1:checked ~ form header:before {
   content: "Odio este producto ";
 }
@@ -84,4 +84,4 @@ input#rate-5:checked ~ label {
 #rate-5:checked ~ form header:before {
   content: "Me enloquecen cosas así ";
 }
-*/
+
