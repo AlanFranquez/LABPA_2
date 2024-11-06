@@ -9,6 +9,10 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
 import com.market.svcentral.Carrito;
 import com.market.svcentral.Cliente;
 import com.market.svcentral.Factory;
@@ -59,14 +63,21 @@ public class agregarAlCarrito extends HttpServlet {
             String numRef = request.getParameter("numRef");
             int cantidad = Integer.parseInt(request.getParameter("cantidad"));
             
-            Producto producto = sist.getProducto(Integer.parseInt(numRef));
+            int numero = Integer.parseInt(numRef);
+            EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+            EntityManager m = emf.createEntityManager();
+            m.getTransaction().begin();
+            Producto producto = m.find(Producto.class, numero);
             
             
+            m.getTransaction().commit();
+            m.close();
+            emf.close();
             
             if (producto != null && cantidad > 0 && cantidad <= producto.getStock()) {
                 
-            	if(carrito.existeProducto(Integer.parseInt(numRef))) {
-            		Item itemExistente = carrito.getItem(Integer.parseInt(numRef));
+            	if(carrito.existeProducto(numero)) {
+            		Item itemExistente = carrito.getItem(numero);
             		
             		itemExistente.setCant(itemExistente.getCant() + cantidad);
             	} else {
