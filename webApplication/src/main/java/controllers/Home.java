@@ -104,11 +104,11 @@ public class Home extends HttpServlet {
             }
 
             session.setAttribute("carrito", clienteLogueado.getCarrito());
-            request.setAttribute("usuario", user);
+            
         } else {
             System.out.println("El usuario logueado no es un cliente.");
         }
-
+        request.setAttribute("usuario", user);
         // Determinar si el dispositivo es móvil
         String userAgent = request.getHeader("User-Agent");
         boolean isMobile = isMobileDevice(userAgent);

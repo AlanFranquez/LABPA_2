@@ -54,6 +54,22 @@ public class Reclamo {
 		this.texto = texto;
 	}
 	
+
+	public LocalDateTime getFecha() {
+        return fecha;
+    }
+	
+	public Producto getProducto() {
+        return producto;
+    }
+	
+	public Proveedor getProveedor() {
+        return proveedor;
+    }
+	
+	public Cliente getAutor() {
+        return autor;
+    }
 	
 	public DTReclamo crearDT() {
 		return new DTReclamo(this.texto, this.fecha, this.producto, this.proveedor, this.autor);

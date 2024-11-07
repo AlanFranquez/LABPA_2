@@ -175,6 +175,13 @@ if (user != null && user.getTipo().equals("proveedor")) {
 	AGREGAR PRODUCTO	
 </button>
 	</a>
+<br>
+<br>
+<a href="VerReclamos" style="text-decoration: none; color: white;">
+<button class="btn btn-primary bg-black" style="border:none; color: white;">
+	VER RECLAMOS	
+</button>
+	</a>
 </div>
 
 <div class="part-final d-flex justify-content-center align-items-center" style="background-color: #2C2C2C;
