@@ -89,7 +89,7 @@ Usuario usr = (Usuario) request.getAttribute("usuarioLogueado");
                     <h5 class="card-title">Reclamo para el producto: <%= reclamo.getProducto().getNombre() %></h5>
                     <p><b>Cliente:</b> <%= reclamo.getAutor().getNombre() %> (<%= reclamo.getAutor().getCorreo() %>)</p>
                     <p><b>Texto del Reclamo:</b> <%= reclamo.getTexto() %></p>
-                    <p><b>Fecha:</b> <%= reclamo.getFecha() %></p>
+                    <p><b>Fecha:</b> <%= reclamo.getFechaFormat() %></p>
                 </div>
             </div>
         <% 

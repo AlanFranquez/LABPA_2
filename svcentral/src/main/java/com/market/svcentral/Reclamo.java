@@ -1,6 +1,7 @@
 package com.market.svcentral;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -54,10 +55,17 @@ public class Reclamo {
 		this.texto = texto;
 	}
 	
-
 	public LocalDateTime getFecha() {
         return fecha;
     }
+	
+	public String getFechaFormat() {
+	
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        String formattedDateTime = this.fecha.format(formatter);
+        return formattedDateTime;
+	}
 	
 	public Producto getProducto() {
         return producto;
