@@ -7,7 +7,6 @@ import java.util.List;
 
 public class Proveedor extends Usuario {
     private Map<Integer, Producto> listaProductos; 
-    private Map<Integer, Reclamo> listaReclamos;
     private String compania, link;
     // Constructor:
     public Proveedor(String nom, String nick, String ape, String correo, DTFecha nacimiento, String comp, String link, String contrasena) {
@@ -100,17 +99,5 @@ public class Proveedor extends Usuario {
         // }
     }
     
-    public Map<Integer, Reclamo> getReclamo() {
-    	return this.listaReclamos;
-    }
-    
-    public List<Reclamo> ObtenerListaReclamos() {
-    	List<Reclamo> listaReclamos = new ArrayList<>();
-       
-        if (this.listaReclamos != null) {
-            listaReclamos.addAll(this.listaReclamos.values());
-        }
-        return listaReclamos;
-    }
 
 }

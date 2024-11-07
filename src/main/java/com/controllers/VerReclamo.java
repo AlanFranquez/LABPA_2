@@ -60,8 +60,12 @@ public class VerReclamo extends HttpServlet {
         Object usuario = session.getAttribute("usuarioLogueado");
         if (usuario instanceof Proveedor) {
             Proveedor proveedor = (Proveedor) usuario;
-           
-            List<Reclamo> reclamos = proveedor.ObtenerListaReclamos(); 
+            List<Reclamo> reclamosTotales = new ArrayList<>();
+            for (Producto producto : proveedor.getProductos().values()) {
+                List<Reclamo> reclamos = producto.getReclamos();
+                if (reclamos != null) {
+                    reclamosTotales.addAll(reclamos); 
+                }
             
             if (reclamos != null) {
                 request.setAttribute("reclamos", reclamos);
@@ -71,7 +75,8 @@ public class VerReclamo extends HttpServlet {
             
             request.setAttribute("proveedor", proveedor);
             request.getRequestDispatcher("/WEB-INF/VerReclamo.jsp").forward(request, response);
-        } else {
+            }
+            } else {
             response.sendRedirect("home");
         }
     }
