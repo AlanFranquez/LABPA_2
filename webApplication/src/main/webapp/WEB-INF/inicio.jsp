@@ -96,7 +96,6 @@ if (usr != null && usr.getTipo().equals("proveedor")) {
 
 
 	
-    <% if(usr != null)  {%>
     <div style="position: relative; background-image: url('media/images/fondo1 (2).jpg'); background-size: cover; background-position: center center;">
     <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); z-index: 1;"></div>
     <main class="container d-flex justify-content-center align-items-center vh-90" style="position: relative; z-index: 2;">
@@ -189,7 +188,7 @@ if (usr != null && usr.getTipo().equals("proveedor")) {
                                     <br>
                                     <div class="row mt-2">
                                         <a href="perfilProducto?producto=<%= dtp != null ? dtp.getNumRef() : "" %>" class="btn" style="color: #0000EE; cursor: pointer">Ver Detalles</a>
-                                        <% if(usr.getTipo().equals("cliente") && !carr.equals(null) && ! carr.existeProducto(dtp.getNumRef())) { 
+                                        <% if(usr.getTipo().equals("cliente") && carr != null && ! carr.existeProducto(dtp.getNumRef())) { 
                                         	
                                        
                                         %>
@@ -208,8 +207,6 @@ if (usr != null && usr.getTipo().equals("proveedor")) {
         </div>
     </div>
 </section>
-
-<% } %>
 
 <div class="container mt-5 mb-5" id="sobrenosotros">
     <div class="row align-items-center">

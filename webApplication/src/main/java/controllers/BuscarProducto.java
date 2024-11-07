@@ -109,6 +109,6 @@ public class BuscarProducto extends HttpServlet {
         
         em.getTransaction().commit();
         em.close();
-        em.close();
+        emf.close();
     }
 }

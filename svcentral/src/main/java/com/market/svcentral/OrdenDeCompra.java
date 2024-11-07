@@ -12,6 +12,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 @Entity
 public class OrdenDeCompra {
@@ -21,7 +22,10 @@ public class OrdenDeCompra {
     private LocalDateTime fecha;
     @OneToMany(cascade = CascadeType.PERSIST)
     private Map<Integer, Item> items;
+    
+    @Transient
     private List<DTEstado> estados;
+    @Transient
     private List<Comentario> comentarios; 
     private Proveedor proveedor;
 

@@ -50,8 +50,6 @@ public class InitServlet extends HttpServlet {
              em.getTransaction().begin();
              
              sistema.agregarCliente("Juan", "Juan123", "Perez", "Juan@gmail.com", fecha1, "123", "123");
-
-             sistema.agregarCliente("Juan", "Juan123", "Perez", "milagrosvairo.dev@gmail.com", fecha1, "123", "123");
              sistema.agregarCliente("Mili", "Mili123", "Vairo", "maria.vairo@estudiantes.utec.edu.uy", fecha1, "123", "123");
              sistema.agregarCliente("Alberto", "albert1341", "Hernandez", "Ahernandez@gmail.com", fecha2, "123", "123");
              sistema.agregarCliente("Maria", "agusmari", "Agustina", "mariaagustina@gmail.com", fecha1, "123", "123");
@@ -60,10 +58,10 @@ public class InitServlet extends HttpServlet {
              sistema.agregarImagenUsuario("Juan123", "/images/p1.jpg");
              sistema.agregarImagenUsuario("agusmari", "/images/p3.jpg");
              sistema.agregarImagenUsuario("albert1341", "/images/p2.jpg");
-             
-             sistema.agregarProveedor("Perez", "AndresPerez@gmail.com", "Andres", "Perez", fecha3 , "Bamboo.inc" , "www.bamboo.com", "123", "123");
+             sistema.agregarProveedor("Perez", "milivairo2303@gmail.com", "Andres", "Perez", fecha3 , "Bamboo.inc" , "www.bamboo.com", "123", "123");
              sistema.agregarProveedor("Jorge", "Jorge@gmail.com", "Jorge", "Urrutia", fecha3 , "Google.inc" , "www.google.com", "123", "123");
              
+          
              sistema.agregarImagenUsuario("Perez", "/images/p1.jpg");
              
              em.persist(sistema.getUsuario("Juan123"));
@@ -83,9 +81,7 @@ public class InitServlet extends HttpServlet {
              sistema.agregarCategoriaConProductos("Bazar");
              
             
-             sistema.agregarProveedor("Perez", "milivairo2303@gmail.com", "Andres", "Perez", fecha3 , "Bamboo.inc" , "www.bamboo.com", "123", "123");
-             sistema.agregarProveedor("Jorge", "Jorge@gmail.com", "Jorge", "Urrutia", fecha3 , "Google.inc" , "www.google.com", "123", "123");
-             
+         
              sistema.agregarProducto("Pelota", 1, "Pelota inflable ideal", "Increible", 120, "Perez", 100);
              sistema.agregarProducto("Cargador", 2, "Cargador tipo c", "Muy bueno", 220, "Perez", 20);
              sistema.agregarProducto("Television", 3, "Televisión en Excelente estado", "Muy bueno", 330, "Jorge", 120);
