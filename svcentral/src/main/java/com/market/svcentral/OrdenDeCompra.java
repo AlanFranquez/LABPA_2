@@ -10,9 +10,14 @@ import java.util.Random;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.Id;
+import javax.persistence.NoResultException;
 import javax.persistence.OneToMany;
+import javax.persistence.Persistence;
 import javax.persistence.Transient;
+import javax.persistence.TypedQuery;
 
 @Entity
 public class OrdenDeCompra {
@@ -23,9 +28,9 @@ public class OrdenDeCompra {
     @OneToMany(cascade = CascadeType.PERSIST)
     private Map<Integer, Item> items;
     
-    @Transient
+    @OneToMany(cascade = CascadeType.PERSIST)
     private List<DTEstado> estados;
-    @Transient
+    @OneToMany(cascade = CascadeType.PERSIST)
     private List<Comentario> comentarios; 
     private Proveedor proveedor;
 
@@ -40,7 +45,24 @@ public class OrdenDeCompra {
         this.items = new HashMap<>();
         this.comentarios = new ArrayList<>(); 
         this.estados = new ArrayList<>();
-        this.estados.add(new DTEstado("En preparación", "PREPARANDO PAQUETE"));
+        
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+    	
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<DTEstado> query = em.createQuery(
+                "SELECT e FROM DTEstado e WHERE e.estado = :estado", DTEstado.class);
+            query.setParameter("estado", "Comprada");
+
+            DTEstado estadoComprada = query.getSingleResult();
+            this.estados.add(estadoComprada);
+        } catch (NoResultException e) {
+            // Manejar el caso cuando no se encuentra el estado
+            System.out.println("No se encontró el estado 'Comprada'");
+        } finally {
+            em.close();
+        }
+
         
     }
 
@@ -51,7 +73,23 @@ public class OrdenDeCompra {
         this.precioTotal = precioTotal;
         this.fecha = LocalDateTime.now();
         this.estados = new ArrayList<>();
-        this.estados.add(new DTEstado("En preparación", "PREPARANDO PAQUETE"));
+        
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<DTEstado> query = em.createQuery(
+                "SELECT e FROM DTEstado e WHERE e.estado = :estado", DTEstado.class);
+            query.setParameter("estado", "Comprada");
+
+            DTEstado estadoComprada = query.getSingleResult();
+            this.estados.add(estadoComprada);
+        } catch (NoResultException e) {
+            // Manejar el caso cuando no se encuentra el estado
+            System.out.println("No se encontró el estado 'Comprada'");
+        } finally {
+            em.close();
+        }
+        
         this.proveedor = proveedor;
     }
     
@@ -83,6 +121,11 @@ public class OrdenDeCompra {
     public void setEstado(String nuevoEstado, String comentarios) {
         estados.add(new DTEstado(nuevoEstado, comentarios));
     }
+    
+    public void setEstado(DTEstado estadoComprada) {
+		this.estados.add(estadoComprada);
+	}
+
    
     public List<DTEstado> getHistorialEstado() {
         return estados;
@@ -145,6 +188,7 @@ public class OrdenDeCompra {
         return new DTOrdenDeCompra(numero, getItems(), getPrecioTotal(), getHistorialEstado());
     }
 
+	
    
     
 

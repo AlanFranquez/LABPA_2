@@ -12,9 +12,11 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
 
 import com.market.svcentral.Cliente;
 import com.market.svcentral.Comentario;
+import com.market.svcentral.DTEstado;
 import com.market.svcentral.DTFecha;
 import com.market.svcentral.Factory;
 import com.market.svcentral.ISistema;
@@ -80,7 +82,18 @@ public class InitServlet extends HttpServlet {
              sistema.agregarCategoriaConProductos("Otros");
              sistema.agregarCategoriaConProductos("Bazar");
              
-            
+          // Crear datos de ejemplo para DTEstado
+             DTEstado estado2 = new DTEstado("Comprada", "El cliente ha realizado la compra.");
+             DTEstado estado3 = new DTEstado("En preparación", "El proveedor está preparando el pedido.");
+             DTEstado estado4 = new DTEstado("En camino", "El pedido ha sido enviado y está en camino.");
+             DTEstado estado5 = new DTEstado("Entregada", "El cliente ha recibido el pedido.");
+
+             // Persistir los estados en la base de datos
+             em.persist(estado2);
+             em.persist(estado3);
+             em.persist(estado4);
+             em.persist(estado5);
+
          
              sistema.agregarProducto("Pelota", 1, "Pelota inflable ideal", "Increible", 120, "Perez", 100);
              sistema.agregarProducto("Cargador", 2, "Cargador tipo c", "Muy bueno", 220, "Perez", 20);
@@ -126,10 +139,35 @@ public class InitServlet extends HttpServlet {
              
              
              Cliente cliente = (Cliente) sistema.getUsuario("Juan123");
-             orden.setEstado("Enviado", "LISTO PARA RECOGER");
+             TypedQuery<DTEstado> query = em.createQuery(
+     	            "SELECT e FROM DTEstado e WHERE e.estado = :estado", DTEstado.class);
+     	        query.setParameter("estado", "Comprada");
+
+     	        DTEstado estadoComprada = query.getSingleResult(); // Aquí se obtiene el estado "Comprada"
+
+     	     // Asignarlo al objeto OrdenCompra
+     	     orden.setEstado(estadoComprada);
+     	     
+     	     TypedQuery<DTEstado> query1 = em.createQuery(
+     	            "SELECT e FROM DTEstado e WHERE e.estado = :estado", DTEstado.class);
+     	        query1.setParameter("estado", "En preparación");
+
+     	     DTEstado estadoComprada1 = query1.getSingleResult();
+     	     orden.setEstado(estadoComprada1); 
+     	     
+     	     TypedQuery<DTEstado> query11 = em.createQuery(
+     	            "SELECT e FROM DTEstado e WHERE e.estado = :estado", DTEstado.class);
+     	        query11.setParameter("estado", "En camino");
+
+     	     DTEstado estadoComprada11 = query11.getSingleResult();
+     	     orden.setEstado(estadoComprada11);
+     	     
              sistema.realizarCompra(orden, cliente.getNick());
              cliente.agregarCompra(orden);
-             sistema.cambiarEstadoOrden("Enviado", "se está enviando, confíe", orden.getNumero(), cliente.getNick());
+             
+             
+     	        
+             
              
              Producto p1 = sistema.getProducto(1);
              Comentario c = new Comentario(22, "lalala", cliente, LocalDateTime.now());
@@ -141,8 +179,7 @@ public class InitServlet extends HttpServlet {
              em.getTransaction().commit();
             
              
-             
-         	 
+
 
              
             

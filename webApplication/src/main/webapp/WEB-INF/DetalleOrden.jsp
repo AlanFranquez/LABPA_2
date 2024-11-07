@@ -157,7 +157,7 @@ if (user != null && user.getTipo().equals("proveedor")) {
     		request.setAttribute("agregarEstado", "si");
     <% } %>
 
-    <% if(orden.getEstado().equalsIgnoreCase("Enviado")) { %>
+    <% if(orden.getEstado().equalsIgnoreCase("En camino")) { %>
         <form action="perfilOrden" method="post">
             <input type="hidden" name="numeroOrden" value="<%= orden.getNumero() %>">
             <input type="hidden" name="accion" value="confirmar">

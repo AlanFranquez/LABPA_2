@@ -180,7 +180,7 @@ if (usr != null && usr.getTipo().equals("proveedor")) {
 						value="<%=prod != null ? prod.getNumRef() : ""%>">
 					<div class="row align-items-center">
 						<%
-						if (usr.getTipo() == "cliente" && carr != null && !carr.existeProducto(prod.getNumRef())) {
+						if (usr.getTipo().equals("cliente") && carr != null && !carr.existeProducto(prod.getNumRef())) {
 						%>
 						<div class="col-auto">
 							<input class="text-center" type="number" name="cantidad" min="1"
@@ -205,7 +205,7 @@ if (usr != null && usr.getTipo().equals("proveedor")) {
 		</div>
 		
 		<%
-				if (usr.getTipo() == "cliente" && comproProducto) {
+				if (usr.getTipo().equals("cliente") && comproProducto) {
 				%>
 				<div class="mt-5">
 					<a

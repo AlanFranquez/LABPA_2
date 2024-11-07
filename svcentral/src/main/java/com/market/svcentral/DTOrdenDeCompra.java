@@ -6,11 +6,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.*;
+
+
+@Entity
 public class DTOrdenDeCompra {
-    private int numero;
+    @Id
+	private int numero;
     private float precioTotal;
     private LocalDateTime fecha;
+    @OneToMany(cascade = CascadeType.PERSIST)
     private Map<Integer, Item> items;
+    @OneToMany(cascade = CascadeType.PERSIST)
     private List<DTEstado> estados;
 
     public DTOrdenDeCompra(int numero, Map<Integer, Item> items, float precioTotal, String estado) {
@@ -19,8 +26,22 @@ public class DTOrdenDeCompra {
         this.precioTotal = precioTotal;
         this.items = items;
         this.estados = new ArrayList<DTEstado>(); 
-        DTEstado tmp = new DTEstado("En Preparacion", "PREPARANDO PAQUETE");
-        this.estados.add(tmp); 
+        
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<DTEstado> query = em.createQuery(
+                "SELECT e FROM DTEstado e WHERE e.estado = :estado", DTEstado.class);
+            query.setParameter("estado", "Comprada");
+
+            DTEstado estadoComprada = query.getSingleResult();
+            this.estados.add(estadoComprada);
+        } catch (NoResultException e) {
+            // Manejar el caso cuando no se encuentra el estado
+            System.out.println("No se encontró el estado 'Comprada'");
+        } finally {
+            em.close();
+        }
     }
     
     public DTOrdenDeCompra(int numero, Map<Integer, Item> items, float precioTotal, List<DTEstado> estadosLista) {

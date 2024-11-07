@@ -704,6 +704,39 @@ public class Sistema implements ISistema {
 	 		
 	 		System.out.print("no se pudo cambiar el estado");
 	 	}
+	 
+	 public void cambiarEstadoOrdenconDT(DTEstado est, int numero, String cliente) {
+		 Cliente client = (Cliente) this.usuarios.get(cliente);
+	 		
+	 		if (client != null) {
+	 			this.ordenes.get(numero).setEstado(est);
+	 			
+	 			String recipientEmail = client.getCorreo();
+	 	        //String recipientEmail = "maria.vairo@estudiantes.utec.edu.uy";
+	 			System.out.println("Correo del cliente: " + recipientEmail);
+
+
+	 	        try {
+	 	            if (recipientEmail != null && !recipientEmail.isEmpty()) {
+	 	                // Enviar el correo de bienvenida
+	 	            	System.out.println("Estado: " + est.getEstado());
+	 	            	System.out.println("recipientEmail: " + recipientEmail);
+	 	                emailService.sendChangeState(recipientEmail, est.getEstado());
+	 	                System.out.println("Correo de cambio de estado enviado a " + recipientEmail);
+	 	            } else {
+	 	                System.out.println("Cambio de estado Error: No se proporcionó una dirección de correo válida.");
+	 	            }
+	 	        } catch (Exception e) {
+	 	            System.out.println("Error al intentar enviar el correo de cambio de estado: " + e.toString());
+	 	            e.printStackTrace();  // Imprime el rastro completo de la excepción en la consola
+	 	            // e.printStackTrace();
+	 	        }
+	 	        
+	 			return;
+	 		}
+	 		
+	 		System.out.print("no se pudo cambiar el estado");
+	 }
 	 	
 	 // Caso de uso: alta reclamo
 	 	
@@ -837,4 +870,7 @@ public class Sistema implements ISistema {
 	        Image resizedImage = img.getScaledInstance(width, height,  java.awt.Image.SCALE_SMOOTH);
 	        return new ImageIcon(resizedImage);
 	    }
+	 
+	 
+	 
 }

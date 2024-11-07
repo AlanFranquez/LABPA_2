@@ -9,8 +9,14 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
+
 import com.market.svcentral.Cliente;
 import com.market.svcentral.DTCliente;
+import com.market.svcentral.DTEstado;
 import com.market.svcentral.DTOrdenDeCompra;
 import com.market.svcentral.Factory;
 import com.market.svcentral.ISistema;
@@ -108,12 +114,18 @@ public class PerfilOrden extends HttpServlet {
             }
             
             
+            EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+            EntityManager em = emf.createEntityManager();
             
-
             if ("confirmar".equals(accion)) {
             	DTOrdenDeCompra orden = cliente.mostrarCompras(numeroOrden);
                 if (orden != null) {
-                	sist.cambiarEstadoOrden("Entregado", "GRACIAS POR COMPRAR <3", orden.getNumero(), cliente.getNick());
+                	TypedQuery<DTEstado> query11 = em.createQuery(
+             	            "SELECT e FROM DTEstado e WHERE e.estado = :estado", DTEstado.class);
+             	        query11.setParameter("estado", "Entregada");
+
+             	     DTEstado estadoComprada11 = query11.getSingleResult();
+             	     sist.cambiarEstadoOrdenconDT(estadoComprada11, numeroOrden, cliente.getNick());
                 } else {
                     response.sendError(HttpServletResponse.SC_NOT_FOUND, "Orden no encontrada.");
                     return;

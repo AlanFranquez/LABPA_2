@@ -3,7 +3,16 @@ package com.market.svcentral;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import javax.persistence.*;
+
+
+@Entity
+@Table(name = "dtestado")  
 public class DTEstado {
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private int id;
+    
     private String estado;
     private LocalDateTime fecha;
     private String comentarios;
@@ -12,7 +21,11 @@ public class DTEstado {
         this.estado = estado;
         this.fecha = LocalDateTime.now();
         this.comentarios = comentarios;
-        //this.comentarios = (comentarios != null) ? comentarios : "Sin comentarios";
+        this.comentarios = (comentarios != null) ? comentarios : "Sin comentarios";
+    }
+    
+    public DTEstado() {
+        // Constructor por defecto
     }
 
     // Getters y setters

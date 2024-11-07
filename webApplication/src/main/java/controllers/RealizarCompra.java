@@ -12,8 +12,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
+
 import com.market.svcentral.Carrito;
 import com.market.svcentral.Cliente;
+import com.market.svcentral.DTEstado;
 import com.market.svcentral.Factory;
 import com.market.svcentral.ISistema;
 import com.market.svcentral.Item;
@@ -105,6 +111,12 @@ public class RealizarCompra extends HttpServlet {
 	        return;
 	    }
 	    
+	    EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+	    
+	    EntityManager em = emf.createEntityManager();
+	    
+	    em.getTransaction().begin();
+	    
 	    Carrito carrito = cliente.getCarrito();
 	    List<Item> items = carrito.getProductos();
 	    
@@ -137,7 +149,16 @@ public class RealizarCompra extends HttpServlet {
 	        
 	        // Crear la OrdenDeCompra
 	        OrdenDeCompra ordenCompra = new OrdenDeCompra(itemsPorProveedor, precioTotalPorProveedor, proveedor);
-	        ordenCompra.setEstado("Enviado", "LISTO PARA RECOGER");
+	     // Dentro de algún método donde tengas acceso a EntityManager (em)
+	        TypedQuery<DTEstado> query = em.createQuery(
+	            "SELECT e FROM DTEstado e WHERE e.estado = :estado", DTEstado.class);
+	        query.setParameter("estado", "Comprada");
+
+	        DTEstado estadoComprada = query.getSingleResult(); // Aquí se obtiene el estado "Comprada"
+
+	        // Asignarlo al objeto OrdenCompra
+	        ordenCompra.setEstado(estadoComprada);
+
 	        sist.realizarCompra(ordenCompra, cliente.getNick());
 	        cliente.agregarCompra(ordenCompra);
 	    }

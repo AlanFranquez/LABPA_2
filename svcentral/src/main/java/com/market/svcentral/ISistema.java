@@ -132,4 +132,6 @@ public interface ISistema {
 	  public void agregarReclamo(String texto, LocalDateTime fecha, Producto p, Proveedor prov, Cliente autor) throws ReclamoException;
 
 	public abstract Icon resizeIcon(ImageIcon imageIcon, int i, int j);
+
+	public abstract void cambiarEstadoOrdenconDT(DTEstado estadoComprada11, int numeroOrden, String nick);
 }

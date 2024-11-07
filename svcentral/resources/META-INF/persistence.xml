@@ -19,6 +19,7 @@
         <class>com.market.svcentral.Cat_Producto</class>
         <class>com.market.svcentral.Cat_Padre</class>
         <class>com.market.svcentral.Carrito</class>
+        <class>com.market.svcentral.DTEstado</class>
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
             <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/db"/>
