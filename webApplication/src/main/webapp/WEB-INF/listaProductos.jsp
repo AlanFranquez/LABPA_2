@@ -207,7 +207,7 @@ if (usr != null && usr.getTipo().equals("proveedor")) {
 																	class="btn" style="color: #0000EE; cursor: pointer">Ver
 																	Detalles</a>
 																<%
-																if (usr.getTipo() == "cliente" && carr != null && !carr.existeProducto(dt.getNumRef())) {
+																if (usr.getTipo().equals("cliente") && carr != null && !carr.existeProducto(dt.getNumRef())) {
 																%>
 																<button type="submit" class="btn btn-primary"
 																	id="addToCartButton">Agregar al Carrito</button>
