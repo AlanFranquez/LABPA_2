@@ -26,6 +26,21 @@ public class RegistrarUsuarios1 extends HttpServlet {
         String correo = request.getParameter("correo");
         HttpSession objSession = request.getSession();
         objSession.removeAttribute("errorMsg");
+        
+        String userAgent = request.getHeader("User-Agent");
+        
+        
+        if((userAgent != null) && (
+                userAgent.contains("Mobile") || 
+                userAgent.contains("Android") || 
+                userAgent.contains("iPhone") || 
+                userAgent.contains("iPad") || 
+                userAgent.contains("Windows Phone") || 
+                userAgent.contains("BlackBerry")
+            )) {
+        	request.getRequestDispatcher("/WEB-INF/construccion.jsp").forward(request, response);
+        	return;
+        } 
 
         if (nick == null || nick.isEmpty() || correo == null || correo.isEmpty()) {
             objSession.setAttribute("errorMsg", "El nickname o correo no pueden estar vacíos");

@@ -52,6 +52,21 @@ public class PerfilProducto extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false); // Cambiado a false para no crear una nueva sesión
 
+        String userAgent = request.getHeader("User-Agent");
+        
+        
+        if((userAgent != null) && (
+                userAgent.contains("Mobile") || 
+                userAgent.contains("Android") || 
+                userAgent.contains("iPhone") || 
+                userAgent.contains("iPad") || 
+                userAgent.contains("Windows Phone") || 
+                userAgent.contains("BlackBerry")
+            )) {
+        	request.getRequestDispatcher("/WEB-INF/construccion.jsp").forward(request, response);
+        	return;
+        } 
+        
         if (session == null) {
             response.sendRedirect("formlogin");
             return;

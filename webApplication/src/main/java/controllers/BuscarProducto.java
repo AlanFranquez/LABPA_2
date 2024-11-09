@@ -49,6 +49,21 @@ public class BuscarProducto extends HttpServlet {
         String searchQuery = request.getParameter("query");
         String ordenacion = request.getParameter("ordenacion");
 
+        String userAgent = request.getHeader("User-Agent");
+        
+        
+        if((userAgent != null) && (
+                userAgent.contains("Mobile") || 
+                userAgent.contains("Android") || 
+                userAgent.contains("iPhone") || 
+                userAgent.contains("iPad") || 
+                userAgent.contains("Windows Phone") || 
+                userAgent.contains("BlackBerry")
+            )) {
+        	request.getRequestDispatcher("/WEB-INF/construccion.jsp").forward(request, response);
+        	return;
+        } 
+        
         // Verificar si la sesión es válida
         if (session == null || session.getAttribute("usuarioLogueado") == null) {
             response.sendRedirect("home");

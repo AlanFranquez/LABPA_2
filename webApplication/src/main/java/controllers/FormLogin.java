@@ -46,6 +46,21 @@ public class FormLogin extends HttpServlet {
         HttpSession objSession = request.getSession();
         String nickname = request.getParameter("nickname");
         String password = request.getParameter("password");
+        
+        String userAgent = request.getHeader("User-Agent");
+        
+        
+        if((userAgent != null) && (
+                userAgent.contains("Mobile") || 
+                userAgent.contains("Android") || 
+                userAgent.contains("iPhone") || 
+                userAgent.contains("iPad") || 
+                userAgent.contains("Windows Phone") || 
+                userAgent.contains("BlackBerry")
+            )) {
+        	request.getRequestDispatcher("/WEB-INF/construccion.jsp").forward(request, response);
+        	return;
+        } 
 
         if (nickname == null || nickname.isEmpty() || password == null || password.isEmpty()) {
             objSession.setAttribute("errorMsg", "Por favor, ingrese todos los datos.");
