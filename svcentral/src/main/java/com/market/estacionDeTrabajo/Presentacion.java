@@ -72,6 +72,8 @@ public class Presentacion {
     private static ISistema s = Factory.getSistema();
     private JFileChooser fileChooser;
     Calendar calendar = Calendar.getInstance();
+    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+    private EntityManager em = emf.createEntityManager();
     
     /**
      * Launch the application.
@@ -724,6 +726,11 @@ public class Presentacion {
         
         //Opcion Mostrar Proveedor
         JMenuItem mntmMostrarProveedor = new JMenuItem("Mostrar Proveedor");
+        mntmMostrarProveedor.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		MostrarProveedor();
+        	}
+        });
         
         JMenuItem mntmListarProductos = new JMenuItem("Listar Productos");
         mntmListarProductos.addActionListener(new ActionListener() {
@@ -1226,13 +1233,16 @@ public class Presentacion {
         ventanaClientes.setSize(500, 300);
         ventanaClientes.getContentPane().setLayout(new BorderLayout());
 
-        // Recuperar la lista de clientes
-        List<DTCliente> clientes = s.listarClientes();
+        List<Cliente> listaCliente = em.createQuery("SELECT c FROM Cliente c", Cliente.class).getResultList();
 
-        // Definir las columnas de la tabla
+        List<DTCliente> clientes = new ArrayList<>();
+        for (Cliente c : listaCliente) {
+            clientes.add(c.crearDt());
+        }
+        
         String[] columnNames = {"Nick", "Correo", "Nombre Completo"};
 
-        // Crear datos para la tabla
+        // Crear los datos para la tabla
         Object[][] data = new Object[clientes.size()][3];
         for (int i = 0; i < clientes.size(); i++) {
             DTCliente cliente = clientes.get(i);
@@ -1241,11 +1251,9 @@ public class Presentacion {
             data[i][2] = cliente.getNombre() + " " + cliente.getApellido();
         }
 
-        // Crear la tabla
         JTable table = new JTable(data, columnNames);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        // Agregar un listener para manejar clics en la tabla
         table.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -1257,18 +1265,18 @@ public class Presentacion {
             }
         });
 
-        // Agregar la tabla al JScrollPane
         JScrollPane scrollPane = new JScrollPane(table);
         ventanaClientes.getContentPane().add(scrollPane, BorderLayout.CENTER);
 
-        // Mostrar la ventana interna
         ventanaClientes.setVisible(true);
 
-        // Agregar la ventana interna al JDesktopPane
         desktopPane.add(ventanaClientes);
 
-        // Opcional: Centrar la ventana interna
-        ventanaClientes.setLocation(100, 100);
+        // Centrar la ventana interna
+        Dimension screenSize = desktopPane.getSize();
+        int x = (screenSize.width - ventanaClientes.getWidth()) / 2;
+        int y = (screenSize.height - ventanaClientes.getHeight()) / 2;
+        ventanaClientes.setLocation(x, y);
     }
     
     private void mostrarDetallesCliente(DTCliente cliente) {
@@ -1350,13 +1358,19 @@ public class Presentacion {
         ventanaProveedores.setSize(500, 300);
         ventanaProveedores.getContentPane().setLayout(new BorderLayout());
         // Recuperar la lista de proveedores
-        List<DTProveedor> proveedores = s.listarProveedores();
+        List<Proveedor> provs = em.createQuery("SELECT p FROM Proveedor p").getResultList();
 
+        List<DTProveedor> proveedores = new ArrayList<DTProveedor>();
+        for(Proveedor p: provs) {
+        	System.out.print(p.getNombre());
+        	proveedores.add(p.crearDt());
+        }
+        
         // Definir las columnas de la tabla
         String[] columnNames = {"Nick", "Correo"};
 
      // Crear datos para la tabla
-        Object[][] data = new Object[proveedores.size()][3];
+        Object[][] data = new Object[proveedores.size()][2];
         for (int i = 0; i < proveedores.size(); i++) {
             DTProveedor proveedor = proveedores.get(i);
             data[i][0] = proveedor.getNick();
