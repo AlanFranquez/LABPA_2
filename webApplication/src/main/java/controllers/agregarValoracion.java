@@ -1,8 +1,14 @@
 package controllers;
 import java.io.IOException;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
 import com.market.svcentral.Cliente;
 import com.market.svcentral.Factory;
 import com.market.svcentral.ISistema;
+import com.market.svcentral.Producto;
 import com.market.svcentral.exceptions.ProductoException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -47,7 +53,16 @@ public class agregarValoracion extends HttpServlet{
 		
 		Cliente cliente = (Cliente) session.getAttribute("usuarioLogueado");
 		try {
-			cliente.agregarPuntaje(puntaje, numRef);
+			EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+            EntityManager m = emf.createEntityManager();
+            m.getTransaction().begin();
+            
+            Cliente cli = m.find(Cliente.class, cliente.getNick());
+            cli.agregarPuntaje(puntaje, numRef);
+            
+            m.getTransaction().commit();
+            m.close();
+            emf.close();
 		} catch (ProductoException e) {
 			e.printStackTrace();
 			System.out.println(e.getMessage());

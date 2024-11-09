@@ -24,6 +24,8 @@ import com.market.svcentral.Item;
 import com.market.svcentral.OrdenDeCompra;
 import com.market.svcentral.Producto;
 import com.market.svcentral.usuarioRandom;
+import com.market.svcentral.exceptions.CategoriaException;
+import com.market.svcentral.exceptions.UsuarioRepetidoException;
 import com.market.svcentral.Proveedor;
 
 @WebServlet(urlPatterns = {"/initServlet"}, loadOnStartup = 1)
@@ -42,7 +44,7 @@ public class InitServlet extends HttpServlet {
     	
     	EntityManager em = emf.createEntityManager();
     	
-         try {
+         
         	 
         	 DTFecha fecha1 = new DTFecha(1, 1, 1990);
              DTFecha fecha2 = new DTFecha(15, 6, 1985);
@@ -51,17 +53,25 @@ public class InitServlet extends HttpServlet {
              
              em.getTransaction().begin();
              
-             sistema.agregarCliente("Juan", "Juan123", "Perez", "Juan@gmail.com", fecha1, "123", "123");
-             sistema.agregarCliente("Mili", "Mili123", "Vairo", "maria.vairo@estudiantes.utec.edu.uy", fecha1, "123", "123");
-             sistema.agregarCliente("Alberto", "albert1341", "Hernandez", "Ahernandez@gmail.com", fecha2, "123", "123");
-             sistema.agregarCliente("Maria", "agusmari", "Agustina", "mariaagustina@gmail.com", fecha1, "123", "123");
+             try {
+				sistema.agregarCliente("Juan", "Juan123", "Perez", "Juan@gmail.com", fecha1, "123", "123");
+				sistema.agregarCliente("Mili", "Mili123", "Vairo", "maria.vairo@estudiantes.utec.edu.uy", fecha1, "123", "123");
+				sistema.agregarCliente("Alberto", "albert1341", "Hernandez", "Ahernandez@gmail.com", fecha2, "123", "123");
+				sistema.agregarCliente("Maria", "agusmari", "Agustina", "mariaagustina@gmail.com", fecha1, "123", "123");
+			} catch (UsuarioRepetidoException e) {
+				e.printStackTrace();
+			}
              
              
              sistema.agregarImagenUsuario("Juan123", "/images/p1.jpg");
              sistema.agregarImagenUsuario("agusmari", "/images/p3.jpg");
              sistema.agregarImagenUsuario("albert1341", "/images/p2.jpg");
-             sistema.agregarProveedor("Perez", "milivairo2303@gmail.com", "Andres", "Perez", fecha3 , "Bamboo.inc" , "www.bamboo.com", "123", "123");
-             sistema.agregarProveedor("Jorge", "Jorge@gmail.com", "Jorge", "Urrutia", fecha3 , "Google.inc" , "www.google.com", "123", "123");
+             try {
+				sistema.agregarProveedor("Perez", "milivairo2303@gmail.com", "Andres", "Perez", fecha3 , "Bamboo.inc" , "www.bamboo.com", "123", "123");
+				sistema.agregarProveedor("Jorge", "Jorge@gmail.com", "Jorge", "Urrutia", fecha3 , "Google.inc" , "www.google.com", "123", "123");
+			} catch (UsuarioRepetidoException e) {
+				e.printStackTrace();
+			}
              
           
              sistema.agregarImagenUsuario("Perez", "/images/p1.jpg");
@@ -75,14 +85,22 @@ public class InitServlet extends HttpServlet {
              System.out.print(((Cliente) sistema.getUsuario("Juan123")).getImagen());
 
              
-             sistema.agregarCategoria("Living");
-             sistema.agregarCategoria("Tecnologia");
-             sistema.agregarCategoria("Estanterias");
+             try {
+				sistema.agregarCategoria("Living");
+				sistema.agregarCategoria("Tecnologia");
+				sistema.agregarCategoria("Estanterias");
+			} catch (CategoriaException e) {
+				e.printStackTrace();
+			}
              
-             sistema.agregarCategoriaConProductos("Tecno");
-             sistema.asignarlePadreCategoria("Living", "Tecno");
-             sistema.agregarCategoriaConProductos("Otros");
-             sistema.agregarCategoriaConProductos("Bazar");
+             try {
+				sistema.agregarCategoriaConProductos("Tecno");
+				sistema.asignarlePadreCategoria("Living", "Tecno");
+				sistema.agregarCategoriaConProductos("Otros");
+				sistema.agregarCategoriaConProductos("Bazar");
+			} catch (CategoriaException e) {
+				e.printStackTrace();
+			}
              
           // Crear datos de ejemplo para DTEstado
              DTEstado estado2 = new DTEstado("Comprada", "El cliente ha realizado la compra.");
@@ -107,9 +125,13 @@ public class InitServlet extends HttpServlet {
              sistema.agregarImagenesDesdeProveedor("Perez", 2, "/images/cargador2.jpg");
              
              
-             sistema.agregarProductoCategoria("Tecno", 1);
-             sistema.agregarProductoCategoria("Tecno", 2);
-             sistema.agregarProductoCategoria("Bazar", 3);
+             try {
+				sistema.agregarProductoCategoria("Tecno", 1);
+				sistema.agregarProductoCategoria("Tecno", 2);
+				sistema.agregarProductoCategoria("Bazar", 3);
+			} catch (CategoriaException e) {
+				e.printStackTrace();
+			}
              
              em.persist(sistema.getProducto(1));
              em.persist(sistema.getProducto(2));
@@ -196,8 +218,6 @@ public class InitServlet extends HttpServlet {
              //sistema.asignarlePadreCategoria("Electrónica", "Computadoras y Laptops");
              //sistema.agregarCategoriaConProductos("Cámaras");      
 
-         } catch (Exception exeption) {
-             exeption.printStackTrace();
-         }
+         
     }
 }

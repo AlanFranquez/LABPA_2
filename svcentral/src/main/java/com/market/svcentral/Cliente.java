@@ -9,10 +9,13 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Persistence;
 import javax.persistence.Transient;
 
 import com.market.svcentral.exceptions.ProductoException;
@@ -25,7 +28,7 @@ public class Cliente extends Usuario {
 	@OneToMany
     private Map<Integer, OrdenDeCompra> listaCompras;
     
-    @OneToMany
+    @OneToMany (cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "cliente_nick")
     private Map<Integer, Puntaje> listaPuntajes;
     
@@ -112,13 +115,10 @@ public class Cliente extends Usuario {
     
     public List<DTOrdenDeCompra> mostrarCompras() {
     	List<DTOrdenDeCompra> lista = new ArrayList<DTOrdenDeCompra>();
-    	
-    	for (Map.Entry<Integer, OrdenDeCompra> entry : listaCompras.entrySet()) {
-    		OrdenDeCompra orden = entry.getValue();
-    		
+    	System.out.println(this.cantCompras());
+    	for (OrdenDeCompra orden : listaCompras.values()) {
     		lista.add(orden.crearDT());
     	}
-    	
     	return lista;
     }
     
@@ -232,12 +232,12 @@ public class Cliente extends Usuario {
         			try {
         				Producto producto = item.getProducto();
         				if(this.listaPuntajes.containsKey(numRef)) {
-        					Puntaje p = this.listaPuntajes.get(numRef);
-        					p.setvalor(valor);
+        		            Puntaje p = this.listaPuntajes.get(numRef);
+        		            p.setvalor(valor);
         				}else {
-        					Puntaje puntaje = new Puntaje(valor, numRef);
-        					producto.agregarPuntaje(puntaje);
-        					this.listaPuntajes.put(numRef, puntaje);        					
+        		            Puntaje puntaje = new Puntaje(valor, numRef);
+        		            producto.agregarPuntaje(puntaje);
+        		            this.listaPuntajes.put(numRef, puntaje);        					
         				}
         				return;        				
         			}catch (PuntajeInvalidoException e) {
