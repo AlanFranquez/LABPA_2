@@ -7,11 +7,17 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
+import java.beans.PersistenceDelegate;
 import java.io.IOException;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 import com.market.svcentral.DtProducto;
 import com.market.svcentral.Factory;
 import com.market.svcentral.ISistema;
+import com.market.svcentral.Producto;
 import com.market.svcentral.Usuario;
 
 /**
@@ -58,6 +64,11 @@ public class perfilProductoMOBILE extends HttpServlet {
             response.sendRedirect("formloginMOBILE");
             return;
         }
+        
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+        EntityManager em = emf.createEntityManager();
+        
+        em.getTransaction().begin();
 
         Object usuarioLogueado = session.getAttribute("usuarioLogueado");
         
@@ -74,21 +85,26 @@ public class perfilProductoMOBILE extends HttpServlet {
                 return;
             }
             int paramNumero = Integer.parseInt(parametro);
-            DtProducto dtprod = sistema.getDtProducto(paramNumero);
+            DtProducto dtprod = (em.find(Producto.class, paramNumero)).crearDT();
 
             if (dtprod == null) {
                 response.sendRedirect("perfilClienteMOBILE");
                 return;
             }
-
+            
             request.setAttribute("dtprod", dtprod);
             request.getRequestDispatcher("/WEB-INF/PerfilProductoMOBILE.jsp").forward(request, response);
         } catch (NumberFormatException e) {
             response.sendRedirect("perfilClienteMOBILE");
         } catch (Exception e) {
             // Manejar otras excepciones si es necesario
-            response.sendRedirect("errorPage"); // O una página de error adecuada
+            System.out.print(e); // O una página de error adecuada
+            return;
         }
+        
+        em.getTransaction().commit();
+        emf.close();
+        em.close();
         
         
     }

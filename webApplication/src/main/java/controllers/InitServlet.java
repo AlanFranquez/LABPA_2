@@ -71,6 +71,8 @@ public class InitServlet extends HttpServlet {
              em.persist(sistema.getUsuario("agusmari"));
              em.persist(sistema.getUsuario("Perez"));
              em.persist(sistema.getUsuario("Jorge"));
+             
+             System.out.print(((Cliente) sistema.getUsuario("Juan123")).getImagen());
 
              
              sistema.agregarCategoria("Living");

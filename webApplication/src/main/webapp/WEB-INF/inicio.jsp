@@ -145,13 +145,14 @@ if (usr != null && usr.getTipo().equals("proveedor")) {
     <section style="background-color: #eee;" class="mt-5">
     <div class="container py-5">
         <div class="row justify-content-center">
-        
+        <% if(prods != null) {%>
         <%
         for(Producto p : prods) {
             DtProducto dtp = p.crearDT();
         %>
             <div class="col-md-8 col-lg-6 col-xl-4 d-flex">
                 <div class="card mb-5 flex-fill" style="border-radius: 15px; min-height: 400px;">
+                
                     <div class="overflow-hidden" style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
                         <% if(dtp.getImagenes() != null && !dtp.getImagenes().isEmpty())  {%>
                         
@@ -203,7 +204,7 @@ if (usr != null && usr.getTipo().equals("proveedor")) {
                 </div>
             </div>
         <% } %>
-        
+        <%} %>
         </div>
     </div>
 </section>

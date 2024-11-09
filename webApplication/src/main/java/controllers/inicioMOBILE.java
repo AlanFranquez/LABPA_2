@@ -2,6 +2,11 @@ package controllers;
 
 import java.io.IOException;
 import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -34,7 +39,13 @@ public class inicioMOBILE extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        List<Producto> productos = sist.getAllProductos();
+        
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+        EntityManager em = emf.createEntityManager();
+        
+        em.getTransaction().begin();
+        
+        List<Producto> productos = em.createQuery("SELECT p FROM Producto p", Producto.class).getResultList();
         request.setAttribute("prods", productos);
         
         String userAgent = request.getHeader("User-Agent");
@@ -52,13 +63,21 @@ public class inicioMOBILE extends HttpServlet {
         
         
 
-        Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
+        Usuario u = (Usuario) session.getAttribute("usuarioLogueado");
+        Usuario usuarioLogueado = em.find(Usuario.class, u.getNick());
+        System.out.print("SE TRAEN LOS DATOS DESDE LA BASE DE DATOS");
         if (usuarioLogueado != null) {
             request.setAttribute("usuario", usuarioLogueado);
             request.setAttribute("estado", "logueado");
             // Redirigir a la página de inicio logueado
             request.getRequestDispatcher("/WEB-INF/inicioLogeadoMOBILE.jsp").forward(request, response);
         }
+        
+        
+        em.getTransaction().commit();
+        
+        em.close();
+        emf.close();
     }
     
     private boolean isMobileDevice(String userAgent) {

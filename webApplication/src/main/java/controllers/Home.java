@@ -50,6 +50,16 @@ public class Home extends HttpServlet {
         } else {
             System.out.println("No hay sesión activa.");
         }
+     // Determinar si el dispositivo es móvil
+        String userAgent = request.getHeader("User-Agent");
+        boolean isMobile = isMobileDevice(userAgent);
+        
+     // Redirigir según el dispositivo
+        if (isMobile) {
+            System.out.println("Redirigiendo a vista MOBILE logueado.");
+            response.sendRedirect("homeMOBILE");
+            return;
+        } 
 
         // Inicia el EntityManager
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
@@ -109,9 +119,7 @@ public class Home extends HttpServlet {
             System.out.println("El usuario logueado no es un cliente.");
         }
         request.setAttribute("usuario", user);
-        // Determinar si el dispositivo es móvil
-        String userAgent = request.getHeader("User-Agent");
-        boolean isMobile = isMobileDevice(userAgent);
+        
         System.out.println("Dispositivo detectado: " + (isMobile ? "Móvil" : "Escritorio"));
 
         // Establecer productos para la vista
@@ -122,15 +130,9 @@ public class Home extends HttpServlet {
             System.out.println("No hay productos disponibles para mostrar.");
         }
 
-        // Redirigir según el dispositivo
-        if (isMobile) {
-            System.out.println("Redirigiendo a vista MOBILE logueado.");
-            request.getRequestDispatcher("/WEB-INF/inicioLogeadoMOBILE.jsp").forward(request, response);
-        } else {
-            System.out.println("Redirigiendo a vista de escritorio logueado.");
-            request.getRequestDispatcher("/WEB-INF/inicio.jsp").forward(request, response);
-        }
+        
 
+        request.getRequestDispatcher("/WEB-INF/inicio.jsp").forward(request, response);
         // Commit y cierre de transacción
         try {
             em.getTransaction().commit();
