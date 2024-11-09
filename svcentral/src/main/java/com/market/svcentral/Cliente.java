@@ -16,6 +16,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
 import com.market.svcentral.exceptions.ProductoException;
+import com.market.svcentral.exceptions.PuntajeInvalidoException;
 @Entity
 @DiscriminatorValue("cliente")
 public class Cliente extends Usuario {
@@ -23,6 +24,10 @@ public class Cliente extends Usuario {
 	
 	@OneToMany
     private Map<Integer, OrdenDeCompra> listaCompras;
+    
+    @OneToMany
+    @JoinColumn(name = "cliente_nick")
+    private Map<Integer, Puntaje> listaPuntajes;
     
     @OneToMany(mappedBy = "autor", cascade = CascadeType.MERGE)
     private Map<Integer, Comentario> listaComentarios;
@@ -40,6 +45,7 @@ public class Cliente extends Usuario {
         this.listaCompras = new HashMap<>();
         this.listaComentarios = new HashMap<>();
         this.carrito = new Carrito();
+        this.listaPuntajes = new HashMap<>();
     }
     // gets, sets
     public Map<Integer, OrdenDeCompra> getCompras() {
@@ -209,6 +215,39 @@ public class Cliente extends Usuario {
         return false; // No se encontraron compras del proveedor
     }
 
+    public Map<Integer, Puntaje> getPuntajes() {
+        return this.listaPuntajes;
+    }
+    
+    public Puntaje getPuntaje(int numero) {
+    	return this.listaPuntajes.get(numero);
+    }
+    
+    public void agregarPuntaje(Integer valor, Integer numRef) throws ProductoException {
+    	for (Map.Entry<Integer, OrdenDeCompra> entry : listaCompras.entrySet()) {
+    		OrdenDeCompra orden = entry.getValue();
+    		for (Map.Entry<Integer, Item> entry2 : orden.getItems().entrySet()) {
+        		Item item = entry2.getValue();
+        		if (item.getProducto().getNumRef() == numRef) {
+        			try {
+        				Producto producto = item.getProducto();
+        				if(this.listaPuntajes.containsKey(numRef)) {
+        					Puntaje p = this.listaPuntajes.get(numRef);
+        					p.setvalor(valor);
+        				}else {
+        					Puntaje puntaje = new Puntaje(valor, numRef);
+        					producto.agregarPuntaje(puntaje);
+        					this.listaPuntajes.put(numRef, puntaje);        					
+        				}
+        				return;        				
+        			}catch (PuntajeInvalidoException e) {
+        				System.out.println(e.getMessage());
+        			}
+        		}
+        	}
+    	}
+    	throw new ProductoException("El cliente no compró el producto");
+    }
 	 
 }
 

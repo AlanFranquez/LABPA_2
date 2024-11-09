@@ -18,12 +18,17 @@ import javax.persistence.OneToMany;
 public class Producto {
 	@Id
 	private Integer numRef;
+
+	@OneToMany
+	@JoinColumn(name = "producto_id")
+	private List <Puntaje> puntajes;
 	
 	@ManyToMany
 	private List<Cat_Producto> categorias;
 	
 	@OneToMany(cascade = CascadeType.PERSIST)
 	private List <Comentario> comentarios;
+	
 	
 	@ManyToOne
 	@JoinColumn(name = "proveedor_nick")
@@ -64,6 +69,7 @@ public class Producto {
 		this.proveedor = prov;
 		this.comentarios = new ArrayList<Comentario>();
 		this.imagenes = new ArrayList<>();
+		this.puntajes = new ArrayList<>();
 		this.reclamos = new ArrayList<Reclamo>();
 	}
 	
@@ -215,10 +221,27 @@ public class Producto {
             }
 		}
 		catStr = catStr + "</html>";
-		return new DtProducto(this.getNombre(), this.getDescripcion(), this.getPrecio(), this.getNumRef(), this.getEspecificaciones(), this.getProveedor(), catStr, this.getImagenes(), this.getStock(), this.getComentarios(), this.getCantidadComprada(), this.getReclamos());
+		return new DtProducto(this.getNombre(), this.getDescripcion(), this.getPrecio(), this.getNumRef(), this.getEspecificaciones(), this.getProveedor(), catStr, this.getImagenes(), this.getStock(), this.getComentarios(), this.getCantidadComprada(), this.getReclamos(), this.obtenerPuntajes());
 	}
 
 	public int getCantidadComprada() {
 		return this.cantidadCompras;
+	}
+	
+	public void agregarPuntaje(Puntaje puntaje) {
+		this.puntajes.add(puntaje);
+	}
+	public List<Puntaje> obtenerPuntajes() {
+		return this.puntajes;
+	}
+	public int[] obtenerPuntaje() {
+		int total = 0;
+		int varios[] = {0, 0, 0, 0, 0, 0};
+		for (Puntaje p : this.puntajes) {
+			varios[p.getValor()] += 1;
+			total += p.getValor();
+		}
+		varios[0] = total / this.puntajes.size();
+		return varios;
 	}
 }

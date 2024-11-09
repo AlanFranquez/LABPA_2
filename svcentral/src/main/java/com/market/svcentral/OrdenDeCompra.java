@@ -13,6 +13,8 @@ import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NoResultException;
 import javax.persistence.OneToMany;
 import javax.persistence.Persistence;
@@ -32,6 +34,8 @@ public class OrdenDeCompra {
     private List<DTEstado> estados;
     @OneToMany(cascade = CascadeType.PERSIST)
     private List<Comentario> comentarios; 
+    @ManyToOne
+    @JoinColumn(name = "proveedorNick")
     private Proveedor proveedor;
 
     public OrdenDeCompra(){
@@ -45,6 +49,7 @@ public class OrdenDeCompra {
         this.items = new HashMap<>();
         this.comentarios = new ArrayList<>(); 
         this.estados = new ArrayList<>();
+        
         
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
     	

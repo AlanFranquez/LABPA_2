@@ -14,6 +14,7 @@ import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 
@@ -169,7 +170,12 @@ public class RealizarCompra extends HttpServlet {
 	            "SELECT e FROM DTEstado e WHERE e.estado = :estado", DTEstado.class);
 	        query.setParameter("estado", "Comprada");
 
-	        DTEstado estadoComprada = query.getSingleResult(); // Aquí se obtiene el estado "Comprada"
+	        DTEstado estadoComprada = null;
+	        try {
+	            estadoComprada = query.getSingleResult();
+	        } catch (NoResultException e) {
+	            System.out.println("No se encontró el estado con valor 'Comprada'.");
+	        } // Aquí se obtiene el estado "Comprada"
 
 	        // Asignarlo al objeto OrdenCompra
 	        ordenCompra.setEstado(estadoComprada);

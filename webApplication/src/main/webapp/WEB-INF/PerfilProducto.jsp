@@ -43,7 +43,8 @@ comproProducto = cl.comproProducto(id);
 	integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
 	crossorigin="anonymous">
 
-<link href="media/styles/InfoProducto.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+<link rel="stylesheet" type="text/css" href="./media/styles/InfoProducto.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link
@@ -216,6 +217,44 @@ if (usr != null && usr.getTipo().equals("proveedor")) {
 				}
 				%>
 	</main>
+
+<div>
+		<%
+		int[] puntajes = prod.obtenerPuntaje();
+		%>
+		<h3>Puntaje Medio: <%=puntajes[0]%></h3>
+		<ul>
+		<li>1:<%=puntajes[1]%></li>
+		<li>2:<%=puntajes[2]%></li>
+		<li>3:<%=puntajes[3]%></li>
+		<li>4:<%=puntajes[4]%></li>
+		<li>5:<%=puntajes[5]%></li>
+		</ul>
+	</div>
+
+	<%
+	if (usr != null && usr.getTipo().equals("cliente") && comproProducto) {
+	%>
+	<div class="col-auto star-widget">
+		<form id="puntaje" action="agregarValoracion" method="post">
+			<span id="valoracion">Valoración</span><br>
+	        <input type="radio" name="rate" id="rate-5" value="5">
+	        <label for="rate-5" class="bi bi-star"></label>
+	        <input type="radio" name="rate" id="rate-4" value="4">
+	        <label for="rate-4" class="bi bi-star"></label>
+	        <input type="radio" name="rate" id="rate-3" value="3">
+	        <label for="rate-3" class="bi bi-star"></label>
+	        <input type="radio" name="rate" id="rate-2" value="2">
+	        <label for="rate-2" class="bi bi-star"></label>
+	        <input type="radio" name="rate" id="rate-1" value="1">
+	        <label for="rate-1" class="bi bi-star"></label>
+	        <input type="hidden" name="dtprod" value="<%=id%>">
+	        <button type="submit" class="btn btn-primary">Enviar</button>
+	        <header></header>
+		</form>
+	</div>
+	<% } %>
+
 
 	<br>
 	<br>
