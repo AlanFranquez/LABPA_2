@@ -24,6 +24,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
@@ -309,7 +312,11 @@ public class Presentacion {
                 confContraseniaField.setBounds(100, 380, 160, 25);
                 panel.add(confContraseniaField);
             
-
+                EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+                EntityManager em = emf.createEntityManager();
+                
+                em.getTransaction().begin();
+                
                 JButton seleccionarImagenButton = new JButton("Seleccionar Imagen");
                 seleccionarImagenButton.setBounds(20, 470, 240, 25);
                 panel.add(seleccionarImagenButton);
@@ -455,6 +462,14 @@ public class Presentacion {
                         	s.agregarImagenUsuario(nickname, imagenSelecc);
                         	
                         }
+                        
+                        em.persist(s.getUsuario(nickname));
+                        
+                        em.getTransaction().commit();
+                        
+                        
+                        em.close();
+                        emf.close();
                         
                         // Limpiar inputs
                         JOptionPane.showMessageDialog(null, "Usuario registrado con éxito.");
