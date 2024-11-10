@@ -249,7 +249,7 @@ if (usr != null && usr.getTipo().equals("proveedor")) {
 	        <input type="radio" name="rate" id="rate-1" value="1">
 	        <label for="rate-1" class="bi bi-star"></label>
 	        <input type="hidden" name="dtprod" value="<%=id%>">
-	        <button type="submit" class="btn btn-primary">Enviar</button>
+	        <button type="submit" class="btn btn-primary" id="submit-btn" disabled>Enviar</button>
 	        <header></header>
 		</form>
 	</div>
@@ -428,6 +428,25 @@ function validarCantidad(form) {
         button.disabled = false;
     }
 }
+</script>
+
+<script>
+    const submitButton = document.getElementById('submit-btn');
+    const radios = document.querySelectorAll('input[name="rate"]');
+
+    function enableSubmitButton() {
+        let isSelected = false;
+        radios.forEach(radio => {
+            if (radio.checked) {
+                isSelected = true;
+            }
+        });
+        submitButton.disabled = !isSelected;
+    }
+
+    radios.forEach(radio => {
+        radio.addEventListener('change', enableSubmitButton);
+    });
 </script>
 
 	<script type="text/javascript">

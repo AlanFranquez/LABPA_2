@@ -89,9 +89,8 @@ public class Home extends HttpServlet {
         // Usuario logueado
         Usuario u = (Usuario) session.getAttribute("usuarioLogueado");
         
-        Usuario user = em.find(Usuario.class, u.getNick());
         // Consultar el usuario logueado en la base de datos
-        Usuario usuarioLogueado = em.find(Usuario.class, user.getNick());
+        Usuario usuarioLogueado = em.find(Usuario.class, u.getNick());
         if (usuarioLogueado != null) {
             System.out.println("Usuario logueado encontrado en la base de datos.");
         } else {
@@ -118,7 +117,7 @@ public class Home extends HttpServlet {
         } else {
             System.out.println("El usuario logueado no es un cliente.");
         }
-        request.setAttribute("usuario", user);
+        request.setAttribute("usuario", usuarioLogueado);
         
         System.out.println("Dispositivo detectado: " + (isMobile ? "Móvil" : "Escritorio"));
 
