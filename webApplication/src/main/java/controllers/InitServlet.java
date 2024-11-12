@@ -136,13 +136,16 @@ public class InitServlet extends HttpServlet {
              em.persist(sistema.getProducto(1));
              em.persist(sistema.getProducto(2));
              em.persist(sistema.getProducto(3));
-             
+             try {
              em.persist(sistema.getCat("Living"));
              em.persist(sistema.getCat("Tecnologia"));
              em.persist(sistema.getCat("Estanterias"));
              em.persist(sistema.getCat("Tecno"));
              em.persist(sistema.getCat("Otros"));
              em.persist(sistema.getCat("Bazar"));
+             }catch (Exception e) {
+            	 System.out.println(e.getMessage());
+             }
              
              
              //Map<Integer, Item> items = new HashMap<>();

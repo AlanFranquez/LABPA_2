@@ -97,14 +97,16 @@ public class Presentacion {
                     //s.agregarImagenUsuario("albert1341", new ImageIcon("./imagenes/p2.jpg"));
                     //s.agregarImagenUsuario("agusmari", new ImageIcon("./imagenes/p3.jpg"));
                     
-                    s.agregarCategoria("Living");
-                    s.agregarCategoria("Tecnología");
-                    s.agregarCategoria("Estanterias");
-                    
-                    s.agregarCategoriaConProductos("Tecno");
-                   // s.asignarlePadreACategoriaProds("Living", "Tecno");
-                    s.agregarCategoriaConProductos("Otros");
-                    s.agregarCategoriaConProductos("Bazar");
+                    try {
+                    	s.agregarCategoria("Tecnología");
+                    	s.agregarCategoria("Estanterias");
+                    	
+                    	s.agregarCategoriaConProductos("Tecno");
+                    	s.agregarCategoriaConProductos("Otros");
+                    	s.agregarCategoriaConProductos("Bazar");                    	
+                    } catch(Exception e) {
+                    	System.out.println(e.getMessage());
+                    }
 
                     
                     
@@ -851,7 +853,7 @@ public class Presentacion {
                 
                 DefaultTreeCellRenderer renderer = new DefaultTreeCellRenderer() {
 					private static final long serialVersionUID = 1L;
-					Icon closedIcon = s.resizeIcon(new ImageIcon("./imagenes/sinElementos.png"), 16, 16);
+					Icon closedIcon = new ImageIcon("./imagenes/sinElementos.png");
 
                     @Override
                     public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel,

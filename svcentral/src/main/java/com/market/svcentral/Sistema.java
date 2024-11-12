@@ -12,6 +12,9 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -31,7 +34,7 @@ public class Sistema implements ISistema {
     private Map<String, Categoria> arbolCategorias;
     private final EmailService emailService = new EmailService();
     private List<Cliente> listaClientes;
-
+    
     private Sistema() {
         // Inicialización de colecciones
         this.usuarios = new HashMap<>();
@@ -223,14 +226,34 @@ public class Sistema implements ISistema {
     
     // CASO DE USO 4: GENERAR ORDEN DE COMPRA
     public DefaultMutableTreeNode arbolProductos() {
-   	 DefaultMutableTreeNode root = new DefaultMutableTreeNode("Cats");
-   	 for (Categoria cat : arbolCategorias.values()) {
-   		 DefaultMutableTreeNode child = arbolProductos(cat);
-   		 root.add(child);
-   	 }
-   	return root;
+    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+    	EntityManager em = emf.createEntityManager();
+    	em.getTransaction().begin();
+    	
+    	DefaultMutableTreeNode root = new DefaultMutableTreeNode("Cats");
+    	List<Categoria> categorias = null;
+	
+    	try {
+    		categorias = em.createQuery("SELECT c FROM Categoria c WHERE c.padre IS NULL", Categoria.class).getResultList();
+    	} catch (Exception e) {
+    		em.getTransaction().commit();
+    		em.close();
+    		System.out.print(e);
+    	}
+   	 	for (Categoria cat : categorias) {
+   	 		DefaultMutableTreeNode child = arbolProductos(cat);
+   	 		root.add(child);
+   	 	}
+   	 	em.getTransaction().commit();
+		em.close();
+   	 	return root;
     }
+    
     public DefaultMutableTreeNode arbolProductos(Categoria cat) {
+    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+    	EntityManager em = emf.createEntityManager();
+    	em.getTransaction().begin();
+    	
         DefaultMutableTreeNode rama = new DefaultMutableTreeNode(cat.getNombre());
         if (cat.getTipo().equals("Padre")) {
             Map<String, Categoria> hijos = ((Cat_Padre) cat).getHijos();
@@ -243,9 +266,14 @@ public class Sistema implements ISistema {
                 rama.add(new DefaultMutableTreeNode("Sin Elementos"));
             }
         } else {
-            Map<Integer, Producto> productos = ((Cat_Producto) cat).getProductos();
+        	List<Producto> productos = null;
+    		try {
+    			productos = em.createQuery("SELECT p FROM Producto p JOIN p.categorias c WHERE c.nombre='" + cat.getNombre() + "'", Producto.class).getResultList();
+    		} catch (Exception e) {
+    			System.out.print(e);
+    		}
             if (productos.size() >= 1) {
-                for (Producto producto : productos.values()) {
+                for (Producto producto : productos) {
                     int stock = producto.getStock(); // Obtener el stock
                     DefaultMutableTreeNode child = new DefaultMutableTreeNode(
                         producto.getNombre() + " - " + producto.getNumRef() + " (" + stock + " disponibles)"
@@ -256,7 +284,9 @@ public class Sistema implements ISistema {
                 rama.add(new DefaultMutableTreeNode("Sin Elementos"));
             }
         }
-        return rama;
+        em.getTransaction().commit();
+		em.close();
+		return rama;
     }
 
     public void CrearOrden() {
@@ -419,28 +449,46 @@ public class Sistema implements ISistema {
     }
 
     public List<DtProducto> listarALLProductos() throws ProductoException {
+    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+    	EntityManager em = emf.createEntityManager();
+    	
     	List<DtProducto> listaProductos = new ArrayList<>();
     	List<Integer> numRefs = new ArrayList<Integer>();
     	
-    	for (Map.Entry<String, Categoria> entry : this.categorias.entrySet()) {
-    		Categoria cat = entry.getValue();
+		List<Categoria> categorias = null;
+		em.getTransaction().begin();
+		
+		try {
+			categorias = em.createQuery("SELECT c FROM Categoria c WHERE c.tipo='Producto'", Categoria.class).getResultList();
+		} catch (Exception e) {
+			em.getTransaction().commit();
+	        em.close();
+			System.out.print(e);
+		}
+		System.out.print("Categorias traidas de la base de datos correctamente");
+		
+    	for (Categoria cat : categorias) {
+    		List<Producto> productos = null;
+    		try {
+    			productos = em.createQuery("SELECT p FROM Producto p JOIN p.categorias c WHERE c.nombre='" + cat.getNombre() + "'", Producto.class).getResultList();
+    		} catch (Exception e) {
+    			System.out.print(e);
+    		}
     		
-    		if (cat.getTipo() == "Producto") {
-    			Cat_Producto cProd = (Cat_Producto) cat;
-    			List<DtProducto> listaPerProducto = cProd.listarProductos();
-    			
-    			if (listaPerProducto.isEmpty()) {
-    				continue;
-    			}
-    			
-    			for (DtProducto dtProducto: listaPerProducto) {
-    				if (!numRefs.contains(dtProducto.getNumRef())) {
-                		numRefs.add(dtProducto.getNumRef());
-                		listaProductos.add(dtProducto);
-                	}
-    			}
+   			if (productos.isEmpty()) {
+    			continue;
+    		}
+    		
+    		for (Producto prod: productos) {
+    			DtProducto dtProducto = prod.crearDT();
+   				if (!numRefs.contains(dtProducto.getNumRef())) {
+               		numRefs.add(dtProducto.getNumRef());
+               		listaProductos.add(dtProducto);
+               	}
     		}
     	}
+    	em.getTransaction().commit();
+        em.close();
     	if (listaProductos.isEmpty()) {
     		throw new ProductoException("No se ha encontrado ningun producto para listar");
     	}
