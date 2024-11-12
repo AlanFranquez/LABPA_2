@@ -186,14 +186,14 @@ public class RealizarCompra extends HttpServlet {
 	        
 	        em.persist(ordenCompra);
 	        
-	        
-	        em.getTransaction().commit();
-	        em.close();
-	        emf.close();
+	      
 	    }
 	    
-	    // Vaciar el carrito después de la compra
 	    carrito.vaciarCarrito();
+	    
+        em.getTransaction().commit();
+        em.close();
+        emf.close();
 	    
 	    // Guardar el precio total general en la sesión
 	    session.setAttribute("mensajeExito", "Su compra se ha realizado con éxito.");

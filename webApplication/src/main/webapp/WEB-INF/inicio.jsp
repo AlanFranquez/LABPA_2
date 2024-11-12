@@ -189,7 +189,7 @@ if (usr != null && usr.getTipo().equals("proveedor")) {
                                     <br>
                                     <div class="row mt-2">
                                         <a href="perfilProducto?producto=<%= dtp != null ? dtp.getNumRef() : "" %>" class="btn" style="color: #0000EE; cursor: pointer">Ver Detalles</a>
-                                        <% if(usr.getTipo().equals("cliente") && carr != null && ! carr.existeProducto(dtp.getNumRef())) { 
+                                        <% if(usr.getTipo().equals("cliente") && carr != null && !carr.existeProducto(p.getNumRef())) { 
                                         	
                                        
                                         %>
