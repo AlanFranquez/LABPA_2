@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +26,7 @@ import com.market.svcentral.Factory;
 import com.market.svcentral.ISistema;
 import com.market.svcentral.Item;
 import com.market.svcentral.OrdenDeCompra;
+import com.market.svcentral.Producto;
 import com.market.svcentral.Proveedor;
 import com.market.svcentral.Usuario;
 
@@ -122,6 +124,10 @@ public class RealizarCompra extends HttpServlet {
 
         Carrito carrito = cliente.getCarrito();
         List<Item> items = carrito.getProductos();
+        
+        List<Producto> prodsComprados = new ArrayList<Producto>();
+        
+       
 
         // Mapa para almacenar las órdenes de compra por proveedor
         Map<Proveedor, Map<Integer, Item>> ordenesPorProveedor = new HashMap<>();
@@ -131,7 +137,12 @@ public class RealizarCompra extends HttpServlet {
             Proveedor proveedor = item.getProveedor();
             ordenesPorProveedor.putIfAbsent(proveedor, new HashMap<>());
             ordenesPorProveedor.get(proveedor).put(item.getProducto().getNumRef(), item);
+            
+            System.out.print("IMPRIMIENDO ITEMS" + item.getProducto().getNombre());
+            
+            prodsComprados.add(em.find(Producto.class, item.getProducto().getNumRef()));
         }
+        session.setAttribute("productosComprados",prodsComprados);
 
         // Variable para acumular el precio total de todas las órdenes de compra
         float precioTotalGeneral = 0;
@@ -176,6 +187,6 @@ public class RealizarCompra extends HttpServlet {
         session.setAttribute("mensajeExito", "Su compra se ha realizado con éxito.");
         session.setAttribute("precioTotal", String.valueOf(precioTotalGeneral)); // Total general de todas las órdenes
         
-        request.getRequestDispatcher("/WEB-INF/paginaExito.jsp").forward(request, response);
+        response.sendRedirect("PaginaExito");
     }
 }

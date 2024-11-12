@@ -15,6 +15,7 @@ import java.util.regex.Pattern;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -824,6 +825,7 @@ public class Sistema implements ISistema {
 		            String recipientEmail = comentarista.getCorreo();
 		            try {
 		                // Enviar la notificación
+		            	System.out.print("SE ENVIO LA NOTIFICACIÓN");
 		                emailService.sendCommentNotification(recipientEmail, producto.getNombre(), autorComentario.getNombre(), nuevoComentarioTexto);
 		            } catch (Exception e) {
 		                System.out.println("Error al intentar enviar la notificación a " + recipientEmail + ": " + e.getMessage());
@@ -920,6 +922,29 @@ public class Sistema implements ISistema {
 	        return new ImageIcon(resizedImage);
 	    }
 	 
+	 // FILTRO PRODUCTOS DESTACADOS
+	 public List<Producto> obtenerProductosDestacados() {
+		 	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+	        EntityManager em = emf.createEntityManager();
+	        
+	        try {
+	            // Consulta JPQL para obtener productos ordenados por 'comprasUnicas' de mayor a menor
+	            String jpql = "SELECT p FROM Producto p ORDER BY p.cantidadUnicaComprada DESC";
+	            Query query = em.createQuery(jpql, Producto.class);
+	            
+	            
+	            query.setMaxResults(10);
+	            
+	           
+	            List<Producto> productosDestacados = query.getResultList();
+	            
+	            return productosDestacados;
+	        } finally {
+	            em.close(); 
+	            emf.close();
+	        }
+	        
+	    }
 	 
 	 
 }

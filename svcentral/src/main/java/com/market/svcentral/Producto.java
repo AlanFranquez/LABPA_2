@@ -30,6 +30,8 @@ public class Producto {
 	private List <Comentario> comentarios;
 	
 	
+	
+	
 	@ManyToOne
 	@JoinColumn(name = "proveedor_nick")
 	private Proveedor proveedor;
@@ -49,6 +51,8 @@ public class Producto {
 	private List<String> imagenes;
 	
 	private int cantidadCompras = 0; 
+	
+	private int cantidadUnicaComprada = 0; // para productos destacados
 	
 	@OneToMany(cascade = CascadeType.PERSIST, mappedBy = "producto")
 	List <Reclamo> reclamos;
@@ -91,6 +95,14 @@ public class Producto {
 	
 	public void agregarReclamo(Reclamo r) {
 		this.reclamos.add(r);
+	}
+	
+	public Integer getComprasUnicas() {
+		return this.cantidadUnicaComprada;
+	}
+	
+	public void setComprasUnicas() {
+		this.cantidadUnicaComprada++;
 	}
 	
 	public void agregarComentario(Comentario comentario) {

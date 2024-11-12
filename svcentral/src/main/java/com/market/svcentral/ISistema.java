@@ -134,4 +134,6 @@ public interface ISistema {
 	public abstract Icon resizeIcon(ImageIcon imageIcon, int i, int j);
 
 	public abstract void cambiarEstadoOrdenconDT(DTEstado estadoComprada11, int numeroOrden, String nick);
+	
+	public List<Producto> obtenerProductosDestacados();
 }

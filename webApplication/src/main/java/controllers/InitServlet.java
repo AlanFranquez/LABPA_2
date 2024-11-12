@@ -177,6 +177,12 @@ public class InitServlet extends HttpServlet {
              Comentario c = new Comentario(22, "lalala", cliente, LocalDateTime.now());
              p1.agregarComentario(c);
              
+             List<Producto> prodDestacados = sistema.obtenerProductosDestacados();
+             
+             for(Producto p : prodDestacados) {
+            	 System.out.print(p.getNombre());
+             }
+             
              em.persist(orden);
              em.persist(c);
              
