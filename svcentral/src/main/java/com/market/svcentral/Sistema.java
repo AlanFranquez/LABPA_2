@@ -451,12 +451,12 @@ public class Sistema implements ISistema {
     public List<DtProducto> listarALLProductos() throws ProductoException {
     	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
     	EntityManager em = emf.createEntityManager();
+    	em.getTransaction().begin();
     	
     	List<DtProducto> listaProductos = new ArrayList<>();
     	List<Integer> numRefs = new ArrayList<Integer>();
     	
 		List<Categoria> categorias = null;
-		em.getTransaction().begin();
 		
 		try {
 			categorias = em.createQuery("SELECT c FROM Categoria c WHERE c.tipo='Producto'", Categoria.class).getResultList();
@@ -465,7 +465,7 @@ public class Sistema implements ISistema {
 	        em.close();
 			System.out.print(e);
 		}
-		System.out.print("Categorias traidas de la base de datos correctamente");
+		System.out.println("Categorias traidas de la base de datos correctamente");
 		
     	for (Categoria cat : categorias) {
     		List<Producto> productos = null;
@@ -495,15 +495,13 @@ public class Sistema implements ISistema {
     	return listaProductos;
     }
     public DtProducto getDtProducto(int numRef) {
-    	for (Usuario user : usuarios.values()) {
-    		if (user instanceof Proveedor) {
-    			Proveedor proveedor = (Proveedor) user;
-    			Producto producto = proveedor.obtenerProd(numRef);
-    			if (producto != null) {
-    				return producto.crearDT();
-    			}
-    		}
-    	}
+    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+    	EntityManager em = emf.createEntityManager();
+    	em.getTransaction().begin();
+    	Producto producto = em.find(Producto.class, numRef);
+		if(producto != null) {
+			return producto.crearDT();
+		}
     	return null;
     }
     
