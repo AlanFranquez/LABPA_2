@@ -2,156 +2,73 @@ package com.market.svcentral;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NoResultException;
-import javax.persistence.OneToMany;
-import javax.persistence.Persistence;
-import javax.persistence.Transient;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 
 @Entity
 public class OrdenDeCompra {
     @Id
-	private int numero;
+    private int numero;
     private float precioTotal;
     private LocalDateTime fecha;
+
     @OneToMany(cascade = CascadeType.PERSIST)
     private Map<Integer, Item> items;
     
-    @OneToMany(cascade = CascadeType.PERSIST)
+    // Cambio: Eliminamos @OneToMany ya que DTEstado es embebido
+    @ElementCollection
     private List<DTEstado> estados;
+
     @OneToMany(cascade = CascadeType.PERSIST)
     private List<Comentario> comentarios; 
+    
     @ManyToOne
     @JoinColumn(name = "proveedorNick")
     private Proveedor proveedor;
 
-    public OrdenDeCompra(){
-    	
-    }
-    
-    public OrdenDeCompra(int numero) {
-        this.fecha = LocalDateTime.now();
-        this.numero = numero;
-        this.precioTotal = 0;
+    public OrdenDeCompra() {
         this.items = new HashMap<>();
-        this.comentarios = new ArrayList<>(); 
+        this.comentarios = new ArrayList<>();
         this.estados = new ArrayList<>();
-        
-        
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-    	
-        EntityManager em = emf.createEntityManager();
-        try {
-            TypedQuery<DTEstado> query = em.createQuery(
-                "SELECT e FROM DTEstado e WHERE e.estado = :estado", DTEstado.class);
-            query.setParameter("estado", "Comprada");
-
-            DTEstado estadoComprada = query.getSingleResult();
-            this.estados.add(estadoComprada);
-        } catch (NoResultException e) {
-            // Manejar el caso cuando no se encuentra el estado
-            System.out.println("No se encontró el estado 'Comprada'");
-        } finally {
-            em.close();
-        }
-
-        
     }
 
     public OrdenDeCompra(Map<Integer, Item> itemsAdquiridos, float precioTotal, Proveedor proveedor) {
         Random random = new Random();
-        this.items = itemsAdquiridos;
-        this.numero = random.nextInt(1000);
+        this.numero = random.nextInt(1000); // o algún otro método para generar números de orden únicos
         this.precioTotal = precioTotal;
         this.fecha = LocalDateTime.now();
+        this.items = itemsAdquiridos;
+        this.comentarios = new ArrayList<>();
         this.estados = new ArrayList<>();
-
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-        EntityManager em = emf.createEntityManager();
-        try {
-            // Intentamos obtener el estado 'Comprada' de la base de datos
-            TypedQuery<DTEstado> query = em.createQuery(
-                "SELECT e FROM DTEstado e WHERE e.estado = :estado", DTEstado.class);
-            query.setParameter("estado", "Comprada");
-
-            DTEstado estadoComprada = query.getSingleResult();
-            
-            // Verificamos si el estado ya está en la lista, y si no, lo agregamos
-            if (estadoComprada != null && !estados.contains(estadoComprada)) {
-                this.estados.add(estadoComprada);
-            }
-        } catch (NoResultException e) {
-            // Manejo del caso cuando no se encuentra el estado en la base de datos
-            System.out.println("No se encontró el estado 'Comprada'");
-        } finally {
-            em.close();
-        }
-
-        // Asignamos el proveedor
         this.proveedor = proveedor;
+
+        // Estado inicial
+        DTEstado estadoComprada = new DTEstado("Comprada", "El cliente ha realizado la compra");
+        this.estados.add(estadoComprada);
+    }
+
+    // Métodos de gestión de estado
+    public void agregarEstado(String estado, String comentarios) {
+        DTEstado nuevoEstado = new DTEstado(estado, comentarios);
+        this.estados.add(nuevoEstado);
     }
     
-    public Proveedor getProveedor() {
-        return proveedor;
-    }
-    
-    public List<Comentario> getComentarios() {
-        return comentarios;
+    public void setEstado(DTEstado estado) {
+    	this.estados.add(estado);
     }
 
-    public void agregarComentario(String comentarioTexto, Cliente autor) {
-        if (autor == null) {
-            throw new IllegalArgumentException("El autor no puede ser null");
-        }
-        Comentario nuevoComentario = new Comentario(numero, comentarioTexto, autor, fecha);
-        comentarios.add(nuevoComentario);
-    }
-
-
-
-    // Métodos para gestionar los estados
     public String getEstado() {
-        //return estados.getLast().getEstado(); // Devuelve el último estado
-        return estados.get(estados.size() - 1).getEstado(); // Accede al último estado por índice
-
+        return estados.isEmpty() ? "Sin estado" : estados.get(estados.size() - 1).getEstado();
     }
 
-    public void setEstado(String nuevoEstado, String comentarios) {
-    	boolean existe = this.estados.stream().anyMatch(e -> e.getEstado() == nuevoEstado);
-
-        // Si no existe, agregarlo a la lista
-        if (!existe) {
-            this.estados.add(new DTEstado(nuevoEstado, comentarios));
-        }
-    }
-    
-    public void setEstado(DTEstado estadoComprada) {
-        if (this.estados.stream().noneMatch(e -> e.getEstado() == estadoComprada.getEstado())) {
-            this.estados.add(estadoComprada);
-        }
-	}
-
-   
     public List<DTEstado> getHistorialEstado() {
         return estados;
     }
-    
 
-    // Getters y Setters:
-    
+    // Otros métodos y getters/setters
     public int getNumero() {
         return numero;
     }
@@ -172,20 +89,14 @@ public class OrdenDeCompra {
         return items;
     }
 
-    private void setPrecioTotal() {
-        float total = 0;
-        if (items.isEmpty()) {
-            this.precioTotal = 0;
-        } else {
-            Collection<Item> col = items.values();
-            for (Item i : col) {
-                total += i.getSubTotal();
-            }
-            this.precioTotal = total;
-        }
+    public List<Comentario> getComentarios() {
+        return comentarios;
     }
 
-    // Métodos para manejar los items
+    public Proveedor getProveedor() {
+        return proveedor;
+    }
+
     public void addItem(Producto producto, int cant) {
         if (items.containsKey(producto.getNumRef())) {
             Item item = items.get(producto.getNumRef());
@@ -202,12 +113,18 @@ public class OrdenDeCompra {
         setPrecioTotal();
     }
 
+    private void setPrecioTotal() {
+        float total = 0;
+        if (!items.isEmpty()) {
+            for (Item i : items.values()) {
+                total += i.getSubTotal();
+            }
+        }
+        this.precioTotal = total;
+    }
+
+    // Método para crear el DTO de la orden
     public DTOrdenDeCompra crearDT() {
         return new DTOrdenDeCompra(numero, getItems(), getPrecioTotal(), getHistorialEstado());
     }
-
-	
-   
-    
-
 }

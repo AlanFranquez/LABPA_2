@@ -136,11 +136,11 @@ public class Presentacion {
                     //s.agregarImagenesProducto("Bazar", 3, new File("./imagenes/s2.jpg"));
                     
                     s.agregarProductoCategoria("Tecno", 2);
-                    OrdenDeCompra o1 = new OrdenDeCompra(1);
-                    o1.addItem(p1, 3);
+                    //OrdenDeCompra o1 = new OrdenDeCompra(1);
+                    //o1.addItem(p1, 3);
                     
                     
-                    s.addOrdenes(o1, "Juan123");
+                    //s.addOrdenes(o1, "Juan123");
 
                   
                     Presentacion window = new Presentacion();

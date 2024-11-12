@@ -6,12 +6,8 @@ import java.time.format.DateTimeFormatter;
 import javax.persistence.*;
 
 
-@Entity
-@Table(name = "dtestado")  
+@Embeddable 
 public class DTEstado {
-    @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private int id;
     
     private String estado;
     private LocalDateTime fecha;

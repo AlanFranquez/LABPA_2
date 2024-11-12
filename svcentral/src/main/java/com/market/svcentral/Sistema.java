@@ -290,9 +290,9 @@ public class Sistema implements ISistema {
     }
 
     public void CrearOrden() {
-    	int maxKey = ordenes.keySet().stream().max(Integer::compare).orElse(0);
-    	OrdenDeCompra orden = new OrdenDeCompra(maxKey + 1);
-    	ordenes.put(orden.getNumero(), orden);
+    	//int maxKey = ordenes.keySet().stream().max(Integer::compare).orElse(0);
+    	//OrdenDeCompra orden = new OrdenDeCompra(maxKey + 1);
+    	//ordenes.put(orden.getNumero(), orden);
     }
     public Integer obtenerStockProducto(int numRef) {
     	for (Usuario user : usuarios.values()) {
@@ -724,7 +724,8 @@ public class Sistema implements ISistema {
 	 		Cliente client = (Cliente) this.usuarios.get(cliente);
 	 		
 	 		if (client != null) {
-	 			this.ordenes.get(numero).setEstado(estado, com);
+	 			DTEstado nuevoEstado = new DTEstado(estado, com);
+	 			this.ordenes.get(numero).setEstado(nuevoEstado);
 	 			
 	 			String recipientEmail = client.getCorreo();
 	 	        //String recipientEmail = "maria.vairo@estudiantes.utec.edu.uy";

@@ -20,6 +20,7 @@ import com.market.svcentral.DTEstado;
 import com.market.svcentral.DTOrdenDeCompra;
 import com.market.svcentral.Factory;
 import com.market.svcentral.ISistema;
+import com.market.svcentral.OrdenDeCompra;
 
 /**
  * Servlet implementation class PerfilOrden
@@ -118,21 +119,17 @@ public class PerfilOrden extends HttpServlet {
             EntityManager em = emf.createEntityManager();
             
             if ("confirmar".equals(accion)) {
-            	DTOrdenDeCompra orden = cliente.mostrarCompras(numeroOrden);
+            	OrdenDeCompra orden = cliente.getCompra(numeroOrden);
                 if (orden != null) {
-                	TypedQuery<DTEstado> query11 = em.createQuery(
-             	            "SELECT e FROM DTEstado e WHERE e.estado = :estado", DTEstado.class);
-             	        query11.setParameter("estado", "Entregada");
-
-             	     DTEstado estadoComprada11 = query11.getSingleResult();
-             	     sist.cambiarEstadoOrdenconDT(estadoComprada11, numeroOrden, cliente.getNick());
+                	DTEstado estado5 = new DTEstado("Entregada", "El cliente ha recibido el pedido."); 
+             	    orden.setEstado(estado5);
                 } else {
                     response.sendError(HttpServletResponse.SC_NOT_FOUND, "Orden no encontrada.");
                     return;
                 }
             }
 
-            request.setAttribute("ordencompra", cliente.mostrarCompras(numeroOrden));
+            request.setAttribute("ordencompra", cliente.getCompra(numeroOrden));
             response.sendRedirect("perfilOrden?nickname=" + cliente.getNick() + "&orden=" + numeroOrden);
 
         } else {

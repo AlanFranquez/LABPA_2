@@ -108,11 +108,7 @@ public class InitServlet extends HttpServlet {
              DTEstado estado4 = new DTEstado("En camino", "El pedido ha sido enviado y está en camino.");
              DTEstado estado5 = new DTEstado("Entregada", "El cliente ha recibido el pedido.");
 
-             // Persistir los estados en la base de datos
-             em.persist(estado2);
-             em.persist(estado3);
-             em.persist(estado4);
-             em.persist(estado5);
+             
 
          
              sistema.agregarProducto("Pelota", 1, "Pelota inflable ideal", "Increible", 120, "Perez", 100);
@@ -166,29 +162,10 @@ public class InitServlet extends HttpServlet {
              
              
              Cliente cliente = (Cliente) sistema.getUsuario("Juan123");
-             TypedQuery<DTEstado> query = em.createQuery(
-     	            "SELECT e FROM DTEstado e WHERE e.estado = :estado", DTEstado.class);
-     	        query.setParameter("estado", "Comprada");
-
-     	        DTEstado estadoComprada = query.getSingleResult(); // Aquí se obtiene el estado "Comprada"
-
-     	     // Asignarlo al objeto OrdenCompra
-     	     orden.setEstado(estadoComprada);
-     	     
-     	     TypedQuery<DTEstado> query1 = em.createQuery(
-     	            "SELECT e FROM DTEstado e WHERE e.estado = :estado", DTEstado.class);
-     	        query1.setParameter("estado", "En preparación");
-
-     	     DTEstado estadoComprada1 = query1.getSingleResult();
-     	     orden.setEstado(estadoComprada1); 
-     	     
-     	     TypedQuery<DTEstado> query11 = em.createQuery(
-     	            "SELECT e FROM DTEstado e WHERE e.estado = :estado", DTEstado.class);
-     	        query11.setParameter("estado", "En camino");
-
-     	     DTEstado estadoComprada11 = query11.getSingleResult();
-     	     orden.setEstado(estadoComprada11);
-     	     
+            
+     	     orden.setEstado(estado2);
+     	     orden.setEstado(estado3);
+     	     orden.setEstado(estado4);
              sistema.realizarCompra(orden, cliente.getNick());
              cliente.agregarCompra(orden);
              
