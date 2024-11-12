@@ -30,7 +30,7 @@
     
     	Usuario usr = (Usuario) request.getAttribute("usuarioLogueado");
     	
-    	List<DTOrdenDeCompra> ordenes = (List<DTOrdenDeCompra>) request.getAttribute("ordenes");
+    	List<OrdenDeCompra> ordenes = (List<OrdenDeCompra>) request.getAttribute("ordenes");
     %>
   
 
@@ -110,7 +110,7 @@ if (usr != null && usr.getTipo().equals("proveedor")) {
       	<p class="text-center mt-4">No ha realizado compras :(</p>
       	<% } else { 
       	
-      		for(DTOrdenDeCompra dt : ordenes) {
+      		for(OrdenDeCompra dt : ordenes) {
       			%>
       	<div class="container align-items-center justify-content-center">
             <div class="card">
@@ -135,7 +135,7 @@ if (usr != null && usr.getTipo().equals("proveedor")) {
                             <br>
                             
                             <p class="card-text"><b>Precio total: </b><%= dt.getPrecioTotal() %></p>
-                            <p class="card-text"><b>Fecha de compra: </b><%= dt.getFechaString() %></p>
+                            <p class="card-text"><b>Fecha de compra: </b><%= dt.crearDT().getFechaString() %></p>
                            
                             <button class="btn" style="border: none; background-color: #2C2C2C">
                             
