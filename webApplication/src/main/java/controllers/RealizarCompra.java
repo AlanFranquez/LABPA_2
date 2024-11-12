@@ -172,7 +172,7 @@ public class RealizarCompra extends HttpServlet {
 
 	        DTEstado estadoComprada = null;
 	        try {
-	            estadoComprada = query.getSingleResult();
+	            estadoComprada = em.find(DTEstado.class, 1);
 	        } catch (NoResultException e) {
 	            System.out.println("No se encontró el estado con valor 'Comprada'.");
 	        } // Aquí se obtiene el estado "Comprada"
@@ -182,6 +182,14 @@ public class RealizarCompra extends HttpServlet {
 
 	        sist.realizarCompra(ordenCompra, cliente.getNick());
 	        cliente.agregarCompra(ordenCompra);
+	        em.merge(cliente);
+	        
+	        em.persist(ordenCompra);
+	        
+	        
+	        em.getTransaction().commit();
+	        em.close();
+	        emf.close();
 	    }
 	    
 	    // Vaciar el carrito después de la compra

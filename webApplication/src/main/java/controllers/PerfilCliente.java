@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -75,7 +76,12 @@ public class PerfilCliente extends HttpServlet {
         
         DTCliente dtcli = cli.crearDt();
         
-        List<DTOrdenDeCompra> ordenes= cli.mostrarCompras();
+        List<OrdenDeCompra> ordenes= cli.getOrdenes();
+        
+        System.out.println("ORDENES DE COMPRA");
+        for(OrdenDeCompra dt : ordenes) {
+        	System.out.print(dt.getNumero());
+        }
         
         String parametro = request.getParameter("nickname");
         

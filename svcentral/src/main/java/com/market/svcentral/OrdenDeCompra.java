@@ -86,7 +86,7 @@ public class OrdenDeCompra {
                 "SELECT e FROM DTEstado e WHERE e.estado = :estado", DTEstado.class);
             query.setParameter("estado", "Comprada");
 
-            DTEstado estadoComprada = query.getSingleResult();
+            DTEstado estadoComprada = em.find(DTEstado.class, 1);
             this.estados.add(estadoComprada);
         } catch (NoResultException e) {
             // Manejar el caso cuando no se encuentra el estado
@@ -124,11 +124,18 @@ public class OrdenDeCompra {
     }
 
     public void setEstado(String nuevoEstado, String comentarios) {
-        estados.add(new DTEstado(nuevoEstado, comentarios));
+    	boolean existe = this.estados.stream().anyMatch(e -> e.getEstado() == nuevoEstado);
+
+        // Si no existe, agregarlo a la lista
+        if (!existe) {
+            this.estados.add(new DTEstado(nuevoEstado, comentarios));
+        }
     }
     
     public void setEstado(DTEstado estadoComprada) {
-		this.estados.add(estadoComprada);
+        if (this.estados.stream().noneMatch(e -> e.getEstado() == estadoComprada.getEstado())) {
+            this.estados.add(estadoComprada);
+        }
 	}
 
    
