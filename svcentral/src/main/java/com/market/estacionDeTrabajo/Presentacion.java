@@ -853,7 +853,7 @@ public class Presentacion {
                 
                 DefaultTreeCellRenderer renderer = new DefaultTreeCellRenderer() {
 					private static final long serialVersionUID = 1L;
-					Icon closedIcon = s.resizeIcon(new ImageIcon("./imagenes/sinElementos.png"), 16, 16);
+					Icon closedIcon = new ImageIcon("./imagenes/sinElementos.png");
 
                     @Override
                     public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel,
