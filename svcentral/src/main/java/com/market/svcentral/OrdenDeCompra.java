@@ -78,23 +78,29 @@ public class OrdenDeCompra {
         this.precioTotal = precioTotal;
         this.fecha = LocalDateTime.now();
         this.estados = new ArrayList<>();
-        
+
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
         EntityManager em = emf.createEntityManager();
         try {
+            // Intentamos obtener el estado 'Comprada' de la base de datos
             TypedQuery<DTEstado> query = em.createQuery(
                 "SELECT e FROM DTEstado e WHERE e.estado = :estado", DTEstado.class);
             query.setParameter("estado", "Comprada");
 
-            DTEstado estadoComprada = em.find(DTEstado.class, 1);
-            this.estados.add(estadoComprada);
+            DTEstado estadoComprada = query.getSingleResult();
+            
+            // Verificamos si el estado ya está en la lista, y si no, lo agregamos
+            if (estadoComprada != null && !estados.contains(estadoComprada)) {
+                this.estados.add(estadoComprada);
+            }
         } catch (NoResultException e) {
-            // Manejar el caso cuando no se encuentra el estado
+            // Manejo del caso cuando no se encuentra el estado en la base de datos
             System.out.println("No se encontró el estado 'Comprada'");
         } finally {
             em.close();
         }
-        
+
+        // Asignamos el proveedor
         this.proveedor = proveedor;
     }
     
