@@ -8,12 +8,14 @@ import java.util.Map.Entry;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
+import javax.persistence.MapKey;
 import javax.persistence.OneToMany;
 
 @Entity
 public class Cat_Producto extends Categoria{
 	
 @ManyToMany(mappedBy = "categorias")
+@MapKey(name = "numRef")
 private Map<Integer, Producto> productos;
 
 	public Cat_Producto() {
@@ -49,6 +51,10 @@ private Map<Integer, Producto> productos;
 
 	public void agregarProducto(Producto producto) {
 		productos.put(producto.getNumRef(), producto);
+	}
+	
+	public void quitarProducto(Integer numRef) {
+		productos.remove(numRef);
 	}
 	
 	public boolean verificarProducto(int numReferencia, String titulo) {

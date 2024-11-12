@@ -107,70 +107,131 @@ public class Sistema implements ISistema {
     
     
     // CASO DE USO 2: REGISTRAR PRODUCTO
-    public boolean verificarUnicidadProducto(String nombreCategoria, int numRef, String titulo) {
-    	Cat_Producto cat = (Cat_Producto) this.categorias.get(nombreCategoria);
-    	if (!cat.verificarProducto(numRef, titulo)) {
-    		return false;
-    	}
-    	return true;
+    public boolean verificarUnicidadProducto(int numRef, String titulo) {
+    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+        EntityManager em = emf.createEntityManager();
+        Producto prod = null;
+        try {
+        	prod = em.find(Producto.class, numRef);
+        	if(prod == null) {
+        		prod = em.createQuery(
+        				"SELECT p FROM Producto p WHERE p.nombre = '" + titulo + "'", Producto.class)
+        				.getSingleResult();
+        	}
+        }catch (Exception e) {
+        	System.out.println(e.getMessage());
+        }
+        em.close();
+        return prod == null;
     }
     public void agregarProducto(String titulo, int numRef, String descripcion, String especificaciones, float precio, String prov, int stock) {    	
-    	Proveedor proveedor = (Proveedor) usuarios.get(prov);
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        
+        Proveedor proveedor = em.find(Proveedor.class, prov);
         Producto producto = new Producto(titulo, descripcion, precio, numRef, especificaciones, proveedor, stock);
         proveedor.agregarProd(producto);
+        em.persist(producto);
+        em.getTransaction().commit();
+        em.close();
     }
     public DefaultMutableTreeNode arbolCategorias() {
+    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+    	EntityManager em = emf.createEntityManager();
+    	List<Categoria> categorias = null;
+	
+    	try {
+    		categorias = em.createQuery("SELECT c FROM Categoria c WHERE c.padre IS NULL", Categoria.class).getResultList();
+    	} catch (Exception e) {
+    		em.close();
+    		System.out.print(e);
+    	}
+    	
       	 DefaultMutableTreeNode root = new DefaultMutableTreeNode("Cats");
-      	 for (Categoria cat : arbolCategorias.values()) {
+      	 for (Categoria cat : categorias) {
       		 DefaultMutableTreeNode child = arbolCategorias(cat);
       		 root.add(child);
       	 }
+      	 em.close();
       	 return root;
     }
     public DefaultMutableTreeNode arbolCategorias(Categoria cat) {
-     	 	DefaultMutableTreeNode rama = new DefaultMutableTreeNode(cat.getNombre());
-     	 	if (cat.getTipo() == "Padre") {
-     	 		Map<String, Categoria> hijos = ((Cat_Padre) cat).getHijos();
-     	 		if (hijos.size() >= 1) {
-     	 			for (Categoria hijo : hijos.values()) {
-     	 				DefaultMutableTreeNode child = arbolCategorias(hijo);
-     	 				rama.add(child);
-     	 			}
-     	 		} else {
-     	 			rama.add(new DefaultMutableTreeNode("Sin Elementos"));
-     	 		}
-     	 	}
-     	return rama;
+    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+    	EntityManager em = emf.createEntityManager();
+    	
+        DefaultMutableTreeNode rama = new DefaultMutableTreeNode(cat.getNombre());
+        if (cat.getTipo().equals("Padre")) {
+            Map<String, Categoria> hijos = ((Cat_Padre) cat).getHijos();
+            if (hijos.size() >= 1) {
+                for (Categoria hijo : hijos.values()) {
+                    DefaultMutableTreeNode child = arbolCategorias(hijo);
+                    rama.add(child);
+                }
+            } else {
+                rama.add(new DefaultMutableTreeNode("Sin Elementos"));
+            }
+        }
+		em.close();
+		return rama;
     }
     public boolean esPadre(String nombre) {
-    	Categoria cat = categorias.get(nombre);
-    	return (cat instanceof Cat_Padre);
+    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+        EntityManager em = emf.createEntityManager();
+        
+        Categoria cat = em.find(Categoria.class, nombre);
+
+        em.close();
+        if(cat == null) {
+        	return false;
+        }
+    	return (cat.getTipo().equals("Padre"));
     }
     public void agregarProductoCategoria(String catName, int numRef) throws CategoriaException {
-    	for (Usuario user : usuarios.values()) {
-    		if (user instanceof Proveedor) {
-    			Proveedor proveedor = (Proveedor) user;
-    			Producto producto = proveedor.obtenerProd(numRef);
-    			if (producto != null) {
-    				Cat_Producto cat = (Cat_Producto) categorias.get(catName);
-    				if (cat == null) {
-    					throw new CategoriaException("Hubo un error en la Categoria, vuelva a intentarlo");
-    				}
-    				producto.agregarCategorias(cat);
-    				cat.agregarProducto(producto);
-    			}
-    		}
-    	}
+    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        
+        Cat_Producto cat = em.find(Cat_Producto.class, catName);
+        Producto producto = em.find(Producto.class, numRef);
+
+        System.out.println(cat + " - " + cat != null + " - " + catName);
+        producto.agregarCategorias(cat);
+		cat.agregarProducto(producto);
+        
+        em.getTransaction().commit();
+        em.close();
+    }
+    public void agregarImagenProd(String img, int numRef) {
+    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        
+        Producto producto = em.find(Producto.class, numRef);
+        producto.agregarImagen(img);
+        
+        em.getTransaction().commit();
+        em.close();
     }
     
-    
     public Categoria getCat(String nombre) {
-    	return this.categorias.get(nombre);
+    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+        EntityManager em = emf.createEntityManager();
+        
+        Categoria cat = em.find(Categoria.class, nombre);
+
+        em.close();
+        return cat;
     }
     
     public Categoria[] getCategorias() {
-        Collection<Categoria> collection = this.categorias.values(); // Obtiene todas las categorías
-        return collection.toArray(new Categoria[collection.size()]); // Convierte a un arreglo
+    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+        EntityManager em = emf.createEntityManager();
+        
+        List <Categoria> categorias = em.createQuery("SELECT c FROM Categoria c", Categoria.class).getResultList();
+    	
+        em.close();
+        return categorias.toArray(new Categoria[categorias.size()]); // Convierte a un arreglo
     }
     
     // CASO DE USO 3: ALTA DE CATEGORIA
@@ -178,48 +239,86 @@ public class Sistema implements ISistema {
 	   if (existeCategoria(nombre)) {
 		   throw new CategoriaException("El nombre de la categoria ya existe");
 	   }
-	   Cat_Padre nuevaCategoria = new Cat_Padre(nombre);
-	   this.categorias.put(nombre, nuevaCategoria);
-	   this.arbolCategorias.put(nombre, nuevaCategoria);
+	   EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+	   EntityManager em = emf.createEntityManager();
+	   em.getTransaction().begin();
+	   em.persist(new Cat_Producto(nombre));
+	   em.getTransaction().commit();
+	   em.close();
     }
     public void agregarCategoriaConProductos(String nombre) throws CategoriaException{
 	   if (existeCategoria(nombre)) {
 		   throw new CategoriaException("Esta categoria ya existe");
 	   }
-	   Cat_Producto nuevaCategoria = new Cat_Producto(nombre);
-	   this.categorias.put(nombre, nuevaCategoria);
-	   this.arbolCategorias.put(nombre, nuevaCategoria);
+	   EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+	   EntityManager em = emf.createEntityManager();
+	   em.getTransaction().begin();
+	   em.persist(new Cat_Producto(nombre));
+	   em.getTransaction().commit();
+	   em.close();
+	   
    }
     public void asignarlePadreCategoria(String nombrePadre, String nombre) throws CategoriaException {
 	   if (nombre == nombrePadre) {
 		   throw new CategoriaException("Una categoría no puede ser su propio padre");
 	   }
 	   
-	   Cat_Padre catPadre = (Cat_Padre) this.categorias.get(nombrePadre);
-	   Categoria cat = this.categorias.get(nombre);
-
+	   EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+	   EntityManager em = emf.createEntityManager();
+	   em.getTransaction().begin();
+   	
+	   Cat_Padre catPadre = null;
+	   Categoria cat = null;
+   	
+	   try {
+		   catPadre = em.find(Cat_Padre.class, nombrePadre);
+		   cat = em.find(Categoria.class, nombre);
+	   } catch (Exception e) {
+		   em.close();
+		   System.out.print(e);
+	   }
+	   if(cat == null || catPadre == null) {
+		   throw new CategoriaException("Una de las categorias ingresadas no existe");
+	   }
 	   if (catPadre.verificarSiYaEsHijo(nombre)) {
 		   throw new CategoriaException("Esta categoria ya es su hijo");
 	   }
 	   
 	   cat.setPadre(catPadre);
 	   catPadre.agregarHijo(cat);
-	   arbolCategorias.remove(cat.getNombre());
+	   em.getTransaction().commit();
+	   em.close();
    }
 
     public List <String> listarSoloNombresPadresCat() {
+    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+    	EntityManager em = emf.createEntityManager();
+    	em.getTransaction().begin();
+    	
+    	List<Categoria> categorias = null;
+    	
+    	try {
+    		categorias = em.createQuery("SELECT c FROM Categoria c WHERE c.tipo='Padre'", Categoria.class).getResultList();
+    	} catch (Exception e) {
+    		em.close();
+    		System.out.print(e);
+    	}
+    	
     	List <String> listarPadres = new ArrayList<>();
-    	for (Map.Entry<String, Categoria> entry : categorias.entrySet()) {
-    		Categoria cat = entry.getValue();
-    		if (cat.getTipo() == "Padre") {
-    			Cat_Padre catPadre = (Cat_Padre) cat;
-    			listarPadres.add(catPadre.getNombre());
-    		}
+    	for (Categoria cat : categorias) {
+    		listarPadres.add(cat.getNombre());
     	}
     	return listarPadres;
     }
+    
     public boolean existeCategoria(String nombre) {
-        return this.categorias.containsKey(nombre);
+    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+    	EntityManager em = emf.createEntityManager();
+    	em.getTransaction().begin();
+    	Categoria cat = em.find(Categoria.class, nombre);
+    	em.close();
+    	return cat != null;
+
     }
     
     
@@ -244,7 +343,6 @@ public class Sistema implements ISistema {
    	 		DefaultMutableTreeNode child = arbolProductos(cat);
    	 		root.add(child);
    	 	}
-   	 	em.getTransaction().commit();
 		em.close();
    	 	return root;
     }
@@ -284,7 +382,6 @@ public class Sistema implements ISistema {
                 rama.add(new DefaultMutableTreeNode("Sin Elementos"));
             }
         }
-        em.getTransaction().commit();
 		em.close();
 		return rama;
     }
@@ -334,15 +431,23 @@ public class Sistema implements ISistema {
     
     // CASO DE USO 6: VER INFORMACION DE PROVEEDOR
     public List<DTProveedor> listarProveedores(){
-    	List<DTProveedor> listaProveedor = new ArrayList<>();
-    	for (Map.Entry<String, Usuario> entry : usuarios.entrySet()) {
-    		Usuario usuario = entry.getValue();
-    		if (usuario.getTipo().equals("proveedor")) {
-    			Proveedor usuarioProveedor = (Proveedor) usuario;
-    			listaProveedor.add(usuarioProveedor.crearDt());
-    		}
+    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+    	EntityManager em = emf.createEntityManager();
+    	
+    	List<Proveedor> proveedores = null;
+    	
+    	try {
+    		proveedores = em.createQuery("SELECT p FROM Proveedor p", Proveedor.class).getResultList();
+    	} catch (Exception e) {
+    		em.close();
+    		System.out.print(e);
     	}
-    	return listaProveedor;
+    	
+    	List <DTProveedor> dts = new ArrayList<>();
+    	for (Proveedor prov : proveedores) {
+    		dts.add(prov.crearDt());
+    	}
+    	return dts;
     }
     
     
@@ -389,31 +494,20 @@ public class Sistema implements ISistema {
     
     // CASO DE USO 8: MODIFICAR DATOS DE PRODUCTO
     public void borrarProducto(int numero, String titulo) {
-    	Map<String, Categoria> cats = categorias;
-    	Iterator<Map.Entry<String, Categoria>> iterator = cats.entrySet().iterator();
-
-    	while (iterator.hasNext()) {
-    	    Map.Entry<String, Categoria> entry = iterator.next();
-    	    Categoria categoria = entry.getValue();
-
-    	    // Verificar si la categoría es una instancia de Cat_Producto
-    	    if (categoria instanceof Cat_Producto) {
-    	        Cat_Producto prodC = (Cat_Producto) categoria;
-
-    	        Iterator<Map.Entry<Integer, Producto>> prodIterator = prodC.getProductos().entrySet().iterator();
-
-    	        while (prodIterator.hasNext()) {
-    	            Map.Entry<Integer, Producto> prodEntry = prodIterator.next();
-    	            Producto producto = prodEntry.getValue();
-
-    	            // Comparar el título del producto usando equals y el número de referencia
-    	            if (producto.getNombre().equals(titulo) && producto.getNumRef() == numero) {
-    	                // Remover el producto del mapa
-    	                prodIterator.remove();
-    	            }
-    	        }
-    	    }
-    	}
+    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        
+        Producto producto = em.find(Producto.class, numero);
+        List <Cat_Producto> cats = producto.getCategorias();
+        
+        for(Cat_Producto cat : cats) {
+        	cat.quitarProducto(producto.getNumRef());
+        }
+        
+        em.remove(producto);
+        em.getTransaction().commit();
+        em.close();
     }
 
 
@@ -497,25 +591,24 @@ public class Sistema implements ISistema {
     public DtProducto getDtProducto(int numRef) {
     	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
     	EntityManager em = emf.createEntityManager();
-    	em.getTransaction().begin();
+
     	Producto producto = em.find(Producto.class, numRef);
-		if(producto != null) {
+    	em.close();
+
+    	if(producto != null) {
 			return producto.crearDT();
 		}
     	return null;
     }
     
     public Producto getProducto(int numRef) {
-    	for (Usuario user : usuarios.values()) {
-    		if (user instanceof Proveedor) {
-    			Proveedor proveedor = (Proveedor) user;
-    			Producto producto = proveedor.obtenerProd(numRef);
-    			if (producto != null) {
-    				return producto;
-    			}
-    		}
-    	}
-    	return null;
+    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+    	EntityManager em = emf.createEntityManager();
+
+    	Producto producto = em.find(Producto.class, numRef);
+    	
+    	em.close();
+    	return producto;
     }
     
     
@@ -555,14 +648,26 @@ public class Sistema implements ISistema {
     	cliente.agregarCompra(orden);
     }
     public boolean comprobarCat(String cat) throws CategoriaException {
-    	if ((Cat_Producto) this.categorias.get(cat) == null) {
-    		throw new CategoriaException("Esta categoria no existe");
-    	}
-    	return true;
+    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+        EntityManager em = emf.createEntityManager();
+        
+        if (em.find(Categoria.class, cat) == null) {
+        	throw new CategoriaException("Esta categoria no existe");
+        }
+
+        em.close();
+        return true;
     } 
     public void eliminarPDesdeProveedor(String proveedor, int numRef) {
-    	Proveedor prov = (Proveedor) this.usuarios.get(proveedor);
-    	prov.eliminarProd(numRef);
+    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        
+        Proveedor prov = em.find(Proveedor.class, proveedor);
+        prov.eliminarProd(numRef);
+
+        em.getTransaction().commit();
+        em.close();
     }
     
     

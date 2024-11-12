@@ -124,8 +124,8 @@ public class RegistrarProducto extends JInternalFrame{
         String[] nombres;
         nombres = new String[proveedores.size()];
         for (int i = 0; i < proveedores.size(); i++) {
-            DTProveedor cliente = proveedores.get(i);
-            nombres[i] = cliente.getNick();
+            DTProveedor prov = proveedores.get(i);
+            nombres[i] = prov.getNick();
         }
         
         DefaultComboBoxModel<String> comboBoxModel = new DefaultComboBoxModel<>(nombres);
@@ -254,11 +254,7 @@ public class RegistrarProducto extends JInternalFrame{
                 }
             }
             
-            
-           
-            
             int precio;
-            
             try {
             	precio = Integer.parseInt(precioStr);
             	
@@ -270,7 +266,6 @@ public class RegistrarProducto extends JInternalFrame{
             int numRef;
             try {
             	numRef = Integer.parseInt(referenciaField.getText());
-            	
             } catch(NumberFormatException e1) {
             	JOptionPane.showMessageDialog(null, "El numero de referencia no puede ser un string", "Error", JOptionPane.ERROR_MESSAGE);
             	return;
@@ -279,7 +274,6 @@ public class RegistrarProducto extends JInternalFrame{
             int Stock;
             try {
             	Stock = Integer.parseInt(stockField.getText());
-            	
             } catch(NumberFormatException e1) {
             	JOptionPane.showMessageDialog(null, "El stock no puede ser un string", "Error", JOptionPane.ERROR_MESSAGE);
             	return;
@@ -290,16 +284,12 @@ public class RegistrarProducto extends JInternalFrame{
             	JOptionPane.showMessageDialog(null, "Recuerde ingresar una Categoría", "Error", JOptionPane.ERROR_MESSAGE);
             	return;
             }
-            
-            
-            if(prod == null) {
-            	s.agregarProducto(titulo, numRef, descripcion,especificaciones, precio, proveedor, Stock);
-            }else {
-            	s.borrarProducto(prod.getNumRef(), prod.getNombre());
-            	s.agregarProducto(titulo, numRef, descripcion,especificaciones, precio, prod.getNicknameProveedor(), Stock);
-            }
             	
-            
+            if(!s.verificarUnicidadProducto(numRef, titulo)) {
+            	JOptionPane.showMessageDialog(null, "El nombre o el numero de referencia ya existe", "Error", JOptionPane.ERROR_MESSAGE);
+            	return;
+            }
+
             for (TreePath path : selectedPaths) {
             	DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) path.getLastPathComponent();
             	String catName = selectedNode.getUserObject().toString();
@@ -311,52 +301,36 @@ public class RegistrarProducto extends JInternalFrame{
 				}	
             }
             
+            if(prod == null) {
+            	s.agregarProducto(titulo, numRef, descripcion,especificaciones, precio, proveedor, Stock);
+            }else {
+            	s.borrarProducto(prod.getNumRef(), prod.getNombre());
+            	s.agregarProducto(titulo, numRef, descripcion,especificaciones, precio, prod.getNicknameProveedor(), Stock);
+            }
+            
             for (TreePath path : selectedPaths) {
             	DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) path.getLastPathComponent();
             	String catName = selectedNode.getUserObject().toString();            	
-            	
-            	if(!s.verificarUnicidadProducto(catName, numRef, titulo)) {
-            		JOptionPane.showMessageDialog(null, "El nombre o el numero de referencia ya existe", "Error", JOptionPane.ERROR_MESSAGE);
-                	
-            		if(proveedor != null) {
-        				s.eliminarPDesdeProveedor(proveedor, numRef);
-        			}
-            		
-            		 tituloField.setText("");
-                     referenciaField.setText("");
-                     descripcionField.setText("");
-                     especificacionesArea.setText("");
-                     precioField.setText("");
-                     comboBoxModel.setSelectedItem(nombres[0]);
-                     tree.clearSelection();
-                     stockField.setText("");
-                     
-                     imagenesSeleccionadasLabel.setText("No se ha seleccionado ninguna imagen");
-                    return;
-            	}
-            	
-                if(s.esPadre(catName)) {
-                	JOptionPane.showMessageDialog(null, "Alguna de las categorias seleccionadas no es una categoria válida", "Error", JOptionPane.ERROR_MESSAGE);
-                	
-                	s.eliminarPDesdeProveedor(proveedor, numRef);
-                    return;
-                }
-                
-                	try {
-                    	s.agregarProductoCategoria(catName, numRef);
-                        Producto producto = s.getProducto(numRef);
-                    	for(String img: imagenesSeleccionadas) {
-                        	producto.agregarImagen(img);
-                        }
-                    	
-                    } catch(CategoriaException e1) {
-                    	JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                    	return;
-                    }
-                }
-                
-                
 
+            	if(s.esPadre(catName)) {
+                	JOptionPane.showMessageDialog(null, "Alguna de las categorias seleccionadas no es una categoria válida", "Error", JOptionPane.ERROR_MESSAGE);
+                	s.borrarProducto(prod.getNumRef(), prod.getNombre());
+                	return;
+                }
+            	try {
+            		s.agregarProductoCategoria(catName, numRef);
+                    	
+            	} catch(CategoriaException e1) {
+            		s.borrarProducto(prod.getNumRef(), prod.getNombre());
+            		JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            		return;
+            	}
+            }
+
+            for(String img: imagenesSeleccionadas) {
+            	s.agregarImagenProd(img, numRef);
+            }
+            
             if(prod == null)
             	JOptionPane.showMessageDialog(null, "Producto registrado con éxito.");
             else
@@ -377,7 +351,5 @@ public class RegistrarProducto extends JInternalFrame{
         getContentPane().add(panel);
         setVisible(true);
         toFront();
-        
 	}
-	
 }

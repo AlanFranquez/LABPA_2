@@ -81,7 +81,7 @@ public interface ISistema {
 	
 	public abstract void eliminarUltimaOrden();
 	
-	public abstract boolean verificarUnicidadProducto(String nombreCategoria, int numRef, String titulo);
+	public abstract boolean verificarUnicidadProducto(int numRef, String titulo);
 	
 	public abstract void eliminarPDesdeProveedor(String proveedor, int numRef);
 	
@@ -134,4 +134,6 @@ public interface ISistema {
 	public abstract Icon resizeIcon(ImageIcon imageIcon, int i, int j);
 
 	public abstract void cambiarEstadoOrdenconDT(DTEstado estadoComprada11, int numeroOrden, String nick);
+
+	public abstract void agregarImagenProd(String img, int numRef);
 }

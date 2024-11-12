@@ -632,11 +632,8 @@ public class Presentacion {
 							return;
 						}
 						
-						try {
-							s.existeCategoria(textCat);
-							
-						} catch(Exception e1) {
-							JOptionPane.showMessageDialog(null, e1.getMessage());
+						if(s.existeCategoria(textCat)) {
+							JOptionPane.showMessageDialog(null, "Ya existe una categoría con ese nombre");
 							return;
 						}
 						
@@ -1111,8 +1108,9 @@ public class Presentacion {
                                  if(selection == "Sin Elementos") {
                                 	 return;
                                  }
-                                 String[] parts = selection.split(" - "); 
-                                 int numRef = Integer.parseInt(parts[1]);
+                                 String[] parts = selection.split(" - ");
+                                 String[] parts2 = parts[1].split(" "); 
+                                 int numRef = Integer.parseInt(parts2[0]);
                                  DtProducto dt = s.getDtProducto(numRef);
                                     	
                                 JInternalFrame ventanaDetalleProducto = new JInternalFrame("Detalle de Producto", true, true, true, true);
