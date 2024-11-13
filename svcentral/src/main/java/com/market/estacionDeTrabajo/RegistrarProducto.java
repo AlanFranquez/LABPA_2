@@ -7,6 +7,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -356,11 +359,22 @@ public class RegistrarProducto extends JInternalFrame{
                 }
                 
                 
+            EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+            EntityManager em = emf.createEntityManager();
+            
+            em.getTransaction().begin();
 
-            if(prod == null)
+            if(prod == null) {
             	JOptionPane.showMessageDialog(null, "Producto registrado con éxito.");
+            	em.persist(s.getProducto(numRef));
+            }
+            	
             else
             	JOptionPane.showMessageDialog(null, "Producto modificado con éxito.");
+            
+            em.getTransaction().commit();
+            em.close();
+            emf.close();
             
             tituloField.setText("");
             referenciaField.setText("");
