@@ -27,15 +27,16 @@ public class Sistema implements ISistema {
     private Map<String, Categoria> categorias;
     private Map<Integer, OrdenDeCompra> ordenes;
     private Map<String, Categoria> arbolCategorias;
-    private final EmailService emailService = new EmailService();
-    private List<Cliente> listaClientes;
+    private final EmailService emailService = new EmailService(this);
+    private int contadorComentarios = 0;
+    //private List<Cliente> listaClientes;
 
     private Sistema() {
         // Inicialización de colecciones
         this.usuarios = new HashMap<>();
         this.categorias = new HashMap<>();
         this.ordenes = new HashMap<>();
-        this.listaClientes = new ArrayList<>();
+        //this.listaClientes = new ArrayList<>();
         this.arbolCategorias = new HashMap<>();
     }
 
@@ -700,45 +701,66 @@ public class Sistema implements ISistema {
 	 	}
 	 
 	 
-	 public void notificarComentaristas(Producto producto, String nuevoComentarioTexto, Cliente autorComentario) {
-		    System.out.println("Iniciando notificación a los comentaristas.");
-
-		    // Verificar que los parámetros no sean nulos
-		    if (producto == null || nuevoComentarioTexto == null || autorComentario == null) {
-		        System.out.println("Error: Parámetros inválidos. Asegúrate de que el producto, el comentario y el autor no sean nulos.");
+	 public void notificarComentario(Producto producto, Comentario nuevoComentario, Comentario comentarioRespondido) {
+		    if (producto == null || nuevoComentario == null) {
+		        System.out.println("Error: El producto o el comentario nuevo son nulos.");
 		        return;
 		    }
 
+		    // Obtener la lista de comentarios del producto
 		    List<Comentario> comentarios = producto.getComentarios();
-		    if (comentarios == null || comentarios.isEmpty()) {
-		        System.out.println("No hay comentarios previos en el producto.");
-		        return;
+
+		    if (comentarios != null && !comentarios.isEmpty()) {
+		        for (Comentario comentario : comentarios) {
+		            Cliente comentarista = comentario.getAutor();
+		            Cliente autorNuevoComentario = nuevoComentario.getAutor();
+
+		            // Notificar a todos los comentaristas excepto al autor del nuevo comentario
+		            if (!comentarista.getCorreo().equals(autorNuevoComentario.getCorreo())) {
+		                String recipientEmail = comentarista.getCorreo();
+
+		                try {
+		                    emailService.sendCommentNotification(
+		                        recipientEmail,
+		                        producto.getNombre(),
+		                        autorNuevoComentario.getNombre(),
+		                        nuevoComentario.getTexto()
+		                    );
+		                    System.out.println("Notificación enviada a " + recipientEmail);
+		                } catch (Exception e) {
+		                    System.out.println("Error al enviar notificación a " + recipientEmail + ": " + e.getMessage());
+		                    e.printStackTrace();
+		                }
+		            }
+		        }
 		    }
 
-		    // Notificar a los comentaristas
-		    for (Comentario comentario : comentarios) {
-		        Cliente comentarista = comentario.getAutor();
+		    // Notificar al autor del comentario respondido (si aplica)
+		    if (comentarioRespondido != null) {
+		        Cliente autorComentarioOriginal = comentarioRespondido.getAutor();
+		        Cliente autorNuevoComentario = nuevoComentario.getAutor();
 
-		        // Enviar notificación solo si el comentarista no es el autor del nuevo comentario
-		        if (!comentarista.getCorreo().equals(autorComentario.getCorreo())) {
-		            String recipientEmail = comentarista.getCorreo();
+		        // Verificar que el autor del comentario original no sea el mismo que el autor del nuevo comentario
+		        if (!autorComentarioOriginal.getCorreo().equals(autorNuevoComentario.getCorreo())) {
 		            try {
-		                // Enviar la notificación
-		                emailService.sendCommentNotification(recipientEmail, producto.getNombre(), autorComentario.getNombre(), nuevoComentarioTexto);
+		                // Aquí usamos sendReplyNotification en lugar de sendCommentNotification
+		                emailService.sendReplyNotification(
+		                    autorComentarioOriginal.getCorreo(),
+		                    producto.getNombre(),
+		                    autorNuevoComentario.getNombre(),
+		                    nuevoComentario.getTexto()
+		                );
+		                System.out.println("Notificación de respuesta enviada a " + autorComentarioOriginal.getCorreo());
 		            } catch (Exception e) {
-		                System.out.println("Error al intentar enviar la notificación a " + recipientEmail + ": " + e.getMessage());
+		                System.out.println("Error al enviar la notificación de respuesta: " + e.getMessage());
 		                e.printStackTrace();
 		            }
 		        }
 		    }
 		}
 
-	 //public void agregarCliente(Cliente cliente) {
-	  //      listaClientes.add(cliente);
-	   // }
 
-	    
-	 public List<Cliente> obtenerClientesQueHanCompradoDelProveedor(Proveedor proveedor) {
+	public List<Cliente> obtenerClientesQueHanCompradoDelProveedor(Proveedor proveedor) {
 	    List<Cliente> clientesQueHanComprado = new ArrayList<Cliente>();
 	    
 	    for (Cliente cliente : getAllClientes()) {
@@ -812,5 +834,42 @@ public class Sistema implements ISistema {
 			 }
 		 }
 		 return clientes;
+	 }
+	 
+	 public Cliente getClientePorCorreo(String email) {
+	    for (Map.Entry<String, Usuario> entry : usuarios.entrySet()) {
+	        Usuario usuario = entry.getValue();
+	        if (usuario instanceof Cliente && usuario.getCorreo().equalsIgnoreCase(email)) {
+	            return (Cliente) usuario;
+	        }
+	    }
+	    return null; // Retorna null si no se encuentra un cliente con el correo
+	}
+	 
+	 public Cliente getClientePorToken(String token) {
+	    for (Usuario usuario : usuarios.values()) {
+	        // Verifica que sea un Cliente y que el token coincida
+	        if (usuario instanceof Cliente) {
+	            Cliente cliente = (Cliente) usuario;
+	            if (token.equals(cliente.getTokenDesactivacion())) {
+	                return cliente;
+	            }
+	        }
+	    }
+	    return null; // Retorna null si no encuentra un cliente con el token especificado
+	}
+
+	 public Cliente getClientePorNick(String nick) {
+		    for (Usuario usuario : usuarios.values()) {
+		        if (usuario instanceof Cliente && usuario.getNick().equalsIgnoreCase(nick)) {
+		            return (Cliente) usuario;
+		        }
+		    }
+		    return null;
+		}
+
+	 @Override
+	 public synchronized int incrementarContadorComentarios() {
+	     return ++contadorComentarios;
 	 }
 }

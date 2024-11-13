@@ -56,6 +56,21 @@ public class Producto {
 		Comentario c = this.comentarios.get(numeroComentario);
 		c.agregarRespuesta(respuesta);
 	}
+
+	public Comentario getComentarioPorId(int idComentario) {
+	    System.out.println("Buscando comentario con ID: " + idComentario);
+	    for (Comentario comentario : this.comentarios) {
+	        System.out.println("Revisando comentario con ID: " + comentario.getNumero());
+	        if (comentario.getNumero() == idComentario) {
+	            System.out.println("Comentario encontrado: " + comentario.getTexto());
+	            return comentario;
+	        }
+	    }
+	    System.out.println("No se encontró el comentario con ID: " + idComentario);
+	    return null;
+	}
+
+
 	
 	public List<Comentario> getComentarios() {
 		return this.comentarios;
@@ -73,6 +88,7 @@ public class Producto {
 		return null;
 	}
 	
+
 	
 	public void agregarCategorias(Cat_Producto cat) {
 		categorias.put(cat.getNombre(), cat);

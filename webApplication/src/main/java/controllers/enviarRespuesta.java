@@ -19,7 +19,6 @@ import com.market.svcentral.Producto;
 @WebServlet("/enviarRespuesta")
 public class enviarRespuesta extends HttpServlet {
     private static final long serialVersionUID = 1L;
-
     private ISistema sist;
 
     @Override
@@ -33,44 +32,47 @@ public class enviarRespuesta extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        
+
         String respuestaTexto = request.getParameter("respuesta");
         String comentarioIdStr = request.getParameter("comentarioId");
-        
         String parametro = request.getParameter("dtprod");
 
-		if (parametro == null || parametro.isEmpty()) {
-		    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "El producto no está disponible.");
-		    return;
-		}
-		
-int paramNum = Integer.parseInt(parametro);
-		
-		if (session == null || session.getAttribute("usuarioLogueado") == null) {
-			response.sendRedirect("formlogin");
-			return;
-		}
-		
+        if (parametro == null || parametro.isEmpty()) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "El producto no está disponible.");
+            return;
+        }
 
         if (comentarioIdStr == null || comentarioIdStr.isEmpty()) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "El comentario no está disponible.");
             return;
         }
 
+        int paramNum = Integer.parseInt(parametro);
         int comentarioId = Integer.parseInt(comentarioIdStr);
-       
-        
-        Cliente cli = (Cliente) session.getAttribute("usuarioLogueado");
+
+        if (session == null || session.getAttribute("usuarioLogueado") == null) {
+            response.sendRedirect("formlogin");
+            return;
+        }
+
+        Cliente cliente = (Cliente) session.getAttribute("usuarioLogueado");
         Producto producto1 = sist.getProducto(paramNum);
-        Comentario coment = producto1.getComentario(comentarioId);
-        
-        if (coment == null) {
+        Comentario comentarioRespondido = producto1.getComentario(comentarioId);
+
+        if (comentarioRespondido == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "Comentario no encontrado.");
             return;
         }
 
-        Comentario respuesta = new Comentario(comentarioId, respuestaTexto, cli, LocalDateTime.now());
-        coment.agregarRespuesta(respuesta);
+        // Incrementar el contador de comentarios utilizando un método centralizado
+        int respuestaId = sist.incrementarContadorComentarios();
+
+        // Crear la respuesta al comentario
+        Comentario respuesta = new Comentario(respuestaId, respuestaTexto, cliente, LocalDateTime.now());
+        comentarioRespondido.agregarRespuesta(respuesta);
+
+        // Notificar al autor del comentario respondido
+        sist.notificarComentario(producto1, respuesta, comentarioRespondido);
 
         // Redirigir a la página del producto
         response.sendRedirect("perfilProducto?producto=" + paramNum);

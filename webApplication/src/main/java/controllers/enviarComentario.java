@@ -18,10 +18,9 @@ import com.market.svcentral.Producto;
 
 @WebServlet("/enviarComentario")
 public class enviarComentario extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
+    private static final long serialVersionUID = 1L;
     private ISistema sist;
- // Contador de comentarios
+
     private static int contadorComentarios = 0;
 
     @Override
@@ -33,36 +32,37 @@ public class enviarComentario extends HttpServlet {
         }
     }
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession();
-		contadorComentarios++;
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        contadorComentarios++;
         int comentarioId = contadorComentarios;
-		String mensaje = request.getParameter("comentario");
-		String parametro = request.getParameter("dtprod");
 
-		if (parametro == null || parametro.isEmpty()) {
-		    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "El producto no está disponible.");
-		    return;
-		}
+        String mensaje = request.getParameter("comentario");
+        String parametro = request.getParameter("dtprod");
 
-		int paramNum = Integer.parseInt(parametro);
-		
-		if (session == null || session.getAttribute("usuarioLogueado") == null) {
-			response.sendRedirect("formlogin");
-			return;
-		}
-		
-		Cliente cliente = (Cliente) session.getAttribute("usuarioLogueado");
-		Producto producto1 = sist.getProducto(paramNum);
+        if (parametro == null || parametro.isEmpty()) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "El producto no está disponible.");
+            return;
+        }
 
-		// Crear el comentario
-		Comentario comentario = new Comentario(comentarioId, mensaje, cliente, LocalDateTime.now());
-	
-		producto1.agregarComentario(comentario);
+        int paramNum = Integer.parseInt(parametro);
 
-		sist.notificarComentaristas(producto1, mensaje, cliente);
-		
-		// Redirigir a la página del producto
-		response.sendRedirect("perfilProducto?producto=" + paramNum);
-	}
+        if (session == null || session.getAttribute("usuarioLogueado") == null) {
+            response.sendRedirect("formlogin");
+            return;
+        }
+
+        Cliente cliente = (Cliente) session.getAttribute("usuarioLogueado");
+        Producto producto1 = sist.getProducto(paramNum);
+
+        // Crear el comentario principal
+        Comentario nuevoComentario = new Comentario(comentarioId, mensaje, cliente, LocalDateTime.now());
+        producto1.agregarComentario(nuevoComentario);
+
+        // Notificar a los interesados
+        sist.notificarComentario(producto1, nuevoComentario, null);
+
+        // Redirigir a la página del producto
+        response.sendRedirect("perfilProducto?producto=" + paramNum);
+    }
 }
