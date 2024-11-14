@@ -4,6 +4,9 @@ import java.awt.BorderLayout;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
@@ -32,17 +35,19 @@ public class DetallesOrden extends JInternalFrame{
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         
-        List<DTItem> lista = orden.listarItems();
         
-        
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        System.out.print(orden.getFecha().format(formatter));
-        panel.add(new JLabel("Numero de Orden: " + orden.getNumero()));
-        panel.add(new JLabel("Fecha: " + orden.getFecha().format(formatter)));
         
         panel.add(new JLabel("============================="));
         
-        if(!s.existeOrden(orden.getNumero())) {
+        
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+
+        OrdenDeCompra ordenEnDB = em.find(OrdenDeCompra.class, orden.getNumero());
+        List<DTItem> lista = ordenEnDB.crearDT().listarItems();
+        
+        if(ordenEnDB == null) {
         	JOptionPane.showMessageDialog(null, "Esta orden ya se ha eliminado");
         	return;
         } else {

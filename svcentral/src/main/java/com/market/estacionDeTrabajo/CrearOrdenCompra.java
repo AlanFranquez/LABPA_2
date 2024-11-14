@@ -4,6 +4,10 @@ package com.market.estacionDeTrabajo;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -34,12 +38,19 @@ public class CrearOrdenCompra extends JInternalFrame {
         JLabel tituloLabel = new JLabel("Cliente:");
         tituloLabel.setBounds(20, 20, 80, 25);
         panel.add(tituloLabel);
+        
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+        EntityManager em = emf.createEntityManager();
+        
+        em.getTransaction().begin();
+        
+        
 
         // CLIENTES
-        List<DTCliente> clientes = s.listarClientes();
+        List<Cliente> clientes = em.createQuery("SELECT c FROM Cliente c").getResultList();
         String[] nombres = new String[clientes.size()];
         for (int i = 0; i < clientes.size(); i++) {
-            nombres[i] = clientes.get(i).getNick();
+            nombres[i] = clientes.get(i).crearDt().getNick();
         }
 
        
@@ -173,11 +184,19 @@ public class CrearOrdenCompra extends JInternalFrame {
             try {
                 OrdenDeCompra orden = new OrdenDeCompra(itemsAgregados, precioTotal, null);
                 s.realizarCompra(orden, cliente);
+                
+                em.persist(orden);
                 model.setRowCount(1); // Reiniciar la tabla dejando el encabezado
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, "Error al realizar la compra: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            }
+            } finally {
+            	em.getTransaction().commit();
+                em.close();
+                emf.close();
+			}
         });
+        
+        
 
         setVisible(true);
         toFront();

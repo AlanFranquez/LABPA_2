@@ -4,6 +4,9 @@ import java.awt.BorderLayout;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
@@ -28,12 +31,19 @@ public class ListarOrdenes extends JInternalFrame{
         setBounds(10, 40, 360, 150);
         setSize(500, 300);
 
-        if(!s.existenOrdenesParaListar()) {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+        EntityManager em = emf.createEntityManager();
+        
+        
+        em.getTransaction().begin();
+	     List<OrdenDeCompra> ordenes = em.createQuery("SELECT c FROM OrdenDeCompra c").getResultList();
+        
+        if(ordenes == null || ordenes.isEmpty()) {
         	JOptionPane.showMessageDialog(null, "Todavia no hay ordenes para listar");
         	return;
         }
-	        
-	     List<DTOrdenDeCompra> ordenes = s.listarOrdenes();
+	       
+     
 	     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
    	 
 	     // Definir las columnas de la tabla
@@ -42,7 +52,7 @@ public class ListarOrdenes extends JInternalFrame{
 	     // Crear datos para la tabla
 	     Object[][] data = new Object[ordenes.size()][3];
 	     for (int i = 0; i < ordenes.size(); i++) {
-	    	 DTOrdenDeCompra o = ordenes.get(i);
+	    	 DTOrdenDeCompra o = ordenes.get(i).crearDT();
 	    	 data[i][0] = o.getNumero();
 	    	 data[i][1] = o.getFecha().format(formatter).toString();
 	     }
@@ -57,7 +67,7 @@ public class ListarOrdenes extends JInternalFrame{
 	    	 public void mouseClicked(java.awt.event.MouseEvent evt) {
 	    		 int row = table.rowAtPoint(evt.getPoint());
 	    		 if (row >= 0) {
-	    			 DTOrdenDeCompra o = ordenes.get(row);
+	    			 DTOrdenDeCompra o = ordenes.get(row).crearDT();
 	    			 if (tipo == "Detalles") {
 	    				 DetallesOrden ord = new DetallesOrden(o);
 	    				 getParent().add(ord);
@@ -70,6 +80,7 @@ public class ListarOrdenes extends JInternalFrame{
 	    			 }else if(tipo == "Eliminar") {
 	    				 EliminarOrden ord = new EliminarOrden(o);
 	    				 getParent().add(ord);
+	    				 dispose();
 	    				 try {
 	    			            ord.setSelected(true);
 	    			            ord.toFront();
@@ -78,7 +89,10 @@ public class ListarOrdenes extends JInternalFrame{
 	    			        }
 	    			 }
 	    		 }
+	    		
 	    	 }
+	    	 
+	    	
 	     });
 
 	     JScrollPane scrollPane = new JScrollPane(table);
@@ -86,5 +100,9 @@ public class ListarOrdenes extends JInternalFrame{
         
 	     setVisible(true);
 	     toFront();
+	     
+	     em.getTransaction().commit();
+		 em.close();
+		 emf.close();
 	}
 }

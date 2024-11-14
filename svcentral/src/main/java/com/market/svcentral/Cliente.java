@@ -25,7 +25,7 @@ import com.market.svcentral.exceptions.PuntajeInvalidoException;
 public class Cliente extends Usuario {
 	
 	
-	@OneToMany
+	@OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Map<Integer, OrdenDeCompra> listaCompras;
     
     @OneToMany (cascade = CascadeType.ALL, orphanRemoval = true)
