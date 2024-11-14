@@ -63,6 +63,7 @@
     </div>
 </nav>
 
+
 <%-- PERFIL CLIENTE --%>
 <main class="container my-5">
     <section class="row justify-content-center align-items-center text-center text-md-start">
@@ -75,9 +76,28 @@
             <p>Nombre: <b><%= user.getNombre() %></b></p>
             <p>Apellido: <b><%= user.getApellido() %></b></p>
             <p>Fecha de Nacimiento: <br><b><%= user.getNacimientoFormateado() %></b></p>
+
+            <!-- Formulario para actualizar notificaciones -->
+            <form action="actualizarNotificaciones" method="get" class="mt-4">
+                <input type="hidden" name="userId" value="<%= user.getNick() %>">
+                <input type="hidden" name="nickname" value="<%= user.getNick() %>">
+                <div class="form-check">
+                    <input 
+                        class="form-check-input" 
+                        type="checkbox" 
+                        id="notificacionesCheckbox" 
+                        name="activar" 
+                        <% if (user.isNotificaciones()) { %> checked <% } %>>
+                    <label class="form-check-label" for="notificacionesCheckbox">
+                        Notificaciones Activas
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Actualizar</button>
+            </form>
         </div>
     </section>
 </main>
+
 
 <%-- SECCIÓN COMPRAS REALIZADAS --%>
 <section class="container">

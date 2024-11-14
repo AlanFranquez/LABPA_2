@@ -4,6 +4,8 @@ import java.util.Map;
 public class DTCliente {
     private String nombre, nick, apellido, correo, tipo;
     private DTFecha nacimiento;
+    private boolean notificaciones;
+    private String tokenDesactivacion; 
     
     private Map<Integer, OrdenDeCompra> ordenes;
 	private String imagen;
@@ -18,6 +20,15 @@ public class DTCliente {
         this.ordenes = ordenes;
         this.tipo = "Cliente";
     }
+    // Métodos para el token de desactivación
+    public String getTokenDesactivacion() {
+        return tokenDesactivacion;
+    }
+
+    public void setTokenDesactivacion(String tokenDesactivacion) {
+        this.tokenDesactivacion = tokenDesactivacion;
+    }
+    
     // Gets
     public String getNombre() {
         return nombre;
@@ -80,4 +91,13 @@ public class DTCliente {
     	return this.ordenes.get(num);
     }
 	
+   
+    //notificaciones email
+    public boolean isNotificaciones() {
+        return notificaciones;
+    }
+
+    public void setNotificaciones(boolean notificaciones) {
+        this.notificaciones = notificaciones;
+    }
 }

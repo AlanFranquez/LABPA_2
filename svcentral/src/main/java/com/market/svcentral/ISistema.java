@@ -121,19 +121,23 @@ public interface ISistema {
 	  
 	  public void cambiarEstadoOrden(String estado, String com, int numero, String cliente);
 	  
-	  public void notificarComentaristas(Producto producto, String nuevoComentarioTexto, Cliente autorComentario);
-	  
-	  //public void agregarCliente(Cliente cliente);
-	  
+	  public void notificarComentario(Producto producto, Comentario nuevoComentario, Comentario comentarioRespondido);
+
 	  List<Cliente> obtenerClientesQueHanCompradoDelProveedor(Proveedor proveedor);
 	  
 	  public void notificarClientesNuevoProducto(Producto nuevoProducto, Proveedor proveedor);
+	  
+	  public Cliente getClientePorCorreo(String email);
+	  
+	  public Cliente getClientePorToken(String token);
 
 	  public void agregarReclamo(String texto, LocalDateTime fecha, Producto p, Proveedor prov, Cliente autor) throws ReclamoException;
 
-	public abstract Icon resizeIcon(ImageIcon imageIcon, int i, int j);
+	  public abstract Icon resizeIcon(ImageIcon imageIcon, int i, int j);
 
-	public abstract void cambiarEstadoOrdenconDT(DTEstado estadoComprada11, int numeroOrden, String nick);
+	  public abstract void cambiarEstadoOrdenconDT(DTEstado estadoComprada11, int numeroOrden, String nick);
 	
-	public List<Producto> obtenerProductosDestacados();
+	  public List<Producto> obtenerProductosDestacados();
+
+	  public abstract int incrementarContadorComentarios();
 }

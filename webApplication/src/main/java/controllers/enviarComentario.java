@@ -30,7 +30,7 @@ public class enviarComentario extends HttpServlet {
 	
        
     private ISistema sist;
- // Contador de comentarios
+
     private static int contadorComentarios = 0;
 
     @Override
@@ -45,20 +45,16 @@ public class enviarComentario extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		Random numRandom = new Random();
-        int comentarioId = numRandom.nextInt(10000);
-		String mensaje = request.getParameter("comentario");
-		String parametro = request.getParameter("dtprod");
+        contadorComentarios++;
+        int comentarioId = contadorComentarios;
 		
 		emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
 		em = emf.createEntityManager();
 		
 		em.getTransaction().begin();
-		
 
-		if (parametro == null || parametro.isEmpty()) {
-		    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "El producto no está disponible.");
-		    return;
-		}
+        String mensaje = request.getParameter("comentario");
+        String parametro = request.getParameter("dtprod");
 
 		int paramNum = Integer.parseInt(parametro);
 		
@@ -83,9 +79,19 @@ public class enviarComentario extends HttpServlet {
 		emf.close();
 		
 
-		sist.notificarComentaristas(producto1, mensaje, cliente);
-		
-		// Redirigir a la página del producto
-		response.sendRedirect("perfilProducto?producto=" + paramNum);
-	}
+        if (session == null || session.getAttribute("usuarioLogueado") == null) {
+            response.sendRedirect("formlogin");
+            return;
+        }
+
+        // Crear el comentario principal
+        Comentario nuevoComentario = new Comentario(comentarioId, mensaje, cliente, LocalDateTime.now());
+        producto1.agregarComentario(nuevoComentario);
+
+        // Notificar a los interesados
+        sist.notificarComentario(producto1, nuevoComentario, null);
+
+        // Redirigir a la página del producto
+        response.sendRedirect("perfilProducto?producto=" + paramNum);
+    }
 }

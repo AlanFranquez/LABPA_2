@@ -24,7 +24,6 @@ import com.market.svcentral.Producto;
 @WebServlet("/enviarRespuesta")
 public class enviarRespuesta extends HttpServlet {
     private static final long serialVersionUID = 1L;
-
     private ISistema sist;
 
     @Override
@@ -38,7 +37,7 @@ public class enviarRespuesta extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        
+
         String respuestaTexto = request.getParameter("respuesta");
         String comentarioIdStr = request.getParameter("comentarioId");
         
@@ -68,13 +67,17 @@ public class enviarRespuesta extends HttpServlet {
         }
 
         int comentarioId = Integer.parseInt(comentarioIdStr);
-        System.out.print("ESTE ES EL COMENTARIO: " + producto1.getComentario(comentarioId).getTexto());
-       
-        
-        Cliente cli = (Cliente) session.getAttribute("usuarioLogueado");
-        Comentario coment = producto1.getComentario(comentarioId);
-        
-        if (coment == null) {
+
+        if (session == null || session.getAttribute("usuarioLogueado") == null) {
+            response.sendRedirect("formlogin");
+            return;
+        }
+
+        Cliente cliente = (Cliente) session.getAttribute("usuarioLogueado");
+        Producto producto2 = sist.getProducto(paramNum);
+        Comentario comentarioRespondido = producto2.getComentario(comentarioId);
+
+        if (comentarioRespondido == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "Comentario no encontrado.");
             return;
         }
@@ -89,6 +92,11 @@ public class enviarRespuesta extends HttpServlet {
 		em.getTransaction().commit();
 		
 		emf.close();
+        // Incrementar el contador de comentarios utilizando un método centralizado
+        int respuestaId = sist.incrementarContadorComentarios();
+
+        // Notificar al autor del comentario respondido
+        sist.notificarComentario(producto1, respuesta, comentarioRespondido);
 
         // Redirigir a la página del producto
         response.sendRedirect("perfilProducto?producto=" + paramNum);

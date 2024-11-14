@@ -56,3 +56,4 @@ Thumbs.db
 # Ignorar archivos relacionados con herramientas de control de versiones locales
 /.git/
 svcentral/src/main/resources/config.properties
+/Server
