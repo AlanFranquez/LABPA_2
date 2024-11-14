@@ -75,7 +75,7 @@ public class VerReclamo extends HttpServlet {
         Object usuario = session.getAttribute("usuarioLogueado");
         if (usuario instanceof Proveedor) {
             Proveedor proveedor = (Proveedor) usuario;
-            List<Reclamo> reclamosTotales = new ArrayList<>();
+            List<Reclamo> reclamosTotales = new ArrayList<Reclamo>();
             for (Producto producto : proveedor.getProductos()) {
                 List<Reclamo> reclamos = producto.getReclamos();
                 if (reclamos != null) {
