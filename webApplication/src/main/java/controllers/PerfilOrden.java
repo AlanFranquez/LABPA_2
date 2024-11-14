@@ -118,16 +118,21 @@ public class PerfilOrden extends HttpServlet {
             EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
             EntityManager em = emf.createEntityManager();
             
+            em.getTransaction().begin();
+            
             if ("confirmar".equals(accion)) {
             	OrdenDeCompra orden = cliente.getCompra(numeroOrden);
                 if (orden != null) {
-                	DTEstado estado5 = new DTEstado("Entregada", "El cliente ha recibido el pedido."); 
+                	DTEstado estado5 = new DTEstado("Entregada", "El cliente ha recibido el pedido.");
              	    orden.setEstado(estado5);
+             	    em.merge(orden);
                 } else {
                     response.sendError(HttpServletResponse.SC_NOT_FOUND, "Orden no encontrada.");
                     return;
                 }
             }
+            em.getTransaction().commit();
+            em.close();
 
             request.setAttribute("ordencompra", cliente.getCompra(numeroOrden));
             response.sendRedirect("perfilOrden?nickname=" + cliente.getNick() + "&orden=" + numeroOrden);

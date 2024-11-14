@@ -17,7 +17,6 @@ public class DTOrdenDeCompra {
     private LocalDateTime fecha;
     @OneToMany(cascade = CascadeType.PERSIST)
     private Map<Integer, Item> items;
-    @OneToMany(cascade = CascadeType.PERSIST)
     private List<DTEstado> estados;
 
     public DTOrdenDeCompra(int numero, Map<Integer, Item> items, float precioTotal, String estado) {
@@ -50,6 +49,10 @@ public class DTOrdenDeCompra {
         this.precioTotal = precioTotal;
         this.items = items;
         this.estados = estadosLista;
+    }
+    
+    public DTOrdenDeCompra() {
+
     }
 
     public List<DTItem> listarItems() {

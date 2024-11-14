@@ -189,6 +189,7 @@ public class Cliente extends Usuario {
     public void setCarrito(Carrito c1) {
         this.carrito = c1;
     }
+    
     public List<OrdenDeCompra> getOrdenes() {
         return new ArrayList<>(listaCompras.values());
     }

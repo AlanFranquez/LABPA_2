@@ -71,15 +71,7 @@ if (user != null && user.getTipo().equals("proveedor")) {
                 <%
                 }
                 %>
-                <li class="nav-item">
-                    <button class="btn btn-danger">
-                        <a class="nav-link" href="logout">Cerrar Sesi�n</a>
-                    <% if (user != null && user.getTipo().equals("proveedor")) { %>
-                        <a class="nav-link" href="perfilProveedor?nickname=<%= user.getNick() %>">Perfil</a>
-                    <% } else if (user != null && user.getTipo().equals("cliente")) { %>
-                        <a class="nav-link" href="perfilCliente?nickname=<%= user.getNick() %>">Perfil</a>
-                    <% } %>
-                </li>
+                
                 <% if (user != null && user.getTipo().equals("cliente")) { %>
                 <li class="nav-item">
                     <a class="nav-link" href="Carrito.html">
@@ -92,7 +84,11 @@ if (user != null && user.getTipo().equals("proveedor")) {
                 <li class="nav-item">
                     <button class="btn btn-danger">
                         <a class="nav-link" href="logout">Cerrar Sesion</a>
-                    </button>
+                    <% if (user != null && user.getTipo().equals("proveedor")) { %>
+                        <a class="nav-link" href="perfilProveedor?nickname=<%= user.getNick() %>">Perfil</a>
+                    <% } else if (user != null && user.getTipo().equals("cliente")) { %>
+                        <a class="nav-link" href="perfilCliente?nickname=<%= user.getNick() %>">Perfil</a>
+                    <% } %>
                 </li>
             </ul>
         </div>
@@ -119,7 +115,7 @@ if (user != null && user.getTipo().equals("proveedor")) {
             <li style="padding: 10px 0; position: relative; padding-left: 30px;">
                 <span style="
                     font-weight: bold; 
-                    color: <%= estado.getEstado().equalsIgnoreCase("Entregado") ? "#00b200" : "#FFA500" %>;">
+                    color: <%= estado.getEstado().equalsIgnoreCase("Entregada") ? "#00b200" : "#FFA500" %>;">
                     Estado:
                 </span> 
                 <%= estado.getEstado() %> - <%= estado.getFecha() %> <br>
@@ -132,7 +128,7 @@ if (user != null && user.getTipo().equals("proveedor")) {
                     top: 5px;
                     width: 10px;
                     height: 10px;
-                    background-color: <%= estado.getEstado().equalsIgnoreCase("Entregado") ? "#00b200" : "#FFA500" %>;
+                    background-color: <%= estado.getEstado().equalsIgnoreCase("Entregada") ? "#00b200" : "#FFA500" %>;
                     border-radius: 50%;
                     border: 2px solid white;"></span>
                 
@@ -144,7 +140,7 @@ if (user != null && user.getTipo().equals("proveedor")) {
                         top: 20px;
                         bottom: 0;
                         width: 2px;
-                        background-color: <%= estado.getEstado().equalsIgnoreCase("Entregado") ? "#00b200" : "#FFA500" %>;">
+                        background-color: <%= estado.getEstado().equalsIgnoreCase("Entregada") ? "#00b200" : "#FFA500" %>;">
                     </span>
                 <% } %>
             </li>
@@ -153,9 +149,12 @@ if (user != null && user.getTipo().equals("proveedor")) {
 </div>
 
 
-    <% if(orden.getEstado().equalsIgnoreCase("En Preparacion")) { %>        
-    		request.setAttribute("agregarEstado", "si");
-    <% } %>
+    <% 
+    if(orden.getEstado().equalsIgnoreCase("En camino")) { 
+        request.setAttribute("agregarEstado", "si");
+    }
+	%>
+
 
     <% if(orden.getEstado().equalsIgnoreCase("En camino")) { %>
         <form action="perfilOrden" method="post">
