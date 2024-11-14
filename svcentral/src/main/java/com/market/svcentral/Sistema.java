@@ -670,7 +670,11 @@ public class Sistema implements ISistema {
 	 
 	 
 	 public void realizarCompra(OrdenDeCompra orden, String nickCliente) {
-		    Cliente cliente = (Cliente) this.usuarios.get(nickCliente);
+		 EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+		 EntityManager em = emf.createEntityManager();
+		 
+		 
+		    Cliente cliente = em.find(Cliente.class, nickCliente);
 		    System.out.println("Realizando compra para el cliente: " + nickCliente);
 		    System.out.println("Número de orden: " + orden.getNumero());
 		    

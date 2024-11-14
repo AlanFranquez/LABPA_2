@@ -153,7 +153,10 @@ public class CrearOrdenCompra extends JInternalFrame {
                 return;
             }
 
-            Map<Integer, Item> itemsAgregados = new HashMap<>();
+            // Mapa para agrupar productos por proveedor
+            Map<Proveedor, Map<Integer, Item>> productosPorProveedor = new HashMap<>();
+            
+            // Recorremos la tabla para obtener los productos seleccionados
             for (int i = 1; i < model.getRowCount(); i++) {
                 if (model.getValueAt(i, 0) == null || model.getValueAt(i, 1) == null) {
                     JOptionPane.showMessageDialog(null, "El número de referencia y la cantidad no pueden estar vacíos.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -174,31 +177,49 @@ public class CrearOrdenCompra extends JInternalFrame {
                     return;
                 }
 
+                // Obtenemos el producto y su proveedor
                 Producto producto = s.getProducto(numRef);
-                if (producto != null) {
-                    itemsAgregados.put(numRef, new Item(cant, producto));
+                Proveedor proveedor = producto.getProveedor();
+
+                if (producto != null && proveedor != null) {
+                    productosPorProveedor.putIfAbsent(proveedor, new HashMap<>());
+                    productosPorProveedor.get(proveedor).put(numRef, new Item(cant, producto));
                 }
             }
 
-            float precioTotal = (float) itemsAgregados.values().stream().mapToDouble(Item::getSubTotal).sum();
             try {
-                OrdenDeCompra orden = new OrdenDeCompra(itemsAgregados, precioTotal, null);
-                s.realizarCompra(orden, cliente);
+                for (Map.Entry<Proveedor, Map<Integer, Item>> entry : productosPorProveedor.entrySet()) {
+                    Proveedor proveedor = entry.getKey();
+                    Map<Integer, Item> itemsProveedor = entry.getValue();
+
+                    float precioTotal = (float) itemsProveedor.values().stream().mapToDouble(Item::getSubTotal).sum();
+
+                    OrdenDeCompra orden = new OrdenDeCompra(itemsProveedor, precioTotal, proveedor);
+                    Cliente cl = em.find(Cliente.class, cliente);
+
+                    s.realizarCompra(orden, cliente);
+                    cl.agregarCompra(orden);
+                    em.merge(cl);
+                    em.persist(orden); 
+                }
+
+                em.getTransaction().commit();
+                JOptionPane.showMessageDialog(null, "Órdenes de compra creadas exitosamente.");
                 
-                em.persist(orden);
-                model.setRowCount(1); // Reiniciar la tabla dejando el encabezado
+                model.setRowCount(1);
+                dispose();
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, "Error al realizar la compra: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                em.getTransaction().rollback();
+                JOptionPane.showMessageDialog(null, "Error al crear las órdenes de compra: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             } finally {
-            	em.getTransaction().commit();
                 em.close();
                 emf.close();
-			}
+            }
         });
         
         
 
         setVisible(true);
-        toFront();
+        toFront(); 
     }
 }
