@@ -85,8 +85,8 @@ public class enviarRespuesta extends HttpServlet {
         Random rand = new Random();
         int numeroRandom = rand.nextInt(20000);
 
-        Comentario respuesta = new Comentario(numeroRandom, respuestaTexto, cli, LocalDateTime.now());
-        coment.agregarRespuesta(respuesta);
+        Comentario respuesta = new Comentario(numeroRandom, respuestaTexto, cliente, LocalDateTime.now());
+        comentarioRespondido.agregarRespuesta(respuesta);
        
 		
 		em.getTransaction().commit();

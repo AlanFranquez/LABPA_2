@@ -141,6 +141,10 @@ public class Cliente extends Usuario {
         return this.carrito;
     }
     
+    public void setCarrito(Carrito c1) {
+        this.carrito = c1;
+    }
+    
     public OrdenDeCompra getOrden(int numero) {
         return this.listaCompras.get(numero);
     }
