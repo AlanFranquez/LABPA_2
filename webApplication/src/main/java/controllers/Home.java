@@ -17,6 +17,8 @@ import jakarta.servlet.http.HttpSession;
 import com.market.svcentral.Factory;
 import com.market.svcentral.ISistema;
 import com.market.svcentral.Producto;
+import com.market.svcentral.Publicador;
+import com.market.svcentral.PublicadorService;
 import com.market.svcentral.Usuario;
 import com.market.svcentral.Carrito;
 import com.market.svcentral.Cliente;
@@ -43,6 +45,12 @@ public class Home extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("Entrando en el método doGet.");
+        
+        PublicadorService p = new PublicadorService();
+        
+        Publicador pp = p.getPublicadorPort();
+		
+		System.out.print("SALUDANDO DESDE LA WEBAPP --> " + pp.saludar());
 
         HttpSession session = request.getSession(false);
         if (session != null) {
