@@ -95,6 +95,7 @@ public class PerfilOrden extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	String accion = request.getParameter("accion");
         String ordenParam = request.getParameter("numeroOrden");
+        
 
         // Obtener el cliente de la sesión
         HttpSession sess = request.getSession(false);
@@ -104,6 +105,8 @@ public class PerfilOrden extends HttpServlet {
         }
 
         Cliente cliente = (Cliente) sess.getAttribute("usuarioLogueado");
+        DTCliente tmp = cliente.crearDt();
+        request.setAttribute("usuarioOrdenEsp", tmp);
 
         if (ordenParam != null && !ordenParam.isEmpty()) {
             int numeroOrden;

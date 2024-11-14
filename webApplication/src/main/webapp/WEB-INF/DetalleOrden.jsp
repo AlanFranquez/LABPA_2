@@ -7,11 +7,13 @@
 <%@page import="com.market.svcentral.DTCliente"%>
 <%@page import="java.util.Map"%>
 <%@page import="com.market.svcentral.Item"%>
+<%@page import="com.market.svcentral.Carrito"%>
 
 <%
     DTOrdenDeCompra orden = (DTOrdenDeCompra) request.getAttribute("ordencompra");
     Map<Integer, Item> items = orden.getItems();
     List<DTEstado> estados = orden.getHistorialEstado();
+    
 %>
 
 <!DOCTYPE html>
@@ -25,11 +27,9 @@
 <body>
 
 <%
-    DTCliente user = (DTCliente) request.getAttribute("usuario");
+    DTCliente user = (DTCliente) request.getAttribute("usuarioOrdenEsp");
 %>
    
-   
-
 
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2C2C2C;">
     <div class="container">
@@ -46,41 +46,23 @@
                     </form>
                 </li>
             </ul>
-            <ul class="navbar-nav align-items-center">
+            <ul class="navbar-nav">
                 <li class="nav-item">
-                   <% 
-if (user != null && user.getTipo().equals("proveedor")) { 
-%> 
-    <a class="nav-link" href="perfilProveedor?nickname=<%=user.getNick()%>">Perfil</a> 
-<% 
-} else if (user != null && user.getTipo().equals("cliente")) { 
-%> 
-    <a class="nav-link" href="perfilCliente?nickname=<%=user.getNick()%>">Perfil</a>
-<% 
-}
-%>
                 </li>
                 <%
                 if (user != null && user.getTipo().equals("cliente")) {
                 %>
-                <li class="nav-item"><a class="nav-link" href="Carrito">
+                <li class="nav-item">
+                	<a class="nav-link" href="Carrito">
                     <svg xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" viewBox="0 0 24 24">
                         <path fill="white" d="M17 18c-1.11 0-2 .89-2 2a2 2 0 0 0 2 2a2 2 0 0 0 2-2a2 2 0 0 0-2-2M1 2v2h2l3.6 7.59l-1.36 2.45c-.15.28-.24.61-.24.96a2 2 0 0 0 2 2h12v-2H7.42a.25.25 0 0 1-.25-.25q0-.075.03-.12L8.1 13h7.45c.75 0 1.41-.42 1.75-1.03l3.58-6.47c.07-.16.12-.33.12-.5a1 1 0 0 0-1-1H5.21l-.94-2M7 18c-1.11 0-2 .89-2 2a2 2 0 0 0 2 2a2 2 0 0 0 2-2a2 2 0 0 0-2-2" />
                     </svg>
-                </a></li>
+                </a>
+                </li>
                 <%
                 }
                 %>
                 
-                <% if (user != null && user.getTipo().equals("cliente")) { %>
-                <li class="nav-item">
-                    <a class="nav-link" href="Carrito.html">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" viewBox="0 0 24 24">
-                            <path fill="white" d="M17 18c-1.11 0-2 .89-2 2a2 2 0 0 0 2 2a2 2 0 0 0 2-2a2 2 0 0 0-2-2M1 2v2h2l3.6 7.59l-1.36 2.45c-.15.28-.24.61-.24.96a2 2 0 0 0 2 2h12v-2H7.42a.25.25 0 0 1-.25-.25q0-.075.03-.12L8.1 13h7.45c.75 0 1.41-.42 1.75-1.03l3.58-6.47c.07-.16.12-.33.12-.5a1 1 0 0 0-1-1H5.21l-.94-2M7 18c-1.11 0-2 .89-2 2a2 2 0 0 0 2 2a2 2 0 0 0 2-2a2 2 0 0 0-2-2"/>
-                        </svg>
-                    </a>
-                </li>
-                <% } %>
                 <li class="nav-item">
                     <button class="btn btn-danger">
                         <a class="nav-link" href="logout">Cerrar Sesion</a>
@@ -191,6 +173,16 @@ if (user != null && user.getTipo().equals("proveedor")) {
     </div>
 
     <a href="perfilCliente?nickname=<%= request.getParameter("nickname") %>" class="btn btn-secondary mt-3">Volver al Perfil</a>
+</div>
+
+<div class="part-final d-flex justify-content-center align-items-center" style="background-color: #2C2C2C;
+				width: 100%;
+				height: 200px; 
+				margin: 50px 0px 0px 0px;">
+    			<div class="bg-gray-800 w-full h-48 mt-12 flex justify-center items-center">
+    <p class="text-center text-white">Todos los derechos reservados, 2024. <br> Laboratorio PA.</p>
+</div>
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
