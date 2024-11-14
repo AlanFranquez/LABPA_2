@@ -3,13 +3,22 @@ package com.market.svcentral;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+
+@Entity
 public class Cat_Padre extends Categoria{
+	@OneToMany(mappedBy = "padre")
 	private Map<String, Categoria> hijos;
 	
 	// Constructor:
 	public Cat_Padre(String nombre) {
 		super(nombre, "Padre");
 		hijos = new HashMap<String, Categoria>();
+	}
+	
+	public Cat_Padre() {
+		
 	}
 	
 	// Getter:

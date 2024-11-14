@@ -9,6 +9,10 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
 import com.market.svcentral.Usuario;
 import com.market.svcentral.Item;
 import com.market.svcentral.Cliente;
@@ -40,8 +44,15 @@ public class CarritoServlet extends HttpServlet {
             return;
         }
 
-        Usuario user = (Usuario) session.getAttribute("usuarioLogueado");
 
+    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+    	EntityManager em = emf.createEntityManager();
+    	em.getTransaction().begin();
+        
+        Usuario u = (Usuario) session.getAttribute("usuarioLogueado");
+
+        Usuario user = em.find(Usuario.class, u.getNick());
+        
         // Verificar si el usuario es un cliente
         if (user instanceof Cliente) {
             Cliente cliente = (Cliente) user;
@@ -59,6 +70,10 @@ public class CarritoServlet extends HttpServlet {
             request.setAttribute("estado", "noLogueado");
         }
         
+        em.getTransaction().commit();
+        em.close();
+        emf.close();
+        
     }
     
     @Override
@@ -68,6 +83,10 @@ public class CarritoServlet extends HttpServlet {
     	
     	String action = req.getParameter("action");
     	String cant = req.getParameter("cantidad");
+    	
+    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+    	EntityManager em = emf.createEntityManager();
+    	
 
         // Verificar si la sesión es válida
         if (session == null || session.getAttribute("usuarioLogueado") == null) {
@@ -76,7 +95,7 @@ public class CarritoServlet extends HttpServlet {
         }
         
         System.out.println("Cantidad recibida: " + req.getParameter("cantidad"));
-
+        em.getTransaction().begin();
         
         int paramNumero = 0;
         if ("eliminar".equals(action)) {
@@ -87,17 +106,24 @@ public class CarritoServlet extends HttpServlet {
               	 resp.sendRedirect("home");
               	 return;
       		}
-              Usuario user = (Usuario) session.getAttribute("usuarioLogueado");
-
+              Usuario u = (Usuario) session.getAttribute("usuarioLogueado");
+              Usuario user = em.find(Usuario.class, u.getNick());
+              
+              
               if (user instanceof Cliente) {
                   Cliente cliente = (Cliente) user;
 
                   cliente.getCarrito().eliminarProd(paramNumero);
+                  System.out.println("Producto con numRef " + paramNumero + " eliminado del carrito.");
+                  session.setAttribute("carrito", cliente.getCarrito());
               }
+              
+
         }
         
         if ("actualizarCant".equals(action)) {
-        	Usuario user = (Usuario) session.getAttribute("usuarioLogueado");
+        	 Usuario u = (Usuario) session.getAttribute("usuarioLogueado");
+             Usuario user = em.find(Usuario.class, u.getNick());
         	
         	Cliente cliente = (Cliente) user;
         	int cantNum = 0;
@@ -121,7 +147,9 @@ public class CarritoServlet extends HttpServlet {
         	}
         }
         
-      
+        em.getTransaction().commit();
+        em.close();
+        emf.close();
         
         resp.sendRedirect("Carrito");
     }

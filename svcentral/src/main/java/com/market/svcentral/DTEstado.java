@@ -3,7 +3,12 @@ package com.market.svcentral;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import javax.persistence.*;
+
+
+@Embeddable 
 public class DTEstado {
+    
     private String estado;
     private LocalDateTime fecha;
     private String comentarios;
@@ -12,7 +17,11 @@ public class DTEstado {
         this.estado = estado;
         this.fecha = LocalDateTime.now();
         this.comentarios = comentarios;
-        //this.comentarios = (comentarios != null) ? comentarios : "Sin comentarios";
+        this.comentarios = (comentarios != null) ? comentarios : "Sin comentarios";
+    }
+    
+    public DTEstado() {
+        // Constructor por defecto
     }
 
     // Getters y setters

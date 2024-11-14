@@ -1,4 +1,4 @@
-package Filters;
+package filters;
 
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
