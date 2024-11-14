@@ -9,10 +9,6 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-
 import com.market.svcentral.Cliente;
 import com.market.svcentral.DTCliente;
 import com.market.svcentral.Usuario;
@@ -33,11 +29,6 @@ public class PerfilClienteMOBILE extends HttpServlet {
         String userAgent = request.getHeader("User-Agent");
         boolean isMobile = isMobileDevice(userAgent);
         
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-        EntityManager em = emf.createEntityManager();
-        
-        em.getTransaction().begin();
-        
         if(!isMobile) {
         	response.sendRedirect("home");
             return;
@@ -50,8 +41,7 @@ public class PerfilClienteMOBILE extends HttpServlet {
         }
         
 
-        Usuario u = (Usuario) session.getAttribute("usuarioLogueado");
-        Usuario usuarioLogueado = em.find(Usuario.class, u.getNick());
+        Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
 
         // Redirigir si el usuario logueado no es de tipo Cliente
         if (!(usuarioLogueado instanceof Cliente)) {
@@ -74,10 +64,6 @@ public class PerfilClienteMOBILE extends HttpServlet {
         request.setAttribute("usuarioLogueado", usuarioLogueado);
         request.setAttribute("usuario", dtcli);
         request.getRequestDispatcher("/WEB-INF/InfoPerfilCilenteMOBILE.jsp").forward(request, response);
-        
-        em.getTransaction().commit();
-        em.close();
-        emf.close();
     }
 
     @Override

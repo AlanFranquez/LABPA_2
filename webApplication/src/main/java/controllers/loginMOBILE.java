@@ -1,11 +1,6 @@
 package controllers;
 
 import java.io.IOException;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-
 import com.market.svcentral.EstadoSesion;
 import com.market.svcentral.Factory;
 import com.market.svcentral.ISistema;
@@ -47,15 +42,10 @@ public class loginMOBILE extends HttpServlet {
         HttpSession objSession = request.getSession();
         String nickname = request.getParameter("nickname");
         String password = request.getParameter("password");
-        
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-        EntityManager em = emf.createEntityManager();
-        
-        em.getTransaction().begin();
 
         EstadoSesion nuevoEstado;
-        Usuario u = sist.getUsuario(nickname);
-        Usuario usr = em.find(Usuario.class, u.getNick());
+        Usuario usr = sist.getUsuario(nickname);
+
         // Verifica si el acceso es desde un dispositivo móvil
         String userAgent = request.getHeader("User-Agent");
         boolean isMobile = isMobileDevice(userAgent);

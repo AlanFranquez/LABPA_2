@@ -7,14 +7,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-import java.beans.PersistenceDelegate;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Random;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
 import com.market.svcentral.Cliente;
 import com.market.svcentral.Comentario;
@@ -24,11 +18,7 @@ import com.market.svcentral.Producto;
 
 @WebServlet("/enviarComentario")
 public class enviarComentario extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-	private EntityManagerFactory emf;
-	private EntityManager em;
-	
-       
+    private static final long serialVersionUID = 1L;
     private ISistema sist;
 
     private static int contadorComentarios = 0;
@@ -42,18 +32,10 @@ public class enviarComentario extends HttpServlet {
         }
     }
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession();
-		Random numRandom = new Random();
-        int comentarioId = numRandom.nextInt(10000);
-		String mensaje = request.getParameter("comentario");
-		String parametro = request.getParameter("dtprod");
-		
-		emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-		em = emf.createEntityManager();
-		
-		em.getTransaction().begin();
-		
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        contadorComentarios++;
+        int comentarioId = contadorComentarios;
 
         String mensaje = request.getParameter("comentario");
         String parametro = request.getParameter("dtprod");
@@ -63,28 +45,7 @@ public class enviarComentario extends HttpServlet {
             return;
         }
 
-		int paramNum = Integer.parseInt(parametro);
-		
-		if (session == null || session.getAttribute("usuarioLogueado") == null) {
-			response.sendRedirect("formlogin");
-			return;
-		}
-		
-		Cliente cliente = (Cliente) session.getAttribute("usuarioLogueado");
-		Producto producto1 = em.find(Producto.class, paramNum);
-
-		// Crear el comentario
-		Comentario comentario = new Comentario(comentarioId, mensaje, cliente, LocalDateTime.now());
-		producto1.agregarComentario(comentario);
-		em.persist(comentario);
-		System.out.print("Comentario guardado en la base de datos");
-	
-		
-		
-		em.getTransaction().commit();
-		em.close();
-		emf.close();
-		
+        int paramNum = Integer.parseInt(parametro);
 
         if (session == null || session.getAttribute("usuarioLogueado") == null) {
             response.sendRedirect("formlogin");

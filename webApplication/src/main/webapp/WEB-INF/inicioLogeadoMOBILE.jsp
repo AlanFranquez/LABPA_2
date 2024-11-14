@@ -50,9 +50,9 @@
 
             <ul class="navbar-nav align-items-center">
                 <li class="nav-item">
-                    <% if (usr != null && usr.getTipo().equals("proveedor")) { %>
+                    <% if (usr != null && usr.getTipo() == "proveedor") { %>
                         <a class="nav-link" href="perfilProveedorMOBILE?nickname=<%= usr.getNick() %>">Perfil</a>
-                    <% } else if(usr != null && usr.getTipo().equals("cliente")){ %>
+                    <% } else if(usr != null && usr.getTipo() == "cliente"){ %>
                         <a class="nav-link" href="perfilClienteMOBILE?nickname=<%= usr.getNick() %>">Perfil</a>
                     <% } %>
                 </li>

@@ -1,20 +1,10 @@
 package com.market.svcentral;
 
-import javax.persistence.Embeddable;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
-@Embeddable
 public class DTFecha {
 	private int dia;
 	private int mes;
 	private int anio;
 	
-	public DTFecha() {
-		
-	}
 	
 	public DTFecha(int dia, int mes, int anio) {
 		this.dia = dia;

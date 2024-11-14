@@ -21,13 +21,11 @@ public class DtProducto {
 	private String nickProveedor, nomProveedor;
 	private String categorias;
 	private int cantidadComprada;
-	private List<Comentario> comentarios;
-	private List<String> imagenes;
-	private List<Reclamo> reclamos;
-	private List <Puntaje> puntajes;
+	List<Comentario> comentarios;
+	List<String> imagenes;
 	
 	// Constructor:
-	public DtProducto(String nombre, String descripcion, float precio, Integer numRef, String especs, Proveedor prov, String cat, List<String> imagenes, Integer stock, List<Comentario> comentarios, int cantidadComprada, List<Reclamo> reclamos, List<Puntaje> puntajes) {
+	public DtProducto(String nombre, String descripcion, float precio, Integer numRef, String especs, Proveedor prov, String cat, List<String> imagenes, Integer stock, List<Comentario> comentarios, int cantidadComprada) {
 		this.nombre = nombre;
 		this.descripcion = descripcion;
 		this.precio = precio;
@@ -40,17 +38,11 @@ public class DtProducto {
 		this.stock = stock;
 		this.comentarios = comentarios;
 		this.cantidadComprada = cantidadComprada;
-		this.reclamos = reclamos;
-		this.puntajes = puntajes;
 	}
 	
 	// Getters:
 	public String getNombre() {
 		return nombre;
-	}
-	
-	public List<Reclamo> getReclamos() {
-		return this.reclamos;
 	}
 	
 	public int getCantidadComprada() {
@@ -104,16 +96,5 @@ public class DtProducto {
 	    }
 	    return null; 
 	}
-	public int[] obtenerPuntaje() {
-		int total = 0;
-		int varios[] = {0, 0, 0, 0, 0, 0};
-		for (Puntaje p : this.puntajes) {
-			varios[p.getValor()] += 1;
-			total += p.getValor();
-		}
-		if (total > 0) {
-			varios[0] = total / this.puntajes.size();			
-		}
-		return varios;
-	}
+
 }

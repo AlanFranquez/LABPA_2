@@ -8,14 +8,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
 import com.market.svcentral.DTProveedor;
-import com.market.svcentral.Producto;
 import com.market.svcentral.Proveedor;
 
 /**
@@ -39,23 +33,14 @@ public class PerfilProveedor extends HttpServlet {
             return;
         }
         
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-        EntityManager em = emf.createEntityManager();
         
-        em.getTransaction().begin();
-        Proveedor u = (Proveedor) session.getAttribute("usuarioLogueado");
-        Proveedor usuarioLogueado = em.find(Proveedor.class, u.getNick());
+        Proveedor usuarioLogueado = (Proveedor) session.getAttribute("usuarioLogueado");
+        DTProveedor dtprov = usuarioLogueado.crearDt();
+        
         String parametro = request.getParameter("nickname");
         
         if (usuarioLogueado.getNick().equals(parametro)) {
-        	List<Producto> productos = null;
-            String jpql = "SELECT p FROM Producto p WHERE p.proveedor.nick = :proveedorNick";  // Usar el parámetro correctamente
-            productos = em.createQuery(jpql, Producto.class)
-                .setParameter("proveedorNick", parametro)  // Usar el valor del parámetro correctamente
-                .getResultList();
-
-            request.setAttribute("usuario", usuarioLogueado);
-            request.setAttribute("productos", productos);
+            request.setAttribute("usuario", dtprov);
             System.out.println("Tipo de usuario almacenado en sesión: " + usuarioLogueado.getClass().getName());
             request.getRequestDispatcher("/WEB-INF/InfoPerfilProveedor.jsp").forward(request, response);
             return;
@@ -63,10 +48,6 @@ public class PerfilProveedor extends HttpServlet {
         
        
         response.sendRedirect("home");
-        
-        em.getTransaction().commit();
-        em.close();
-        emf.close();
     }
 
 	/**

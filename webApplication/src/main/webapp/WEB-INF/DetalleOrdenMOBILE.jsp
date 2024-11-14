@@ -1,5 +1,3 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
 <%@page import="com.market.svcentral.DTEstado"%>
 <%@page import="java.util.List"%>
 <%@page import="com.market.svcentral.DTItem"%>
@@ -37,7 +35,7 @@
 
 	<style>
     	.texto-pequeno {
-        font-size: 0.6em; /* Ajusta el tamaÃ±o segÃºn lo necesites */
+        font-size: 0.6em; /* Ajusta el tamaño según lo necesites */
     	}
 	</style>
         
@@ -58,7 +56,7 @@
                 </li>
                 <li class="nav-item">
                     <button class="btn btn-danger">
-                        <a class="nav-link" href="logout">Cerrar SesiÃ³n</a>
+                        <a class="nav-link" href="logout">Cerrar Sesión</a>
                     </button>
                 </li>
             </ul>
@@ -67,7 +65,7 @@
 </nav>
 
 <div class="container mt-5">
-    <h1 class="text-center">Detalles de la Orden NÂº <%= orden.getNumero() %></h1>
+    <h1 class="text-center">Detalles de la Orden Nº <%= orden.getNumero() %></h1>
     
     <div class="card my-4">
         <div class="card-body">

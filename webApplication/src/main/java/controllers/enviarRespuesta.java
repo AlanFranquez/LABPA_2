@@ -9,11 +9,6 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Random;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
 import com.market.svcentral.Cliente;
 import com.market.svcentral.Comentario;
@@ -40,26 +35,12 @@ public class enviarRespuesta extends HttpServlet {
 
         String respuestaTexto = request.getParameter("respuesta");
         String comentarioIdStr = request.getParameter("comentarioId");
-        
-    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-		EntityManager em = emf.createEntityManager();
-		
-		em.getTransaction().begin();
-        
         String parametro = request.getParameter("dtprod");
 
-		if (parametro == null || parametro.isEmpty()) {
-		    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "El producto no está disponible.");
-		    return;
-		}
-		
-		int paramNum = Integer.parseInt(parametro);
-		Producto producto1 = em.find(Producto.class, paramNum);
-		if (session == null || session.getAttribute("usuarioLogueado") == null) {
-			response.sendRedirect("formlogin");
-			return;
-		}
-		
+        if (parametro == null || parametro.isEmpty()) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "El producto no está disponible.");
+            return;
+        }
 
         if (comentarioIdStr == null || comentarioIdStr.isEmpty()) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "El comentario no está disponible.");
@@ -82,9 +63,6 @@ public class enviarRespuesta extends HttpServlet {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "Comentario no encontrado.");
             return;
         }
-        
-        Random rand = new Random();
-        int numeroRandom = rand.nextInt(20000);
 
         // Incrementar el contador de comentarios utilizando un método centralizado
         int respuestaId = sist.incrementarContadorComentarios();
@@ -95,12 +73,6 @@ public class enviarRespuesta extends HttpServlet {
 
         // Notificar al autor del comentario respondido
         sist.notificarComentario(producto1, respuesta, comentarioRespondido);
-        coment.agregarRespuesta(respuesta);
-       
-		
-		em.getTransaction().commit();
-		
-		emf.close();
 
         // Redirigir a la página del producto
         response.sendRedirect("perfilProducto?producto=" + paramNum);

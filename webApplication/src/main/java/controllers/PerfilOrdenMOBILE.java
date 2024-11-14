@@ -9,10 +9,6 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-
 import com.market.svcentral.Cliente;
 import com.market.svcentral.DTCliente;
 import com.market.svcentral.DTOrdenDeCompra;
@@ -48,13 +44,7 @@ public class PerfilOrdenMOBILE extends HttpServlet {
             response.sendRedirect("home");
             return;
         }
-        
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-        EntityManager em = emf.createEntityManager();
 
-        
-        em.getTransaction().begin();
-        
         String ordenParam = request.getParameter("orden");
 
         HttpSession sess = request.getSession(false); // No crear una nueva sesión
@@ -63,8 +53,7 @@ public class PerfilOrdenMOBILE extends HttpServlet {
             return;
         }
 
-        Cliente cl = (Cliente) sess.getAttribute("usuarioLogueado");
-        Cliente cliente = em.find(Cliente.class, cl.getNick());
+        Cliente cliente = (Cliente) sess.getAttribute("usuarioLogueado");
 
         if (ordenParam != null && !ordenParam.isEmpty()) {
             int numeroOrden;
@@ -87,21 +76,12 @@ public class PerfilOrdenMOBILE extends HttpServlet {
         } else {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Falta el número de orden.");
         }
-        
-        em.getTransaction().commit();
-        em.close();
-        emf.close();
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String accion = request.getParameter("accion");
         String ordenParam = request.getParameter("numeroOrden");
-        
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-        EntityManager em = emf.createEntityManager();
-        
-        em.getTransaction().begin();
 
         // Detectar si el acceso proviene de un dispositivo móvil
         String userAgent = request.getHeader("User-Agent");
@@ -118,8 +98,7 @@ public class PerfilOrdenMOBILE extends HttpServlet {
             return;
         }
 
-        Cliente cl = (Cliente) sess.getAttribute("usuarioLogueado");
-        Cliente cliente = em.find(Cliente.class, cl.getNick());
+        Cliente cliente = (Cliente) sess.getAttribute("usuarioLogueado");
 
         if (ordenParam != null && !ordenParam.isEmpty()) {
             int numeroOrden;
@@ -143,10 +122,6 @@ public class PerfilOrdenMOBILE extends HttpServlet {
             request.setAttribute("ordencompra", cliente.mostrarCompras(numeroOrden));
             response.sendRedirect("perfilOrdenMOBILE?nickname=" + cliente.getNick() + "&orden=" + numeroOrden);
 
-            em.getTransaction().commit();
-            em.close();
-            emf.close();
-            
         } else {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Falta el número de orden.");
         }

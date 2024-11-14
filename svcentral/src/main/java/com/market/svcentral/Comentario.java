@@ -4,92 +4,63 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
-@Entity
 public class Comentario {
-    @Id
-    private int numero;
-    
+	private int numero;
 	private String texto;
+	private Cliente autor;
+	private LocalDateTime fecha;
+	List <Comentario> respuestas;
+	
+	
+	public Comentario(int numero, String texto, Cliente autor, LocalDateTime fecha) {
+		this.numero = numero;
+		this.texto = texto;
+		this.autor = autor;
+		this.fecha = fecha;
+		this.respuestas = new ArrayList<Comentario>();
+	}
 
-    @ManyToOne(cascade = CascadeType.MERGE) 
-    @JoinColumn(name = "cliente_nick")
-    private Cliente autor;
 
-    private LocalDateTime fecha;
+	public void agregarRespuesta(Comentario respuesta) {
+		this.respuestas.add(respuesta);
+	}
+	
+	public List<Comentario> getRespuestas() {
+		return this.respuestas;
+	}
 
-    @OneToMany(mappedBy = "comentarioPadre", cascade = CascadeType.ALL)
-    private List<Comentario> respuestas;
+	public int getNumero() {
+		return numero;
+	}
 
-    @ManyToOne
-    @JoinColumn(name = "comentario_padre_id")
-    private Comentario comentarioPadre;
+	public void setNumero(int numero) {
+		this.numero = numero;
+	}
 
-    public Comentario() {
-        this.respuestas = new ArrayList<>();
-    }
+	public String getTexto() {
+		return texto;
+	}
 
-    public Comentario(int numero, String texto, Cliente autor, LocalDateTime fecha) {
-        this.numero = numero;
-        this.texto = texto;
-        this.autor = autor;
-        this.fecha = fecha;
-        this.respuestas = new ArrayList<>();
-    }
+	public void setTexto(String texto) {
+		this.texto = texto;
+	}
 
-    public void agregarRespuesta(Comentario respuesta) {
-        respuesta.setComentarioPadre(this);
-        this.respuestas.add(respuesta);
-    }
+	public Cliente getAutor() {
+		return autor;
+	}
 
-    public List<Comentario> getRespuestas() {
-        return this.respuestas;
-    }
+	public void setAutor(Cliente autor) {
+		this.autor = autor;
+	}
 
-    // Getters y setters
-    public int getNumero() {
-        return numero;
-    }
+	public LocalDateTime getFecha() {
+		return fecha;
+	}
 
-    public void setNumero(int numero) {
-        this.numero = numero;
-    }
+	public void setFecha(LocalDateTime fecha) {
+		this.fecha = fecha;
+	}
 
-    public String getTexto() {
-        return texto;
-    }
 
-    public void setTexto(String texto) {
-        this.texto = texto;
-    }
-
-    public Cliente getAutor() {
-        return autor;
-    }
-
-    public void setAutor(Cliente autor) {
-        this.autor = autor;
-    }
-
-    public LocalDateTime getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(LocalDateTime fecha) {
-        this.fecha = fecha;
-    }
-
-    public Comentario getComentarioPadre() {
-        return comentarioPadre;
-    }
-
-    public void setComentarioPadre(Comentario comentarioPadre) {
-        this.comentarioPadre = comentarioPadre;
-    }
 }

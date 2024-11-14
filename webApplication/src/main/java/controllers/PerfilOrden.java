@@ -9,18 +9,11 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
-
 import com.market.svcentral.Cliente;
 import com.market.svcentral.DTCliente;
-import com.market.svcentral.DTEstado;
 import com.market.svcentral.DTOrdenDeCompra;
 import com.market.svcentral.Factory;
 import com.market.svcentral.ISistema;
-import com.market.svcentral.OrdenDeCompra;
 
 /**
  * Servlet implementation class PerfilOrden
@@ -59,7 +52,6 @@ public class PerfilOrden extends HttpServlet {
             response.sendRedirect("formlogin");
             return;
         }
-        
 
         Cliente cliente = (Cliente) sess.getAttribute("usuarioLogueado");
 
@@ -115,21 +107,19 @@ public class PerfilOrden extends HttpServlet {
             }
             
             
-            EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-            EntityManager em = emf.createEntityManager();
             
+
             if ("confirmar".equals(accion)) {
-            	OrdenDeCompra orden = cliente.getCompra(numeroOrden);
+            	DTOrdenDeCompra orden = cliente.mostrarCompras(numeroOrden);
                 if (orden != null) {
-                	DTEstado estado5 = new DTEstado("Entregada", "El cliente ha recibido el pedido."); 
-             	    orden.setEstado(estado5);
+                	sist.cambiarEstadoOrden("Entregado", "GRACIAS POR COMPRAR <3", orden.getNumero(), cliente.getNick());
                 } else {
                     response.sendError(HttpServletResponse.SC_NOT_FOUND, "Orden no encontrada.");
                     return;
                 }
             }
 
-            request.setAttribute("ordencompra", cliente.getCompra(numeroOrden));
+            request.setAttribute("ordencompra", cliente.mostrarCompras(numeroOrden));
             response.sendRedirect("perfilOrden?nickname=" + cliente.getNick() + "&orden=" + numeroOrden);
 
         } else {

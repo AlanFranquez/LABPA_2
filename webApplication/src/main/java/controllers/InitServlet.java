@@ -4,116 +4,217 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
-
 import com.market.svcentral.Cliente;
-import com.market.svcentral.Comentario;
-import com.market.svcentral.DTEstado;
 import com.market.svcentral.DTFecha;
 import com.market.svcentral.Factory;
 import com.market.svcentral.ISistema;
 import com.market.svcentral.Item;
 import com.market.svcentral.OrdenDeCompra;
 import com.market.svcentral.Producto;
-import com.market.svcentral.usuarioRandom;
-import com.market.svcentral.exceptions.CategoriaException;
-import com.market.svcentral.exceptions.UsuarioRepetidoException;
 import com.market.svcentral.Proveedor;
 
 @WebServlet(urlPatterns = {"/initServlet"}, loadOnStartup = 1)
 public class InitServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    
-  
-
 
 	@Override
     public void init() throws ServletException {
     	System.out.print("El SISTEMA INICIO VAMO ARRIBA");
     	ISistema sistema = Factory.getSistema();
-    
-    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
     	
-    	EntityManager em = emf.createEntityManager();
-    	
-         
+         try {
         	 
         	 DTFecha fecha1 = new DTFecha(1, 1, 1990);
              DTFecha fecha2 = new DTFecha(15, 6, 1985);
              DTFecha fecha3 = new DTFecha(5, 6, 1990);
-             
-             
-             em.getTransaction().begin();
-             
-             try {
-				sistema.agregarCliente("Juan", "Juan123", "Perez", "Juan@gmail.com", fecha1, "123", "123");
-				sistema.agregarCliente("Mili", "Mili123", "Vairo", "maria.vairo@estudiantes.utec.edu.uy", fecha1, "123", "123");
-				sistema.agregarCliente("Alberto", "albert1341", "Hernandez", "Ahernandez@gmail.com", fecha2, "123", "123");
-				sistema.agregarCliente("Maria", "agusmari", "Agustina", "mariaagustina@gmail.com", fecha1, "123", "123");
-			} catch (UsuarioRepetidoException e) {
-				e.printStackTrace();
-			}
-             
-             
+
+             sistema.agregarCliente("Juan", "Juan123", "Perez", "milagrosvairo.dev@gmail.com", fecha1, "123", "123");
+             sistema.agregarCliente("Mili", "Mili123", "Vairo", "maria.vairo@estudiantes.utec.edu.uy", fecha1, "123", "123");
+             sistema.agregarCliente("Alberto", "albert1341", "Hernandez", "Ahernandez@gmail.com", fecha2, "123", "123");
+             sistema.agregarCliente("Maria", "agusmari", "Agustina", "mariaagustina@gmail.com", fecha1, "123", "123");
+
              sistema.agregarImagenUsuario("Juan123", "/images/p1.jpg");
-             sistema.agregarImagenUsuario("agusmari", "/images/p3.jpg");
              sistema.agregarImagenUsuario("albert1341", "/images/p2.jpg");
-             try {
-				sistema.agregarProveedor("Perez", "milivairo2303@gmail.com", "Andres", "Perez", fecha3 , "Bamboo.inc" , "www.bamboo.com", "123", "123");
-				sistema.agregarProveedor("Jorge", "Jorge@gmail.com", "Jorge", "Urrutia", fecha3 , "Google.inc" , "www.google.com", "123", "123");
-			} catch (UsuarioRepetidoException e) {
-				e.printStackTrace();
-			}
+             sistema.agregarImagenUsuario("agusmari", "/images/p3.jpg");
              
-          
+             sistema.agregarCategoria("Living");
+             sistema.agregarCategoria("Tecnología");
+             sistema.agregarCategoria("Estanterias");
+             
+             sistema.agregarCategoriaConProductos("Tecno");
+             sistema.asignarlePadreCategoria("Living", "Tecno");
+             sistema.agregarCategoriaConProductos("Otros");
+             sistema.agregarCategoriaConProductos("Bazar");
+
+          // Electrónica
+             sistema.agregarCategoria("Electrónica");
+             sistema.agregarCategoriaConProductos("Celulares y Accesorios");
+             sistema.asignarlePadreCategoria("Electrónica", "Celulares y Accesorios");
+             sistema.agregarCategoriaConProductos("Computadoras y Laptops");
+             sistema.asignarlePadreCategoria("Electrónica", "Computadoras y Laptops");
+             sistema.agregarCategoriaConProductos("Cámaras");
+             sistema.asignarlePadreCategoria("Electrónica", "Cámaras");
+             sistema.agregarCategoriaConProductos("Audio y Video");
+             sistema.asignarlePadreCategoria("Electrónica", "Audio y Video");
+             sistema.agregarCategoriaConProductos("Consolas de Videojuegos");
+             sistema.asignarlePadreCategoria("Electrónica", "Consolas de Videojuegos");
+             sistema.agregarCategoriaConProductos("Smart Home");
+             sistema.asignarlePadreCategoria("Electrónica", "Smart Home");
+
+             // Hogar y Muebles
+             sistema.agregarCategoria("Hogar y Muebles");
+             sistema.agregarCategoriaConProductos("Muebles de Sala");
+             sistema.asignarlePadreCategoria("Hogar y Muebles", "Muebles de Sala");
+             sistema.agregarCategoriaConProductos("Muebles de Dormitorio");
+             sistema.asignarlePadreCategoria("Hogar y Muebles", "Muebles de Dormitorio");
+             sistema.agregarCategoriaConProductos("Cocina y Comedor");
+             sistema.asignarlePadreCategoria("Hogar y Muebles", "Cocina y Comedor");
+             sistema.agregarCategoriaConProductos("Decoración del Hogar");
+             sistema.asignarlePadreCategoria("Hogar y Muebles", "Decoración del Hogar");
+             sistema.agregarCategoriaConProductos("Iluminación");
+             sistema.asignarlePadreCategoria("Hogar y Muebles", "Iluminación");
+             sistema.agregarCategoriaConProductos("Herramientas");
+             sistema.asignarlePadreCategoria("Hogar y Muebles", "Herramientas");
+
+             // Moda y Accesorios
+             sistema.agregarCategoria("Moda y Accesorios");
+             sistema.agregarCategoriaConProductos("Ropa de Hombre");
+             sistema.asignarlePadreCategoria("Moda y Accesorios", "Ropa de Hombre");
+             sistema.agregarCategoriaConProductos("Ropa de Mujer");
+             sistema.asignarlePadreCategoria("Moda y Accesorios", "Ropa de Mujer");
+             sistema.agregarCategoriaConProductos("Calzado");
+             sistema.asignarlePadreCategoria("Moda y Accesorios", "Calzado");
+             sistema.agregarCategoriaConProductos("Accesorios de Moda");
+             sistema.asignarlePadreCategoria("Moda y Accesorios", "Accesorios de Moda");
+             sistema.agregarCategoriaConProductos("Joyería");
+             sistema.asignarlePadreCategoria("Moda y Accesorios", "Joyería");
+             sistema.agregarCategoriaConProductos("Bolsos y Mochilas");
+             sistema.asignarlePadreCategoria("Moda y Accesorios", "Bolsos y Mochilas");
+
+             // Deportes y Aire Libre
+             sistema.agregarCategoria("Deportes y Aire Libre");
+             sistema.agregarCategoriaConProductos("Bicicletas");
+             sistema.asignarlePadreCategoria("Deportes y Aire Libre", "Bicicletas");
+             sistema.agregarCategoriaConProductos("Equipamiento de Gimnasio");
+             sistema.asignarlePadreCategoria("Deportes y Aire Libre", "Equipamiento de Gimnasio");
+             sistema.agregarCategoriaConProductos("Ropa Deportiva");
+             sistema.asignarlePadreCategoria("Deportes y Aire Libre", "Ropa Deportiva");
+             sistema.agregarCategoriaConProductos("Camping y Senderismo");
+             sistema.asignarlePadreCategoria("Deportes y Aire Libre", "Camping y Senderismo");
+             sistema.agregarCategoriaConProductos("Equipamiento de Deportes");
+             sistema.asignarlePadreCategoria("Deportes y Aire Libre", "Equipamiento de Deportes");
+
+             // Salud y Belleza
+             sistema.agregarCategoria("Salud y Belleza");
+             sistema.agregarCategoriaConProductos("Maquillaje");
+             sistema.asignarlePadreCategoria("Salud y Belleza", "Maquillaje");
+             sistema.agregarCategoriaConProductos("Cuidado de la Piel");
+             sistema.asignarlePadreCategoria("Salud y Belleza", "Cuidado de la Piel");
+             sistema.agregarCategoriaConProductos("Fragancias");
+             sistema.asignarlePadreCategoria("Salud y Belleza", "Fragancias");
+             sistema.agregarCategoriaConProductos("Salud y Bienestar");
+             sistema.asignarlePadreCategoria("Salud y Belleza", "Salud y Bienestar");
+             sistema.agregarCategoriaConProductos("Suplementos");
+             sistema.asignarlePadreCategoria("Salud y Belleza", "Suplementos");
+
+             // Niños y Bebésistema
+             sistema.agregarCategoria("Niños y Bebésistema");
+             sistema.agregarCategoriaConProductos("Juguetes");
+             sistema.asignarlePadreCategoria("Niños y Bebésistema", "Juguetes");
+             sistema.agregarCategoriaConProductos("Ropa de Bebé");
+             sistema.asignarlePadreCategoria("Niños y Bebésistema", "Ropa de Bebé");
+             sistema.agregarCategoriaConProductos("Pañales y Higiene");
+             sistema.asignarlePadreCategoria("Niños y Bebésistema", "Pañales y Higiene");
+             sistema.agregarCategoriaConProductos("Cunas y Mobiliario");
+             sistema.asignarlePadreCategoria("Niños y Bebésistema", "Cunas y Mobiliario");
+
+             // Bebidas y Alimentos
+             sistema.agregarCategoria("Bebidas y Alimentos");
+             sistema.agregarCategoriaConProductos("Bebidas Alcohólicas");
+             sistema.asignarlePadreCategoria("Bebidas y Alimentos", "Bebidas Alcohólicas");
+             sistema.agregarCategoriaConProductos("Comestibles");
+             sistema.asignarlePadreCategoria("Bebidas y Alimentos", "Comestibles");
+             sistema.agregarCategoriaConProductos("Alimentos Gourmet");
+             sistema.asignarlePadreCategoria("Bebidas y Alimentos", "Alimentos Gourmet");
+             sistema.agregarCategoriaConProductos("Suplementos Nutricionales");
+             sistema.asignarlePadreCategoria("Bebidas y Alimentos", "Suplementos Nutricionales");
+
+             // Libros y Música
+             sistema.agregarCategoria("Libros y Música");
+             sistema.agregarCategoriaConProductos("Libros Físicos");
+             sistema.asignarlePadreCategoria("Libros y Música", "Libros Físicos");
+             sistema.agregarCategoriaConProductos("E-books");
+             sistema.asignarlePadreCategoria("Libros y Música", "E-books");
+             sistema.agregarCategoriaConProductos("Instrumentos Musicales");
+             sistema.asignarlePadreCategoria("Libros y Música", "Instrumentos Musicales");
+             sistema.agregarCategoriaConProductos("Música y Películas");
+             sistema.asignarlePadreCategoria("Libros y Música", "Música y Películas");
+
+             // Automotriz
+             sistema.agregarCategoria("Automotriz");
+             sistema.agregarCategoriaConProductos("Accesorios para Vehículos");
+             sistema.asignarlePadreCategoria("Automotriz", "Accesorios para Vehículos");
+             sistema.agregarCategoriaConProductos("Mantenimiento y Repuestos");
+             sistema.asignarlePadreCategoria("Automotriz", "Mantenimiento y Repuestos");
+             sistema.agregarCategoriaConProductos("Herramientas para el Automóvil");
+             sistema.asignarlePadreCategoria("Automotriz", "Herramientas para el Automóvil");
+
+             // Jardín y Exterior
+             sistema.agregarCategoria("Jardín y Exterior");
+             sistema.agregarCategoriaConProductos("Mobiliario de Jardín");
+             sistema.asignarlePadreCategoria("Jardín y Exterior", "Mobiliario de Jardín");
+             sistema.agregarCategoriaConProductos("Decoración para el Jardín");
+             sistema.asignarlePadreCategoria("Jardín y Exterior", "Decoración para el Jardín");
+             sistema.agregarCategoriaConProductos("Herramientas de Jardinería");
+             sistema.asignarlePadreCategoria("Jardín y Exterior", "Herramientas de Jardinería");
+             sistema.agregarCategoriaConProductos("Equipos para Piscinas");
+             sistema.asignarlePadreCategoria("Jardín y Exterior", "Equipos para Piscinas");
+
+             // Oficina y Papelería
+             sistema.agregarCategoria("Oficina y Papelería");
+             sistema.agregarCategoriaConProductos("Mobiliario de Oficina");
+             sistema.asignarlePadreCategoria("Oficina y Papelería", "Mobiliario de Oficina");
+             sistema.agregarCategoriaConProductos("Computadoras y Equipos");
+             sistema.asignarlePadreCategoria("Oficina y Papelería", "Computadoras y Equipos");
+             sistema.agregarCategoriaConProductos("Papelería");
+             sistema.asignarlePadreCategoria("Oficina y Papelería", "Papelería");
+             sistema.agregarCategoriaConProductos("Impresoras y Tintas");
+             sistema.asignarlePadreCategoria("Oficina y Papelería", "Impresoras y Tintas");
+
+             // Mascotas
+             sistema.agregarCategoria("Mascotas");
+             sistema.agregarCategoriaConProductos("Alimentos para Mascotas");
+             sistema.asignarlePadreCategoria("Mascotas", "Alimentos para Mascotas");
+             sistema.agregarCategoriaConProductos("Accesorios para Mascotas");
+             sistema.asignarlePadreCategoria("Mascotas", "Accesorios para Mascotas");
+             sistema.agregarCategoriaConProductos("Juguetes para Mascotas");
+             sistema.asignarlePadreCategoria("Mascotas", "Juguetes para Mascotas");
+             sistema.agregarCategoriaConProductos("Cuidado y Salud");
+             sistema.asignarlePadreCategoria("Mascotas", "Cuidado y Salud");
+
+             
+            
+             ;
+             sistema.agregarProveedor("Perez", "milivairo2303@gmail.com", "Andres", "Perez", fecha3 , "Bamboo.inc" , "www.bamboo.com", "123", "123");
+             sistema.agregarProveedor("Jorge", "Jorge@gmail.com", "Jorge", "Urrutia", fecha3 , "Google.inc" , "www.google.com", "123", "123");
+             
              sistema.agregarImagenUsuario("Perez", "/images/p1.jpg");
              
-             em.persist(sistema.getUsuario("Juan123"));
-             em.persist(sistema.getUsuario("albert1341"));
-             em.persist(sistema.getUsuario("agusmari"));
-             em.persist(sistema.getUsuario("Perez"));
-             em.persist(sistema.getUsuario("Jorge"));
-             
-             System.out.print(((Cliente) sistema.getUsuario("Juan123")).getImagen());
 
-             
-             try {
-				sistema.agregarCategoria("Living");
-				sistema.agregarCategoria("Tecnologia");
-				sistema.agregarCategoria("Estanterias");
-			} catch (CategoriaException e) {
-				e.printStackTrace();
-			}
-             
-             try {
-				sistema.agregarCategoriaConProductos("Tecno");
-				sistema.asignarlePadreCategoria("Living", "Tecno");
-				sistema.agregarCategoriaConProductos("Otros");
-				sistema.agregarCategoriaConProductos("Bazar");
-			} catch (CategoriaException e) {
-				e.printStackTrace();
-			}
-             
-          // Crear datos de ejemplo para DTEstado
-             DTEstado estado2 = new DTEstado("Comprada", "El cliente ha realizado la compra.");
-             DTEstado estado3 = new DTEstado("En preparación", "El proveedor está preparando el pedido.");
-             DTEstado estado4 = new DTEstado("En camino", "El pedido ha sido enviado y está en camino.");
-             DTEstado estado5 = new DTEstado("Entregada", "El cliente ha recibido el pedido.");
-
-             
-
-         
              sistema.agregarProducto("Pelota", 1, "Pelota inflable ideal", "Increible", 120, "Perez", 100);
              sistema.agregarProducto("Cargador", 2, "Cargador tipo c", "Muy bueno", 220, "Perez", 20);
+          
              sistema.agregarProducto("Television", 3, "Televisión en Excelente estado", "Muy bueno", 330, "Jorge", 120);
+             
+             sistema.agregarProductoCategoria("Tecno", 1);
+             sistema.agregarProductoCategoria("Tecno", 2);
+             sistema.agregarProductoCategoria("Bazar", 3);
+             
+             // DOS FORMAS DE AGREGAR IMAGENES
              sistema.agregarImagenesDesdeProveedor("Perez", 1, "/images/pelota1.jpg");
              sistema.getProducto(1).agregarImagen("/images/pelota2.jpg");
              
@@ -121,26 +222,10 @@ public class InitServlet extends HttpServlet {
              sistema.agregarImagenesDesdeProveedor("Perez", 2, "/images/cargador2.jpg");
              
              
-             try {
-				sistema.agregarProductoCategoria("Tecno", 1);
-				sistema.agregarProductoCategoria("Tecno", 2);
-				sistema.agregarProductoCategoria("Bazar", 3);
-			} catch (CategoriaException e) {
-				e.printStackTrace();
-			}
+             List<String> lista = sistema.getProdByCateogria("Tecno", 2).crearDT().getImagenes();
              
-             em.persist(sistema.getProducto(1));
-             em.persist(sistema.getProducto(2));
-             em.persist(sistema.getProducto(3));
-             try {
-             em.persist(sistema.getCat("Living"));
-             em.persist(sistema.getCat("Tecnologia"));
-             em.persist(sistema.getCat("Estanterias"));
-             em.persist(sistema.getCat("Tecno"));
-             em.persist(sistema.getCat("Otros"));
-             em.persist(sistema.getCat("Bazar"));
-             }catch (Exception e) {
-            	 System.out.println(e.getMessage());
+             for (String data : lista) {
+            	 System.out.print(data);
              }
              
              
@@ -162,48 +247,26 @@ public class InitServlet extends HttpServlet {
              
              
              Cliente cliente = (Cliente) sistema.getUsuario("Juan123");
-            
-     	     orden.setEstado(estado2);
-     	     orden.setEstado(estado3);
-     	     orden.setEstado(estado4);
+             orden.setEstado("Enviado", "LISTO PARA RECOGER");
              sistema.realizarCompra(orden, cliente.getNick());
              cliente.agregarCompra(orden);
              
+         	 
+
+             sistema.agregarImagenUsuario("Juan123", "/images/p1.jpg");
+             sistema.agregarImagenUsuario("albert1341", "/images/p2.jpg");
+             sistema.agregarImagenUsuario("agusmari", "/images/p3.jpg");
              
-     	        
+             List<Producto> prodlist = sistema.getAllProductos();
              
-             
-             Producto p1 = sistema.getProducto(1);
-             Comentario c = new Comentario(22, "lalala", cliente, LocalDateTime.now());
-             p1.agregarComentario(c);
-             
-             List<Producto> prodDestacados = sistema.obtenerProductosDestacados();
-             
-             for(Producto p : prodDestacados) {
-            	 System.out.print(p.getNombre());
+             for (Producto producto1 : prodlist) {
+            	 System.out.print(producto1.getNombre());
              }
              
-             em.persist(orden);
-             em.persist(c);
-             
-             em.getTransaction().commit();
-            
              
 
-
-             
-            
-             
-           
-
-          // Electrónica
-             //sistema.agregarCategoria("Electrónica");
-             //sistema.agregarCategoriaConProductos("Celulares y Accesorios");
-             //sistema.asignarlePadreCategoria("Electrónica", "Celulares y Accesorios");
-             //sistema.agregarCategoriaConProductos("Computadoras y Laptops");
-             //sistema.asignarlePadreCategoria("Electrónica", "Computadoras y Laptops");
-             //sistema.agregarCategoriaConProductos("Cámaras");      
-
-         
+         } catch (Exception exeption) {
+             exeption.printStackTrace();
+         }
     }
 }
