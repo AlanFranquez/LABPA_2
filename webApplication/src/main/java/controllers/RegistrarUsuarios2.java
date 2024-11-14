@@ -2,6 +2,11 @@ package controllers;
 
 import java.io.File;
 import java.io.IOException;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
 import com.market.svcentral.exceptions.UsuarioRepetidoException;
 import com.market.svcentral.Cliente;
 import com.market.svcentral.DTFecha;
@@ -147,6 +152,17 @@ public class RegistrarUsuarios2 extends HttpServlet {
             	sist.agregarImagenUsuario(usr.getNick(), fileName);
             	usr.setImagen(fileName);
             }
+            
+            EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+			EntityManager em = emf.createEntityManager();
+			
+			em.getTransaction().begin();
+			
+			em.persist(usr);
+			
+			em.getTransaction().commit();
+			
+			emf.close();
             
             System.out.print(sist.getUsuario(nick).getImagen());
             

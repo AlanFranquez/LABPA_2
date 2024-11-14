@@ -1,15 +1,17 @@
 package com.market.svcentral;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
-
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import com.market.svcentral.exceptions.CategoriaException;
 import com.market.svcentral.exceptions.OrdenDeCompraException;
 import com.market.svcentral.exceptions.ProductoException;
+import com.market.svcentral.exceptions.ReclamoException;
 import com.market.svcentral.exceptions.UsuarioException;
 import com.market.svcentral.exceptions.UsuarioRepetidoException;
 
@@ -129,5 +131,13 @@ public interface ISistema {
 	  
 	  public Cliente getClientePorToken(String token);
 
-	public abstract int incrementarContadorComentarios();
+	  public abstract int incrementarContadorComentarios();
+
+	  public void agregarReclamo(String texto, LocalDateTime fecha, Producto p, Proveedor prov, Cliente autor) throws ReclamoException;
+
+	  public abstract Icon resizeIcon(ImageIcon imageIcon, int i, int j);
+
+	  public abstract void cambiarEstadoOrdenconDT(DTEstado estadoComprada11, int numeroOrden, String nick);
+	
+	  public List<Producto> obtenerProductosDestacados();
 }

@@ -1,12 +1,22 @@
 package com.market.svcentral;
 import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
 import java.util.ArrayList;
 
-
+@Entity
 public class Carrito {
-
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
 	
-
+	@OneToMany(cascade = CascadeType.PERSIST)
 	private List<Item> listItems;
 
     public Carrito() {
@@ -15,6 +25,10 @@ public class Carrito {
     
     public List<Item> getProductos() {
     	return this.listItems;
+    }
+    
+    public int getId() {
+    	return this.id;
     }
 
     

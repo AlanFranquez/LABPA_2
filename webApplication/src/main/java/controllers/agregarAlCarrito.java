@@ -9,6 +9,10 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
 import com.market.svcentral.Carrito;
 import com.market.svcentral.Cliente;
 import com.market.svcentral.Factory;
@@ -49,8 +53,11 @@ public class agregarAlCarrito extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        
-        Cliente cliente = (Cliente) session.getAttribute("usuarioLogueado");
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+        EntityManager m = emf.createEntityManager();
+        m.getTransaction().begin();
+        Cliente cl = (Cliente) session.getAttribute("usuarioLogueado");
+        Cliente cliente = m.find(Cliente.class, cl.getNick());
         
         if (cliente != null && cliente.getTipo().equals("cliente")) {
      
@@ -59,14 +66,16 @@ public class agregarAlCarrito extends HttpServlet {
             String numRef = request.getParameter("numRef");
             int cantidad = Integer.parseInt(request.getParameter("cantidad"));
             
-            Producto producto = sist.getProducto(Integer.parseInt(numRef));
+            int numero = Integer.parseInt(numRef);
+           
+            Producto producto = m.find(Producto.class, numero);
             
             
             
             if (producto != null && cantidad > 0 && cantidad <= producto.getStock()) {
                 
-            	if(carrito.existeProducto(Integer.parseInt(numRef))) {
-            		Item itemExistente = carrito.getItem(Integer.parseInt(numRef));
+            	if(carrito.existeProducto(numero)) {
+            		Item itemExistente = carrito.getItem(numero);
             		
             		itemExistente.setCant(itemExistente.getCant() + cantidad);
             	} else {
@@ -86,6 +95,10 @@ public class agregarAlCarrito extends HttpServlet {
         } else {
             response.sendRedirect("formlogin");
         }
+        
+        m.getTransaction().commit();
+        m.close();
+        emf.close();
     }
 
 }

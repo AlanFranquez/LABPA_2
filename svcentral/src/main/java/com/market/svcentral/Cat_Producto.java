@@ -6,8 +6,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+
+@Entity
 public class Cat_Producto extends Categoria{
+	
+@ManyToMany(mappedBy = "categorias")
 private Map<Integer, Producto> productos;
+
+	public Cat_Producto() {
+		
+	}
 	
 	// Constructor:
 	public Cat_Producto(String nombre) {

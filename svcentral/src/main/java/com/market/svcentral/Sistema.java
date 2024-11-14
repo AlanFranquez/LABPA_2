@@ -12,12 +12,18 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import com.market.svcentral.exceptions.CategoriaException;
 import com.market.svcentral.exceptions.OrdenDeCompraException;
 import com.market.svcentral.exceptions.ProductoException;
+import com.market.svcentral.exceptions.ReclamoException;
 import com.market.svcentral.exceptions.UsuarioException;
 import com.market.svcentral.exceptions.UsuarioRepetidoException;
 
@@ -73,7 +79,7 @@ public class Sistema implements ISistema {
     }
     public void agregarCliente(String nombre, String nick, String apellido, String correo, DTFecha fecha, String contra, String confContra) throws UsuarioRepetidoException {
     	if (!verificarUnicidad(nick, correo)) {
-    		throw new UsuarioRepetidoException("Ya existe un usuario con nick: " + nick + " orden email: " + correo);
+    		throw new UsuarioRepetidoException("Ya existe un usuario con este nick o correo");
     	}
     	if (!contra.equals(confContra)) {
     		throw new UsuarioRepetidoException("Contraseñas Diferentes");
@@ -222,42 +228,73 @@ public class Sistema implements ISistema {
     
     // CASO DE USO 4: GENERAR ORDEN DE COMPRA
     public DefaultMutableTreeNode arbolProductos() {
-   	 DefaultMutableTreeNode root = new DefaultMutableTreeNode("Cats");
-   	 for (Categoria cat : arbolCategorias.values()) {
-   		 DefaultMutableTreeNode child = arbolProductos(cat);
-   		 root.add(child);
-   	 }
-   	return root;
+    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+    	EntityManager em = emf.createEntityManager();
+    	em.getTransaction().begin();
+    	
+    	DefaultMutableTreeNode root = new DefaultMutableTreeNode("Cats");
+    	List<Categoria> categorias = null;
+	
+    	try {
+    		categorias = em.createQuery("SELECT c FROM Categoria c WHERE c.padre IS NULL", Categoria.class).getResultList();
+    	} catch (Exception e) {
+    		em.getTransaction().commit();
+    		em.close();
+    		System.out.print(e);
+    	}
+   	 	for (Categoria cat : categorias) {
+   	 		DefaultMutableTreeNode child = arbolProductos(cat);
+   	 		root.add(child);
+   	 	}
+   	 	em.getTransaction().commit();
+		em.close();
+   	 	return root;
     }
+    
     public DefaultMutableTreeNode arbolProductos(Categoria cat) {
-  	 	DefaultMutableTreeNode rama = new DefaultMutableTreeNode(cat.getNombre());
-  	 	if (cat.getTipo() == "Padre") {
-  	 		Map<String, Categoria> hijos = ((Cat_Padre) cat).getHijos();
-  	 		if (hijos.size() >= 1) {
-  	 			for (Categoria hijo : hijos.values()) {
-  	 				DefaultMutableTreeNode child = arbolProductos(hijo);
-  	 				rama.add(child);
-  	 			}
-  	 		} else {
-  	 			rama.add(new DefaultMutableTreeNode("Sin Elementos"));
-  	 		}
-  	 	} else {
-  	 		Map<Integer, Producto> productos = ((Cat_Producto) cat).getProductos();
-  	 		if (productos.size() >= 1) {
-  	 			for (Producto producto : productos.values()) {
-  	 				DefaultMutableTreeNode child = new DefaultMutableTreeNode(producto.getNombre() + " - " + producto.getNumRef());
-  					rama.add(child);
-  	 			}
-  	 		} else {
-  	 			rama.add(new DefaultMutableTreeNode("Sin Elementos"));
-  	 		}
-  	 	}
-  	return rama;
-  }
+    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+    	EntityManager em = emf.createEntityManager();
+    	em.getTransaction().begin();
+    	
+        DefaultMutableTreeNode rama = new DefaultMutableTreeNode(cat.getNombre());
+        if (cat.getTipo().equals("Padre")) {
+            Map<String, Categoria> hijos = ((Cat_Padre) cat).getHijos();
+            if (hijos.size() >= 1) {
+                for (Categoria hijo : hijos.values()) {
+                    DefaultMutableTreeNode child = arbolProductos(hijo);
+                    rama.add(child);
+                }
+            } else {
+                rama.add(new DefaultMutableTreeNode("Sin Elementos"));
+            }
+        } else {
+        	List<Producto> productos = null;
+    		try {
+    			productos = em.createQuery("SELECT p FROM Producto p JOIN p.categorias c WHERE c.nombre='" + cat.getNombre() + "'", Producto.class).getResultList();
+    		} catch (Exception e) {
+    			System.out.print(e);
+    		}
+            if (productos.size() >= 1) {
+                for (Producto producto : productos) {
+                    int stock = producto.getStock(); // Obtener el stock
+                    DefaultMutableTreeNode child = new DefaultMutableTreeNode(
+                        producto.getNombre() + " - " + producto.getNumRef() + " (" + stock + " disponibles)"
+                    );
+                    rama.add(child);
+                }
+            } else {
+                rama.add(new DefaultMutableTreeNode("Sin Elementos"));
+            }
+        }
+        em.getTransaction().commit();
+		em.close();
+		return rama;
+    }
+
     public void CrearOrden() {
-    	int maxKey = ordenes.keySet().stream().max(Integer::compare).orElse(0);
-    	OrdenDeCompra orden = new OrdenDeCompra(maxKey + 1);
-    	ordenes.put(orden.getNumero(), orden);
+    	//int maxKey = ordenes.keySet().stream().max(Integer::compare).orElse(0);
+    	//OrdenDeCompra orden = new OrdenDeCompra(maxKey + 1);
+    	//ordenes.put(orden.getNumero(), orden);
     }
     public Integer obtenerStockProducto(int numRef) {
     	for (Usuario user : usuarios.values()) {
@@ -414,28 +451,46 @@ public class Sistema implements ISistema {
     }
 
     public List<DtProducto> listarALLProductos() throws ProductoException {
+    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+    	EntityManager em = emf.createEntityManager();
+    	
     	List<DtProducto> listaProductos = new ArrayList<>();
     	List<Integer> numRefs = new ArrayList<Integer>();
     	
-    	for (Map.Entry<String, Categoria> entry : this.categorias.entrySet()) {
-    		Categoria cat = entry.getValue();
+		List<Categoria> categorias = null;
+		em.getTransaction().begin();
+		
+		try {
+			categorias = em.createQuery("SELECT c FROM Categoria c WHERE c.tipo='Producto'", Categoria.class).getResultList();
+		} catch (Exception e) {
+			em.getTransaction().commit();
+	        em.close();
+			System.out.print(e);
+		}
+		System.out.print("Categorias traidas de la base de datos correctamente");
+		
+    	for (Categoria cat : categorias) {
+    		List<Producto> productos = null;
+    		try {
+    			productos = em.createQuery("SELECT p FROM Producto p JOIN p.categorias c WHERE c.nombre='" + cat.getNombre() + "'", Producto.class).getResultList();
+    		} catch (Exception e) {
+    			System.out.print(e);
+    		}
     		
-    		if (cat.getTipo() == "Producto") {
-    			Cat_Producto cProd = (Cat_Producto) cat;
-    			List<DtProducto> listaPerProducto = cProd.listarProductos();
-    			
-    			if (listaPerProducto.isEmpty()) {
-    				continue;
-    			}
-    			
-    			for (DtProducto dtProducto: listaPerProducto) {
-    				if (!numRefs.contains(dtProducto.getNumRef())) {
-                		numRefs.add(dtProducto.getNumRef());
-                		listaProductos.add(dtProducto);
-                	}
-    			}
+   			if (productos.isEmpty()) {
+    			continue;
+    		}
+    		
+    		for (Producto prod: productos) {
+    			DtProducto dtProducto = prod.crearDT();
+   				if (!numRefs.contains(dtProducto.getNumRef())) {
+               		numRefs.add(dtProducto.getNumRef());
+               		listaProductos.add(dtProducto);
+               	}
     		}
     	}
+    	em.getTransaction().commit();
+        em.close();
     	if (listaProductos.isEmpty()) {
     		throw new ProductoException("No se ha encontrado ningun producto para listar");
     	}
@@ -671,7 +726,8 @@ public class Sistema implements ISistema {
 	 		Cliente client = (Cliente) this.usuarios.get(cliente);
 	 		
 	 		if (client != null) {
-	 			this.ordenes.get(numero).setEstado(estado, com);
+	 			DTEstado nuevoEstado = new DTEstado(estado, com);
+	 			this.ordenes.get(numero).setEstado(nuevoEstado);
 	 			
 	 			String recipientEmail = client.getCorreo();
 	 	        //String recipientEmail = "maria.vairo@estudiantes.utec.edu.uy";
@@ -699,6 +755,51 @@ public class Sistema implements ISistema {
 	 		
 	 		System.out.print("no se pudo cambiar el estado");
 	 	}
+	 
+	 public void cambiarEstadoOrdenconDT(DTEstado est, int numero, String cliente) {
+		 Cliente client = (Cliente) this.usuarios.get(cliente);
+	 		
+	 		if (client != null) {
+	 			this.ordenes.get(numero).setEstado(est);
+	 			
+	 			String recipientEmail = client.getCorreo();
+	 	        //String recipientEmail = "maria.vairo@estudiantes.utec.edu.uy";
+	 			System.out.println("Correo del cliente: " + recipientEmail);
+
+
+	 	        try {
+	 	            if (recipientEmail != null && !recipientEmail.isEmpty()) {
+	 	                // Enviar el correo de bienvenida
+	 	            	System.out.println("Estado: " + est.getEstado());
+	 	            	System.out.println("recipientEmail: " + recipientEmail);
+	 	                emailService.sendChangeState(recipientEmail, est.getEstado());
+	 	                System.out.println("Correo de cambio de estado enviado a " + recipientEmail);
+	 	            } else {
+	 	                System.out.println("Cambio de estado Error: No se proporcionó una dirección de correo válida.");
+	 	            }
+	 	        } catch (Exception e) {
+	 	            System.out.println("Error al intentar enviar el correo de cambio de estado: " + e.toString());
+	 	            e.printStackTrace();  // Imprime el rastro completo de la excepción en la consola
+	 	            // e.printStackTrace();
+	 	        }
+	 	        
+	 			return;
+	 		}
+	 		
+	 		System.out.print("no se pudo cambiar el estado");
+	 }
+	 	
+	 // Caso de uso: alta reclamo
+	 	
+	 	 	public void agregarReclamo(String texto, LocalDateTime fecha, Producto p, Proveedor prov, Cliente autor) throws ReclamoException {
+	 	 		
+	 	 		
+	 	 		Reclamo r = new Reclamo(texto, fecha, p, prov, autor);
+	 	 		
+	 	 		
+	 	 		
+	 	 		this.getProducto(p.getNumRef()).agregarReclamo(r);
+	 	 	}
 	 
 	 
 	 public void notificarComentario(Producto producto, Comentario nuevoComentario, Comentario comentarioRespondido) {
@@ -872,4 +973,36 @@ public class Sistema implements ISistema {
 	 public synchronized int incrementarContadorComentarios() {
 	     return ++contadorComentarios;
 	 }
+
+	 public Icon resizeIcon(ImageIcon icon, int width, int height) {
+	        Image img = icon.getImage();
+	        Image resizedImage = img.getScaledInstance(width, height,  java.awt.Image.SCALE_SMOOTH);
+	        return new ImageIcon(resizedImage);
+	    }
+	 
+	 // FILTRO PRODUCTOS DESTACADOS
+	 public List<Producto> obtenerProductosDestacados() {
+		 	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+	        EntityManager em = emf.createEntityManager();
+	        
+	        try {
+	            // Consulta JPQL para obtener productos ordenados por 'comprasUnicas' de mayor a menor
+	            String jpql = "SELECT p FROM Producto p ORDER BY p.cantidadUnicaComprada DESC";
+	            Query query = em.createQuery(jpql, Producto.class);
+	            
+	            
+	            query.setMaxResults(10);
+	            
+	           
+	            List<Producto> productosDestacados = query.getResultList();
+	            
+	            return productosDestacados;
+	        } finally {
+	            em.close(); 
+	            emf.close();
+	        }
+	        
+	    }
+	 
+	 
 }

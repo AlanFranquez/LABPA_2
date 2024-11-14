@@ -1,22 +1,65 @@
 package com.market.svcentral;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.persistence.CascadeType;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+@Entity
 public class Producto {
-	private Map<String, Cat_Producto> categorias;
+	@Id
+	private Integer numRef;
+
+	@OneToMany
+	@JoinColumn(name = "producto_id")
+	private List <Puntaje> puntajes;
+	
+	@ManyToMany
+	private List<Cat_Producto> categorias;
+	
+	@OneToMany(cascade = CascadeType.PERSIST)
 	private List <Comentario> comentarios;
+	
+	
+	
+	
+	@ManyToOne
+	@JoinColumn(name = "proveedor_nick")
 	private Proveedor proveedor;
 	
-	private String nombre, descripcion;
+	private String nombre;
+	
+	private String descripcion;
+	
 	private float precio;
-	private Integer numRef, stock;
+	
+	
+	private Integer stock;
+	
 	private String especificaciones;
+	
+	@ElementCollection
 	private List<String> imagenes;
+	
 	private int cantidadCompras = 0; 
+	
+	private int cantidadUnicaComprada = 0; // para productos destacados
+	
+	@OneToMany(cascade = CascadeType.PERSIST, mappedBy = "producto")
+	List <Reclamo> reclamos;
+	
+	public Producto() {
+		
+	}
 	
 	// Constructor:
 	public Producto(String nombre, String descripcion, float precio, Integer numRef, String especificaciones, Proveedor prov, int stock) {
@@ -26,18 +69,16 @@ public class Producto {
 		this.numRef = numRef;
 		this.stock = stock;
 		this.especificaciones = especificaciones;
-		this.categorias = new HashMap<>();
+		this.categorias = new ArrayList<>();
 		this.proveedor = prov;
 		this.comentarios = new ArrayList<Comentario>();
 		this.imagenes = new ArrayList<>();
+		this.puntajes = new ArrayList<>();
+		this.reclamos = new ArrayList<Reclamo>();
 	}
 	
-	public void agregarComentario(Comentario comentario) {
-	    this.comentarios.add(comentario);
-	}
-
-	public int getCantidadComprada() {
-		return this.cantidadCompras;
+	public List<Reclamo> getReclamos() {
+		return this.reclamos;
 	}
 	
 	public void setCantidadComprada(int cantidadComprada) {
@@ -50,6 +91,22 @@ public class Producto {
 	
 	public List<String> getImagenes() {
 		return this.imagenes;
+	}
+	
+	public void agregarReclamo(Reclamo r) {
+		this.reclamos.add(r);
+	}
+	
+	public Integer getComprasUnicas() {
+		return this.cantidadUnicaComprada;
+	}
+	
+	public void setComprasUnicas() {
+		this.cantidadUnicaComprada++;
+	}
+	
+	public void agregarComentario(Comentario comentario) {
+		this.comentarios.add(comentario);
 	}
 	
 	public void agregarRespuesta(int numeroComentario, Comentario respuesta) {
@@ -91,13 +148,13 @@ public class Producto {
 
 	
 	public void agregarCategorias(Cat_Producto cat) {
-		categorias.put(cat.getNombre(), cat);
+		categorias.add(cat);
 	}
 	public void eliminarCategorias() {
 		categorias.clear();
 	}
 	
-	public Map<String, Cat_Producto> getCategorias() {
+	public List<Cat_Producto> getCategorias() {
 		return this.categorias;
 	}
 	
@@ -113,7 +170,6 @@ public class Producto {
 	public String getDescripcion() {
 		return descripcion;
 	}
-
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
 	}
@@ -157,9 +213,9 @@ public class Producto {
     	int contador = 0;
     	String[] arrString = new String[contador];
     		
-    	for (Entry<String, Cat_Producto> entry : this.categorias.entrySet()) {
+    	for (Categoria entry: this.categorias) {
     		
-    		Categoria cat = entry.getValue();
+    		Categoria cat = entry;
     		Cat_Producto cProducto = (Cat_Producto) cat;
     		arrString[contador++] = cProducto.getNombre();
     		
@@ -184,7 +240,7 @@ public class Producto {
 		if (this.categorias.isEmpty()) {
 			catStr = "El producto no tiene categorias asignadas";
 		}
-		for (Cat_Producto cat : this.categorias.values()) {	
+		for (Cat_Producto cat : this.categorias) {	
 			catStr = catStr + "<br>" + tab + cat.getNombre();
 			Cat_Padre cPadre = cat.getPadre();
             while (cPadre != null) {
@@ -193,6 +249,27 @@ public class Producto {
             }
 		}
 		catStr = catStr + "</html>";
-		return new DtProducto(this.getNombre(), this.getDescripcion(), this.getPrecio(), this.getNumRef(), this.getEspecificaciones(), this.getProveedor(), catStr, this.getImagenes(), this.getStock(), this.getComentarios(), this.getCantidadComprada());
+		return new DtProducto(this.getNombre(), this.getDescripcion(), this.getPrecio(), this.getNumRef(), this.getEspecificaciones(), this.getProveedor(), catStr, this.getImagenes(), this.getStock(), this.getComentarios(), this.getCantidadComprada(), this.getReclamos(), this.obtenerPuntajes());
+	}
+
+	public int getCantidadComprada() {
+		return this.cantidadCompras;
+	}
+	
+	public void agregarPuntaje(Puntaje puntaje) {
+		this.puntajes.add(puntaje);
+	}
+	public List<Puntaje> obtenerPuntajes() {
+		return this.puntajes;
+	}
+	public int[] obtenerPuntaje() {
+		int total = 0;
+		int varios[] = {0, 0, 0, 0, 0, 0};
+		for (Puntaje p : this.puntajes) {
+			varios[p.getValor()] += 1;
+			total += p.getValor();
+		}
+		varios[0] = total / this.puntajes.size();
+		return varios;
 	}
 }
