@@ -246,16 +246,8 @@ if (usr != null && usr.getTipo().equals("proveedor")) {
 
 
 
-		<%
-		}
-		%>
+	
 
-
-
-
-		<%
-		}
-		%>
 
 
 	</section>
