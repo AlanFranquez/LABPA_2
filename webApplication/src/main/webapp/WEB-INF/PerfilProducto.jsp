@@ -218,41 +218,61 @@ if (usr != null && usr.getTipo().equals("proveedor")) {
 				%>
 	</main>
 
-<div>
-		<%
-		int[] puntajes = prod.obtenerPuntaje();
-		%>
-		<h3>Puntaje Medio: <%=puntajes[0]%></h3>
-		<ul>
-		<li>1:<%=puntajes[1]%></li>
-		<li>2:<%=puntajes[2]%></li>
-		<li>3:<%=puntajes[3]%></li>
-		<li>4:<%=puntajes[4]%></li>
-		<li>5:<%=puntajes[5]%></li>
-		</ul>
-	</div>
+<div class="container my-4 p-3 border rounded shadow-sm">
+    <%
+    int[] puntajes = prod.obtenerPuntaje();
+    %>
+    <h3 class="text-primary">Puntaje Medio: <span class="fw-bold"><%=puntajes[0]%></span></h3>
+    
+    <ul class="list-group my-3">
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            1 Estrella 
+            <span class="badge bg-primary rounded-pill"><%=puntajes[1]%></span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            2 Estrellas 
+            <span class="badge bg-secondary rounded-pill"><%=puntajes[2]%></span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            3 Estrellas 
+            <span class="badge bg-success rounded-pill"><%=puntajes[3]%></span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            4 Estrellas 
+            <span class="badge bg-warning rounded-pill"><%=puntajes[4]%></span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            5 Estrellas 
+            <span class="badge bg-danger rounded-pill"><%=puntajes[5]%></span>
+        </li>
+    </ul>
+</div>
 
 	<%
 	if (usr != null && usr.getTipo().equals("cliente") && comproProducto) {
 	%>
-	<div class="col-auto star-widget">
-		<form id="puntaje" action="agregarValoracion" method="post">
-			<span id="valoracion">Valoración</span><br>
-	        <input type="radio" name="rate" id="rate-5" value="5">
-	        <label for="rate-5" class="bi bi-star"></label>
-	        <input type="radio" name="rate" id="rate-4" value="4">
-	        <label for="rate-4" class="bi bi-star"></label>
-	        <input type="radio" name="rate" id="rate-3" value="3">
-	        <label for="rate-3" class="bi bi-star"></label>
-	        <input type="radio" name="rate" id="rate-2" value="2">
-	        <label for="rate-2" class="bi bi-star"></label>
-	        <input type="radio" name="rate" id="rate-1" value="1">
-	        <label for="rate-1" class="bi bi-star"></label>
-	        <input type="hidden" name="dtprod" value="<%=id%>">
-	        <button type="submit" class="btn btn-primary" id="submit-btn" disabled>Enviar</button>
-	        <header></header>
-		</form>
-	</div>
+	<div class="container my-4 p-3 border rounded shadow-sm">
+    <span id="valoracion" class="d-block mb-3 fs-5 fw-bold">Valoración</span>
+    <div class="col-auto star-widget">
+        <form id="puntaje" action="agregarValoracion" method="post" style="display: inline-block; text-align: center;">
+            <input type="radio" name="rate" id="rate-5" value="5">
+            <label for="rate-5" class="bi bi-star"></label>
+            <input type="radio" name="rate" id="rate-4" value="4">
+            <label for="rate-4" class="bi bi-star"></label>
+            <input type="radio" name="rate" id="rate-3" value="3">
+            <label for="rate-3" class="bi bi-star"></label>
+            <input type="radio" name="rate" id="rate-2" value="2">
+            <label for="rate-2" class="bi bi-star"></label>
+            <input type="radio" name="rate" id="rate-1" value="1">
+            <label for="rate-1" class="bi bi-star"></label>
+            <input type="hidden" name="dtprod" value="<%=id%>">
+            <button type="submit" class="btn btn-primary mt-3" id="submit-btn" disabled>Enviar</button>
+        </form>
+    </div>
+</div>
+
+
+
 	<% } %>
 
 

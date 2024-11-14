@@ -168,7 +168,7 @@ public class RealizarCompra extends HttpServlet {
             DTEstado estadoComprada = new DTEstado("Comprada", "La compra ha sido realizada correctamente.");
             
             // Asignar el estado a la orden de compra
-            ordenCompra.agregarEstado("Comprada", "La compra ha sido realizada correctamente.");
+            ordenCompra.setEstado(estadoComprada);
             
             sist.realizarCompra(ordenCompra, cliente.getNick());
             cliente.agregarCompra(ordenCompra);

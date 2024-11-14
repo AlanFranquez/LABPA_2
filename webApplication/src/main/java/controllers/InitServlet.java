@@ -103,7 +103,6 @@ public class InitServlet extends HttpServlet {
 			}
              
           // Crear datos de ejemplo para DTEstado
-             DTEstado estado2 = new DTEstado("Comprada", "El cliente ha realizado la compra.");
              DTEstado estado3 = new DTEstado("En preparación", "El proveedor está preparando el pedido.");
              DTEstado estado4 = new DTEstado("En camino", "El pedido ha sido enviado y está en camino.");
              DTEstado estado5 = new DTEstado("Entregada", "El cliente ha recibido el pedido.");
@@ -163,7 +162,6 @@ public class InitServlet extends HttpServlet {
              
              Cliente cliente = (Cliente) sistema.getUsuario("Juan123");
             
-     	     orden.setEstado(estado2);
      	     orden.setEstado(estado3);
      	     orden.setEstado(estado4);
              sistema.realizarCompra(orden, cliente.getNick());
