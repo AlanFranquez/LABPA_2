@@ -17,9 +17,13 @@ public class DTOrdenDeCompra {
     private LocalDateTime fecha;
     @OneToMany(cascade = CascadeType.PERSIST)
     private Map<Integer, Item> items;
-    @OneToMany(cascade = CascadeType.PERSIST)
     private List<DTEstado> estados;
 
+    //constructor OrdenCompra
+    public DTOrdenDeCompra(){
+    	
+    }
+    
     public DTOrdenDeCompra(int numero, Map<Integer, Item> items, float precioTotal, String estado) {
         this.fecha = LocalDateTime.now();
         this.numero = numero;
