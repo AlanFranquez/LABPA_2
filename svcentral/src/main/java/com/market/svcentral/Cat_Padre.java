@@ -3,12 +3,13 @@ package com.market.svcentral;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 
 @Entity
 public class Cat_Padre extends Categoria{
-	@OneToMany(mappedBy = "padre")
+	@OneToMany(mappedBy = "padre", cascade = CascadeType.PERSIST)
 	private Map<String, Categoria> hijos;
 	
 	// Constructor:

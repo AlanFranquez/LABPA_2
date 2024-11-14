@@ -617,7 +617,10 @@ public class Presentacion {
                 registrarButton.setBounds(20, 200, 240, 25);
                 panel.add(registrarButton);
                 
+                EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+                EntityManager em = emf.createEntityManager();
                 
+                em.getTransaction().begin();
                 registrarButton.addActionListener(new ActionListener() {
 					
 					@Override
@@ -632,19 +635,21 @@ public class Presentacion {
 							return;
 						}
 						
-						try {
-							s.existeCategoria(textCat);
-							
-						} catch(Exception e1) {
-							JOptionPane.showMessageDialog(null, e1.getMessage());
+						
+						if(em.find(Categoria.class, textCat) != null) {
+							JOptionPane.showMessageDialog(null, "Ya existe esta categoría");
 							return;
 						}
 						
 						try {
 							if(tieneProds) {
 								s.agregarCategoriaConProductos(textCat);
+							
 								if(tienePadre) {
 									s.asignarlePadreCategoria(nombreCatPadre, textCat);
+									
+									
+									
 								}
 								
 							} else {
@@ -652,7 +657,11 @@ public class Presentacion {
 								if(tienePadre) {
 									s.asignarlePadreCategoria(nombreCatPadre, textCat);
 								}
+								
 							}
+							
+							
+							em.persist(s.getCat(textCat));
 							
 						}	catch(Exception e1) {
 							JOptionPane.showMessageDialog(null, e1.getMessage());
@@ -660,8 +669,9 @@ public class Presentacion {
 						}
 						
 						
-						
-						
+						em.getTransaction().commit();
+						em.close();
+						emf.close();
 						JOptionPane.showMessageDialog(null, "Categoria agregada con exito");
 						// Actualizar campos
 						categoriaField.setText("");
