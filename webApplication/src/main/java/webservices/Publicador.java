@@ -1,5 +1,5 @@
 
-package com.market.svcentral;
+package webservices;
 
 import javax.jws.WebMethod;
 import javax.jws.WebResult;
@@ -14,7 +14,7 @@ import javax.xml.ws.Action;
  * Generated source version: 2.2
  * 
  */
-@WebService(name = "Publicador", targetNamespace = "http://svcentral.market.com/")
+@WebService(name = "Publicador", targetNamespace = "http://services/")
 @SOAPBinding(style = SOAPBinding.Style.RPC)
 public interface Publicador {
 
@@ -26,7 +26,7 @@ public interface Publicador {
      */
     @WebMethod
     @WebResult(partName = "return")
-    @Action(input = "http://svcentral.market.com/Publicador/saludarRequest", output = "http://svcentral.market.com/Publicador/saludarResponse")
+    @Action(input = "http://services/Publicador/saludarRequest", output = "http://services/Publicador/saludarResponse")
     public String saludar();
 
 }

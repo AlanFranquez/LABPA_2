@@ -13,12 +13,11 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import webservices.Publicador;
 
 import com.market.svcentral.Factory;
 import com.market.svcentral.ISistema;
 import com.market.svcentral.Producto;
-import com.market.svcentral.Publicador;
-import com.market.svcentral.PublicadorService;
 import com.market.svcentral.Usuario;
 import com.market.svcentral.Carrito;
 import com.market.svcentral.Cliente;
@@ -46,11 +45,10 @@ public class Home extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("Entrando en el método doGet.");
         
-        PublicadorService p = new PublicadorService();
-        
-        Publicador pp = p.getPublicadorPort();
+        webservices.PublicadorService p = new webservices.PublicadorService();
+        Publicador port = p.getPublicadorPort();
 		
-		System.out.print("SALUDANDO DESDE LA WEBAPP --> " + pp.saludar());
+		System.out.print("SALUDANDO DESDE LA WEBAPP --> " + port.saludar());
 
         HttpSession session = request.getSession(false);
         if (session != null) {

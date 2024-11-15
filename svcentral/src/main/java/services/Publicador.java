@@ -1,4 +1,4 @@
-package com.market.svcentral;
+package services;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
