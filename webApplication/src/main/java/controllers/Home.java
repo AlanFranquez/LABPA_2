@@ -13,12 +13,11 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
+import webservices.PublicadorService;
+import webservices.Producto;
+import webservices.Publicador;
 import com.market.svcentral.Factory;
 import com.market.svcentral.ISistema;
-import com.market.svcentral.Producto;
-import com.market.svcentral.Publicador;
-import com.market.svcentral.PublicadorService;
 import com.market.svcentral.Usuario;
 import com.market.svcentral.Carrito;
 import com.market.svcentral.Cliente;
@@ -45,24 +44,24 @@ public class Home extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("Entrando en el método doGet.");
-        
         PublicadorService p = new PublicadorService();
+    	
+    	Publicador port = p.getPublicadorPort();
+    	
+    	System.out.print(port.saludar());
+    	
+    	System.out.print("PRODUCTO DESDE EL WEBSERVICE "+ port.obtenerProducto(1).getNombre());
         
-        Publicador pp = p.getPublicadorPort();
-		
-		System.out.print("SALUDANDO DESDE LA WEBAPP --> " + pp.saludar());
-
+        
         HttpSession session = request.getSession(false);
         if (session != null) {
             System.out.println("Sesión obtenida correctamente.");
         } else {
             System.out.println("No hay sesión activa.");
         }
-     // Determinar si el dispositivo es móvil
         String userAgent = request.getHeader("User-Agent");
         boolean isMobile = isMobileDevice(userAgent);
         
-     // Redirigir según el dispositivo
         if (isMobile) {
             System.out.println("Redirigiendo a vista MOBILE logueado.");
             response.sendRedirect("homeMOBILE");
@@ -78,8 +77,13 @@ public class Home extends HttpServlet {
             em.getTransaction().begin();
             System.out.println("Iniciando transacción de base de datos.");
 
-            productos = em.createQuery("SELECT p FROM Producto p", Producto.class).getResultList();
-            System.out.println("Consulta a la base de datos ejecutada. Número de productos: " + (productos != null ? productos.size() : "0"));
+            productos = port.listarProductos();
+            
+            System.out.print("COMPROBANDO");
+            for(Producto lala : productos) 
+            {
+            	System.out.print(lala.getNombre());
+            }
         } catch (Exception e) {
             System.out.println("Error al ejecutar la consulta a la base de datos.");
             e.printStackTrace();
@@ -93,6 +97,7 @@ public class Home extends HttpServlet {
             request.getRequestDispatcher("/WEB-INF/inicioNoLogueado.jsp").forward(request, response);
             return;
         }
+        
 
         // Usuario logueado
         Usuario u = (Usuario) session.getAttribute("usuarioLogueado");
