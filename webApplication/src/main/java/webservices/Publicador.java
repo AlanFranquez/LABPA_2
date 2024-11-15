@@ -54,6 +54,21 @@ public interface Publicador {
 
     /**
      * 
+     * @param arg0
+     * @return
+     *     returns java.lang.String
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "verificarClienteYCrearCarrito", targetNamespace = "http://services.market.com/", className = "webservices.VerificarClienteYCrearCarrito")
+    @ResponseWrapper(localName = "verificarClienteYCrearCarritoResponse", targetNamespace = "http://services.market.com/", className = "webservices.VerificarClienteYCrearCarritoResponse")
+    @Action(input = "http://services.market.com/Publicador/verificarClienteYCrearCarritoRequest", output = "http://services.market.com/Publicador/verificarClienteYCrearCarritoResponse")
+    public String verificarClienteYCrearCarrito(
+        @WebParam(name = "arg0", targetNamespace = "")
+        String arg0);
+
+    /**
+     * 
      * @return
      *     returns java.lang.String
      */
@@ -63,5 +78,110 @@ public interface Publicador {
     @ResponseWrapper(localName = "saludarResponse", targetNamespace = "http://services.market.com/", className = "webservices.SaludarResponse")
     @Action(input = "http://services.market.com/Publicador/saludarRequest", output = "http://services.market.com/Publicador/saludarResponse")
     public String saludar();
+
+    /**
+     * 
+     * @param arg0
+     * @return
+     *     returns webservices.Carrito
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "obtenerCarritoDeCliente", targetNamespace = "http://services.market.com/", className = "webservices.ObtenerCarritoDeCliente")
+    @ResponseWrapper(localName = "obtenerCarritoDeClienteResponse", targetNamespace = "http://services.market.com/", className = "webservices.ObtenerCarritoDeClienteResponse")
+    @Action(input = "http://services.market.com/Publicador/obtenerCarritoDeClienteRequest", output = "http://services.market.com/Publicador/obtenerCarritoDeClienteResponse")
+    public Carrito obtenerCarritoDeCliente(
+        @WebParam(name = "arg0", targetNamespace = "")
+        String arg0);
+
+    /**
+     * 
+     * @param arg0
+     * @return
+     *     returns java.lang.Boolean
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "comprobarCliente", targetNamespace = "http://services.market.com/", className = "webservices.ComprobarCliente")
+    @ResponseWrapper(localName = "comprobarClienteResponse", targetNamespace = "http://services.market.com/", className = "webservices.ComprobarClienteResponse")
+    @Action(input = "http://services.market.com/Publicador/comprobarClienteRequest", output = "http://services.market.com/Publicador/comprobarClienteResponse")
+    public Boolean comprobarCliente(
+        @WebParam(name = "arg0", targetNamespace = "")
+        String arg0);
+
+    /**
+     * 
+     * @param arg0
+     * @return
+     *     returns webservices.Usuario
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "obtenerUsuario", targetNamespace = "http://services.market.com/", className = "webservices.ObtenerUsuario")
+    @ResponseWrapper(localName = "obtenerUsuarioResponse", targetNamespace = "http://services.market.com/", className = "webservices.ObtenerUsuarioResponse")
+    @Action(input = "http://services.market.com/Publicador/obtenerUsuarioRequest", output = "http://services.market.com/Publicador/obtenerUsuarioResponse")
+    public Usuario obtenerUsuario(
+        @WebParam(name = "arg0", targetNamespace = "")
+        String arg0);
+
+    /**
+     * 
+     * @param arg0
+     * @return
+     *     returns webservices.Cliente
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "obtenerCliente", targetNamespace = "http://services.market.com/", className = "webservices.ObtenerCliente")
+    @ResponseWrapper(localName = "obtenerClienteResponse", targetNamespace = "http://services.market.com/", className = "webservices.ObtenerClienteResponse")
+    @Action(input = "http://services.market.com/Publicador/obtenerClienteRequest", output = "http://services.market.com/Publicador/obtenerClienteResponse")
+    public Cliente obtenerCliente(
+        @WebParam(name = "arg0", targetNamespace = "")
+        String arg0);
+
+    /**
+     * 
+     * @param arg1
+     * @param arg0
+     */
+    @WebMethod
+    @RequestWrapper(localName = "setCarritoCliente", targetNamespace = "http://services.market.com/", className = "webservices.SetCarritoCliente")
+    @ResponseWrapper(localName = "setCarritoClienteResponse", targetNamespace = "http://services.market.com/", className = "webservices.SetCarritoClienteResponse")
+    @Action(input = "http://services.market.com/Publicador/setCarritoClienteRequest", output = "http://services.market.com/Publicador/setCarritoClienteResponse")
+    public void setCarritoCliente(
+        @WebParam(name = "arg0", targetNamespace = "")
+        String arg0,
+        @WebParam(name = "arg1", targetNamespace = "")
+        Carrito arg1);
+
+    /**
+     * 
+     * @param arg0
+     * @return
+     *     returns java.util.List<java.lang.String>
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "obtenerImagenesProducto", targetNamespace = "http://services.market.com/", className = "webservices.ObtenerImagenesProducto")
+    @ResponseWrapper(localName = "obtenerImagenesProductoResponse", targetNamespace = "http://services.market.com/", className = "webservices.ObtenerImagenesProductoResponse")
+    @Action(input = "http://services.market.com/Publicador/obtenerImagenesProductoRequest", output = "http://services.market.com/Publicador/obtenerImagenesProductoResponse")
+    public List<String> obtenerImagenesProducto(
+        @WebParam(name = "arg0", targetNamespace = "")
+        Producto arg0);
+
+    /**
+     * 
+     * @param arg0
+     * @return
+     *     returns java.lang.String
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "obtenerPrimeraImagenProducto", targetNamespace = "http://services.market.com/", className = "webservices.ObtenerPrimeraImagenProducto")
+    @ResponseWrapper(localName = "obtenerPrimeraImagenProductoResponse", targetNamespace = "http://services.market.com/", className = "webservices.ObtenerPrimeraImagenProductoResponse")
+    @Action(input = "http://services.market.com/Publicador/obtenerPrimeraImagenProductoRequest", output = "http://services.market.com/Publicador/obtenerPrimeraImagenProductoResponse")
+    public String obtenerPrimeraImagenProducto(
+        @WebParam(name = "arg0", targetNamespace = "")
+        Producto arg0);
 
 }

@@ -43,6 +43,7 @@ import javax.xml.bind.annotation.XmlType;
     "nombre"
 })
 @XmlSeeAlso({
+    Cliente.class,
     Proveedor.class
 })
 public class Usuario {

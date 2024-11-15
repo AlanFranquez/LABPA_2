@@ -14,32 +14,20 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import webservices.PublicadorService;
+import webservices.Carrito;
 import webservices.Producto;
 import webservices.Publicador;
-import com.market.svcentral.Factory;
-import com.market.svcentral.ISistema;
-import com.market.svcentral.Usuario;
-import com.market.svcentral.Carrito;
-import com.market.svcentral.Cliente;
+import webservices.Usuario;
 
 @WebServlet("/home")
 public class Home extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private ISistema sist;
-
+    
     public Home() {
         super();
     }
 
-    @Override
-    public void init() throws ServletException {
-        try {
-            sist = Factory.getSistema();
-            System.out.println("ISistema inicializado correctamente.");
-        } catch (Exception e) {
-            throw new ServletException("No se pudo inicializar ISistema", e);
-        }
-    }
+ 
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -103,26 +91,26 @@ public class Home extends HttpServlet {
         Usuario u = (Usuario) session.getAttribute("usuarioLogueado");
         
         // Consultar el usuario logueado en la base de datos
-        Usuario usuarioLogueado = em.find(Usuario.class, u.getNick());
+        Usuario usuarioLogueado = port.obtenerUsuario(u.getNick());
         if (usuarioLogueado != null) {
             System.out.println("Usuario logueado encontrado en la base de datos.");
         } else {
             System.out.println("Usuario no encontrado en la base de datos.");
         }
 
-        if (usuarioLogueado instanceof Cliente) {
-            Cliente clienteLogueado = (Cliente) usuarioLogueado;
+        if (port.comprobarCliente(usuarioLogueado.getNick())) {
+            webservices.Cliente clienteLogueado = port.obtenerCliente(usuarioLogueado.getNick());
             System.out.println("Cliente logueado: " + clienteLogueado.getNick());
 
             // Verificar si el cliente tiene carrito
-            if (clienteLogueado.getCarrito() == null) {
+            if (port.obtenerCarritoDeCliente(clienteLogueado.getNick()) ==  null) {
                 System.out.println("Carrito no encontrado para el cliente, creando nuevo carrito.");
                 Carrito nuevoCarrito = new Carrito();
-                clienteLogueado.setCarrito(nuevoCarrito);
-                em.persist(nuevoCarrito);
+                port.setCarritoCliente(usuarioLogueado.getNick(), nuevoCarrito);
+                
                 System.out.println("Nuevo carrito creado y persistido.");
             } else {
-                System.out.println("Carrito existente para el cliente: " + clienteLogueado.getCarrito().getId());
+                System.out.println("El Cliente ya tiene carrito");
             }
 
             session.setAttribute("carrito", clienteLogueado.getCarrito());
@@ -136,7 +124,6 @@ public class Home extends HttpServlet {
 
         // Establecer productos para la vista
         if (productos != null && !productos.isEmpty()) {
-            System.out.println("Productos disponibles: " + productos.size());
             request.setAttribute("prods", productos);
         } else {
             System.out.println("No hay productos disponibles para mostrar.");
