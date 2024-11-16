@@ -1,12 +1,13 @@
+<%@page import="services.Proveedor"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
-<%@page import="com.market.svcentral.Sistema"%>
-<%@page import="com.market.svcentral.Usuario"%>
-<%@page import="com.market.svcentral.Producto"%>
-<%@page import="com.market.svcentral.DTCliente" %>
-<%@page import="com.market.svcentral.DtProducto" %>
-<%@page import="com.market.svcentral.Carrito" %>
-<%@page import="com.market.svcentral.Cliente" %>
+<%@page import="services.Usuario"%>
+<%@page import="services.Producto"%>
+<%@page import="services.Carrito" %>
+<%@page import="services.Proveedor" %>
+<%@page import="services.Cliente" %>
+<%@page import="services.Publicador" %>
+<%@page import="services.PublicadorService" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
 
@@ -22,20 +23,22 @@
 </head>
 <body>
 
-	<%
-	String estadoUser = (String) request.getAttribute("estado");
+<%
+	String estadoUser = (String) session.getAttribute("estado");
     Usuario usr = (Usuario) request.getAttribute("usuario");
-	
+    
+    PublicadorService pub = new PublicadorService();
+	Publicador port = pub.getPublicadorPort();
     
     List<Producto> prods = (List<Producto>) request.getAttribute("prods");
     Cliente cl = null;
-    if (usr != null && usr.getTipo().equals("cliente")) {
+    if (usr != null && usr instanceof Cliente) {
         cl = (Cliente) usr; 
     }
 
     Carrito carr = null;
     if (cl != null) {
-        carr = cl.getCarrito(); 
+        carr = cl.getCarrito();
     } else {
         System.out.println("El cliente no tiene un carrito asignado.");
     }
@@ -60,11 +63,11 @@
             <ul class="navbar-nav align-items-center">
                 <li class="nav-item">
                    <% 
-if (usr != null && usr.getTipo().equals("proveedor")) { 
+if (usr != null && usr instanceof Proveedor) { 
 %> 
     <a class="nav-link" href="perfilProveedor?nickname=<%=usr.getNick()%>">Perfil</a> 
 <% 
-} else if (usr != null && usr.getTipo().equals("cliente")) { 
+} else if (usr != null && usr instanceof Cliente) { 
 %> 
     <a class="nav-link" href="perfilCliente?nickname=<%=usr.getNick()%>">Perfil</a>
 <% 
@@ -72,7 +75,7 @@ if (usr != null && usr.getTipo().equals("proveedor")) {
 %>
                 </li>
                 <%
-                if (usr != null && usr.getTipo().equals("cliente")) {
+                if (usr != null && usr instanceof Cliente) {
                 %>
                 <li class="nav-item"><a class="nav-link" href="Carrito">
                     <svg xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" viewBox="0 0 24 24">
@@ -93,10 +96,7 @@ if (usr != null && usr.getTipo().equals("proveedor")) {
     </div>
 </nav>
 
-
-
-	
-    <div style="position: relative; background-image: url('media/images/fondo1 (2).jpg'); background-size: cover; background-position: center center;">
+<div style="position: relative; background-image: url('media/images/fondo1 (2).jpg'); background-size: cover; background-position: center center;">
     <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); z-index: 1;"></div>
     <main class="container d-flex justify-content-center align-items-center vh-90" style="position: relative; z-index: 2;">
         <div class="row w-100">
@@ -142,21 +142,23 @@ if (usr != null && usr.getTipo().equals("proveedor")) {
     </main>
 </div>
 
-    <section style="background-color: #eee;" class="mt-5">
+	
+<h1>Hello World</h1>
+
+ <section style="background-color: #eee;" class="mt-5">
     <div class="container py-5">
         <div class="row justify-content-center">
         <% if(prods != null) {%>
         <%
         for(Producto p : prods) {
-            DtProducto dtp = p.crearDT();
         %>
             <div class="col-md-8 col-lg-6 col-xl-4 d-flex">
                 <div class="card mb-5 flex-fill" style="border-radius: 15px; min-height: 400px;">
                 
                     <div class="overflow-hidden" style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
-                        <% if(dtp.getImagenes() != null && !dtp.getImagenes().isEmpty())  {%>
+                        <% if(port.obtenerImagenesProducto(p) != null && !port.obtenerImagenesProducto(p).isEmpty())  {%>
                         
-                          <img src="media/<%= dtp.getImagenes().getFirst() %>"
+                          <img src="media/<%= port.obtenerPrimeraImagenProducto(p) %>"
                              class="img-fluid" alt="Producto" 
                              style="width: 100%; height: 200px; object-fit: cover;" />
                         
@@ -171,25 +173,25 @@ if (usr != null && usr.getTipo().equals("proveedor")) {
                     </div>
                     <div class="card-body d-flex flex-column">
                         <div class="d-flex justify-content-between align-items-start">
-                            <p><a href="#!" class="text-dark"><%= dtp.getNombre() %></a></p>
-                            <p class="text-dark">#<%= dtp.getNumRef() %></p>
+                            <p><a href="#!" class="text-dark"><%= p.getNombre() %></a></p>
+                            <p class="text-dark">#<%= p.getNumRef() %></p>
                         </div>
-                            <p style="color: gray"><%= dtp.getDescripcion() %></p>
+                            <p style="color: gray"><%= p.getDescripcion() %></p>
                         
                        
                         <div class="">
-                            <p class="text-dark">$<%= dtp.getPrecio() %></p>
+                            <p class="text-dark">$<%= p.getPrecio() %></p>
                       
-                            <p class="alert alert-danger">Cantidad disponible: <%= dtp.getStock() %></p>
+                            <p class="alert alert-danger">Cantidad disponible: <%= p.getStock() %></p>
                         </div>
                         <div class="d-flex justify-content-center align-items-center">
                            <form action="agregarAlCarrito" method="post" style="display: inline-block;" onsubmit="return validarCantidad(this)">
-                                    <input type="hidden" name="numRef" value="<%= dtp != null ? dtp.getNumRef() : "" %>">
-                                    <input class="text-center" type="number" name="cantidad" min="1" max="<%= dtp.getStock() %>" value="1" style="width: 60px;" onchange="validarCantidad(this.form)">
+                                    <input type="hidden" name="numRef" value="<%= p != null ? p.getNumRef() : "" %>">
+                                    <input class="text-center" type="number" name="cantidad" min="1" max="<%= p.getStock() %>" value="1" style="width: 60px;" onchange="validarCantidad(this.form)">
                                     <br>
                                     <div class="row mt-2">
-                                        <a href="perfilProducto?producto=<%= dtp != null ? dtp.getNumRef() : "" %>" class="btn" style="color: #0000EE; cursor: pointer">Ver Detalles</a>
-                                        <% if(usr.getTipo().equals("cliente") && carr != null && !carr.existeProducto(p.getNumRef())) { 
+                                        <a href="perfilProducto?producto=<%= p != null ? p.getNumRef() : "" %>" class="btn" style="color: #0000EE; cursor: pointer">Ver Detalles</a>
+                                        <% if(usr instanceof Cliente && carr != null && !port.comprobarSiProductoExisteCarrito(cl.getNick(), p.getNumRef())) { 
                                         	
                                        
                                         %>
@@ -212,7 +214,7 @@ if (usr != null && usr.getTipo().equals("proveedor")) {
 <div class="container mt-5 mb-5" id="sobrenosotros">
     <div class="row align-items-center">
         <div class="col-md-6">
-            <img alt="Imagen sobre nosotros" class="img-fluid shadow" src="media/images/nosotros.jpg" style="max-width: 100%; height: auto; border: 1px solid black">
+            <img alt="Imagen sobre nosotros" class="img-fluid shadow" src="https://mrwallpaper.com/images/hd/hanging-photography-camera-against-mountain-e67sm3xq5ggp1k08.jpg" style="max-width: 100%; height: auto; border: 1px solid black">
         </div>
 
         <div class="col-md-6">
@@ -221,7 +223,6 @@ if (usr != null && usr.getTipo().equals("proveedor")) {
         </div>
     </div>
 </div>
-
 
 
 

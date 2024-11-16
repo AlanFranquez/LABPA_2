@@ -20,6 +20,7 @@ import com.market.svcentral.Cliente;
 import com.market.svcentral.Factory;
 import com.market.svcentral.ISistema;
 import com.market.svcentral.Producto;
+import com.market.svcentral.Proveedor;
 import com.market.svcentral.Usuario;
 @WebService
 @SOAPBinding(parameterStyle=SOAPBinding.ParameterStyle.WRAPPED)
@@ -130,6 +131,25 @@ public class Publicador {
 	@WebMethod
 	public Cliente obtenerCliente(String nick) {
 		return (Cliente) em.find(Cliente.class, nick);
+	}
+	
+	@WebMethod
+	public Proveedor obtenerProveedor(String nick) {
+		return (Proveedor) em.find(Proveedor.class, nick);
+	}
+	
+	@WebMethod
+	public Carrito obtenerCarritoCliente(String nick) {
+		Cliente cl = em.find(Cliente.class, nick);
+		
+		return cl.getCarrito();
+	}
+	
+	@WebMethod
+	public boolean comprobarSiProductoExisteCarrito(String nick, int numRef) {
+		Carrito c = this.obtenerCarritoCliente(nick);
+		
+		return c.getItem(numRef) != null;
 	}
 
 	@WebMethod

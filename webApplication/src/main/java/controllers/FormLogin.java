@@ -17,6 +17,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import services.Publicador;
+import services.PublicadorService;
 
 /**
  * Servlet implementation class Home
@@ -49,6 +51,9 @@ public class FormLogin extends HttpServlet {
         
         String userAgent = request.getHeader("User-Agent");
         
+        PublicadorService p = new PublicadorService();
+        Publicador port = p.getPublicadorPort();
+        
         
         if((userAgent != null) && (
                 userAgent.contains("Mobile") || 
@@ -68,11 +73,11 @@ public class FormLogin extends HttpServlet {
             return;
         }
 
-        EstadoSesion nuevoEstado;
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-        EntityManager em = emf.createEntityManager();
+        String nuevoEstado;
 
-        Usuario usr = em.find(Usuario.class, nickname);
+        services.Usuario usr = port.obtenerUsuario(nickname);
+       
+        
         
         if (usr == null) {
             objSession.setAttribute("errorMsg", "Los datos no son válidos");
@@ -81,24 +86,18 @@ public class FormLogin extends HttpServlet {
         }
 
         if (usr.getNick().equals(nickname) && usr.getContrasena().equals(password)) {
-            nuevoEstado = EstadoSesion.LOGIN_CORRECTO;
+            nuevoEstado = "logueado";
             request.setAttribute("logueado", usr);
             objSession.setAttribute("usuarioLogueado", usr);
             response.sendRedirect("home");
         } else {
-            nuevoEstado = EstadoSesion.LOGIN_INCORRECTO;
+            nuevoEstado = "nologueado";
             objSession.setAttribute("errorMsg", "Los datos no son válidos");
             request.getRequestDispatcher("/WEB-INF/IniciarSesion.jsp").forward(request, response);
         }
 
         objSession.setAttribute("estado", nuevoEstado);
         
-        // Cerrar recursos
-        try {
-            em.close();
-            emf.close();
-        } catch (Exception e) {
-            e.printStackTrace();  // Manejo de errores
-        }
+      
     }
 }

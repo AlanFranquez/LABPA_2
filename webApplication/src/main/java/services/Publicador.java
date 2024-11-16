@@ -156,6 +156,54 @@ public interface Publicador {
 
     /**
      * 
+     * @param arg0
+     * @return
+     *     returns services.Proveedor
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "obtenerProveedor", targetNamespace = "http://services/", className = "services.ObtenerProveedor")
+    @ResponseWrapper(localName = "obtenerProveedorResponse", targetNamespace = "http://services/", className = "services.ObtenerProveedorResponse")
+    @Action(input = "http://services/Publicador/obtenerProveedorRequest", output = "http://services/Publicador/obtenerProveedorResponse")
+    public Proveedor obtenerProveedor(
+        @WebParam(name = "arg0", targetNamespace = "")
+        String arg0);
+
+    /**
+     * 
+     * @param arg0
+     * @return
+     *     returns services.Carrito
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "obtenerCarritoCliente", targetNamespace = "http://services/", className = "services.ObtenerCarritoCliente")
+    @ResponseWrapper(localName = "obtenerCarritoClienteResponse", targetNamespace = "http://services/", className = "services.ObtenerCarritoClienteResponse")
+    @Action(input = "http://services/Publicador/obtenerCarritoClienteRequest", output = "http://services/Publicador/obtenerCarritoClienteResponse")
+    public Carrito obtenerCarritoCliente(
+        @WebParam(name = "arg0", targetNamespace = "")
+        String arg0);
+
+    /**
+     * 
+     * @param arg1
+     * @param arg0
+     * @return
+     *     returns boolean
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "comprobarSiProductoExisteCarrito", targetNamespace = "http://services/", className = "services.ComprobarSiProductoExisteCarrito")
+    @ResponseWrapper(localName = "comprobarSiProductoExisteCarritoResponse", targetNamespace = "http://services/", className = "services.ComprobarSiProductoExisteCarritoResponse")
+    @Action(input = "http://services/Publicador/comprobarSiProductoExisteCarritoRequest", output = "http://services/Publicador/comprobarSiProductoExisteCarritoResponse")
+    public boolean comprobarSiProductoExisteCarrito(
+        @WebParam(name = "arg0", targetNamespace = "")
+        String arg0,
+        @WebParam(name = "arg1", targetNamespace = "")
+        int arg1);
+
+    /**
+     * 
      * @param arg1
      * @param arg0
      */
