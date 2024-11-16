@@ -13,42 +13,38 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import webservices.Publicador;
+import services.Publicador;
+import services.PublicadorService;
 
-import com.market.svcentral.Factory;
-import com.market.svcentral.ISistema;
-import com.market.svcentral.Producto;
-import com.market.svcentral.Usuario;
-import com.market.svcentral.Carrito;
-import com.market.svcentral.Cliente;
 
 @WebServlet("/home")
 public class Home extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private ISistema sist;
-
+    
     public Home() {
         super();
     }
 
     @Override
     public void init() throws ServletException {
-        try {
-            sist = Factory.getSistema();
-            System.out.println("ISistema inicializado correctamente.");
-        } catch (Exception e) {
-            throw new ServletException("No se pudo inicializar ISistema", e);
-        }
+       
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("Entrando en el método doGet.");
         
-        webservices.PublicadorService p = new webservices.PublicadorService();
+       PublicadorService p = new PublicadorService();
         Publicador port = p.getPublicadorPort();
 		
 		System.out.print("SALUDANDO DESDE LA WEBAPP --> " + port.saludar());
+		
+		List<services.Producto> pruebaaa = port.obtenerProductos();
+		
+		System.out.print("PROBANDO QUE FUNCIONA ESTO");
+		for(services.Producto prodd : pruebaaa) {
+			System.out.print(prodd.getNombre());
+		}
 
         HttpSession session = request.getSession(false);
         if (session != null) {
@@ -70,13 +66,13 @@ public class Home extends HttpServlet {
         // Inicia el EntityManager
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
         EntityManager em = emf.createEntityManager();
-        List<Producto> productos = null;
+        List<services.Producto> productos = null;
 
         try {
             em.getTransaction().begin();
             System.out.println("Iniciando transacción de base de datos.");
 
-            productos = em.createQuery("SELECT p FROM Producto p", Producto.class).getResultList();
+            productos = port.obtenerProductos();
             System.out.println("Consulta a la base de datos ejecutada. Número de productos: " + (productos != null ? productos.size() : "0"));
         } catch (Exception e) {
             System.out.println("Error al ejecutar la consulta a la base de datos.");
@@ -93,32 +89,31 @@ public class Home extends HttpServlet {
         }
 
         // Usuario logueado
-        Usuario u = (Usuario) session.getAttribute("usuarioLogueado");
+        services.Usuario u = (services.Usuario) session.getAttribute("usuarioLogueado");
         
         // Consultar el usuario logueado en la base de datos
-        Usuario usuarioLogueado = em.find(Usuario.class, u.getNick());
+        services.Usuario usuarioLogueado = port.obtenerUsuario(u.getNick());
         if (usuarioLogueado != null) {
             System.out.println("Usuario logueado encontrado en la base de datos.");
         } else {
             System.out.println("Usuario no encontrado en la base de datos.");
         }
 
-        if (usuarioLogueado instanceof Cliente) {
-            Cliente clienteLogueado = (Cliente) usuarioLogueado;
+        if (port.obtenerCliente(usuarioLogueado.getNick()) != null) {
+            services.Cliente clienteLogueado = port.obtenerCliente(usuarioLogueado.getNick());
             System.out.println("Cliente logueado: " + clienteLogueado.getNick());
 
             // Verificar si el cliente tiene carrito
-            if (clienteLogueado.getCarrito() == null) {
+            if (port.obtenerCarritoDeCliente(clienteLogueado.getNick()) == null) {
                 System.out.println("Carrito no encontrado para el cliente, creando nuevo carrito.");
-                Carrito nuevoCarrito = new Carrito();
-                clienteLogueado.setCarrito(nuevoCarrito);
-                em.persist(nuevoCarrito);
+                services.Carrito nuevoCarrito = new services.Carrito();
+                port.setCarritoCliente(clienteLogueado.getNick(), nuevoCarrito);
                 System.out.println("Nuevo carrito creado y persistido.");
             } else {
-                System.out.println("Carrito existente para el cliente: " + clienteLogueado.getCarrito().getId());
+                System.out.println("Carrito existente para el cliente");
             }
 
-            session.setAttribute("carrito", clienteLogueado.getCarrito());
+            session.setAttribute("carrito", port.obtenerCarritoDeCliente(clienteLogueado.getNick()));
             
         } else {
             System.out.println("El usuario logueado no es un cliente.");

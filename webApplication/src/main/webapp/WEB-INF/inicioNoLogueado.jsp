@@ -1,15 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
-<%@page import="com.market.svcentral.Usuario"%>
-<%@page import="com.market.svcentral.Producto"%>
-<%@page import="com.market.svcentral.DtProducto"%>
-<%@page import="com.market.svcentral.DTCliente" %>
-<%@ page import="java.util.List" %>
-<%@page import="com.market.svcentral.Sistema"%>
-<%@page import="com.market.svcentral.DTCliente" %>
-<%@page import="com.market.svcentral.Carrito" %>
-<%@page import="com.market.svcentral.Cliente" %>
+<%@page import="services.*"%>
+<%@page import="services.Producto" %>
+<%@page import="services.Usuario" %>
+<%@page import="services.Carrito" %>
+<%@page import="services.Publicador" %>
+<%@page import="services.PublicadorService" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.List" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,7 +21,8 @@
 <body>
 
 <% 
-
+PublicadorService pp = new PublicadorService();
+Publicador port = pp.getPublicadorPort();
 
 List<Producto> prods = (List<Producto>) request.getAttribute("prods");
 
@@ -96,14 +95,13 @@ List<Producto> prods = (List<Producto>) request.getAttribute("prods");
         
         <%
         for(Producto p : prods) {
-            DtProducto dtp = p.crearDT();
         %>
             <div class="col-md-8 col-lg-6 col-xl-4 d-flex">
                 <div class="card flex-fill" style="border-radius: 15px; min-height: 400px;">
                     <div class="overflow-hidden" style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
-                        <% if(dtp.getImagenes() != null && !dtp.getImagenes().isEmpty())  {%>
+                        <% if(port.obtenerImagenesProducto(p) != null && !port.obtenerImagenesProducto(p).isEmpty())  {%>
                         
-                          <img src="media/<%= dtp.getImagenes().getFirst() %>"
+                          <img src="media/<%= port.obtenerImagenesProducto(p).get(0) %>"
                              class="img-fluid" alt="Producto" 
                              style="width: 100%; height: 200px; object-fit: cover;" />
                         
@@ -118,16 +116,16 @@ List<Producto> prods = (List<Producto>) request.getAttribute("prods");
                     </div>
                     <div class="card-body d-flex flex-column">
                         <div class="d-flex justify-content-between align-items-start">
-                            <p><a href="#!" class="text-dark"><%= dtp.getNombre() %></a></p>
-                            <p class="text-dark">#<%= dtp.getNumRef() %></p>
+                            <p><a href="#!" class="text-dark"><%= p.getNombre() %></a></p>
+                            <p class="text-dark">#<%= p.getNumRef() %></p>
                         </div>
-                            <p style="color: gray"><%= dtp.getDescripcion() %></p>
+                            <p style="color: gray"><%= p.getDescripcion() %></p>
                         
                        
                         <div class="">
-                            <p class="text-dark">$<%= dtp.getPrecio() %></p>
+                            <p class="text-dark">$<%= p.getPrecio() %></p>
                       
-                            <p class="alert alert-danger">Cantidad disponible: <%= dtp.getStock() %></p>
+                            <p class="alert alert-danger">Cantidad disponible: <%= p.getStock() %></p>
                         </div>
                         <div class="d-flex justify-content-center align-items-center">
                        
