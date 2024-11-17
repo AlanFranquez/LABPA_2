@@ -3,9 +3,6 @@ package controllers;
 import java.io.IOException;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -13,15 +10,14 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import com.market.svcentral.Factory;
-import com.market.svcentral.ISistema;
-import com.market.svcentral.Producto;
-import com.market.svcentral.Usuario;
+import services.Publicador;
+import services.PublicadorService;
+
 
 @WebServlet("/homeMOBILE")
 public class inicioMOBILE extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private ISistema sist;
+  
 
     public inicioMOBILE() {
         super();
@@ -29,23 +25,18 @@ public class inicioMOBILE extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        try {
-            sist = Factory.getSistema();
-        } catch (Exception e) {
-            throw new ServletException("No se pudo inicializar ISistema", e);
-        }
+        
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-        EntityManager em = emf.createEntityManager();
+        PublicadorService p = new PublicadorService();
+        Publicador port = p.getPublicadorPort();
         
-        em.getTransaction().begin();
         
-        List<Producto> productos = em.createQuery("SELECT p FROM Producto p", Producto.class).getResultList();
+        List<services.Producto> productos = port.obtenerProductos();
         request.setAttribute("prods", productos);
         
         String userAgent = request.getHeader("User-Agent");
@@ -63,21 +54,16 @@ public class inicioMOBILE extends HttpServlet {
         
         
 
-        Usuario u = (Usuario) session.getAttribute("usuarioLogueado");
-        Usuario usuarioLogueado = em.find(Usuario.class, u.getNick());
+        services.Usuario u = (services.Usuario) session.getAttribute("usuarioLogueado");
+        services.Usuario usuarioLogueado = port.obtenerUsuario(u.getNick());
         System.out.print("SE TRAEN LOS DATOS DESDE LA BASE DE DATOS");
         if (usuarioLogueado != null) {
             request.setAttribute("usuario", usuarioLogueado);
             request.setAttribute("estado", "logueado");
-            // Redirigir a la página de inicio logueado
             request.getRequestDispatcher("/WEB-INF/inicioLogeadoMOBILE.jsp").forward(request, response);
         }
         
         
-        em.getTransaction().commit();
-        
-        em.close();
-        emf.close();
     }
     
     private boolean isMobileDevice(String userAgent) {

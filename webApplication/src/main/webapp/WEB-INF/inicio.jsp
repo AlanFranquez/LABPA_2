@@ -143,7 +143,6 @@ if (usr != null && usr instanceof Proveedor) {
 </div>
 
 	
-<h1>Hello World</h1>
 
  <section style="background-color: #eee;" class="mt-5">
     <div class="container py-5">

@@ -1,13 +1,14 @@
+<%@page import="services.PublicadorService"%>
+<%@page import="services.Publicador"%>
+<%@page import="services.Proveedor"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ page import="java.util.List"%>
 <%@ page import="java.util.ArrayList"%>
-<%@ page import="com.market.svcentral.Producto"%>
-<%@ page import="com.market.svcentral.DtProducto"%>
-<%@ page import="com.market.svcentral.Usuario"%>
-<%@ page import="com.market.svcentral.Carrito"%>
-<%@ page import="com.market.svcentral.Cliente"%>
-<%@ page import="com.market.svcentral.ISistema"%>
+<%@ page import="services.Producto"%>
+<%@ page import="services.Usuario"%>
+<%@ page import="services.Carrito"%>
+<%@ page import="services.Cliente"%>
 
 <!DOCTYPE html>
 <html>
@@ -30,9 +31,12 @@
 	List<Producto> productos = (List<Producto>) request.getAttribute("productos");
 	Usuario usr = (Usuario) request.getAttribute("usuarioLogueado");
 	Cliente cl = null;
-    if (usr != null && usr.getTipo().equals("cliente")) {
+    if (usr != null && usr instanceof Cliente) {
         cl = (Cliente) usr; 
     }
+    
+    PublicadorService p = new PublicadorService();
+    Publicador port = p.getPublicadorPort();
 
     Carrito carr = null;
     if (cl != null) {
@@ -62,11 +66,11 @@
             <ul class="navbar-nav align-items-center">
                 <li class="nav-item">
                    <% 
-if (usr != null && usr.getTipo().equals("proveedor")) { 
+if (usr != null && usr instanceof Proveedor) { 
 %> 
     <a class="nav-link" href="perfilProveedor?nickname=<%=usr.getNick()%>">Perfil</a> 
 <% 
-} else if (usr != null && usr.getTipo().equals("cliente")) { 
+} else if (usr != null && usr instanceof Cliente) { 
 %> 
     <a class="nav-link" href="perfilCliente?nickname=<%=usr.getNick()%>">Perfil</a>
 <% 
@@ -74,7 +78,7 @@ if (usr != null && usr.getTipo().equals("proveedor")) {
 %>
                 </li>
                 <%
-                if (usr != null && usr.getTipo().equals("cliente")) {
+                if (usr != null && usr instanceof Cliente) {
                 %>
                 <li class="nav-item"><a class="nav-link" href="Carrito">
                     <svg xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" viewBox="0 0 24 24">
@@ -146,18 +150,13 @@ if (usr != null && usr.getTipo().equals("proveedor")) {
 								<section>
 
 									<%
-									List<DtProducto> listaDTProductos = new ArrayList<>();
 									if (productos == null || productos.isEmpty()) {
 									%>
 									<%
 									} else {
-									for (Producto p : productos) {
-										DtProducto dtp = p.crearDT();
-										listaDTProductos.add(dtp);
-									}
 									}
 
-									if (listaDTProductos.isEmpty()) {
+									if (productos.isEmpty()) {
 									%>
 									<p class="text-center mt-4">No hay productos disponibles.</p>
 									<%
@@ -165,12 +164,12 @@ if (usr != null && usr.getTipo().equals("proveedor")) {
 									%>
 									<div class="row justify-content-center">
 										<%
-										for (DtProducto dt : listaDTProductos) {
+										for (Producto dt : productos) {
 										%>
 										<div class="col-md-4 col-sm-6 mb-4">
 											<div class="card h-100 text-center">
 											
-												<% if(dt.getImagenes() == null || dt.getImagenes().isEmpty()) {%>
+												<% if(port.obtenerImagenesProducto(dt) == null || port.obtenerImagenesProducto(dt).isEmpty()) {%>
 												<img class="card-img-top"
 													src="https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png"
 													alt="<%=dt.getNombre()%>"
@@ -179,7 +178,7 @@ if (usr != null && usr.getTipo().equals("proveedor")) {
 												<% } else { %>
 													
 													<img class="card-img-top"
-													src="media/<%=dt.getImagenes().getFirst()%>"
+													src="media/<%=port.obtenerPrimeraImagenProducto(dt)%>"
 													alt="<%=dt.getNombre()%>"
 													style="height: 200px; object-fit: cover;">
 												<%}%>
@@ -207,7 +206,7 @@ if (usr != null && usr.getTipo().equals("proveedor")) {
 																	class="btn" style="color: #0000EE; cursor: pointer">Ver
 																	Detalles</a>
 																<%
-																if (usr.getTipo().equals("cliente") && carr != null && !carr.existeProducto(dt.getNumRef())) {
+																if (usr instanceof Cliente && carr != null && port.comprobarSiProductoExisteCarrito(usr.getNick(), dt.getNumRef())) {
 																%>
 																<button type="submit" class="btn btn-primary"
 																	id="addToCartButton">Agregar al Carrito</button>
