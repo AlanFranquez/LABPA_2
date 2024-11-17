@@ -2,6 +2,7 @@ package services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
@@ -16,12 +17,14 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.ws.Endpoint;
 
 import com.market.svcentral.Carrito;
+import com.market.svcentral.Categoria;
 import com.market.svcentral.Cliente;
 import com.market.svcentral.Factory;
 import com.market.svcentral.ISistema;
 import com.market.svcentral.Producto;
 import com.market.svcentral.Proveedor;
 import com.market.svcentral.Usuario;
+import com.market.svcentral.exceptions.CategoriaException;
 @WebService
 @SOAPBinding(parameterStyle=SOAPBinding.ParameterStyle.WRAPPED)
 public class Publicador {
@@ -176,7 +179,34 @@ public class Publicador {
 	// CARLITOS
 
 	// FABRICIO
+	/*
+	  	wsimport -keep -p webservices http://localhost:1234/publicador?wsdl
+	  
+		ProductoServlet.java
+		RealizarCompra.java
+		RealizarReclamo.java
+		RegistrarUsuarios1.java
+		RegistrarUsuarios2.java
+		Saludo.java
+		Usuarios.java
+		ValidarAjax.java
+		VerReclamo.java 
+	 */
+	@WebMethod
+	public List<Categoria> getCategoriasLista() {
+		return s.getCategoriasLista();
+	}
+	
+	@WebMethod
+	public void agregarProducto(String titulo, int numRef, String descripcion, String especificaciones, float precio, String proveedor, int stock) {
+		s.agregarProducto(titulo, numRef, descripcion, especificaciones, precio, proveedor, stock);
+	}
 
+	@WebMethod
+	public void agregarProductoCategoria(String catName, int numRef) throws CategoriaException {
+		s.agregarProductoCategoria(catName, numRef);
+	}
+	
 	// RENZO
 
 	public String saludar() {

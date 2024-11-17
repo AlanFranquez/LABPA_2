@@ -18,6 +18,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
+import services.Publicador;
+import services.PublicadorService;
 
 import com.market.svcentral.exceptions.CategoriaException;
 import com.market.svcentral.Cat_Producto;
@@ -30,29 +32,23 @@ import com.market.svcentral.Proveedor;
 @MultipartConfig
 public class ProductoServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private ISistema sist;
 
     @Override
     public void init() throws ServletException {
-        try {
-            sist = Factory.getSistema();  // Inicializa el sistema usando Factory
-        } catch (Exception e) {
-            throw new ServletException("No se pudo inicializar ISistema", e);
-        }
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //HttpSession objSession = request.getSession();
-        //Proveedor prov = (Proveedor) objSession.getAttribute("usuarioLogueado");
+    	PublicadorService p = new PublicadorService();
+        Publicador port = p.getPublicadorPort();
 
         // Obtener la lista de categorías
-        Map<String, Categoria> listacats = sist.getCategoriasLista();
+        List<Categoria> listacats = port.getCategoriasLista();
         List<String> listaString = new ArrayList<>();
 
-        for (Map.Entry<String, Categoria> entry : listacats.entrySet()) {
-            if (entry.getValue() instanceof Cat_Producto) {
-                String stringUnico = entry.getValue().getNombre();
+        for (Categoria cat : listacats) {
+            if (cat instanceof Cat_Producto) {
+                String stringUnico = cat.getNombre();
                 listaString.add(stringUnico);
             }
         }
@@ -74,6 +70,8 @@ public class ProductoServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession objSession = request.getSession();
         Proveedor prov = (Proveedor) objSession.getAttribute("usuarioLogueado");
+        PublicadorService p = new PublicadorService();
+        Publicador port = p.getPublicadorPort();
 
         // Verificar si el proveedor es nulo
         if (prov == null) {
@@ -149,18 +147,18 @@ public class ProductoServlet extends HttpServlet {
         
         if (precio > 0) {
 
-            sist.agregarProducto(titulo, referencia, descripcion, especificaciones, precio, prov.getNick(), stock);
+            port.agregarProducto(titulo, referencia, descripcion, especificaciones, precio, prov.getNick(), stock);
            
             if (!imagenesUrls.isEmpty()) {
             	for (String img : imagenesUrls) {
                     System.out.print(img);
-                    sist.getProducto(referencia).agregarImagen(img);
+                    port.obtenerProducto(referencia).agregarImagen(img);
                 }
             }
             
 
             Cat_Producto catp1 = new Cat_Producto(categoriaSeleccionada);
-            catp1.agregarProducto(sist.getProducto(referencia));
+            catp1.agregarProducto(port.obtenerProducto(referencia));
             
             EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
             EntityManager em = emf.createEntityManager();
@@ -169,13 +167,14 @@ public class ProductoServlet extends HttpServlet {
             
             
             try {
-				sist.agregarProductoCategoria(catp1.getNombre(), referencia);
+				port.agregarProductoCategoria(catp1.getNombre(), referencia);
 			} catch (CategoriaException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-            prov.agregarProd(sist.getProducto(referencia));
-            em.persist(sist.getProducto(referencia));
+            
+            prov.agregarProd(port.obtenerProducto(referencia));
+            em.persist(port.obtenerProducto(referencia));
             response.sendRedirect("perfilProveedor?nickname=" + prov.getNick());
             em.getTransaction().commit();
             em.close();

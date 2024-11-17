@@ -44,7 +44,7 @@ public interface ISistema {
     
     public Categoria[] getCategorias();
     
-    public Map<String, Categoria> getCategoriasLista();
+    public List<Categoria> getCategoriasLista();
     
     public abstract boolean existenOrdenesParaListar();
 

@@ -72,8 +72,6 @@ public class Presentacion {
     private static ISistema s = Factory.getSistema();
     private JFileChooser fileChooser;
     Calendar calendar = Calendar.getInstance();
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-    private EntityManager em = emf.createEntityManager();
     
     /**
      * Launch the application.
@@ -83,71 +81,8 @@ public class Presentacion {
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
-  
-                try {
-                    DTFecha fecha1 = new DTFecha(1, 1, 1990);
-                    DTFecha fecha2 = new DTFecha(15, 6, 1985);
-                    DTFecha fecha3 = new DTFecha(5, 6, 1990);
-
-                    s.agregarCliente("Juan", "Juan123", "Perez", "Juan@gmail.com", fecha1, "123", "123");
-                    s.agregarCliente("Alberto", "albert1341", "Hernandez", "Ahernandez@gmail.com", fecha2, "123", "123");
-                    s.agregarCliente("Maria", "agusmari", "Agustina", "mariaagustina@gmail.com", fecha1, "123", "123");
-
-                    //s.agregarImagenUsuario("Juan123", new ImageIcon("./imagenes/p1.jpg"));
-                    //s.agregarImagenUsuario("albert1341", new ImageIcon("./imagenes/p2.jpg"));
-                    //s.agregarImagenUsuario("agusmari", new ImageIcon("./imagenes/p3.jpg"));
-                    
-                    try {
-                    	s.agregarCategoria("Tecnología");
-                    	s.agregarCategoria("Estanterias");
-                    	
-                    	s.agregarCategoriaConProductos("Tecno");
-                    	s.agregarCategoriaConProductos("Otros");
-                    	s.agregarCategoriaConProductos("Bazar");                    	
-                    } catch(Exception e) {
-                    	System.out.println(e.getMessage());
-                    }
-
-                    
-                    
-                   
-                    Proveedor prov = new Proveedor("Perez", "AndresPerez@gmail.com", "Andres", "Perez", fecha3 ,"Bamboo.inc" , "www.bamboo.com", "123");
-                    s.agregarProveedor("Perez", "AndresPerez@gmail.com", "Andres", "Perez", fecha3 ,"Bamboo.inc" , "www.bamboo.com", "123", "123");
-                    s.agregarProveedor("Jorge", "Jorge@gmail.com", "Jorge", "Urrutia", fecha3 ,"Google.inc" , "www.google.com", "123", "123");
-                    
-                   
-                    
-                    Producto p1 = new Producto("Pelota", "Pelota inflable ideal", 120, 1,"Lalala", prov, 2);
-                    s.agregarProducto("Pelota", 1, "Pelota inflable ideal", "Increible", 120, "Perez", 2);
-                    s.agregarProducto("Cargador", 2, "Cargador tipo c", "Muy bueno", 220, "Perez", 20);
-                    s.agregarProducto("Sillon Comodo", 3, "Sillon comodo para todos los hogares", "Muy bueno", 330, "Jorge", 25);
-                    
-                    s.agregarProductoCategoria("Tecno", 1);
-                    s.agregarProductoCategoria("Otros", 1);
-                    s.agregarProductoCategoria("Tecno", 2);
-                    s.agregarProductoCategoria("Bazar", 3);
-                    //s.agregarImagenesProducto("Tecno", 2, new File("./imagenes/cargador1.jpg"));
-                    //s.agregarImagenesProducto("Tecno", 2, new File("./imagenes/cargador2.jpg"));
-                    
-                    //s.agregarImagenesProducto("Tecno", 1, new File("./imagenes/pelota1.jpg"));
-                    //s.agregarImagenesProducto("Tecno", 1, new File("./imagenes/pelota2.jpg"));
-                    
-                    //s.agregarImagenesProducto("Bazar", 3, new File("./imagenes/s1.jpg"));
-                    //s.agregarImagenesProducto("Bazar", 3, new File("./imagenes/s2.jpg"));
-                    
-                    s.agregarProductoCategoria("Tecno", 2);
-                    //OrdenDeCompra o1 = new OrdenDeCompra(1);
-                    //o1.addItem(p1, 3);
-                    
-                    
-                    //s.addOrdenes(o1, "Juan123");
-
-                  
-                    Presentacion window = new Presentacion();
-                    window.frame.setVisible(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+            	Presentacion window = new Presentacion();
+            	window.frame.setVisible(true);
             }
         });
     }
@@ -316,10 +251,6 @@ public class Presentacion {
                 confContraseniaField.setBounds(100, 380, 160, 25);
                 panel.add(confContraseniaField);
             
-                EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-                EntityManager em = emf.createEntityManager();
-                
-                em.getTransaction().begin();
                 
                 JButton seleccionarImagenButton = new JButton("Seleccionar Imagen");
                 seleccionarImagenButton.setBounds(20, 470, 240, 25);
@@ -467,14 +398,6 @@ public class Presentacion {
                         	
                         }
                         
-                        em.persist(s.getUsuario(nickname));
-                        
-                        em.getTransaction().commit();
-                        
-                        
-                        em.close();
-                        emf.close();
-                        
                         // Limpiar inputs
                         JOptionPane.showMessageDialog(null, "Usuario registrado con éxito.");
                         nicknameField.setText("");
@@ -617,10 +540,6 @@ public class Presentacion {
                 registrarButton.setBounds(20, 200, 240, 25);
                 panel.add(registrarButton);
                 
-                EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-                EntityManager em = emf.createEntityManager();
-                
-                em.getTransaction().begin();
                 registrarButton.addActionListener(new ActionListener() {
 					
 					@Override
@@ -636,7 +555,7 @@ public class Presentacion {
 						}
 						
 						
-						if(em.find(Categoria.class, textCat) != null) {
+						if(s.existeCategoria(textCat)) {
 							JOptionPane.showMessageDialog(null, "Ya existe esta categoría");
 							return;
 						}
@@ -647,31 +566,18 @@ public class Presentacion {
 							
 								if(tienePadre) {
 									s.asignarlePadreCategoria(nombreCatPadre, textCat);
-									
-									
-									
 								}
-								
 							} else {
 								s.agregarCategoria(textCat);
 								if(tienePadre) {
 									s.asignarlePadreCategoria(nombreCatPadre, textCat);
 								}
-								
 							}
-							
-							
-							em.persist(s.getCat(textCat));
-							
 						}	catch(Exception e1) {
 							JOptionPane.showMessageDialog(null, e1.getMessage());
 							return;
 						}
 						
-						
-						em.getTransaction().commit();
-						em.close();
-						emf.close();
 						JOptionPane.showMessageDialog(null, "Categoria agregada con exito");
 						// Actualizar campos
 						categoriaField.setText("");
@@ -685,8 +591,6 @@ public class Presentacion {
                         for (String padre : nuevosPadres) {
                             comboBoxModel.addElement(padre);
                         }
-						
-						
 						
 					}
 				} );
@@ -1245,12 +1149,7 @@ public class Presentacion {
         ventanaClientes.setSize(500, 300);
         ventanaClientes.getContentPane().setLayout(new BorderLayout());
 
-        List<Cliente> listaCliente = em.createQuery("SELECT c FROM Cliente c", Cliente.class).getResultList();
-
-        List<DTCliente> clientes = new ArrayList<>();
-        for (Cliente c : listaCliente) {
-            clientes.add(c.crearDt());
-        }
+        List<DTCliente> clientes = s.listarClientes();
         
         String[] columnNames = {"Nick", "Correo", "Nombre Completo"};
 
@@ -1370,13 +1269,7 @@ public class Presentacion {
         ventanaProveedores.setSize(500, 300);
         ventanaProveedores.getContentPane().setLayout(new BorderLayout());
         // Recuperar la lista de proveedores
-        List<Proveedor> provs = em.createQuery("SELECT p FROM Proveedor p").getResultList();
-
-        List<DTProveedor> proveedores = new ArrayList<DTProveedor>();
-        for(Proveedor p: provs) {
-        	System.out.print(p.getNombre());
-        	proveedores.add(p.crearDt());
-        }
+        List<DTProveedor> proveedores = s.listarProveedores();
         
         // Definir las columnas de la tabla
         String[] columnNames = {"Nick", "Correo"};

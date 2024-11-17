@@ -63,5 +63,9 @@ private Map<Integer, Producto> productos;
 	    }
 	    return true;
 	}
+
+	public void quitarProducto(Integer numRef) {
+		productos.remove(numRef);
+	}
 	
 }

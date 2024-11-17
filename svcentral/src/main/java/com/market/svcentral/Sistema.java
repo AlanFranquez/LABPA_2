@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -28,21 +27,16 @@ import com.market.svcentral.exceptions.UsuarioException;
 import com.market.svcentral.exceptions.UsuarioRepetidoException;
 
 public class Sistema implements ISistema {
+	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+	EntityManager em = emf.createEntityManager();
+	
     private static Sistema instance = null;
-    private Map<String, Usuario> usuarios;
-    private Map<String, Categoria> categorias;
     private Map<Integer, OrdenDeCompra> ordenes;
-    private Map<String, Categoria> arbolCategorias;
     private final EmailService emailService = new EmailService();
-    private List<Cliente> listaClientes;
     
     private Sistema() {
         // Inicialización de colecciones
-        this.usuarios = new HashMap<>();
-        this.categorias = new HashMap<>();
         this.ordenes = new HashMap<>();
-        this.listaClientes = new ArrayList<>();
-        this.arbolCategorias = new HashMap<>();
     }
 
     public static synchronized Sistema getInstance() {
@@ -54,17 +48,16 @@ public class Sistema implements ISistema {
 
     // CASO DE USO 1: REGISTRAR USUARIO
 	public boolean verificarUnicidad(String nick, String correo) {
-    	Usuario usuario = this.usuarios.get(nick);
-        if (usuario != null) {
-        	return false;
-        }
-        for (Usuario user : this.usuarios.values()) {
-            if (user.getCorreo() != null && user.getCorreo().equals(correo)) {
-                return false;
-            }
-        }
-        return true;
-        
+    	Usuario usuario = null;
+    	try {
+    		usuario = em.find(Usuario.class, nick);
+    		if (usuario == null) {
+    			usuario = em.createQuery("SELECT u FROM Usuario u WHERE u.correo='" + correo +"'", Usuario.class).getSingleResult();
+    		}
+    	}catch(Exception e) {
+    		System.out.println(e.getMessage());
+    	}
+        return usuario == null;
     }
     public void agregarProveedor(String nick, String correo, String nombre, String apellido, DTFecha fechaNacimiento, String compania, String link, String contra, String confContra) throws UsuarioRepetidoException {
     	if (!verificarUnicidad(nick, correo)) {
@@ -72,9 +65,15 @@ public class Sistema implements ISistema {
     	}
     	if (!contra.equals(confContra)) {
     		throw new UsuarioRepetidoException("Contraseñas Diferentes");
-    	}	
-    	Proveedor nuevoProveedor = new Proveedor(nombre, nick, apellido, correo, fechaNacimiento, compania, link, contra);
-    	usuarios.put(nick, nuevoProveedor);
+    	}
+    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+    	EntityManager em = emf.createEntityManager();
+    	em.getTransaction().begin();
+    	
+    	em.persist(new Proveedor(nombre, nick, apellido, correo, fechaNacimiento, compania, link, contra));
+    	
+    	em.getTransaction().commit();
+    	em.close();
     }
     public void agregarCliente(String nombre, String nick, String apellido, String correo, DTFecha fecha, String contra, String confContra) throws UsuarioRepetidoException {
     	if (!verificarUnicidad(nick, correo)) {
@@ -83,20 +82,32 @@ public class Sistema implements ISistema {
     	if (!contra.equals(confContra)) {
     		throw new UsuarioRepetidoException("Contraseñas Diferentes");
     	}
-
-    	Cliente nuevoCliente = new Cliente(nombre, nick, apellido, correo, fecha, contra);
-    	usuarios.put(nick, nuevoCliente);
+    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+    	EntityManager em = emf.createEntityManager();
+    	em.getTransaction().begin();
+    	
+    	em.persist(new Cliente(nombre, nick, apellido, correo, fecha, contra));
+    	
+    	em.getTransaction().commit();
+    	em.close();
     }
     public void agregarImagenUsuario(String nick, String imagen) {
-    	Usuario usuarioBuscado = this.usuarios.get(nick);
-    	if (usuarioBuscado == null) {
+    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+    	EntityManager em = emf.createEntityManager();
+    	em.getTransaction().begin();
+    	
+    	Usuario user = em.find(Usuario.class, nick);
+    	if (user == null) {
     		System.out.println("Usuario con nick: " + nick + " no encontrado.");
     		return;
     	}
-    	usuarioBuscado.setImagen(imagen);
+    	user.setImagen(imagen);
+    	
+    	em.getTransaction().commit();
+    	em.close();
     }
     public Usuario getUsuario(String nickname) {
-    	return this.usuarios.get(nickname);
+    	return em.find(Usuario.class, nickname);
     }
     public boolean validarCorreo(String correo) {
         String regex = "^[A-Za-z0-9+_.-]+@(.+)$";
@@ -109,68 +120,114 @@ public class Sistema implements ISistema {
     
     // CASO DE USO 2: REGISTRAR PRODUCTO
     public boolean verificarUnicidadProducto(String nombreCategoria, int numRef, String titulo) {
-    	Cat_Producto cat = (Cat_Producto) this.categorias.get(nombreCategoria);
-    	if (!cat.verificarProducto(numRef, titulo)) {
-    		return false;
-    	}
-    	return true;
+        Producto prod = null;
+        try {
+        	prod = em.find(Producto.class, numRef);
+        	if(prod == null) {
+        		prod = em.createQuery(
+        				"SELECT p FROM Producto p WHERE p.nombre = '" + titulo + "'", Producto.class)
+        				.getSingleResult();
+        	}
+        }catch (Exception e) {
+        	System.out.println(e.getMessage());
+        }
+        return prod == null;
     }
     public void agregarProducto(String titulo, int numRef, String descripcion, String especificaciones, float precio, String prov, int stock) {    	
-    	Proveedor proveedor = (Proveedor) usuarios.get(prov);
-        Producto producto = new Producto(titulo, descripcion, precio, numRef, especificaciones, proveedor, stock);
-        proveedor.agregarProd(producto);
+    	Proveedor proveedor = em.find(Proveedor.class, prov);
+    	
+    	Producto producto = new Producto(titulo, descripcion, precio, numRef, especificaciones, proveedor, stock);
+        try {
+        	proveedor.agregarProd(producto);
+        	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+        	EntityManager em = emf.createEntityManager();
+        	em.getTransaction().begin();
+        	
+        	em.persist(producto);
+        	
+        	em.getTransaction().commit();
+        	em.close();
+        }catch (Exception e) {
+        	System.out.println(e.getMessage());
+        }
     }
     public DefaultMutableTreeNode arbolCategorias() {
+    	List<Categoria> categorias = null;
+	
+    	try {
+    		categorias = em.createQuery("SELECT c FROM Categoria c WHERE c.padre IS NULL", Categoria.class).getResultList();
+    	} catch (Exception e) {
+    		System.out.print(e);
+    	}
+    	
       	 DefaultMutableTreeNode root = new DefaultMutableTreeNode("Cats");
-      	 for (Categoria cat : arbolCategorias.values()) {
+      	 for (Categoria cat : categorias) {
       		 DefaultMutableTreeNode child = arbolCategorias(cat);
       		 root.add(child);
       	 }
       	 return root;
     }
     public DefaultMutableTreeNode arbolCategorias(Categoria cat) {
-     	 	DefaultMutableTreeNode rama = new DefaultMutableTreeNode(cat.getNombre());
-     	 	if (cat.getTipo() == "Padre") {
-     	 		Map<String, Categoria> hijos = ((Cat_Padre) cat).getHijos();
-     	 		if (hijos.size() >= 1) {
-     	 			for (Categoria hijo : hijos.values()) {
-     	 				DefaultMutableTreeNode child = arbolCategorias(hijo);
-     	 				rama.add(child);
-     	 			}
-     	 		} else {
-     	 			rama.add(new DefaultMutableTreeNode("Sin Elementos"));
-     	 		}
-     	 	}
-     	return rama;
+        DefaultMutableTreeNode rama = new DefaultMutableTreeNode(cat.getNombre());
+        if (cat.getTipo().equals("Padre")) {
+            Map<String, Categoria> hijos = ((Cat_Padre) cat).getHijos();
+            if (hijos.size() >= 1) {
+                for (Categoria hijo : hijos.values()) {
+                    DefaultMutableTreeNode child = arbolCategorias(hijo);
+                    rama.add(child);
+                }
+            } else {
+                rama.add(new DefaultMutableTreeNode("Sin Elementos"));
+            }
+        }
+		return rama;
     }
     public boolean esPadre(String nombre) {
-    	Categoria cat = categorias.get(nombre);
-    	return (cat instanceof Cat_Padre);
+        Categoria cat = em.find(Categoria.class, nombre);
+        if(cat == null) {
+        	return false;
+        }
+    	return (cat.getTipo().equals("Padre"));
     }
     public void agregarProductoCategoria(String catName, int numRef) throws CategoriaException {
-    	for (Usuario user : usuarios.values()) {
-    		if (user instanceof Proveedor) {
-    			Proveedor proveedor = (Proveedor) user;
-    			Producto producto = proveedor.obtenerProd(numRef);
-    			if (producto != null) {
-    				Cat_Producto cat = (Cat_Producto) categorias.get(catName);
-    				if (cat == null) {
-    					throw new CategoriaException("Hubo un error en la Categoria, vuelva a intentarlo");
-    				}
-    				producto.agregarCategorias(cat);
-    				cat.agregarProducto(producto);
-    			}
-    		}
-    	}
+        try {
+        	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+        	EntityManager em = emf.createEntityManager();
+        	em.getTransaction().begin();
+        	
+        	Cat_Producto cat = em.find(Cat_Producto.class, catName);
+        	Producto producto = em.find(Producto.class, numRef);
+        	
+        	System.out.println(cat + " - " + cat != null + " - " + catName);
+        	
+        	producto.agregarCategorias(cat);
+        	cat.agregarProducto(producto);
+        	
+        	em.getTransaction().commit();
+        	em.close();
+        }catch (Exception e) {
+        	System.out.println(e.getMessage());
+        }
+    }
+    public void agregarImagenProd(String img, int numRef) {
+    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+    	EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        
+        Producto producto = em.find(Producto.class, numRef);
+        producto.agregarImagen(img);
+        
+        em.getTransaction().commit();
+        em.close();
     }
     
     
     public Categoria getCat(String nombre) {
-    	return this.categorias.get(nombre);
+        return em.find(Categoria.class, nombre);
     }
     
     public Categoria[] getCategorias() {
-        Collection<Categoria> collection = this.categorias.values(); // Obtiene todas las categorías
+        Collection<Categoria> collection = em.createQuery("SELECT c FROM Categoria c", Categoria.class).getResultList();
         return collection.toArray(new Categoria[collection.size()]); // Convierte a un arreglo
     }
     
@@ -179,82 +236,107 @@ public class Sistema implements ISistema {
 	   if (existeCategoria(nombre)) {
 		   throw new CategoriaException("El nombre de la categoria ya existe");
 	   }
-	   Cat_Padre nuevaCategoria = new Cat_Padre(nombre);
-	   this.categorias.put(nombre, nuevaCategoria);
-	   this.arbolCategorias.put(nombre, nuevaCategoria);
+	   EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+	   EntityManager em = emf.createEntityManager();
+	   em.getTransaction().begin();
+	   
+	   em.persist(new Cat_Padre(nombre));
+	   
+	   em.getTransaction().commit();
+	   em.close();
     }
     public void agregarCategoriaConProductos(String nombre) throws CategoriaException{
 	   if (existeCategoria(nombre)) {
 		   throw new CategoriaException("Esta categoria ya existe");
 	   }
-	   Cat_Producto nuevaCategoria = new Cat_Producto(nombre);
-	   this.categorias.put(nombre, nuevaCategoria);
-	   this.arbolCategorias.put(nombre, nuevaCategoria);
+	   EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+	   EntityManager em = emf.createEntityManager();
+	   em.getTransaction().begin();
+	   
+	   em.persist(new Cat_Producto(nombre));
+	   
+	   em.getTransaction().commit();
+	   em.close();
    }
     public void asignarlePadreCategoria(String nombrePadre, String nombre) throws CategoriaException {
 	   if (nombre == nombrePadre) {
 		   throw new CategoriaException("Una categoría no puede ser su propio padre");
 	   }
+	   EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+	   EntityManager em = emf.createEntityManager();
+	   em.getTransaction().begin();
 	   
-	   Cat_Padre catPadre = (Cat_Padre) this.categorias.get(nombrePadre);
-	   Categoria cat = this.categorias.get(nombre);
-
+	   Cat_Padre catPadre = null;
+	   Categoria cat = null;
+   	
+	   try {
+		   catPadre = em.find(Cat_Padre.class, nombrePadre);
+		   cat = em.find(Categoria.class, nombre);
+	   } catch (Exception e) {
+		   System.out.print(e);
+		   em.close();
+	   }
+	   if(cat == null || catPadre == null) {
+		   em.close();
+		   throw new CategoriaException("Una de las categorias ingresadas no existe");
+	   }
 	   if (catPadre.verificarSiYaEsHijo(nombre)) {
+		   em.close();
 		   throw new CategoriaException("Esta categoria ya es su hijo");
 	   }
 	   
 	   cat.setPadre(catPadre);
 	   catPadre.agregarHijo(cat);
-	   arbolCategorias.remove(cat.getNombre());
+	   
+	   em.getTransaction().commit();
+	   em.close();
    }
 
     public List <String> listarSoloNombresPadresCat() {
+    	List<Cat_Padre> categorias = null;
+    	
+    	try {
+    		categorias = em.createQuery("SELECT c FROM Cat_Padre c", Cat_Padre.class).getResultList();
+    	} catch (Exception e) {
+    		System.out.print(e);
+    	}
     	List <String> listarPadres = new ArrayList<>();
-    	for (Map.Entry<String, Categoria> entry : categorias.entrySet()) {
-    		Categoria cat = entry.getValue();
-    		if (cat.getTipo() == "Padre") {
-    			Cat_Padre catPadre = (Cat_Padre) cat;
-    			listarPadres.add(catPadre.getNombre());
-    		}
+    	for (Cat_Padre cat : categorias) {
+    		listarPadres.add(cat.getNombre());    		
     	}
     	return listarPadres;
     }
+    
     public boolean existeCategoria(String nombre) {
-        return this.categorias.containsKey(nombre);
+    	Categoria cat = null;
+    	try {
+    		cat = em.find(Categoria.class, nombre);
+    	}catch (Exception e) {
+    		System.out.print(e);
+    	}
+        return cat != null;
     }
     
     
     
     // CASO DE USO 4: GENERAR ORDEN DE COMPRA
     public DefaultMutableTreeNode arbolProductos() {
-    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-    	EntityManager em = emf.createEntityManager();
-    	em.getTransaction().begin();
-    	
     	DefaultMutableTreeNode root = new DefaultMutableTreeNode("Cats");
     	List<Categoria> categorias = null;
 	
     	try {
     		categorias = em.createQuery("SELECT c FROM Categoria c WHERE c.padre IS NULL", Categoria.class).getResultList();
     	} catch (Exception e) {
-    		em.getTransaction().commit();
-    		em.close();
     		System.out.print(e);
     	}
    	 	for (Categoria cat : categorias) {
    	 		DefaultMutableTreeNode child = arbolProductos(cat);
    	 		root.add(child);
    	 	}
-   	 	em.getTransaction().commit();
-		em.close();
    	 	return root;
     }
     
     public DefaultMutableTreeNode arbolProductos(Categoria cat) {
-    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-    	EntityManager em = emf.createEntityManager();
-    	em.getTransaction().begin();
-    	
         DefaultMutableTreeNode rama = new DefaultMutableTreeNode(cat.getNombre());
         if (cat.getTipo().equals("Padre")) {
             Map<String, Categoria> hijos = ((Cat_Padre) cat).getHijos();
@@ -285,8 +367,6 @@ public class Sistema implements ISistema {
                 rama.add(new DefaultMutableTreeNode("Sin Elementos"));
             }
         }
-        em.getTransaction().commit();
-		em.close();
 		return rama;
     }
 
@@ -296,14 +376,9 @@ public class Sistema implements ISistema {
     	//ordenes.put(orden.getNumero(), orden);
     }
     public Integer obtenerStockProducto(int numRef) {
-    	for (Usuario user : usuarios.values()) {
-    		if (user instanceof Proveedor) {
-    			Proveedor proveedor = (Proveedor) user;
-    			Producto producto = proveedor.obtenerProd(numRef);
-    			if (producto != null) {
-    				return producto.getStock();
-    			}
-    		}
+    	Producto producto = em.find(Producto.class, numRef);
+    	if (producto != null) {
+    		return producto.getStock();
     	}
     	return 0;
     }
@@ -312,7 +387,7 @@ public class Sistema implements ISistema {
     	ordenes.remove(keyOrden);
     }
     public void asignarOrdenCliente(String usuarioCliente) {
-    	Cliente cliente = (Cliente) usuarios.get(usuarioCliente);
+    	Cliente cliente = (Cliente) this.getUsuario(usuarioCliente);
     	cliente.agregarCompra(ordenes.get(ordenes.size()));
     }
     
@@ -320,45 +395,53 @@ public class Sistema implements ISistema {
     
     // CASO DE USO 5: VER INFORMACION DE CLIENTE 
     public List<DTCliente> listarClientes() {
-        List<DTCliente> listaClientes = new ArrayList<>();
-        for (Map.Entry<String, Usuario> entry : usuarios.entrySet()) {
-            Usuario usuario = entry.getValue();
-            if (usuario.getTipo().equals("cliente")) {
-                Cliente usuarioCliente = (Cliente) usuario;
-                listaClientes.add(usuarioCliente.crearDt());
-            }
-        }
-        return listaClientes;
+    	List<Cliente> clientes = null;
+    	
+    	try {
+    		clientes = em.createQuery("SELECT c FROM Cliente c", Cliente.class).getResultList();
+    	} catch (Exception e) {
+    		System.out.print(e);
+    	}
+    	
+    	List <DTCliente> dts = new ArrayList<>();
+    	for (Cliente cli : clientes) {
+    		dts.add(cli.crearDt());
+    	}
+    	return dts;
     }
     
     
     
     // CASO DE USO 6: VER INFORMACION DE PROVEEDOR
     public List<DTProveedor> listarProveedores(){
-    	List<DTProveedor> listaProveedor = new ArrayList<>();
-    	for (Map.Entry<String, Usuario> entry : usuarios.entrySet()) {
-    		Usuario usuario = entry.getValue();
-    		if (usuario.getTipo().equals("proveedor")) {
-    			Proveedor usuarioProveedor = (Proveedor) usuario;
-    			listaProveedor.add(usuarioProveedor.crearDt());
-    		}
+    	List<Proveedor> proveedores = null;
+    	
+    	try {
+    		proveedores = em.createQuery("SELECT p FROM Proveedor p", Proveedor.class).getResultList();
+    	} catch (Exception e) {
+    		System.out.print(e);
     	}
-    	return listaProveedor;
+    	if (proveedores == null) {
+    		return null;
+    	}
+    	List <DTProveedor> dts = new ArrayList<>();
+    	for (Proveedor prov : proveedores) {
+    		dts.add(prov.crearDt());
+    	}
+    	return dts;
     }
     
     
     
     // CASO DE USO 7: CANCELAR ORDEN DE COMPRA
     public Cliente getClienteDeOrden(Integer orden) {
-        for (Usuario usuario : usuarios.values()) {
-            if (usuario instanceof Cliente) {
-                Cliente cliente = (Cliente) usuario;
-                System.out.println("Verificando cliente: " + cliente.getCorreo()); // Debug
-                if (cliente.existeOrden(orden)) {
-                    System.out.println("Cliente encontrado con orden: " + orden); // Debug
-                    return cliente;
-                }
-            }
+    	List <Cliente> usuarios = em.createQuery("SELECT c FROM Cliente", Cliente.class).getResultList();
+        for (Cliente cliente : usuarios) {
+        	System.out.println("Verificando cliente: " + cliente.getCorreo()); // Debug
+        	if (cliente.existeOrden(orden)) {
+        		System.out.println("Cliente encontrado con orden: " + orden); // Debug
+        		return cliente;
+        	}
         }
         System.out.println("No se encontró cliente con la orden: " + orden); // Debug
         return null;
@@ -390,31 +473,20 @@ public class Sistema implements ISistema {
     
     // CASO DE USO 8: MODIFICAR DATOS DE PRODUCTO
     public void borrarProducto(int numero, String titulo) {
-    	Map<String, Categoria> cats = categorias;
-    	Iterator<Map.Entry<String, Categoria>> iterator = cats.entrySet().iterator();
-
-    	while (iterator.hasNext()) {
-    	    Map.Entry<String, Categoria> entry = iterator.next();
-    	    Categoria categoria = entry.getValue();
-
-    	    // Verificar si la categoría es una instancia de Cat_Producto
-    	    if (categoria instanceof Cat_Producto) {
-    	        Cat_Producto prodC = (Cat_Producto) categoria;
-
-    	        Iterator<Map.Entry<Integer, Producto>> prodIterator = prodC.getProductos().entrySet().iterator();
-
-    	        while (prodIterator.hasNext()) {
-    	            Map.Entry<Integer, Producto> prodEntry = prodIterator.next();
-    	            Producto producto = prodEntry.getValue();
-
-    	            // Comparar el título del producto usando equals y el número de referencia
-    	            if (producto.getNombre().equals(titulo) && producto.getNumRef() == numero) {
-    	                // Remover el producto del mapa
-    	                prodIterator.remove();
-    	            }
-    	        }
-    	    }
-    	}
+    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+    	EntityManager em = emf.createEntityManager();
+    	em.getTransaction().begin();
+        
+        Producto producto = em.find(Producto.class, numero);
+        List <Cat_Producto> cats = producto.getCategorias();
+        
+        for(Cat_Producto cat : cats) {
+        	cat.quitarProducto(producto.getNumRef());
+        }
+        
+        em.remove(producto);
+        em.getTransaction().commit();
+        em.close();
     }
 
 
@@ -422,7 +494,7 @@ public class Sistema implements ISistema {
     // CASO DE USO 9: VER INFORMACION DE PRODUCTO
     public List<DtProducto> listarProductosPorCategoria(String cat) throws ProductoException {
     	List <DtProducto> listaProductos = new ArrayList<>();
-    	Cat_Producto prodC = (Cat_Producto) this.categorias.get(cat);
+    	Cat_Producto prodC = em.find(Cat_Producto.class, cat);
     	if (prodC.getProductos().isEmpty()) {
     		throw new ProductoException("Esta categoría no cuenta con productos");
     	}
@@ -435,7 +507,7 @@ public class Sistema implements ISistema {
     
     
     public Producto getProdByCateogria(String cat, int numRef) throws ProductoException {
-        Cat_Producto prodC = (Cat_Producto) this.categorias.get(cat);
+        Cat_Producto prodC = em.find(Cat_Producto.class, cat);
         
         if (prodC == null || prodC.getProductos().isEmpty()) {
             throw new ProductoException("Esta categoría no cuenta con productos");
@@ -450,75 +522,35 @@ public class Sistema implements ISistema {
     }
 
     public List<DtProducto> listarALLProductos() throws ProductoException {
-    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-    	EntityManager em = emf.createEntityManager();
-    	
     	List<DtProducto> listaProductos = new ArrayList<>();
-    	List<Integer> numRefs = new ArrayList<Integer>();
-    	
-		List<Categoria> categorias = null;
-		em.getTransaction().begin();
-		
-		try {
-			categorias = em.createQuery("SELECT c FROM Categoria c WHERE c.tipo='Producto'", Categoria.class).getResultList();
-		} catch (Exception e) {
-			em.getTransaction().commit();
-	        em.close();
-			System.out.print(e);
-		}
-		System.out.print("Categorias traidas de la base de datos correctamente");
-		
-    	for (Categoria cat : categorias) {
-    		List<Producto> productos = null;
-    		try {
-    			productos = em.createQuery("SELECT p FROM Producto p JOIN p.categorias c WHERE c.nombre='" + cat.getNombre() + "'", Producto.class).getResultList();
-    		} catch (Exception e) {
-    			System.out.print(e);
-    		}
-    		
-   			if (productos.isEmpty()) {
-    			continue;
-    		}
-    		
-    		for (Producto prod: productos) {
-    			DtProducto dtProducto = prod.crearDT();
-   				if (!numRefs.contains(dtProducto.getNumRef())) {
-               		numRefs.add(dtProducto.getNumRef());
-               		listaProductos.add(dtProducto);
-               	}
-    		}
+    	List<Producto> productos = null;
+    	try {
+    		productos = em.createQuery("SELECT p FROM Producto p", Producto.class).getResultList();
+    	} catch (Exception e) {
+    		System.out.print(e);
     	}
-    	em.getTransaction().commit();
-        em.close();
+    	
+    	for (Producto prod: productos) {
+    		DtProducto dtProducto = prod.crearDT();
+    		listaProductos.add(dtProducto);
+    	}
+	
     	if (listaProductos.isEmpty()) {
     		throw new ProductoException("No se ha encontrado ningun producto para listar");
     	}
     	return listaProductos;
     }
     public DtProducto getDtProducto(int numRef) {
-    	for (Usuario user : usuarios.values()) {
-    		if (user instanceof Proveedor) {
-    			Proveedor proveedor = (Proveedor) user;
-    			Producto producto = proveedor.obtenerProd(numRef);
-    			if (producto != null) {
-    				return producto.crearDT();
-    			}
-    		}
+    	Producto producto = em.find(Producto.class, numRef);
+
+    	if(producto != null) {
+    		return producto.crearDT();
     	}
     	return null;
     }
     
     public Producto getProducto(int numRef) {
-    	for (Usuario user : usuarios.values()) {
-    		if (user instanceof Proveedor) {
-    			Proveedor proveedor = (Proveedor) user;
-    			Producto producto = proveedor.obtenerProd(numRef);
-    			if (producto != null) {
-    				return producto;
-    			}
-    		}
-    	}
-    	return null;
+    	return em.find(Producto.class, numRef);
     }
     
     
@@ -551,56 +583,64 @@ public class Sistema implements ISistema {
     }
     */
     public void addOrdenes(OrdenDeCompra orden, String nickUsuario) {
-    	Usuario user = this.usuarios.get(nickUsuario);
-    	
-    	Cliente cliente = (Cliente) user;
+    	Cliente cliente = em.find(Cliente.class, nickUsuario);
     	ordenes.put(orden.getNumero(), orden);
     	cliente.agregarCompra(orden);
     }
     public boolean comprobarCat(String cat) throws CategoriaException {
-    	if ((Cat_Producto) this.categorias.get(cat) == null) {
+    	if (em.find(Categoria.class, cat) == null) {
     		throw new CategoriaException("Esta categoria no existe");
     	}
     	return true;
     } 
     public void eliminarPDesdeProveedor(String proveedor, int numRef) {
-    	Proveedor prov = (Proveedor) this.usuarios.get(proveedor);
+    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+    	EntityManager em = emf.createEntityManager();
+    	em.getTransaction().begin();
+         
+    	Proveedor prov = em.find(Proveedor.class, proveedor);
     	prov.eliminarProd(numRef);
+    	em.remove(em.find(Producto.class, numRef));
+
+    	em.getTransaction().commit();
+    	em.close();
     }
     
     
 
 	 // MOSTRAR PERFIL CLIENTE
 	 public DTCliente mostrarPerfilCliente(String nick) {
-	 	Cliente cliente = (Cliente) this.usuarios.get(nick);
+	 	Cliente cliente = em.find(Cliente.class, nick);
 	 	
 	 	return cliente.crearDt();
 	 }
 	 
 	 // MOSTRAR PERFIL PROVEEDOR
 	 public DTProveedor mostrarPerfilProveedor(String nick) {
-		 Proveedor proveedor = (Proveedor) this.usuarios.get(nick);
+		 Proveedor proveedor = em.find(Proveedor.class, nick);
 		 
 		 return proveedor.crearDt();
 	 }
 	 
 	 // Traer Ordenes de compras de un cliente
 	 public List<DTOrdenDeCompra> getOrdenesCliente(String nick) {
-		 Cliente cliente = (Cliente) this.usuarios.get(nick);
+		 Cliente cliente = em.find(Cliente.class, nick);
 		 
 		 return cliente.mostrarCompras();
 	 }
 	 
 	 
 	 public Usuario getUserByEmail(String email) throws UsuarioException {
-		 for (Usuario usuario : usuarios.values()) {
-			 	if (usuario.getCorreo() == email) {
-			 		return usuario;
-			 	}
-	     }
-		 
-		 throw new UsuarioException("No se ha encontrado al usuario");
-		 
+		 Usuario u = null;
+		 try {
+			 u = em.createQuery("SELECT u FROM Usuario WHERE u.correo='" + email + "'", Usuario.class).getSingleResult();
+		 }catch(Exception e) {
+			 System.out.println(e.getMessage());
+		 }
+		 if(u == null) {
+			 throw new UsuarioException("No se ha encontrado al usuario");
+		 }
+		 return u;
 	 }
 	 
 	
@@ -627,8 +667,19 @@ public class Sistema implements ISistema {
 	    	this.getProdByCateogria(cat, num).getImagenes().add(imagen);
 	   }
 	 */
-	 public Map<String, Categoria> getCategoriasLista() {
-		 return this.categorias;
+	 public List<Categoria> getCategoriasLista() {
+		 EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+		 EntityManager em = emf.createEntityManager();
+	    	
+		 List<Categoria> categorias = null;
+		 try {
+			 categorias = em.createQuery("SELECT c FROM Categoria", Categoria.class).getResultList();
+		 } catch (Exception e) {
+			 em.close();
+			 System.out.print(e);
+		 }
+		 em.close();
+		 return categorias;
 	 }
 	 
 	 public List<Producto> buscarProductos(String query) {
@@ -639,34 +690,20 @@ public class Sistema implements ISistema {
 		    }
 
 		    String queryLower = query.toLowerCase(); 
-
-		    for (Categoria categoria : categorias.values()) {
-		        if (categoria instanceof Cat_Producto) {
-		            Cat_Producto catprod = (Cat_Producto) categoria;
-		            for (Producto producto : catprod.getProductos().values()) {
-		                if (producto.getNombre().toLowerCase().contains(queryLower) ||
-		                    categoria.getNombre().toLowerCase().contains(queryLower) ||
-		                    producto.getProveedor().getNick().toLowerCase().contains(queryLower)) {
-		                    resultados.add(producto);
-		                }
-		            }
-		        }
+		    List <Producto> prods = em.createQuery("SELECT p FROM Producto p", Producto.class).getResultList();
+		    for (Producto producto : prods) {
+		    	if (producto.getNombre().toLowerCase().contains(queryLower) ||
+		    			producto.getCategorias().stream().anyMatch(cat -> cat.getNombre().toLowerCase().contains(queryLower)) ||
+		    			producto.getProveedor().getNick().toLowerCase().contains(queryLower)) {
+		    		resultados.add(producto);
+		    	}
 		    }
 		    return resultados; 
 		}
 	 
 	 public List<Producto> getAllProductos() {
-		    List<Producto> resultados = new ArrayList<>();
-		    for (Categoria categoria : categorias.values()) {
-		        if (categoria instanceof Cat_Producto) {
-		        	Cat_Producto catprod = (Cat_Producto) categoria;
-		            for (Producto producto : catprod.getProductos().values()) {
-		                resultados.add(producto);
-		            }
-		        }
-		    }
-		    return resultados;
-		}
+		 return em.createQuery("SELECT p FROM Producto p", Producto.class).getResultList();
+	 }
 	 
 	 
 	 public void realizarCompra(OrdenDeCompra orden, String nickCliente) {
@@ -708,17 +745,7 @@ public class Sistema implements ISistema {
 	 
 	 
 	 	public List<Usuario> listaUsuarios(){
-	 		Map<String, Usuario> personas = this.usuarios;
-	 		List<Usuario> nuevaLista = new ArrayList<Usuario>();
-	 		for (Map.Entry<String, Usuario> entry : personas.entrySet()) { 
-	 			Usuario usuario = entry.getValue();
-	 			
-	 			nuevaLista.add(usuario);
-	 			
-	 		}
-	 		
-	 		
-	 		return nuevaLista;
+	 		return em.createQuery("SELECT u FROM Usuario u", Usuario.class).getResultList();
 	 	}
 	 	
 	 	public OrdenDeCompra getOrden(int numero) {
@@ -726,7 +753,7 @@ public class Sistema implements ISistema {
 	 	}
 	 	
 	 public void cambiarEstadoOrden(String estado, String com, int numero, String cliente) {
-	 		Cliente client = (Cliente) this.usuarios.get(cliente);
+	 		Cliente client = em.find(Cliente.class, cliente);
 	 		
 	 		if (client != null) {
 	 			DTEstado nuevoEstado = new DTEstado(estado, com);
@@ -760,7 +787,7 @@ public class Sistema implements ISistema {
 	 	}
 	 
 	 public void cambiarEstadoOrdenconDT(DTEstado est, int numero, String cliente) {
-		 Cliente client = (Cliente) this.usuarios.get(cliente);
+		 Cliente client = em.find(Cliente.class, cliente);
 	 		
 	 		if (client != null) {
 	 			this.ordenes.get(numero).setEstado(est);
@@ -909,15 +936,7 @@ public class Sistema implements ISistema {
 
 	 
 	 public List<Cliente> getAllClientes() {
-		 List<Cliente> clientes = new ArrayList<Cliente>();
-		 for (Map.Entry<String, Usuario> entry : usuarios.entrySet()) {
-			 Usuario usuario = entry.getValue();
-			 if (usuario.getTipo().equals("cliente")) {
-				 Cliente cliente = (Cliente) usuario;
-				 clientes.add(cliente);
-			 }
-		 }
-		 return clientes;
+		 return em.createQuery("SELECT c FROM Cliente c", Cliente.class).getResultList();
 	 }
 
 	 public Icon resizeIcon(ImageIcon icon, int width, int height) {

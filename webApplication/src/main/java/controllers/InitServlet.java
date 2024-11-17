@@ -59,7 +59,7 @@ public class InitServlet extends HttpServlet {
 				sistema.agregarCliente("Alberto", "albert1341", "Hernandez", "Ahernandez@gmail.com", fecha2, "123", "123");
 				sistema.agregarCliente("Maria", "agusmari", "Agustina", "mariaagustina@gmail.com", fecha1, "123", "123");
 			} catch (UsuarioRepetidoException e) {
-				e.printStackTrace();
+				System.out.println(e.getMessage());
 			}
              
              
@@ -70,17 +70,12 @@ public class InitServlet extends HttpServlet {
 				sistema.agregarProveedor("Perez", "milivairo2303@gmail.com", "Andres", "Perez", fecha3 , "Bamboo.inc" , "www.bamboo.com", "123", "123");
 				sistema.agregarProveedor("Jorge", "Jorge@gmail.com", "Jorge", "Urrutia", fecha3 , "Google.inc" , "www.google.com", "123", "123");
 			} catch (UsuarioRepetidoException e) {
-				e.printStackTrace();
+				System.out.println(e.getMessage());
 			}
              
           
              sistema.agregarImagenUsuario("Perez", "/images/p1.jpg");
              
-             em.persist(sistema.getUsuario("Juan123"));
-             em.persist(sistema.getUsuario("albert1341"));
-             em.persist(sistema.getUsuario("agusmari"));
-             em.persist(sistema.getUsuario("Perez"));
-             em.persist(sistema.getUsuario("Jorge"));
              
              System.out.print(((Cliente) sistema.getUsuario("Juan123")).getImagen());
 
@@ -90,7 +85,7 @@ public class InitServlet extends HttpServlet {
 				sistema.agregarCategoria("Tecnologia");
 				sistema.agregarCategoria("Estanterias");
 			} catch (CategoriaException e) {
-				e.printStackTrace();
+				System.out.println(e.getMessage());
 			}
              
              try {
@@ -99,7 +94,7 @@ public class InitServlet extends HttpServlet {
 				sistema.agregarCategoriaConProductos("Otros");
 				sistema.agregarCategoriaConProductos("Bazar");
 			} catch (CategoriaException e) {
-				e.printStackTrace();
+				System.out.println(e.getMessage());
 			}
              
           // Crear datos de ejemplo para DTEstado
@@ -125,22 +120,22 @@ public class InitServlet extends HttpServlet {
 				sistema.agregarProductoCategoria("Tecno", 2);
 				sistema.agregarProductoCategoria("Bazar", 3);
 			} catch (CategoriaException e) {
-				e.printStackTrace();
+				System.out.println(e.getMessage());
 			}
              
-             em.persist(sistema.getProducto(1));
-             em.persist(sistema.getProducto(2));
-             em.persist(sistema.getProducto(3));
-             try {
-             em.persist(sistema.getCat("Living"));
-             em.persist(sistema.getCat("Tecnologia"));
-             em.persist(sistema.getCat("Estanterias"));
-             em.persist(sistema.getCat("Tecno"));
-             em.persist(sistema.getCat("Otros"));
-             em.persist(sistema.getCat("Bazar"));
-             }catch (Exception e) {
-            	 System.out.println(e.getMessage());
-             }
+//             em.persist(sistema.getProducto(1));
+//             em.persist(sistema.getProducto(2));
+//             em.persist(sistema.getProducto(3));
+//             try {
+//             em.persist(sistema.getCat("Living"));
+//             em.persist(sistema.getCat("Tecnologia"));
+//             em.persist(sistema.getCat("Estanterias"));
+//             em.persist(sistema.getCat("Tecno"));
+//             em.persist(sistema.getCat("Otros"));
+//             em.persist(sistema.getCat("Bazar"));
+//             }catch (Exception e) {
+//            	 System.out.println(e.getMessage());
+//             }
              
              
              //Map<Integer, Item> items = new HashMap<>();
