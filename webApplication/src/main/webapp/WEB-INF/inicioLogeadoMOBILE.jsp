@@ -1,10 +1,9 @@
-<%@page import="com.market.svcentral.Sistema"%>
-<%@page import="com.market.svcentral.Usuario"%>
-<%@page import="com.market.svcentral.Producto"%>
-<%@page import="com.market.svcentral.DTCliente" %>
-<%@page import="com.market.svcentral.DtProducto" %>
-<%@page import="com.market.svcentral.Carrito" %>
-<%@page import="com.market.svcentral.Cliente" %>
+
+<%@page import="services.Proveedor"%>
+<%@page import="services.Usuario"%>
+<%@page import="services.Producto"%>
+<%@page import="services.Carrito" %>
+<%@page import="services.Cliente" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -50,9 +49,9 @@
 
             <ul class="navbar-nav align-items-center">
                 <li class="nav-item">
-                    <% if (usr != null && usr.getTipo().equals("proveedor")) { %>
+                    <% if (usr != null && usr instanceof Proveedor) { %>
                         <a class="nav-link" href="perfilProveedorMOBILE?nickname=<%= usr.getNick() %>">Perfil</a>
-                    <% } else if(usr != null && usr.getTipo().equals("cliente")){ %>
+                    <% } else if(usr != null && usr instanceof Cliente){ %>
                         <a class="nav-link" href="perfilClienteMOBILE?nickname=<%= usr.getNick() %>">Perfil</a>
                     <% } %>
                 </li>
@@ -116,7 +115,7 @@
 <div class="container mt-5 mb-5" id="sobrenosotros">
     <div class="row align-items-center">
         <div class="col-md-6">
-            <img alt="Imagen sobre nosotros" class="img-fluid shadow" src="media/images/nosotros.jpg" style="max-width: 100%; height: auto; border: 1px solid black">
+            <img alt="Imagen sobre nosotros" class="img-fluid shadow" src="https://mrwallpaper.com/images/hd/hanging-photography-camera-against-mountain-e67sm3xq5ggp1k08.jpg" style="max-width: 100%; height: auto; border: 1px solid black">
         </div>
 
         <div class="col-md-6">

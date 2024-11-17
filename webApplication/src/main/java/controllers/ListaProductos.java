@@ -6,6 +6,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import services.Publicador;
+import services.PublicadorService;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -34,15 +37,10 @@ public class ListaProductos extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
     
-    private ISistema sist;
 
     @Override
     public void init() throws ServletException {
-        try {
-            sist = Factory.getSistema();  
-        } catch (Exception e) {
-            throw new ServletException("No se pudo inicializar ISistema", e);
-        }
+        
     }
 
 	/**
@@ -50,15 +48,14 @@ public class ListaProductos extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		//List<Producto> productos = sist.getAllProductos();
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-		EntityManager em = emf.createEntityManager();
-		List<Producto> productos = null;
-		em.getTransaction().begin();
+		
+		PublicadorService p = new PublicadorService();
+		Publicador port = p.getPublicadorPort();		
+		List<services.Producto> productos = null;
+		
 		
 		try {
-			productos = em.createQuery("SELECT p FROM Producto p", Producto.class)
-				    .getResultList();
+			productos = port.obtenerProductos();
 			
 		} catch (Exception e) {
 			System.out.print(e);
@@ -67,11 +64,8 @@ public class ListaProductos extends HttpServlet {
 		System.out.print("Productos traidos de la base de datos correctamente");
 		
         request.setAttribute("productos", productos);
-        request.getSession().setAttribute("sistema", sist);
         request.getRequestDispatcher("/WEB-INF/listaProductos.jsp").forward(request, response);
-        em.getTransaction().commit();
-        em.close();
-        em.close();
+     
 	
 	}
 

@@ -88,7 +88,6 @@
         <version>2.3.1</version>
     </dependency>
 
-    <!-- JWS API para anotaciones como @WebService -->
     <dependency>
         <groupId>javax.jws</groupId>
         <artifactId>javax.jws-api</artifactId>

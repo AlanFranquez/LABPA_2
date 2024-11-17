@@ -6,10 +6,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-import com.market.svcentral.EstadoSesion;
-import com.market.svcentral.Factory;
-import com.market.svcentral.ISistema;
-import com.market.svcentral.Usuario;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -27,15 +23,10 @@ import services.PublicadorService;
 public class FormLogin extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    private ISistema sist;
 
     @Override
     public void init() throws ServletException {
-        try {
-            sist = Factory.getSistema();
-        } catch (Exception e) {
-            throw new ServletException("No se pudo inicializar ISistema", e);
-        }
+        
     }
 
     @Override
