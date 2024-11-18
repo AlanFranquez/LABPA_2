@@ -39,7 +39,7 @@ public class ProductoServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	PublicadorService p = new PublicadorService();
+    	/*PublicadorService p = new PublicadorService();
         Publicador port = p.getPublicadorPort();
 
         // Obtener la lista de categorías
@@ -64,11 +64,13 @@ public class ProductoServlet extends HttpServlet {
 
         // Redirige al JSP de registro de productos
         request.getRequestDispatcher("/WEB-INF/RegistrarProducto.jsp").forward(request, response);
+        */
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession objSession = request.getSession();
+        /*
+    	HttpSession objSession = request.getSession();
         Proveedor prov = (Proveedor) objSession.getAttribute("usuarioLogueado");
         PublicadorService p = new PublicadorService();
         Publicador port = p.getPublicadorPort();
@@ -190,5 +192,6 @@ public class ProductoServlet extends HttpServlet {
             request.setAttribute("error", "El precio debe ser mayor a cero.");
             request.getRequestDispatcher("/WEB-INF/RegistrarProducto.jsp").forward(request, response);
         }
+        */
     }
 }

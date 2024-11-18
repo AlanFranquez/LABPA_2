@@ -224,14 +224,15 @@ public class Publicador {
 			return new DTEstado(estado, com);
 		}
 		
+		
 		@WebMethod
-		public String getTipo(Usuario u) {
-			return u.getTipo();
+		public String getTipo(String u) {
+			return em.find(Usuario.class, u).getTipo();
 		}
 		
 		@WebMethod
-		public int getNumRefOrden(DTOrdenDeCompra o) {
-			return o.getNumero();
+		public int getNumRefOrden(int o) {
+			return em.find(OrdenDeCompra.class, o).crearDT().getNumero();
 		}
 		
 		@WebMethod
@@ -269,18 +270,18 @@ public class Publicador {
 		}
 		
 		@WebMethod
-		public String getEstadoOrden(DTOrdenDeCompra o) {
-			return o.getEstado();
+		public String getEstadoOrden(int o) {
+			return em.find(OrdenDeCompra.class, o).crearDT().getEstado();
 		}
 		
 		@WebMethod
-		public float getPrecioTotalOrden(DTOrdenDeCompra o) {
-			return o.getPrecioTotal();
+		public float getPrecioTotalOrden(int o) {
+			return em.find(OrdenDeCompra.class, o).crearDT().getPrecioTotal();
 		}
 		
 		@WebMethod
-		public String getFechaOrden(DTOrdenDeCompra o) {
-			return o.getFechaString();
+		public String getFechaOrden(int o) {
+			return em.find(OrdenDeCompra.class, o).crearDT().getFechaString();
 		}
 		
 		@WebMethod
@@ -319,44 +320,42 @@ public class Publicador {
 		}
 		
 		@WebMethod
-		public List<OrdenDeCompra> getOrdenesCliente(Cliente c) {
+		public List<OrdenDeCompra> getOrdenesCliente(String c) {
 			if (c == null) {
 		        throw new IllegalArgumentException("El cliente no puede ser nulo");
 		    }
 			
-			
-			
-			return c.getOrdenes();
+			return em.find(Cliente.class, c).getOrdenes();
 		}
 		
 		@WebMethod
-		public String getNickDTCliente(DTCliente c) {
-			return c.getNick();
+		public String getNickDTCliente(String c) {
+			return em.find(Usuario.class, c).getNick();
 		}
 		
 		@WebMethod
-		public String getNombreDTCliente(DTCliente c) {
-			return c.getNombre();
+		public String getNombreDTCliente(String c) {
+			return em.find(Usuario.class, c).getNombre();
 		}
 		
 		@WebMethod
-		public String getApellidoDTCliente(DTCliente c) {
-			return c.getApellido();
+		public String getApellidoDTCliente(String c) {
+			return em.find(Usuario.class, c).getApellido();
 		}
 		
 		@WebMethod
-		public String getImagenesDTCliente(DTCliente c) {
-			return c.getImagenes();
+		public String getImagenesDTCliente(String c) {
+			return em.find(Usuario.class, c).getImagen();
 		}
 		
 		@WebMethod
-		public String getFechaNacDTClienteString(DTCliente c) {
-			return c.getNacimientoFormateado();
+		public String getFechaNacDTClienteString(String c) {
+			return em.find(Cliente.class, c).crearDt().getNacimientoFormateado();
 		}
 		
 		@WebMethod
-		public DTOrdenDeCompra crearDTOrden(OrdenDeCompra o) {
-			return o.crearDT();
+		public DTOrdenDeCompra crearDTOrden(int numref) {
+			return em.find(OrdenDeCompra.class, numref).crearDT();
 		}
 	// FABRICIO
 	/*

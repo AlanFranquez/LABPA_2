@@ -1,11 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <%@page import="java.util.HashMap"%>
-<%@page import="services.*"%>
 <%@page import="java.util.Collection"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.Map"%>
+<%@ page import="webservices.PublicadorService" %>
+<%@ page import="services.Publicador" %>
+<%@ page import="webservices.DtCliente" %>
+<%@ page import="webservices.Usuario" %>
+<%@ page import="webservices.OrdenDeCompra" %>
+<%@ page import="webservices.DtOrdenDeCompra" %>
 
 
 
@@ -22,15 +27,18 @@
 <body>
     
     <%
-    	PublicadorService p = new PublicadorService();
-		Publicador port = p.getPublicadorPort();
+    	webservices.PublicadorService p = new PublicadorService();
+    	webservices.Publicador port = p.getPublicadorPort();
 		
-    	services.DtCliente user = (DtCliente) request.getAttribute("usuario");
+		webservices.DtCliente user = (webservices.DtCliente) request.getAttribute("usuario");
     
-    	services.Usuario usr = (Usuario) request.getAttribute("usuarioLogueado");
+		webservices.Usuario usr = (webservices.Usuario) request.getAttribute("usuarioLogueado");
     	
-    	List<services.OrdenDeCompra> ordenes = (List<OrdenDeCompra>) request.getAttribute("ordenes");
+    	List<webservices.OrdenDeCompra> ordenes = (List<webservices.OrdenDeCompra>) request.getAttribute("ordenes");
     	
+    	webservices.Cliente usuarioLogueado = (webservices.Cliente) request.getAttribute("usuarioLogueado");
+    	String nickUser = port.getNickCliente(usuarioLogueado);
+		
     	
     	
     %>
@@ -55,19 +63,19 @@
             <ul class="navbar-nav align-items-center">
                 <li class="nav-item">
                    <% 
-if (usr != null && port.getTipo(usr).equals("proveedor")) { 
+if (usr != null && port.getTipo(nickUser).equals("proveedor")) { 
 %> 
-    <a class="nav-link" href="perfilProveedor?nickname=<%=usr.getNick()%>">Perfil</a> 
+    <a class="nav-link" href="perfilProveedor?nickname=<%= nickUser %>">Perfil</a> 
 <% 
-} else if (usr != null && port.getTipo(usr).equals("cliente")) { 
+} else if (usr != null && port.getTipo(nickUser).equals("cliente")) { 
 %> 
-    <a class="nav-link" href="perfilCliente?nickname=<%=usr.getNick()%>">Perfil</a>
+    <a class="nav-link" href="perfilCliente?nickname=<%= nickUser %>">Perfil</a>
 <% 
 }
 %>
                 </li>
                 <%
-                if (usr != null && port.getTipo(usr).equals("cliente")) {
+                if (usr != null && port.getTipo(nickUser).equals("cliente")) {
                 %>
                 <li class="nav-item"><a class="nav-link" href="Carrito">
                     <svg xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" viewBox="0 0 24 24">
@@ -86,20 +94,18 @@ if (usr != null && port.getTipo(usr).equals("proveedor")) {
         </div>
     </div>
 </nav>
-
-
     
     <main class="container mt-5 d-flex"> 
     <section class="row justify-content-center align-items-center">
         <div class="col-md-6 col-12 text-center">
-                <img class="img-fluid rounded-circle" style="width: 200px; height: 200px; object-fit: cover;" src="media/<%= port.getImagenesDTCliente(user) %>" alt="Imagen de cliente" />
+                <img class="img-fluid rounded-circle" style="width: 200px; height: 200px; object-fit: cover;" src="media/<%= port.getImagenesDTCliente(nickUser) %>" alt="Imagen de cliente" />
         </div>
         <div class="col-md-6 col-12">
             <p>Tipo de Usuario: <b>Cliente</b></p>
-            <p>Nickname: <b><%= port.getNickDTCliente(user) %></b></p>
-            <p>Nombre: <b><%= port.getNombreDTCliente(user) %></b></p>
-            <p>Apellido: <b><%= port.getApellidoDTCliente(user) %></b></p>
-            <p>Fecha de Nacimiento: <br><b><%= port.getFechaNacDTClienteString(user) %></b></p> 
+            <p>Nickname: <b><%= port.getNickDTCliente(nickUser) %></b></p>
+            <p>Nombre: <b><%= port.getNombreDTCliente(nickUser) %></b></p>
+            <p>Apellido: <b><%= port.getApellidoDTCliente(nickUser) %></b></p>
+            <p>Fecha de Nacimiento: <br><b><%= port.getFechaNacDTClienteString(nickUser) %></b></p> 
         </div>
     </section>
 </main>
@@ -114,38 +120,39 @@ if (usr != null && port.getTipo(usr).equals("proveedor")) {
       		
       	
       		for(OrdenDeCompra dt : ordenes) {
-      			DtOrdenDeCompra dto = port.crearDTOrden(dt);
       			%>
+      			
       	<div class="container align-items-center justify-content-center">
             <div class="card">
                 <div class="row g-0">
                     <div class="col-md-8">
                         <div class="card-body">
-                            <h3 class="card-title"><%= port.getNumRefOrden(dto) %></h3> 
+                            <h3 class="card-title"><%= port.getNumRefOrden(dt.getNumero()) %></h3> 
                             
                          	
                             <% 
                             
-                            if ("Entregado".equals(port.getEstadoOrden(dto))) { 
+                            if ("Entregado".equals(port.getEstadoOrden(dt.getNumero()))) { 
                             
                             %>
                             
 
-                            	<span class="badge mb-2" style="background-color: green; font-weight: normal; color: white"><%= port.getEstadoOrden(dto) %></span>
+                            	<span class="badge mb-2" style="background-color: green; font-weight: normal; color: white"><%= port.getEstadoOrden(dt.getNumero()) %></span>
                             
                             <% } else {%>
-                            	<span class="badge mb-2" style="background-color: yellow; font-weight: normal; color: black"><%= port.getEstadoOrden(dto) %></span>
+                            	<span class="badge mb-2" style="background-color: yellow; font-weight: normal; color: black"><%= port.getEstadoOrden(dt.getNumero()) %></span>
                             
                             <% }%>
                             
+                            
                             <br>
                             
-                            <p class="card-text"><b>Precio total: </b><%= port.getPrecioTotalOrden(dto) %></p>
-                            <p class="card-text"><b>Fecha de compra: </b><%= port.getFechaOrden(dto) %></p>
+                            <p class="card-text"><b>Precio total: </b><%= port.getPrecioTotalOrden(dt.getNumero()) %></p>
+                            <p class="card-text"><b>Fecha de compra: </b><%= port.getFechaOrden(dt.getNumero()) %></p>
                            
                             <button class="btn" style="border: none; background-color: #2C2C2C">
                             
-                            <a style="text-decoration: none; color: white" href="perfilOrden?nickname=<%= port.getNickDTCliente(user) %>&orden=<%= port.getNumRefOrden(dto) %>" >VER DETALLES</a>
+                            <a style="text-decoration: none; color: white" href="perfilOrden?nickname=<%= port.getNickDTCliente(nickUser) %>&orden=<%= port.getEstadoOrden(dt.getNumero()) %>" >VER DETALLES</a>
                             </button>
     
 

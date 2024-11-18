@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+
 import webservices.PublicadorService;
 import webservices.DtCliente;
 import webservices.OrdenDeCompra;
@@ -61,65 +62,51 @@ public class PerfilCliente extends HttpServlet {
         EntityManagerFactory emf = null;
         EntityManager em = null;
 
-            emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-            em = emf.createEntityManager();
+        emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+        em = emf.createEntityManager();
 
-            PublicadorService p = new PublicadorService();
-            Publicador port = p.getPublicadorPort();
+        PublicadorService p = new PublicadorService();
+        Publicador port = p.getPublicadorPort();
 
-            webservices.Usuario user = (webservices.Usuario) session.getAttribute("usuarioLogueado");
-            webservices.Cliente cli = port.obtenerCliente(user.getNick());
+        webservices.Usuario user = (webservices.Usuario) session.getAttribute("usuarioLogueado");
+        webservices.Cliente cli = port.obtenerCliente(user.getNick());
+        
+        if (cli == null) {
+            logger.warning("No se encontró al usuario en la base de datos");
+            response.sendRedirect("home");
+            return;
+        }
+        
+        // Obtener las órdenes de compra del cliente
+        List<OrdenDeCompra> ordenes = port.getOrdenesCliente(port.getNickCliente(cli));
+        
+        // Verificar si el cliente es válido
+        if (cli != null) {
+            DtCliente dtcli = port.crearDTCliente(cli);
 
-            if (cli == null) {
-                logger.warning("No se encontró al usuario en la base de datos");
-                response.sendRedirect("home");
+            // Obtener el parámetro "nickname"
+            String parametro = request.getParameter("nickname");
+
+            if (parametro != null && port.getNickCliente(cli).equals(parametro)) {
+                request.setAttribute("usuarioLogueado", user);
+                request.setAttribute("usuario", dtcli);
+                request.setAttribute("ordenes", ordenes);  // Pasar la lista de ordenes correctamente
+                request.getRequestDispatcher("/WEB-INF/InfoPerfilCliente.jsp").forward(request, response);
                 return;
             }
-           
-            
-            if(cli.getNick() == null) {
-            	
-            	System.out.print("NO SE ENCONTRO EL NICK");
-            } else {
-            	System.out.print("EL NICK ES " + cli.getNick()) ;
-            }
-            
-            List<webservices.OrdenDeCompra> compras = port.listarComprasPorNick(cli.getNick());
-            
-            for(webservices.OrdenDeCompra o : compras) {
-            	System.out.print("TESTEANDO COMPRAS --> " + o.getNumero());
-            }
-            
+        }
 
-            // Verificar si el cliente es válido
-            if (cli != null) {
-                DtCliente dtcli = port.crearDTCliente(cli);
+        response.sendRedirect("home");
 
-                // Obtener el parámetro "nickname"
-                String parametro = request.getParameter("nickname");
-
-                if (parametro != null && port.getNickCliente(cli).equals(parametro)) {
-                    request.setAttribute("usuarioLogueado", user);
-                    request.setAttribute("usuario", dtcli);
-                    //request.setAttribute("ordenes", ordenes);
-                    request.getRequestDispatcher("/WEB-INF/InfoPerfilCliente.jsp").forward(request, response);
-                    return;
-                }
-            }
-
-            response.sendRedirect("home");
-
-        
-            // Cerrar los recursos de la base de datos
-            if (em != null) {
-                em.close();
-            }
-            if (emf != null) {
-                emf.close();
-            }
-        
+        // Cerrar los recursos de la base de datos
+        if (em != null) {
+            em.close();
+        }
+        if (emf != null) {
+            emf.close();
+        }
     }
-
+    
     /**
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
      */

@@ -7,9 +7,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for item complex type.
+ * <p>Clase Java para item complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
  * 
  * <pre>
  * &lt;complexType name="item">
@@ -37,7 +37,7 @@ public class Item {
     protected Producto producto;
 
     /**
-     * Gets the value of the cant property.
+     * Obtiene el valor de la propiedad cant.
      * 
      */
     public int getCant() {
@@ -45,7 +45,7 @@ public class Item {
     }
 
     /**
-     * Sets the value of the cant property.
+     * Define el valor de la propiedad cant.
      * 
      */
     public void setCant(int value) {
@@ -53,7 +53,7 @@ public class Item {
     }
 
     /**
-     * Gets the value of the producto property.
+     * Obtiene el valor de la propiedad producto.
      * 
      * @return
      *     possible object is
@@ -65,7 +65,7 @@ public class Item {
     }
 
     /**
-     * Sets the value of the producto property.
+     * Define el valor de la propiedad producto.
      * 
      * @param value
      *     allowed object is

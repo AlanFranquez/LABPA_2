@@ -7,16 +7,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for getNombreDTCliente complex type.
+ * <p>Clase Java para getNombreDTCliente complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
  * 
  * <pre>
  * &lt;complexType name="getNombreDTCliente">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://services/}dtCliente" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,29 +31,29 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class GetNombreDTCliente {
 
-    protected DtCliente arg0;
+    protected String arg0;
 
     /**
-     * Gets the value of the arg0 property.
+     * Obtiene el valor de la propiedad arg0.
      * 
      * @return
      *     possible object is
-     *     {@link DtCliente }
+     *     {@link String }
      *     
      */
-    public DtCliente getArg0() {
+    public String getArg0() {
         return arg0;
     }
 
     /**
-     * Sets the value of the arg0 property.
+     * Define el valor de la propiedad arg0.
      * 
      * @param value
      *     allowed object is
-     *     {@link DtCliente }
+     *     {@link String }
      *     
      */
-    public void setArg0(DtCliente value) {
+    public void setArg0(String value) {
         this.arg0 = value;
     }
 
