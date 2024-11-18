@@ -13,8 +13,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import services.Publicador;
-import services.PublicadorService;
+import webservices.Publicador;
+import webservices.PublicadorService;
 
 
 @WebServlet("/home")
@@ -39,10 +39,10 @@ public class Home extends HttpServlet {
 		
 		System.out.print("SALUDANDO DESDE LA WEBAPP --> " + port.saludar());
 		
-		List<services.Producto> pruebaaa = port.obtenerProductos();
+		List<webservices.Producto> pruebaaa = port.obtenerProductos();
 		
 		System.out.print("PROBANDO QUE FUNCIONA ESTO");
-		for(services.Producto prodd : pruebaaa) {
+		for(webservices.Producto prodd : pruebaaa) {
 			System.out.print(prodd.getNombre());
 		}
 
@@ -66,7 +66,7 @@ public class Home extends HttpServlet {
         // Inicia el EntityManager
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
         EntityManager em = emf.createEntityManager();
-        List<services.Producto> productos = null;
+        List<webservices.Producto> productos = null;
 
         try {
             em.getTransaction().begin();
@@ -89,10 +89,10 @@ public class Home extends HttpServlet {
         }
 
         // Usuario logueado
-        services.Usuario u = (services.Usuario) session.getAttribute("usuarioLogueado");
+        webservices.Usuario u = (webservices.Usuario) session.getAttribute("usuarioLogueado");
         
         // Consultar el usuario logueado en la base de datos
-        services.Usuario usuarioLogueado = port.obtenerUsuario(u.getNick());
+        webservices.Usuario usuarioLogueado = port.obtenerUsuario(u.getNick());
         if (usuarioLogueado != null) {
             System.out.println("Usuario logueado encontrado en la base de datos.");
         } else {
@@ -100,13 +100,13 @@ public class Home extends HttpServlet {
         }
 
         if (port.obtenerCliente(usuarioLogueado.getNick()) != null) {
-            services.Cliente clienteLogueado = port.obtenerCliente(usuarioLogueado.getNick());
+            webservices.Cliente clienteLogueado = port.obtenerCliente(usuarioLogueado.getNick());
             System.out.println("Cliente logueado: " + clienteLogueado.getNick());
 
             // Verificar si el cliente tiene carrito
             if (port.obtenerCarritoDeCliente(clienteLogueado.getNick()) == null) {
                 System.out.println("Carrito no encontrado para el cliente, creando nuevo carrito.");
-                services.Carrito nuevoCarrito = new services.Carrito();
+                webservices.Carrito nuevoCarrito = new webservices.Carrito();
                 port.setCarritoCliente(clienteLogueado.getNick(), nuevoCarrito);
                 System.out.println("Nuevo carrito creado y persistido.");
             } else {

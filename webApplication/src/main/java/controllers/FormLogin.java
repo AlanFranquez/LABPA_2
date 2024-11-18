@@ -13,8 +13,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import services.Publicador;
-import services.PublicadorService;
+import webservices.Publicador;
+import webservices.PublicadorService;
 
 /**
  * Servlet implementation class Home
@@ -66,7 +66,7 @@ public class FormLogin extends HttpServlet {
 
         String nuevoEstado;
 
-        services.Usuario usr = port.obtenerUsuario(nickname);
+        webservices.Usuario usr = port.obtenerUsuario(nickname);
        
         
         

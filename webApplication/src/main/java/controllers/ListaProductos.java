@@ -6,8 +6,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import services.Publicador;
-import services.PublicadorService;
+import webservices.Publicador;
+import webservices.PublicadorService;
 
 import java.io.IOException;
 import java.util.List;
@@ -51,7 +51,7 @@ public class ListaProductos extends HttpServlet {
 		
 		PublicadorService p = new PublicadorService();
 		Publicador port = p.getPublicadorPort();		
-		List<services.Producto> productos = null;
+		List<webservices.Producto> productos = null;
 		
 		
 		try {

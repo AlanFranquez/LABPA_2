@@ -1,13 +1,13 @@
-<%@page import="services.Proveedor"%>
+<%@page import="webservices.Proveedor"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
-<%@page import="services.Usuario"%>
-<%@page import="services.Producto"%>
-<%@page import="services.Carrito" %>
-<%@page import="services.Proveedor" %>
-<%@page import="services.Cliente" %>
-<%@page import="services.Publicador" %>
-<%@page import="services.PublicadorService" %>
+<%@page import="webservices.Usuario"%>
+<%@page import="webservices.Producto"%>
+<%@page import="webservices.Carrito" %>
+<%@page import="webservices.Proveedor" %>
+<%@page import="webservices.Cliente" %>
+<%@page import="webservices.Publicador" %>
+<%@page import="webservices.PublicadorService" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
 

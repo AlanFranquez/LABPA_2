@@ -1,9 +1,9 @@
 
-<%@page import="services.Proveedor"%>
-<%@page import="services.Usuario"%>
-<%@page import="services.Producto"%>
-<%@page import="services.Carrito" %>
-<%@page import="services.Cliente" %>
+<%@page import="webservices.Proveedor"%>
+<%@page import="webservices.Usuario"%>
+<%@page import="webservices.Producto"%>
+<%@page import="webservices.Carrito" %>
+<%@page import="webservices.Cliente" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"

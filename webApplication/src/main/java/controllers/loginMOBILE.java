@@ -9,8 +9,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import services.Publicador;
-import services.PublicadorService;
+import webservices.Publicador;
+import webservices.PublicadorService;
 
 @WebServlet("/formloginMOBILE")
 public class loginMOBILE extends HttpServlet {
@@ -41,7 +41,7 @@ public class loginMOBILE extends HttpServlet {
         Publicador port = p.getPublicadorPort();
         
         String nuevoEstado;
-        services.Usuario usr = port.obtenerUsuario(nickname);
+        webservices.Usuario usr = port.obtenerUsuario(nickname);
         String userAgent = request.getHeader("User-Agent");
         boolean isMobile = isMobileDevice(userAgent);
 
@@ -55,7 +55,7 @@ public class loginMOBILE extends HttpServlet {
         }
 
      // Validación de usuario tipo Proveedor o cliente en dispositivo no móvil
-        if (usr instanceof services.Proveedor) {
+        if (usr instanceof webservices.Proveedor) {
             nuevoEstado = "nologueado";
             objSession.setAttribute("estado", nuevoEstado);
             objSession.setAttribute("errorMsg", "No se permite acceso a Proveedores");

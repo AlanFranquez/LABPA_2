@@ -10,8 +10,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import services.Publicador;
-import services.PublicadorService;
+import webservices.Publicador;
+import webservices.PublicadorService;
 
 
 @WebServlet("/homeMOBILE")
@@ -36,7 +36,7 @@ public class inicioMOBILE extends HttpServlet {
         Publicador port = p.getPublicadorPort();
         
         
-        List<services.Producto> productos = port.obtenerProductos();
+        List<webservices.Producto> productos = port.obtenerProductos();
         request.setAttribute("prods", productos);
         
         String userAgent = request.getHeader("User-Agent");
@@ -54,8 +54,8 @@ public class inicioMOBILE extends HttpServlet {
         
         
 
-        services.Usuario u = (services.Usuario) session.getAttribute("usuarioLogueado");
-        services.Usuario usuarioLogueado = port.obtenerUsuario(u.getNick());
+        webservices.Usuario u = (webservices.Usuario) session.getAttribute("usuarioLogueado");
+        webservices.Usuario usuarioLogueado = port.obtenerUsuario(u.getNick());
         System.out.print("SE TRAEN LOS DATOS DESDE LA BASE DE DATOS");
         if (usuarioLogueado != null) {
             request.setAttribute("usuario", usuarioLogueado);

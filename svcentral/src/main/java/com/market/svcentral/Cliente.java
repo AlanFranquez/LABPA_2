@@ -150,6 +150,10 @@ public class Cliente extends Usuario {
     	return this;
     }
     
+    public Map<Integer, OrdenDeCompra> traerCompras(){
+    	return this.listaCompras;
+    }
+    
     public Boolean comproProducto(int numeroRef) {
     	for (Map.Entry<Integer, OrdenDeCompra> entry : listaCompras.entrySet()) {
     		OrdenDeCompra orden = entry.getValue();
@@ -190,8 +194,12 @@ public class Cliente extends Usuario {
     }
     
     public List<OrdenDeCompra> getOrdenes() {
+        if (listaCompras == null) {
+            listaCompras = new HashMap<>(); // O cualquier colección que sea apropiada
+        }
         return new ArrayList<>(listaCompras.values());
     }
+
     
     public DTCliente crearDt() {
         return new DTCliente(this.getNombre(), this.getNick(), this.getApellido(), this.getCorreo(), this.getNacimiento(), this.getImagen(), this.getCompras());

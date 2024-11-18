@@ -3,6 +3,8 @@ package services;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
@@ -19,8 +21,15 @@ import javax.xml.ws.Endpoint;
 import com.market.svcentral.Carrito;
 import com.market.svcentral.Categoria;
 import com.market.svcentral.Cliente;
+import com.market.svcentral.DTCliente;
+import com.market.svcentral.DTEstado;
+import com.market.svcentral.DTItem;
+import com.market.svcentral.DTOrdenDeCompra;
+import com.market.svcentral.DtProducto;
 import com.market.svcentral.Factory;
 import com.market.svcentral.ISistema;
+import com.market.svcentral.Item;
+import com.market.svcentral.OrdenDeCompra;
 import com.market.svcentral.Producto;
 import com.market.svcentral.Proveedor;
 import com.market.svcentral.Usuario;
@@ -176,11 +185,182 @@ public class Publicador {
 		return this.obtenerProducto(p.getNumRef()).getImagenes();
 	}
 
-	// CARLITOS
 
+	// CARLITOS
+	
+		@WebMethod
+		public DTOrdenDeCompra mostrarCompraCliente(Cliente c, int numO) {
+			return c.mostrarCompras(numO);
+		}
+		
+		@WebMethod
+		public DTCliente crearDTCliente(Cliente c) {
+			return c.crearDt();
+		}
+		
+		@WebMethod
+		public void setEstadoOrden(OrdenDeCompra o, DTEstado e) {
+			o.setEstado(e);
+			em.merge(o);
+		}
+		
+		@WebMethod
+		public String getNickCliente(Cliente c) {
+			return c.getNick();
+		}
+		
+		@WebMethod
+		public OrdenDeCompra getCompra(int num, Cliente c) {
+			return c.getCompra(num);
+		}
+		
+		@WebMethod
+		public String getNombreUsuario(Usuario u) {
+			return u.getNick();
+		}
+		
+		@WebMethod
+		public DTEstado crearEstado(String estado, String com) {
+			return new DTEstado(estado, com);
+		}
+		
+		
+		@WebMethod
+		public String getTipo(String u) {
+			return em.find(Usuario.class, u).getTipo();
+		}
+		
+		@WebMethod
+		public int getNumRefOrden(int o) {
+			return em.find(OrdenDeCompra.class, o).crearDT().getNumero();
+		}
+		
+		@WebMethod
+		public List<Item> getItemsOrden(DTOrdenDeCompra o) {
+		    return o.getItems().values().stream().collect(Collectors.toList());
+		}
+		
+		@WebMethod
+		public List<OrdenDeCompra> listarComprasPorNick(String nick) {
+		    Cliente cliente = obtenerCliente(nick);
+		    if (cliente == null) {
+		        return null;
+		    }
+		    return cliente.getCompras().values().stream().collect(Collectors.toList());
+		}
+		
+		@WebMethod
+		public List<DTEstado> getHistorialEstado(DTOrdenDeCompra o){
+			return o.getHistorialEstado();
+		}
+		
+		@WebMethod
+		public String getEstado(DTEstado e) {
+			return e.getEstado();
+		}
+		
+		@WebMethod
+		public String getFechaEstado(DTEstado e) {
+			return e.getFecha();
+		}
+		
+		@WebMethod
+		public String getComEstado(DTEstado e) {
+			return e.getComentarios();
+		}
+		
+		@WebMethod
+		public String getEstadoOrden(int o) {
+			return em.find(OrdenDeCompra.class, o).crearDT().getEstado();
+		}
+		
+		@WebMethod
+		public float getPrecioTotalOrden(int o) {
+			return em.find(OrdenDeCompra.class, o).crearDT().getPrecioTotal();
+		}
+		
+		@WebMethod
+		public String getFechaOrden(int o) {
+			return em.find(OrdenDeCompra.class, o).crearDT().getFechaString();
+		}
+		
+		@WebMethod
+		public DTItem crearDTItem(Item i) {
+			return i.crearDT();
+		}
+		
+		@WebMethod
+		public Producto getProductoItem(DTItem i) {
+			return i.getProducto();
+		}
+		
+		@WebMethod
+		public DtProducto crearDTProd(Producto p) {
+			return p.crearDT();
+		}
+		
+		@WebMethod
+		public String getNombreProd(DtProducto p) {
+			return p.getNombre();
+		}
+		
+		@WebMethod
+		public float getPrecioProd(DtProducto p) {
+			return p.getPrecio();
+		}
+		
+		@WebMethod
+		public int getCantProdItem(DTItem i) {
+			return i.getCant();
+		}
+		
+		@WebMethod
+		public float getSubTotaItem(DTItem i) {
+			return i.getSubTotal();
+		}
+		
+		@WebMethod
+		public List<OrdenDeCompra> getOrdenesCliente(String c) {
+			if (c == null) {
+		        throw new IllegalArgumentException("El cliente no puede ser nulo");
+		    }
+			
+			return em.find(Cliente.class, c).getOrdenes();
+		}
+		
+		@WebMethod
+		public String getNickDTCliente(String c) {
+			return em.find(Usuario.class, c).getNick();
+		}
+		
+		@WebMethod
+		public String getNombreDTCliente(String c) {
+			return em.find(Usuario.class, c).getNombre();
+		}
+		
+		@WebMethod
+		public String getApellidoDTCliente(String c) {
+			return em.find(Usuario.class, c).getApellido();
+		}
+		
+		@WebMethod
+		public String getImagenesDTCliente(String c) {
+			return em.find(Usuario.class, c).getImagen();
+		}
+		
+		@WebMethod
+		public String getFechaNacDTClienteString(String c) {
+			return em.find(Cliente.class, c).crearDt().getNacimientoFormateado();
+		}
+		
+		@WebMethod
+		public DTOrdenDeCompra crearDTOrden(int numref) {
+			return em.find(OrdenDeCompra.class, numref).crearDT();
+		}
 	// FABRICIO
 	/*
 	  	wsimport -keep -p webservices http://localhost:1234/publicador?wsdl
+	  	
 	  
 		ProductoServlet.java
 		RealizarCompra.java

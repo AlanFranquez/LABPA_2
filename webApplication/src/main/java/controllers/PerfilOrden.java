@@ -14,13 +14,8 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 
-import com.market.svcentral.Cliente;
-import com.market.svcentral.DTCliente;
-import com.market.svcentral.DTEstado;
-import com.market.svcentral.DTOrdenDeCompra;
-import com.market.svcentral.Factory;
-import com.market.svcentral.ISistema;
-import com.market.svcentral.OrdenDeCompra;
+import webservices.*;
+
 
 /**
  * Servlet implementation class PerfilOrden
@@ -35,17 +30,7 @@ public class PerfilOrden extends HttpServlet {
     public PerfilOrden() {
         super();
     }
-    
-    private ISistema sist;
 
-    @Override
-    public void init() throws ServletException {
-        try {
-            sist = Factory.getSistema();  // Aquí puede estar fallando
-        } catch (Exception e) {
-            throw new ServletException("No se pudo inicializar ISistema", e);  // Manejar la excepción
-        }
-    }
 
     /**
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -60,8 +45,12 @@ public class PerfilOrden extends HttpServlet {
             return;
         }
         
+        PublicadorService p = new PublicadorService();
+        Publicador port = p.getPublicadorPort();
 
-        Cliente cliente = (Cliente) sess.getAttribute("usuarioLogueado");
+        webservices.Usuario user = (webservices.Usuario) sess.getAttribute("usuarioLogueado");
+        webservices.Cliente cliente = port.obtenerCliente(user.getNick());
+        
 
         // Comprobar que el parámetro de la orden no sea nulo y convertirlo a entero
         if (ordenParam != null && !ordenParam.isEmpty()) {
@@ -74,9 +63,9 @@ public class PerfilOrden extends HttpServlet {
             }
 
             // Obtener la orden específica
-            DTOrdenDeCompra orden = cliente.mostrarCompras(numeroOrden);
+            DtOrdenDeCompra orden = port.mostrarCompraCliente(cliente, numeroOrden);
             if (orden != null) {
-                DTCliente dtcli = (DTCliente) cliente.crearDt();
+            	DtCliente dtcli = port.crearDTCliente(cliente);
                 request.setAttribute("ordencompra", orden);
                 request.setAttribute("usuario", dtcli);
                 request.getRequestDispatcher("/WEB-INF/DetalleOrden.jsp").forward(request, response);
@@ -103,9 +92,13 @@ public class PerfilOrden extends HttpServlet {
             response.sendRedirect("formlogin");
             return;
         }
-
-        Cliente cliente = (Cliente) sess.getAttribute("usuarioLogueado");
-        DTCliente tmp = cliente.crearDt();
+        
+        PublicadorService p = new PublicadorService();
+        Publicador port = p.getPublicadorPort();
+        
+        webservices.Usuario user = (webservices.Usuario) sess.getAttribute("usuarioLogueado");
+        webservices.Cliente cliente = port.obtenerCliente(user.getNick());
+        DtCliente tmp = port.crearDTCliente(cliente);
         request.setAttribute("usuarioOrdenEsp", tmp);
 
         if (ordenParam != null && !ordenParam.isEmpty()) {
@@ -125,11 +118,10 @@ public class PerfilOrden extends HttpServlet {
             em.getTransaction().begin();
             
             if ("confirmar".equals(accion)) {
-            	OrdenDeCompra orden = cliente.getCompra(numeroOrden);
+            	webservices.OrdenDeCompra orden = port.getCompra(numeroOrden, cliente);
                 if (orden != null) {
-                	DTEstado estado5 = new DTEstado("Entregada", "El cliente ha recibido el pedido.");
-             	    orden.setEstado(estado5);
-             	    em.merge(orden);
+                	DtEstado estado = port.crearEstado("Entregada", "El cliente ha recibido el pedido.");
+             	    port.setEstadoOrden(orden, estado);
                 } else {
                     response.sendError(HttpServletResponse.SC_NOT_FOUND, "Orden no encontrada.");
                     return;
@@ -138,8 +130,8 @@ public class PerfilOrden extends HttpServlet {
             em.getTransaction().commit();
             em.close();
 
-            request.setAttribute("ordencompra", cliente.getCompra(numeroOrden));
-            response.sendRedirect("perfilOrden?nickname=" + cliente.getNick() + "&orden=" + numeroOrden);
+            request.setAttribute("ordencompra", port.mostrarCompraCliente(cliente, numeroOrden));
+            response.sendRedirect("perfilOrden?nickname=" + port.getNickCliente(cliente) + "&orden=" + numeroOrden);
 
         } else {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Falta el número de orden.");
