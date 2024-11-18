@@ -42,6 +42,21 @@ public interface Publicador {
      * 
      * @param arg0
      * @return
+     *     returns webservices.Cliente
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "obtenerCliente", targetNamespace = "http://services/", className = "webservices.ObtenerCliente")
+    @ResponseWrapper(localName = "obtenerClienteResponse", targetNamespace = "http://services/", className = "webservices.ObtenerClienteResponse")
+    @Action(input = "http://services/Publicador/obtenerClienteRequest", output = "http://services/Publicador/obtenerClienteResponse")
+    public Cliente obtenerCliente(
+        @WebParam(name = "arg0", targetNamespace = "")
+        String arg0);
+
+    /**
+     * 
+     * @param arg0
+     * @return
      *     returns webservices.Producto
      */
     @WebMethod
@@ -152,21 +167,6 @@ public interface Publicador {
     @ResponseWrapper(localName = "obtenerUsuarioResponse", targetNamespace = "http://services/", className = "webservices.ObtenerUsuarioResponse")
     @Action(input = "http://services/Publicador/obtenerUsuarioRequest", output = "http://services/Publicador/obtenerUsuarioResponse")
     public Usuario obtenerUsuario(
-        @WebParam(name = "arg0", targetNamespace = "")
-        String arg0);
-
-    /**
-     * 
-     * @param arg0
-     * @return
-     *     returns webservices.Cliente
-     */
-    @WebMethod
-    @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "obtenerCliente", targetNamespace = "http://services/", className = "webservices.ObtenerCliente")
-    @ResponseWrapper(localName = "obtenerClienteResponse", targetNamespace = "http://services/", className = "webservices.ObtenerClienteResponse")
-    @Action(input = "http://services/Publicador/obtenerClienteRequest", output = "http://services/Publicador/obtenerClienteResponse")
-    public Cliente obtenerCliente(
         @WebParam(name = "arg0", targetNamespace = "")
         String arg0);
 
@@ -415,12 +415,12 @@ public interface Publicador {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "listarCompras", targetNamespace = "http://services/", className = "webservices.ListarCompras")
-    @ResponseWrapper(localName = "listarComprasResponse", targetNamespace = "http://services/", className = "webservices.ListarComprasResponse")
-    @Action(input = "http://services/Publicador/listarComprasRequest", output = "http://services/Publicador/listarComprasResponse")
-    public List<OrdenDeCompra> listarCompras(
+    @RequestWrapper(localName = "listarComprasPorNick", targetNamespace = "http://services/", className = "webservices.ListarComprasPorNick")
+    @ResponseWrapper(localName = "listarComprasPorNickResponse", targetNamespace = "http://services/", className = "webservices.ListarComprasPorNickResponse")
+    @Action(input = "http://services/Publicador/listarComprasPorNickRequest", output = "http://services/Publicador/listarComprasPorNickResponse")
+    public List<OrdenDeCompra> listarComprasPorNick(
         @WebParam(name = "arg0", targetNamespace = "")
-        Cliente arg0);
+        String arg0);
 
     /**
      * 

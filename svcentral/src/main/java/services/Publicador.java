@@ -240,11 +240,12 @@ public class Publicador {
 		}
 		
 		@WebMethod
-		public List<OrdenDeCompra> listarCompras(Cliente c) {
-		    
-			
-		    return c.getOrdenes();
-			
+		public List<OrdenDeCompra> listarComprasPorNick(String nick) {
+		    Cliente cliente = obtenerCliente(nick);
+		    if (cliente == null) {
+		        return null;
+		    }
+		    return cliente.getCompras().values().stream().collect(Collectors.toList());
 		}
 		
 		@WebMethod
@@ -361,7 +362,6 @@ public class Publicador {
 	/*
 	  	wsimport -keep -p webservices http://localhost:1234/publicador?wsdl
 	  	
-	  	Quitale lo del -p webservices, asi queda en la carpeta de services D:
 	  
 		ProductoServlet.java
 		RealizarCompra.java

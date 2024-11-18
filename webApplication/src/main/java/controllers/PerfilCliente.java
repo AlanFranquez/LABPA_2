@@ -77,13 +77,19 @@ public class PerfilCliente extends HttpServlet {
             }
            
             
-            List<webservices.OrdenDeCompra> ord = port.listarCompras(cli);
-            
-            System.out.print("LISTANDO ORDENES DE COMPRA");
-            
-            for(webservices.OrdenDeCompra o : ord) {
-            	System.out.print(o.getNumero() + " - ");
+            if(cli.getNick() == null) {
+            	
+            	System.out.print("NO SE ENCONTRO EL NICK");
+            } else {
+            	System.out.print("EL NICK ES " + cli.getNick()) ;
             }
+            
+            List<webservices.OrdenDeCompra> compras = port.listarComprasPorNick(cli.getNick());
+            
+            for(webservices.OrdenDeCompra o : compras) {
+            	System.out.print("TESTEANDO COMPRAS --> " + o.getNumero());
+            }
+            
 
             // Verificar si el cliente es válido
             if (cli != null) {
