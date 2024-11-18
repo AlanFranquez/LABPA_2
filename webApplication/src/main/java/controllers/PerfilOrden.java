@@ -14,7 +14,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 
-import services.*;
+import webservices.*;
 
 
 /**
@@ -48,8 +48,8 @@ public class PerfilOrden extends HttpServlet {
         PublicadorService p = new PublicadorService();
         Publicador port = p.getPublicadorPort();
 
-        services.Usuario user = (services.Usuario) sess.getAttribute("usuarioLogueado");
-        services.Cliente cliente = port.obtenerCliente(user.getNick());
+        webservices.Usuario user = (webservices.Usuario) sess.getAttribute("usuarioLogueado");
+        webservices.Cliente cliente = port.obtenerCliente(user.getNick());
         
 
         // Comprobar que el parámetro de la orden no sea nulo y convertirlo a entero
@@ -96,8 +96,8 @@ public class PerfilOrden extends HttpServlet {
         PublicadorService p = new PublicadorService();
         Publicador port = p.getPublicadorPort();
         
-        services.Usuario user = (services.Usuario) sess.getAttribute("usuarioLogueado");
-        services.Cliente cliente = port.obtenerCliente(user.getNick());
+        webservices.Usuario user = (webservices.Usuario) sess.getAttribute("usuarioLogueado");
+        webservices.Cliente cliente = port.obtenerCliente(user.getNick());
         DtCliente tmp = port.crearDTCliente(cliente);
         request.setAttribute("usuarioOrdenEsp", tmp);
 
@@ -118,7 +118,7 @@ public class PerfilOrden extends HttpServlet {
             em.getTransaction().begin();
             
             if ("confirmar".equals(accion)) {
-            	services.OrdenDeCompra orden = port.getCompra(numeroOrden, cliente);
+            	webservices.OrdenDeCompra orden = port.getCompra(numeroOrden, cliente);
                 if (orden != null) {
                 	DtEstado estado = port.crearEstado("Entregada", "El cliente ha recibido el pedido.");
              	    port.setEstadoOrden(orden, estado);

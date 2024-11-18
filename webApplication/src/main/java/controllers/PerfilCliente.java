@@ -12,7 +12,10 @@ import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import services.*;
+import webservices.PublicadorService;
+import webservices.DtCliente;
+import webservices.OrdenDeCompra;
+import webservices.Publicador;
 
 /**
  * Servlet implementation class Perfil
@@ -64,17 +67,23 @@ public class PerfilCliente extends HttpServlet {
             PublicadorService p = new PublicadorService();
             Publicador port = p.getPublicadorPort();
 
-            services.Usuario user = (services.Usuario) session.getAttribute("usuarioLogueado");
-            services.Cliente cli = port.obtenerCliente(user.getNick());
+            webservices.Usuario user = (webservices.Usuario) session.getAttribute("usuarioLogueado");
+            webservices.Cliente cli = port.obtenerCliente(user.getNick());
 
             if (cli == null) {
                 logger.warning("No se encontró al usuario en la base de datos");
                 response.sendRedirect("home");
                 return;
             }
+           
             
+            List<webservices.OrdenDeCompra> ord = port.listarCompras(cli);
             
-            List<services.OrdenDeCompra> ordenes = port.getOrdenesCliente(cli);
+            System.out.print("LISTANDO ORDENES DE COMPRA");
+            
+            for(webservices.OrdenDeCompra o : ord) {
+            	System.out.print(o.getNumero() + " - ");
+            }
 
             // Verificar si el cliente es válido
             if (cli != null) {
@@ -86,7 +95,7 @@ public class PerfilCliente extends HttpServlet {
                 if (parametro != null && port.getNickCliente(cli).equals(parametro)) {
                     request.setAttribute("usuarioLogueado", user);
                     request.setAttribute("usuario", dtcli);
-                    request.setAttribute("ordenes", ordenes);
+                    //request.setAttribute("ordenes", ordenes);
                     request.getRequestDispatcher("/WEB-INF/InfoPerfilCliente.jsp").forward(request, response);
                     return;
                 }

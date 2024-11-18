@@ -3,6 +3,7 @@ package services;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import javax.jws.WebMethod;
@@ -239,6 +240,14 @@ public class Publicador {
 		}
 		
 		@WebMethod
+		public List<OrdenDeCompra> listarCompras(Cliente c) {
+		    
+			
+		    return c.getOrdenes();
+			
+		}
+		
+		@WebMethod
 		public List<DTEstado> getHistorialEstado(DTOrdenDeCompra o){
 			return o.getHistorialEstado();
 		}
@@ -313,6 +322,9 @@ public class Publicador {
 			if (c == null) {
 		        throw new IllegalArgumentException("El cliente no puede ser nulo");
 		    }
+			
+			
+			
 			return c.getOrdenes();
 		}
 		
@@ -348,6 +360,8 @@ public class Publicador {
 	// FABRICIO
 	/*
 	  	wsimport -keep -p webservices http://localhost:1234/publicador?wsdl
+	  	
+	  	Quitale lo del -p webservices, asi queda en la carpeta de services D:
 	  
 		ProductoServlet.java
 		RealizarCompra.java

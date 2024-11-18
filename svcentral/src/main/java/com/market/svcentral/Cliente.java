@@ -151,6 +151,10 @@ public class Cliente extends Usuario {
     	return this;
     }
     
+    public Map<Integer, OrdenDeCompra> traerCompras(){
+    	return this.listaCompras;
+    }
+    
     public Boolean comproProducto(int numeroRef) {
     	for (Map.Entry<Integer, OrdenDeCompra> entry : listaCompras.entrySet()) {
     		OrdenDeCompra orden = entry.getValue();

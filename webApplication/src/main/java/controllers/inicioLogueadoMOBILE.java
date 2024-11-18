@@ -10,8 +10,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import services.Publicador;
-import services.PublicadorService;
+import webservices.Publicador;
+import webservices.PublicadorService;
 
 @WebServlet("/inicioLogueadoMOBILE")
 public class inicioLogueadoMOBILE extends HttpServlet {
@@ -38,18 +38,18 @@ public class inicioLogueadoMOBILE extends HttpServlet {
         String userAgent = request.getHeader("User-Agent");
         boolean isMobile = isMobileDevice(userAgent);
 
-        services.Usuario u = (services.Usuario) (session != null ? session.getAttribute("usuarioLogueado") : null);
+        webservices.Usuario u = (webservices.Usuario) (session != null ? session.getAttribute("usuarioLogueado") : null);
         
-        services.Usuario usuarioLogueado = port.obtenerUsuario(u.getNick());
+        webservices.Usuario usuarioLogueado = port.obtenerUsuario(u.getNick());
         if (usuarioLogueado == null) {
-            List<services.Producto> productos = port.obtenerProductos();
+            List<webservices.Producto> productos = port.obtenerProductos();
             request.setAttribute("prods", productos);
             request.getRequestDispatcher("/WEB-INF/inicioMOBILE.jsp").forward(request, response);
             return;
         }
 
         // Restricción para proveedores en cualquier dispositivo
-        if (usuarioLogueado instanceof services.Proveedor) {
+        if (usuarioLogueado instanceof webservices.Proveedor) {
             session.setAttribute("estado", "LOGIN_INCORRECTO");
             session.setAttribute("errorMsg", "Acceso no permitido para proveedores.");
             response.sendRedirect("formloginMOBILE"); // Redirigir al formulario de login con error
@@ -57,7 +57,7 @@ public class inicioLogueadoMOBILE extends HttpServlet {
         }
 
         // Restricción para clientes en PC (solo permiten dispositivos móviles)
-        if (!isMobile && !(usuarioLogueado instanceof services.Proveedor)) {
+        if (!isMobile && !(usuarioLogueado instanceof webservices.Proveedor)) {
             session.setAttribute("estado", "LOGIN_INCORRECTO");
             session.setAttribute("errorMsg", "Acceso permitido solo desde dispositivos móviles.");
             response.sendRedirect("formloginMOBILE"); // Redirigir al formulario de login con error
@@ -67,7 +67,7 @@ public class inicioLogueadoMOBILE extends HttpServlet {
         // Configuración para inicio de sesión exitoso desde móvil
         request.setAttribute("usuario", usuarioLogueado);
         request.setAttribute("estado", "logueado");
-        List<services.Producto> productos = port.obtenerProductos();
+        List<webservices.Producto> productos = port.obtenerProductos();
         request.setAttribute("prods", productos);
         
         // Redirigir a la página de inicio logueado móvil
