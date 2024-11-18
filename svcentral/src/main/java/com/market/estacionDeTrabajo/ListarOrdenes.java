@@ -36,7 +36,7 @@ public class ListarOrdenes extends JInternalFrame{
         
         
         em.getTransaction().begin();
-	     List<OrdenDeCompra> ordenes = em.createQuery("SELECT c FROM OrdenDeCompra c").getResultList();
+	     List<DTOrdenDeCompra> ordenes = s.listarOrdenes();
         
         if(ordenes == null || ordenes.isEmpty()) {
         	JOptionPane.showMessageDialog(null, "Todavia no hay ordenes para listar");
@@ -52,9 +52,8 @@ public class ListarOrdenes extends JInternalFrame{
 	     // Crear datos para la tabla
 	     Object[][] data = new Object[ordenes.size()][3];
 	     for (int i = 0; i < ordenes.size(); i++) {
-	    	 DTOrdenDeCompra o = ordenes.get(i).crearDT();
-	    	 data[i][0] = o.getNumero();
-	    	 data[i][1] = o.getFecha().format(formatter).toString();
+	    	 data[i][0] = ordenes.get(i).getNumero();
+	    	 data[i][1] = ordenes.get(i).getFecha().format(formatter).toString();
 	     }
 
 	     // Crear la tabla
@@ -67,7 +66,7 @@ public class ListarOrdenes extends JInternalFrame{
 	    	 public void mouseClicked(java.awt.event.MouseEvent evt) {
 	    		 int row = table.rowAtPoint(evt.getPoint());
 	    		 if (row >= 0) {
-	    			 DTOrdenDeCompra o = ordenes.get(row).crearDT();
+	    			 DTOrdenDeCompra o = ordenes.get(row);
 	    			 if (tipo == "Detalles") {
 	    				 DetallesOrden ord = new DetallesOrden(o);
 	    				 getParent().add(ord);

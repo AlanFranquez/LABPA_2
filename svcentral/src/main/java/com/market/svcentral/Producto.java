@@ -19,23 +19,23 @@ public class Producto {
 	@Id
 	private Integer numRef;
 
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "producto_id")
 	private List <Puntaje> puntajes;
 	
 	@ManyToMany
 	private List<Cat_Producto> categorias;
 	
-	@OneToMany(cascade = CascadeType.PERSIST)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	private List <Comentario> comentarios;
-	
-	
-	
 	
 	@ManyToOne
 	@JoinColumn(name = "proveedor_nick")
 	private Proveedor proveedor;
 	
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "producto")
+	List <Reclamo> reclamos;
+
 	private String nombre;
 	
 	private String descripcion;
@@ -54,8 +54,6 @@ public class Producto {
 	
 	private int cantidadUnicaComprada = 0; // para productos destacados
 	
-	@OneToMany(cascade = CascadeType.PERSIST, mappedBy = "producto")
-	List <Reclamo> reclamos;
 	
 	public Producto() {
 		

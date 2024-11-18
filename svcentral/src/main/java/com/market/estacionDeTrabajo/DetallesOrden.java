@@ -44,13 +44,13 @@ public class DetallesOrden extends JInternalFrame{
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
 
-        OrdenDeCompra ordenEnDB = em.find(OrdenDeCompra.class, orden.getNumero());
-        List<DTItem> lista = ordenEnDB.crearDT().listarItems();
+        DTOrdenDeCompra ordenEnDB = s.getOrden(orden.getNumero());
         
         if(ordenEnDB == null) {
         	JOptionPane.showMessageDialog(null, "Esta orden ya se ha eliminado");
         	return;
         } else {
+        	List<DTItem> lista = ordenEnDB.listarItems();
         	for(DTItem l: lista) {
         		Producto p = l.getProducto();
         		DtProducto dtp = p.crearDT();

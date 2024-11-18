@@ -1025,8 +1025,9 @@ public class Presentacion {
                                  if(selection == "Sin Elementos") {
                                 	 return;
                                  }
-                                 String[] parts = selection.split(" - "); 
-                                 int numRef = Integer.parseInt(parts[1]);
+                                 String[] partes = selection.split(" - ");
+                                 String[] parts = partes[1].split(" ");
+                                 int numRef = Integer.parseInt(parts[0]);
                                  DtProducto dt = s.getDtProducto(numRef);
                                     	
                                 JInternalFrame ventanaDetalleProducto = new JInternalFrame("Detalle de Producto", true, true, true, true);
@@ -1228,15 +1229,14 @@ public class Presentacion {
         panel.add(Box.createVerticalStrut(5));
        
         panel.add(new JLabel("Ordenes: "));
-        if(cliente.getOrdenes().isEmpty()) {
+        List<DTOrdenDeCompra> ordenesCliente = s.getOrdenesCliente(cliente.getNick());
+        if(ordenesCliente.isEmpty()) {
         	panel.add(new JLabel("   Todavia no existen ordenes"));
         } else {
-        	Map<Integer, OrdenDeCompra> ordenesCliente = cliente.getOrdenes();
         	
         	
-            for (OrdenDeCompra orden : ordenesCliente.values()) {
-                DTOrdenDeCompra dtOrden = orden.crearDT();
-                panel.add(new JLabel(dtOrden.toString()));
+            for (DTOrdenDeCompra orden : ordenesCliente) {
+                panel.add(new JLabel(orden.toString()));
             }
         }
         

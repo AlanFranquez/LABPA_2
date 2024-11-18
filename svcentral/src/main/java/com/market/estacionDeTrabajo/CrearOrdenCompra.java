@@ -39,18 +39,11 @@ public class CrearOrdenCompra extends JInternalFrame {
         tituloLabel.setBounds(20, 20, 80, 25);
         panel.add(tituloLabel);
         
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-        EntityManager em = emf.createEntityManager();
-        
-        em.getTransaction().begin();
-        
-        
-
         // CLIENTES
-        List<Cliente> clientes = em.createQuery("SELECT c FROM Cliente c").getResultList();
+        List<DTCliente> clientes = s.listarClientes();
         String[] nombres = new String[clientes.size()];
         for (int i = 0; i < clientes.size(); i++) {
-            nombres[i] = clientes.get(i).crearDt().getNick();
+            nombres[i] = clientes.get(i).getNick();
         }
 
        
@@ -195,25 +188,15 @@ public class CrearOrdenCompra extends JInternalFrame {
                     float precioTotal = (float) itemsProveedor.values().stream().mapToDouble(Item::getSubTotal).sum();
 
                     OrdenDeCompra orden = new OrdenDeCompra(itemsProveedor, precioTotal, proveedor);
-                    Cliente cl = em.find(Cliente.class, cliente);
 
                     s.realizarCompra(orden, cliente);
-                    cl.agregarCompra(orden);
-                    em.merge(cl);
-                    em.persist(orden); 
                 }
-
-                em.getTransaction().commit();
                 JOptionPane.showMessageDialog(null, "Órdenes de compra creadas exitosamente.");
                 
                 model.setRowCount(1);
                 dispose();
             } catch (Exception ex) {
-                em.getTransaction().rollback();
                 JOptionPane.showMessageDialog(null, "Error al crear las órdenes de compra: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            } finally {
-                em.close();
-                emf.close();
             }
         });
         

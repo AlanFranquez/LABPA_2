@@ -54,8 +54,6 @@ public interface ISistema {
 
 	public abstract List<DTProveedor> listarProveedores();
 
-    public abstract void addOrdenes(OrdenDeCompra orden, String nickUsuario);
-
 	public abstract void agregarProductoCategoria(String catName, int numRef) throws CategoriaException;
 
 	public abstract boolean esPadre(String catName);
@@ -71,7 +69,7 @@ public interface ISistema {
 	
 	public boolean comprobarCat(String cat) throws CategoriaException;
 
-	public abstract void asignarOrdenCliente(String cliente);
+	public abstract void asignarOrdenCliente(String cliente, int numeroOrden);
 
 	public abstract DtProducto getDtProducto(int numRef);
 
@@ -79,9 +77,7 @@ public interface ISistema {
 
 	public abstract boolean existeOrden(int num);
 	
-	public abstract void eliminarUltimaOrden();
-	
-	public abstract boolean verificarUnicidadProducto(String nombreCategoria, int numRef, String titulo);
+	public abstract boolean verificarUnicidadProducto(int numRef, String titulo);
 	
 	public abstract void eliminarPDesdeProveedor(String proveedor, int numRef);
 	
@@ -117,7 +113,7 @@ public interface ISistema {
 	  
 	  public List<Usuario> listaUsuarios();
 	  
-	  public OrdenDeCompra getOrden(int numero);
+	  public DTOrdenDeCompra getOrden(int numero);
 	  
 	  public void cambiarEstadoOrden(String estado, String com, int numero, String cliente);
 	  
@@ -136,4 +132,6 @@ public interface ISistema {
 	public abstract void cambiarEstadoOrdenconDT(DTEstado estadoComprada11, int numeroOrden, String nick);
 	
 	public List<Producto> obtenerProductosDestacados();
+
+	public abstract void agregarImagenProd(String img, int numRef);
 }

@@ -31,12 +31,9 @@ public class Sistema implements ISistema {
 	EntityManager em = emf.createEntityManager();
 	
     private static Sistema instance = null;
-    private Map<Integer, OrdenDeCompra> ordenes;
     private final EmailService emailService = new EmailService();
     
     private Sistema() {
-        // Inicialización de colecciones
-        this.ordenes = new HashMap<>();
     }
 
     public static synchronized Sistema getInstance() {
@@ -119,7 +116,7 @@ public class Sistema implements ISistema {
     
     
     // CASO DE USO 2: REGISTRAR PRODUCTO
-    public boolean verificarUnicidadProducto(String nombreCategoria, int numRef, String titulo) {
+    public boolean verificarUnicidadProducto(int numRef, String titulo) {
         Producto prod = null;
         try {
         	prod = em.find(Producto.class, numRef);
@@ -148,7 +145,7 @@ public class Sistema implements ISistema {
         	em.getTransaction().commit();
         	em.close();
         }catch (Exception e) {
-        	System.out.println(e.getMessage());
+        	e.printStackTrace();
         }
     }
     public DefaultMutableTreeNode arbolCategorias() {
@@ -172,7 +169,8 @@ public class Sistema implements ISistema {
         if (cat.getTipo().equals("Padre")) {
             Map<String, Categoria> hijos = ((Cat_Padre) cat).getHijos();
             if (hijos.size() >= 1) {
-                for (Categoria hijo : hijos.values()) {
+                for (Map.Entry<String, Categoria> entry : hijos.entrySet()) {
+                	Categoria hijo = entry.getValue();
                     DefaultMutableTreeNode child = arbolCategorias(hijo);
                     rama.add(child);
                 }
@@ -206,12 +204,12 @@ public class Sistema implements ISistema {
         	em.getTransaction().commit();
         	em.close();
         }catch (Exception e) {
-        	System.out.println(e.getMessage());
+        	e.printStackTrace();
         }
     }
     public void agregarImagenProd(String img, int numRef) {
     	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-    	EntityManager em = emf.createEntityManager();
+        EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
         
         Producto producto = em.find(Producto.class, numRef);
@@ -273,8 +271,8 @@ public class Sistema implements ISistema {
 		   catPadre = em.find(Cat_Padre.class, nombrePadre);
 		   cat = em.find(Categoria.class, nombre);
 	   } catch (Exception e) {
-		   System.out.print(e);
 		   em.close();
+		   e.printStackTrace();
 	   }
 	   if(cat == null || catPadre == null) {
 		   em.close();
@@ -382,13 +380,17 @@ public class Sistema implements ISistema {
     	}
     	return 0;
     }
-    public void eliminarUltimaOrden() {
-    	int keyOrden = ordenes.size();
-    	ordenes.remove(keyOrden);
-    }
-    public void asignarOrdenCliente(String usuarioCliente) {
-    	Cliente cliente = (Cliente) this.getUsuario(usuarioCliente);
-    	cliente.agregarCompra(ordenes.get(ordenes.size()));
+    public void asignarOrdenCliente(String usuarioCliente, int numeroOrden) {
+    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+    	EntityManager em = emf.createEntityManager();
+    	em.getTransaction().begin();
+    	
+    	Cliente cliente = em.find(Cliente.class, usuarioCliente);
+    	OrdenDeCompra ord = em.find(OrdenDeCompra.class, numeroOrden);
+    	cliente.agregarCompra(ord);
+    	
+    	em.getTransaction().commit();
+    	em.close();
     }
     
     
@@ -451,7 +453,11 @@ public class Sistema implements ISistema {
 
     
     public void eliminarOrdenDeCompra(int numero) throws OrdenDeCompraException {
-    	OrdenDeCompra orden = this.ordenes.get(numero);
+    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+    	EntityManager em = emf.createEntityManager();
+    	em.getTransaction().begin();
+    	
+    	OrdenDeCompra orden = em.find(OrdenDeCompra.class, numero);
         if (orden == null) {
             throw new OrdenDeCompraException("La orden de compra no existe");
         }
@@ -462,11 +468,13 @@ public class Sistema implements ISistema {
         cliente.eliminarOrden(numero);
         Map<Integer, Item> items = orden.getItems();
         items.clear();
-        this.ordenes.remove(numero);
+        em.remove(orden);
         
+        em.getTransaction().commit();
+        em.close();
     }
     public boolean existeOrden(int num) {
-    	return ordenes.containsKey(num);
+    	return em.find(OrdenDeCompra.class, num) != null;
     }
     
     
@@ -478,12 +486,7 @@ public class Sistema implements ISistema {
     	em.getTransaction().begin();
         
         Producto producto = em.find(Producto.class, numero);
-        List <Cat_Producto> cats = producto.getCategorias();
-        
-        for(Cat_Producto cat : cats) {
-        	cat.quitarProducto(producto.getNumRef());
-        }
-        
+        producto = em.merge(producto);
         em.remove(producto);
         em.getTransaction().commit();
         em.close();
@@ -555,37 +558,18 @@ public class Sistema implements ISistema {
     
     
     // CASO DE USO 10: VER INFORMACION DE ORDEN DE COMPRA
-    public boolean existenOrdenesParaListar() {
-        return !this.ordenes.isEmpty();
-    }
     public List<DTOrdenDeCompra> listarOrdenes() {
+    	List <OrdenDeCompra> ords = em.createQuery("SELECT o FROM OrdenDeCompra o", OrdenDeCompra.class).getResultList();
     	List<DTOrdenDeCompra> lista = new ArrayList<>();
     	
-    	for (Map.Entry<Integer, OrdenDeCompra> entry : this.ordenes.entrySet()) {
-    		OrdenDeCompra orden = entry.getValue();
-    		
-    		lista.add(orden.crearDT());
+    	for (OrdenDeCompra o : ords) {;
+    		lista.add(o.crearDT());
     	}
     	
     	return lista;
     }
-    /*
-     * Creo que esto no se usa
-    public List<DTCliente> obtenerSoloClientes() {
-        List<DTCliente> listaClientes = new ArrayList<>();
-        for (Usuario usuario : usuarios.values()) {
-            if (usuario instanceof Cliente) {
-            	Cliente cliente = (Cliente) usuario;
-                listaClientes.add(cliente.crearDt());
-            }
-        }
-        return listaClientes;
-    }
-    */
-    public void addOrdenes(OrdenDeCompra orden, String nickUsuario) {
-    	Cliente cliente = em.find(Cliente.class, nickUsuario);
-    	ordenes.put(orden.getNumero(), orden);
-    	cliente.agregarCompra(orden);
+    public boolean existenOrdenesParaListar() {
+    	return !this.listarOrdenes().isEmpty();
     }
     public boolean comprobarCat(String cat) throws CategoriaException {
     	if (em.find(Categoria.class, cat) == null) {
@@ -625,7 +609,7 @@ public class Sistema implements ISistema {
 	 // Traer Ordenes de compras de un cliente
 	 public List<DTOrdenDeCompra> getOrdenesCliente(String nick) {
 		 Cliente cliente = em.find(Cliente.class, nick);
-		 
+		 em.refresh(cliente);
 		 return cliente.mostrarCompras();
 	 }
 	 
@@ -635,7 +619,7 @@ public class Sistema implements ISistema {
 		 try {
 			 u = em.createQuery("SELECT u FROM Usuario WHERE u.correo='" + email + "'", Usuario.class).getSingleResult();
 		 }catch(Exception e) {
-			 System.out.println(e.getMessage());
+			 e.printStackTrace();
 		 }
 		 if(u == null) {
 			 throw new UsuarioException("No se ha encontrado al usuario");
@@ -709,47 +693,50 @@ public class Sistema implements ISistema {
 	 public void realizarCompra(OrdenDeCompra orden, String nickCliente) {
 		 EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
 		 EntityManager em = emf.createEntityManager();
+		 em.getTransaction().begin();
 		 
-		 
-		    Cliente cliente = em.find(Cliente.class, nickCliente);
-		    System.out.println("Realizando compra para el cliente: " + nickCliente);
-		    System.out.println("Número de orden: " + orden.getNumero());
+		 Cliente cliente = em.find(Cliente.class, nickCliente);
+		 System.out.println("Realizando compra para el cliente: " + nickCliente);
+		 System.out.println("Número de orden: " + orden.getNumero());
 		    
-		    if (cliente == null) {
-		        System.out.println("Cliente no encontrado");
-		        return; 
-		    }
-
-		    this.ordenes.put(orden.getNumero(), orden);
-		    System.out.println("Orden guardada: " + orden.getNumero());
+		 if (cliente == null) {
+			 em.getTransaction().commit();
+			 em.close();
+			 System.out.println("Cliente no encontrado");
+			 return; 
+		 }
+		 em.persist(orden);
+		 System.out.println("Orden guardada: " + orden.getNumero());
 		    
-		    // Agregar compra al cliente
-		    cliente.agregarCompra(this.ordenes.get(orden.getNumero()));
+		 // Agregar compra al cliente
+		 cliente.agregarCompra(orden);
 		    
-		    Map<Integer, Item> itemsAdquiridos = orden.getItems();
-		    for (Map.Entry<Integer, Item> entry : itemsAdquiridos.entrySet()) {
-		        Item item = entry.getValue();
-		        int numeroRef = item.getProducto().getNumRef();
-		        Producto producto = this.getProducto(numeroRef);
+		 Map<Integer, Item> itemsAdquiridos = orden.getItems();
+		 for (Map.Entry<Integer, Item> entry : itemsAdquiridos.entrySet()) {
+			 Item item = entry.getValue();
+			 int numeroRef = item.getProducto().getNumRef();
+			 Producto producto = this.getProducto(numeroRef);
 		        
-		        if (producto != null) {
-		            System.out.println("Actualizando stock para producto: " + numeroRef);
-		            producto.setCantidadComprada(producto.getCantidadComprada() + item.getCant());
-		            producto.setStock(producto.getStock() - item.getCant());
-		            System.out.println("Nuevo stock para producto " + numeroRef + ": " + producto.getStock());
-		        } else {
-		            System.out.println("Producto no encontrado: " + numeroRef);
-		        }
-		    }
-		}
+			 if (producto != null) {
+				 System.out.println("Actualizando stock para producto: " + numeroRef);
+				 producto.setCantidadComprada(producto.getCantidadComprada() + item.getCant());
+				 producto.setStock(producto.getStock() - item.getCant());
+				 System.out.println("Nuevo stock para producto " + numeroRef + ": " + producto.getStock());
+			 } else {
+				 System.out.println("Producto no encontrado: " + numeroRef);
+			 }
+		 }
+		 em.getTransaction().commit();
+		 em.close();
+	 }
 	 
 	 
 	 	public List<Usuario> listaUsuarios(){
 	 		return em.createQuery("SELECT u FROM Usuario u", Usuario.class).getResultList();
 	 	}
 	 	
-	 	public OrdenDeCompra getOrden(int numero) {
-	 		return this.ordenes.get(numero);
+	 	public DTOrdenDeCompra getOrden(int numero) {
+	 		return em.find(OrdenDeCompra.class, numero).crearDT();
 	 	}
 	 	
 	 public void cambiarEstadoOrden(String estado, String com, int numero, String cliente) {
@@ -757,7 +744,7 @@ public class Sistema implements ISistema {
 	 		
 	 		if (client != null) {
 	 			DTEstado nuevoEstado = new DTEstado(estado, com);
-	 			this.ordenes.get(numero).setEstado(nuevoEstado);
+	 			em.find(OrdenDeCompra.class, numero).setEstado(nuevoEstado);
 	 			
 	 			String recipientEmail = client.getCorreo();
 	 	        //String recipientEmail = "maria.vairo@estudiantes.utec.edu.uy";
@@ -790,7 +777,7 @@ public class Sistema implements ISistema {
 		 Cliente client = em.find(Cliente.class, cliente);
 	 		
 	 		if (client != null) {
-	 			this.ordenes.get(numero).setEstado(est);
+	 			em.find(OrdenDeCompra.class, numero).setEstado(est);
 	 			
 	 			String recipientEmail = client.getCorreo();
 	 	        //String recipientEmail = "maria.vairo@estudiantes.utec.edu.uy";

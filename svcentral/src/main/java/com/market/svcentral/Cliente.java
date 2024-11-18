@@ -115,7 +115,6 @@ public class Cliente extends Usuario {
     
     public List<DTOrdenDeCompra> mostrarCompras() {
     	List<DTOrdenDeCompra> lista = new ArrayList<DTOrdenDeCompra>();
-    	System.out.println(this.cantCompras());
     	for (OrdenDeCompra orden : listaCompras.values()) {
     		lista.add(orden.crearDT());
     	}
