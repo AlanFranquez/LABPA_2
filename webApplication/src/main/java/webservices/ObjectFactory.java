@@ -117,6 +117,7 @@ public class ObjectFactory {
     private final static QName _AgregarClienteResponse_QNAME = new QName("http://services/", "agregarClienteResponse");
     private final static QName _VerificarClienteYCrearCarrito_QNAME = new QName("http://services/", "verificarClienteYCrearCarrito");
     private final static QName _CrearDTProd_QNAME = new QName("http://services/", "crearDTProd");
+    private final static QName _GetNickxDTCliente_QNAME = new QName("http://services/", "getNickxDTCliente");
     private final static QName _GetNumRefOrden_QNAME = new QName("http://services/", "getNumRefOrden");
     private final static QName _AgregarImagenUsuarioResponse_QNAME = new QName("http://services/", "agregarImagenUsuarioResponse");
     private final static QName _CrearDTCliente_QNAME = new QName("http://services/", "crearDTCliente");
@@ -151,6 +152,7 @@ public class ObjectFactory {
     private final static QName _CrearDTItemResponse_QNAME = new QName("http://services/", "crearDTItemResponse");
     private final static QName _AgregarCATProductoResponse_QNAME = new QName("http://services/", "agregarCATProductoResponse");
     private final static QName _GetNickDTCliente_QNAME = new QName("http://services/", "getNickDTCliente");
+    private final static QName _GetNickxDTClienteResponse_QNAME = new QName("http://services/", "getNickxDTClienteResponse");
     private final static QName _GetFechaNacDTClienteString_QNAME = new QName("http://services/", "getFechaNacDTClienteString");
     private final static QName _ObtenerDTCliente_QNAME = new QName("http://services/", "obtenerDTCliente");
     private final static QName _GetNombreProdResponse_QNAME = new QName("http://services/", "getNombreProdResponse");
@@ -791,6 +793,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link GetNickxDTCliente }
+     * 
+     */
+    public GetNickxDTCliente createGetNickxDTCliente() {
+        return new GetNickxDTCliente();
+    }
+
+    /**
      * Create an instance of {@link GetNumRefOrden }
      * 
      */
@@ -1268,6 +1278,14 @@ public class ObjectFactory {
      */
     public ObtenerProveedorResponse createObtenerProveedorResponse() {
         return new ObtenerProveedorResponse();
+    }
+
+    /**
+     * Create an instance of {@link GetNickxDTClienteResponse }
+     * 
+     */
+    public GetNickxDTClienteResponse createGetNickxDTClienteResponse() {
+        return new GetNickxDTClienteResponse();
     }
 
     /**
@@ -2340,6 +2358,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link GetNickxDTCliente }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://services/", name = "getNickxDTCliente")
+    public JAXBElement<GetNickxDTCliente> createGetNickxDTCliente(GetNickxDTCliente value) {
+        return new JAXBElement<GetNickxDTCliente>(_GetNickxDTCliente_QNAME, GetNickxDTCliente.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link GetNumRefOrden }{@code >}}
      * 
      */
@@ -2643,6 +2670,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://services/", name = "getNickDTCliente")
     public JAXBElement<GetNickDTCliente> createGetNickDTCliente(GetNickDTCliente value) {
         return new JAXBElement<GetNickDTCliente>(_GetNickDTCliente_QNAME, GetNickDTCliente.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link GetNickxDTClienteResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://services/", name = "getNickxDTClienteResponse")
+    public JAXBElement<GetNickxDTClienteResponse> createGetNickxDTClienteResponse(GetNickxDTClienteResponse value) {
+        return new JAXBElement<GetNickxDTClienteResponse>(_GetNickxDTClienteResponse_QNAME, GetNickxDTClienteResponse.class, null, value);
     }
 
     /**

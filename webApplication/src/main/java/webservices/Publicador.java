@@ -575,7 +575,7 @@ public interface Publicador {
     @Action(input = "http://services/Publicador/getTipoRequest", output = "http://services/Publicador/getTipoResponse")
     public String getTipo(
         @WebParam(name = "arg0", targetNamespace = "")
-        Usuario arg0);
+        String arg0);
 
     /**
      * 
@@ -780,6 +780,21 @@ public interface Publicador {
 
     /**
      * 
+     * @param arg0
+     * @return
+     *     returns java.lang.String
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "getNickxDTCliente", targetNamespace = "http://services/", className = "webservices.GetNickxDTCliente")
+    @ResponseWrapper(localName = "getNickxDTClienteResponse", targetNamespace = "http://services/", className = "webservices.GetNickxDTClienteResponse")
+    @Action(input = "http://services/Publicador/getNickxDTClienteRequest", output = "http://services/Publicador/getNickxDTClienteResponse")
+    public String getNickxDTCliente(
+        @WebParam(name = "arg0", targetNamespace = "")
+        DtCliente arg0);
+
+    /**
+     * 
      * @param arg1
      * @param arg0
      * @return
@@ -794,7 +809,7 @@ public interface Publicador {
         @WebParam(name = "arg0", targetNamespace = "")
         int arg0,
         @WebParam(name = "arg1", targetNamespace = "")
-        String arg1);
+        Cliente arg1);
 
     /**
      * 
@@ -842,7 +857,7 @@ public interface Publicador {
     @Action(input = "http://services/Publicador/getNumRefOrdenRequest", output = "http://services/Publicador/getNumRefOrdenResponse")
     public int getNumRefOrden(
         @WebParam(name = "arg0", targetNamespace = "")
-        DtOrdenDeCompra arg0);
+        int arg0);
 
     /**
      * 
@@ -857,7 +872,7 @@ public interface Publicador {
     @Action(input = "http://services/Publicador/getItemsOrdenRequest", output = "http://services/Publicador/getItemsOrdenResponse")
     public List<Item> getItemsOrden(
         @WebParam(name = "arg0", targetNamespace = "")
-        DtOrdenDeCompra arg0);
+        OrdenDeCompra arg0);
 
     /**
      * 
@@ -887,7 +902,7 @@ public interface Publicador {
     @Action(input = "http://services/Publicador/getHistorialEstadoRequest", output = "http://services/Publicador/getHistorialEstadoResponse")
     public List<DtEstado> getHistorialEstado(
         @WebParam(name = "arg0", targetNamespace = "")
-        DtOrdenDeCompra arg0);
+        OrdenDeCompra arg0);
 
     /**
      * 
@@ -947,7 +962,7 @@ public interface Publicador {
     @Action(input = "http://services/Publicador/getEstadoOrdenRequest", output = "http://services/Publicador/getEstadoOrdenResponse")
     public String getEstadoOrden(
         @WebParam(name = "arg0", targetNamespace = "")
-        DtOrdenDeCompra arg0);
+        int arg0);
 
     /**
      * 
@@ -962,7 +977,7 @@ public interface Publicador {
     @Action(input = "http://services/Publicador/getPrecioTotalOrdenRequest", output = "http://services/Publicador/getPrecioTotalOrdenResponse")
     public float getPrecioTotalOrden(
         @WebParam(name = "arg0", targetNamespace = "")
-        DtOrdenDeCompra arg0);
+        int arg0);
 
     /**
      * 
@@ -977,7 +992,7 @@ public interface Publicador {
     @Action(input = "http://services/Publicador/getFechaOrdenRequest", output = "http://services/Publicador/getFechaOrdenResponse")
     public String getFechaOrden(
         @WebParam(name = "arg0", targetNamespace = "")
-        DtOrdenDeCompra arg0);
+        int arg0);
 
     /**
      * 
@@ -1097,7 +1112,7 @@ public interface Publicador {
     @Action(input = "http://services/Publicador/getOrdenesClienteRequest", output = "http://services/Publicador/getOrdenesClienteResponse")
     public List<OrdenDeCompra> getOrdenesCliente(
         @WebParam(name = "arg0", targetNamespace = "")
-        Cliente arg0);
+        String arg0);
 
     /**
      * 
@@ -1112,7 +1127,7 @@ public interface Publicador {
     @Action(input = "http://services/Publicador/getNickDTClienteRequest", output = "http://services/Publicador/getNickDTClienteResponse")
     public String getNickDTCliente(
         @WebParam(name = "arg0", targetNamespace = "")
-        DtCliente arg0);
+        String arg0);
 
     /**
      * 
@@ -1127,7 +1142,7 @@ public interface Publicador {
     @Action(input = "http://services/Publicador/getNombreDTClienteRequest", output = "http://services/Publicador/getNombreDTClienteResponse")
     public String getNombreDTCliente(
         @WebParam(name = "arg0", targetNamespace = "")
-        DtCliente arg0);
+        String arg0);
 
     /**
      * 
@@ -1142,7 +1157,7 @@ public interface Publicador {
     @Action(input = "http://services/Publicador/getApellidoDTClienteRequest", output = "http://services/Publicador/getApellidoDTClienteResponse")
     public String getApellidoDTCliente(
         @WebParam(name = "arg0", targetNamespace = "")
-        DtCliente arg0);
+        String arg0);
 
     /**
      * 
@@ -1157,7 +1172,7 @@ public interface Publicador {
     @Action(input = "http://services/Publicador/getImagenesDTClienteRequest", output = "http://services/Publicador/getImagenesDTClienteResponse")
     public String getImagenesDTCliente(
         @WebParam(name = "arg0", targetNamespace = "")
-        DtCliente arg0);
+        String arg0);
 
     /**
      * 
@@ -1172,7 +1187,7 @@ public interface Publicador {
     @Action(input = "http://services/Publicador/getFechaNacDTClienteStringRequest", output = "http://services/Publicador/getFechaNacDTClienteStringResponse")
     public String getFechaNacDTClienteString(
         @WebParam(name = "arg0", targetNamespace = "")
-        DtCliente arg0);
+        String arg0);
 
     /**
      * 
@@ -1187,7 +1202,7 @@ public interface Publicador {
     @Action(input = "http://services/Publicador/crearDTOrdenRequest", output = "http://services/Publicador/crearDTOrdenResponse")
     public DtOrdenDeCompra crearDTOrden(
         @WebParam(name = "arg0", targetNamespace = "")
-        OrdenDeCompra arg0);
+        int arg0);
 
     /**
      * 
