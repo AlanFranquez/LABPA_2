@@ -133,22 +133,25 @@ public class Sistema implements ISistema {
         }
         return prod == null;
     }
-    public void agregarProducto(String titulo, int numRef, String descripcion, String especificaciones, float precio, String prov, int stock) {    	
-    	Proveedor proveedor = em.find(Proveedor.class, prov);
-    	
-    	Producto producto = new Producto(titulo, descripcion, precio, numRef, especificaciones, proveedor, stock);
+    public void agregarProducto(String titulo, int numRef, String descripcion, String especificaciones, float precio, String prov, int stock) {   
+        EntityManager em = emf.createEntityManager();
+        Proveedor proveedor = em.find(Proveedor.class, prov);
+        if (proveedor == null) {
+            System.out.println("Proveedor no encontrado: " + prov);
+            return; 
+        }
+        Producto producto = new Producto(titulo, descripcion, precio, numRef, especificaciones, proveedor, stock);
         try {
-        	proveedor.agregarProd(producto);
-        	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-        	EntityManager em = emf.createEntityManager();
-        	em.getTransaction().begin();
-        	
-        	em.persist(producto);
-        	
-        	em.getTransaction().commit();
-        	em.close();
-        }catch (Exception e) {
-        	System.out.println(e.getMessage());
+            em.getTransaction().begin();
+            em.persist(producto);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            System.out.println("Error al agregar el producto: " + e.getMessage());
+        } finally {
+            em.close(); // Asegúrate de cerrar el EntityManager
         }
     }
     public DefaultMutableTreeNode arbolCategorias() {
@@ -711,6 +714,7 @@ public class Sistema implements ISistema {
 		 EntityManager em = emf.createEntityManager();
 		 
 		 
+		 
 		    Cliente cliente = em.find(Cliente.class, nickCliente);
 		    System.out.println("Realizando compra para el cliente: " + nickCliente);
 		    System.out.println("Número de orden: " + orden.getNumero());
@@ -725,6 +729,8 @@ public class Sistema implements ISistema {
 		    
 		    // Agregar compra al cliente
 		    cliente.agregarCompra(this.ordenes.get(orden.getNumero()));
+		    
+		    em.merge(cliente);
 		    
 		    Map<Integer, Item> itemsAdquiridos = orden.getItems();
 		    for (Map.Entry<Integer, Item> entry : itemsAdquiridos.entrySet()) {
@@ -741,7 +747,49 @@ public class Sistema implements ISistema {
 		            System.out.println("Producto no encontrado: " + numeroRef);
 		        }
 		    }
+		    
+		    
 		}
+	 
+	 public void realizarCompraPRUEBA(int orden, String nickCliente) {
+		 EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+		 EntityManager em = emf.createEntityManager();
+		 
+		 OrdenDeCompra ord = em.find(OrdenDeCompra.class, orden);
+		 
+		 Cliente cliente = em.find(Cliente.class, nickCliente);
+		    System.out.println("Realizando compra para el cliente: " + nickCliente);
+		    System.out.println("Número de orden: " + ord.getNumero());
+		    
+		    if (cliente == null) {
+		        System.out.println("Cliente no encontrado");
+		        return; 
+		    }
+
+		    this.ordenes.put(ord.getNumero(), ord);
+		    System.out.println("Orden guardada: " + ord.getNumero());
+		    
+		    // Agregar compra al cliente
+		    cliente.agregarCompra(this.ordenes.get(ord.getNumero()));
+		    
+		    em.merge(cliente);
+		    
+		    Map<Integer, Item> itemsAdquiridos = ord.getItems();
+		    for (Map.Entry<Integer, Item> entry : itemsAdquiridos.entrySet()) {
+		        Item item = entry.getValue();
+		        int numeroRef = item.getProducto().getNumRef();
+		        Producto producto = this.getProducto(numeroRef);
+		        
+		        if (producto != null) {
+		            System.out.println("Actualizando stock para producto: " + numeroRef);
+		            producto.setCantidadComprada(producto.getCantidadComprada() + item.getCant());
+		            producto.setStock(producto.getStock() - item.getCant());
+		            System.out.println("Nuevo stock para producto " + numeroRef + ": " + producto.getStock());
+		        } else {
+		            System.out.println("Producto no encontrado: " + numeroRef);
+		        }
+		    }
+	 }
 	 
 	 
 	 	public List<Usuario> listaUsuarios(){
@@ -968,6 +1016,54 @@ public class Sistema implements ISistema {
 	        }
 	        
 	    }
+	 
+	 
+	 // PROBANDO
+	 
+	 public Integer iniciarOrdenVacia(String nickProveedor) {
+		 Proveedor prov = em.find(Proveedor.class, nickProveedor);
+		 
+		 EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+	        EntityManager em = emf.createEntityManager();
+		 
+		 if(prov == null) {
+			 System.out.print("NO se encontro prov");
+			 
+			 return 0;
+		 }
+		 
+		 
+		 em.getTransaction().begin();
+		 OrdenDeCompra ord = new OrdenDeCompra(prov);
+		 em.persist(ord);
+		 
+		 em.getTransaction().commit();
+		 
+		 System.out.print("SE AGREGO LA COMPRA");
+		 
+		 em.close();
+		 emf.close();
+		 
+		 return ord.getNumero();
+	 
+	 }
+	 
+	 public void agregarItemsAOrden(int numeroOrden, int numProducto, int cantidad) {
+		 EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+	        EntityManager em = emf.createEntityManager();
+	        em.getTransaction().begin();
+	        
+	        OrdenDeCompra ord = em.find(OrdenDeCompra.class, numeroOrden);
+	        
+	        ord.agregarItem(getProducto(numProducto), cantidad);
+	        
+	        em.merge(ord);
+	        
+	        em.getTransaction().commit();
+	        em.close();
+	        emf.close();
+	        	
+	 }
 	 
 	 
 }

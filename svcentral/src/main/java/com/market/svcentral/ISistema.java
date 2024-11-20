@@ -136,4 +136,10 @@ public interface ISistema {
 	public abstract void cambiarEstadoOrdenconDT(DTEstado estadoComprada11, int numeroOrden, String nick);
 	
 	public List<Producto> obtenerProductosDestacados();
+	
+	public Integer iniciarOrdenVacia(String nickProveedor);
+	
+	public void realizarCompraPRUEBA(int orden, String nickCliente);
+	
+	public void agregarItemsAOrden(int numeroOrden, int numProducto, int cantidad);
 }

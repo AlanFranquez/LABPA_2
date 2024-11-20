@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for getCompra complex type.
+ * <p>Java class for agregarCategoriaProducto complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="getCompra">
+ * &lt;complexType name="agregarCategoriaProducto">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -27,11 +27,11 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "getCompra", propOrder = {
+@XmlType(name = "agregarCategoriaProducto", propOrder = {
     "arg0",
     "arg1"
 })
-public class GetCompra {
+public class AgregarCategoriaProducto {
 
     protected int arg0;
     protected String arg1;

@@ -14,6 +14,7 @@ public class OrdenDeCompra {
     private int numero;
     private float precioTotal;
     private LocalDateTime fecha;
+    private int contadorCompras = 5;
 
     @OneToMany(cascade = CascadeType.PERSIST)
     private Map<Integer, Item> items;
@@ -49,7 +50,32 @@ public class OrdenDeCompra {
         DTEstado estadoComprada = new DTEstado("Comprada", "El cliente ha realizado la compra");
         this.estados.add(estadoComprada);
     }
+    
+    // Probando
+    public OrdenDeCompra(Proveedor proveedor) {
 
+    	Random random = new Random();
+        this.numero = random.nextInt(1000);
+        this.precioTotal = 0;
+        this.fecha = LocalDateTime.now();
+        this.items = new HashMap<>();
+        this.comentarios = new ArrayList<>();
+        this.estados = new ArrayList<>();
+        this.proveedor = proveedor;
+
+        // Estado inicial
+        DTEstado estadoComprada = new DTEstado("Comprada", "El cliente ha realizado la compra");
+        this.estados.add(estadoComprada);
+    }
+    
+    public void agregarItem(Producto p, int cant) {
+    	Item nuevoItem = new Item(cant, p);
+    	
+    	items.put(p.getNumRef(), nuevoItem);
+    	setPrecioTotal();
+    }
+    
+    
     // Métodos de gestión de estado
     public void agregarEstado(String estado, String comentarios) {
         DTEstado nuevoEstado = new DTEstado(estado, comentarios);
@@ -88,6 +114,8 @@ public class OrdenDeCompra {
     public Map<Integer, Item> getItems() {
         return items;
     }
+    
+   
 
     public List<Comentario> getComentarios() {
         return comentarios;

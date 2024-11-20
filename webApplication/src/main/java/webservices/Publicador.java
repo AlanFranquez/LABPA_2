@@ -70,6 +70,365 @@ public interface Publicador {
 
     /**
      * 
+     * @param arg2
+     * @param arg1
+     * @param arg0
+     * @return
+     *     returns webservices.DtFecha
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "nuevaFecha", targetNamespace = "http://services/", className = "webservices.NuevaFecha")
+    @ResponseWrapper(localName = "nuevaFechaResponse", targetNamespace = "http://services/", className = "webservices.NuevaFechaResponse")
+    @Action(input = "http://services/Publicador/nuevaFechaRequest", output = "http://services/Publicador/nuevaFechaResponse")
+    public DtFecha nuevaFecha(
+        @WebParam(name = "arg0", targetNamespace = "")
+        int arg0,
+        @WebParam(name = "arg1", targetNamespace = "")
+        int arg1,
+        @WebParam(name = "arg2", targetNamespace = "")
+        int arg2);
+
+    /**
+     * 
+     * @param arg1
+     * @param arg0
+     * @return
+     *     returns webservices.DtEstado
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "nuevoEstado", targetNamespace = "http://services/", className = "webservices.NuevoEstado")
+    @ResponseWrapper(localName = "nuevoEstadoResponse", targetNamespace = "http://services/", className = "webservices.NuevoEstadoResponse")
+    @Action(input = "http://services/Publicador/nuevoEstadoRequest", output = "http://services/Publicador/nuevoEstadoResponse")
+    public DtEstado nuevoEstado(
+        @WebParam(name = "arg0", targetNamespace = "")
+        String arg0,
+        @WebParam(name = "arg1", targetNamespace = "")
+        String arg1);
+
+    /**
+     * 
+     * @param arg3
+     * @param arg2
+     * @param arg5
+     * @param arg4
+     * @param arg1
+     * @param arg0
+     * @param arg6
+     * @throws UsuarioRepetidoException_Exception
+     */
+    @WebMethod
+    @RequestWrapper(localName = "agregarCliente", targetNamespace = "http://services/", className = "webservices.AgregarCliente")
+    @ResponseWrapper(localName = "agregarClienteResponse", targetNamespace = "http://services/", className = "webservices.AgregarClienteResponse")
+    @Action(input = "http://services/Publicador/agregarClienteRequest", output = "http://services/Publicador/agregarClienteResponse", fault = {
+        @FaultAction(className = UsuarioRepetidoException_Exception.class, value = "http://services/Publicador/agregarCliente/Fault/UsuarioRepetidoException")
+    })
+    public void agregarCliente(
+        @WebParam(name = "arg0", targetNamespace = "")
+        String arg0,
+        @WebParam(name = "arg1", targetNamespace = "")
+        String arg1,
+        @WebParam(name = "arg2", targetNamespace = "")
+        String arg2,
+        @WebParam(name = "arg3", targetNamespace = "")
+        String arg3,
+        @WebParam(name = "arg4", targetNamespace = "")
+        DtFecha arg4,
+        @WebParam(name = "arg5", targetNamespace = "")
+        String arg5,
+        @WebParam(name = "arg6", targetNamespace = "")
+        String arg6)
+        throws UsuarioRepetidoException_Exception
+    ;
+
+    /**
+     * 
+     * @param arg3
+     * @param arg2
+     * @param arg5
+     * @param arg4
+     * @param arg1
+     * @param arg0
+     * @param arg7
+     * @param arg6
+     * @param arg8
+     * @throws UsuarioRepetidoException_Exception
+     */
+    @WebMethod
+    @RequestWrapper(localName = "agregarProveedor", targetNamespace = "http://services/", className = "webservices.AgregarProveedor")
+    @ResponseWrapper(localName = "agregarProveedorResponse", targetNamespace = "http://services/", className = "webservices.AgregarProveedorResponse")
+    @Action(input = "http://services/Publicador/agregarProveedorRequest", output = "http://services/Publicador/agregarProveedorResponse", fault = {
+        @FaultAction(className = UsuarioRepetidoException_Exception.class, value = "http://services/Publicador/agregarProveedor/Fault/UsuarioRepetidoException")
+    })
+    public void agregarProveedor(
+        @WebParam(name = "arg0", targetNamespace = "")
+        String arg0,
+        @WebParam(name = "arg1", targetNamespace = "")
+        String arg1,
+        @WebParam(name = "arg2", targetNamespace = "")
+        String arg2,
+        @WebParam(name = "arg3", targetNamespace = "")
+        String arg3,
+        @WebParam(name = "arg4", targetNamespace = "")
+        DtFecha arg4,
+        @WebParam(name = "arg5", targetNamespace = "")
+        String arg5,
+        @WebParam(name = "arg6", targetNamespace = "")
+        String arg6,
+        @WebParam(name = "arg7", targetNamespace = "")
+        String arg7,
+        @WebParam(name = "arg8", targetNamespace = "")
+        String arg8)
+        throws UsuarioRepetidoException_Exception
+    ;
+
+    /**
+     * 
+     * @param arg1
+     * @param arg0
+     */
+    @WebMethod
+    @RequestWrapper(localName = "agregarImagenUsuario", targetNamespace = "http://services/", className = "webservices.AgregarImagenUsuario")
+    @ResponseWrapper(localName = "agregarImagenUsuarioResponse", targetNamespace = "http://services/", className = "webservices.AgregarImagenUsuarioResponse")
+    @Action(input = "http://services/Publicador/agregarImagenUsuarioRequest", output = "http://services/Publicador/agregarImagenUsuarioResponse")
+    public void agregarImagenUsuario(
+        @WebParam(name = "arg0", targetNamespace = "")
+        String arg0,
+        @WebParam(name = "arg1", targetNamespace = "")
+        String arg1);
+
+    /**
+     * 
+     * @param arg0
+     * @return
+     *     returns webservices.Usuario
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "obtenerUsuario", targetNamespace = "http://services/", className = "webservices.ObtenerUsuario")
+    @ResponseWrapper(localName = "obtenerUsuarioResponse", targetNamespace = "http://services/", className = "webservices.ObtenerUsuarioResponse")
+    @Action(input = "http://services/Publicador/obtenerUsuarioRequest", output = "http://services/Publicador/obtenerUsuarioResponse")
+    public Usuario obtenerUsuario(
+        @WebParam(name = "arg0", targetNamespace = "")
+        String arg0);
+
+    /**
+     * 
+     * @param arg1
+     * @param arg0
+     */
+    @WebMethod
+    @RequestWrapper(localName = "agregarImagenesProd", targetNamespace = "http://services/", className = "webservices.AgregarImagenesProd")
+    @ResponseWrapper(localName = "agregarImagenesProdResponse", targetNamespace = "http://services/", className = "webservices.AgregarImagenesProdResponse")
+    @Action(input = "http://services/Publicador/agregarImagenesProdRequest", output = "http://services/Publicador/agregarImagenesProdResponse")
+    public void agregarImagenesProd(
+        @WebParam(name = "arg0", targetNamespace = "")
+        int arg0,
+        @WebParam(name = "arg1", targetNamespace = "")
+        String arg1);
+
+    /**
+     * 
+     * @param arg0
+     * @throws CategoriaException_Exception
+     */
+    @WebMethod
+    @RequestWrapper(localName = "agregarCATPadre", targetNamespace = "http://services/", className = "webservices.AgregarCATPadre")
+    @ResponseWrapper(localName = "agregarCATPadreResponse", targetNamespace = "http://services/", className = "webservices.AgregarCATPadreResponse")
+    @Action(input = "http://services/Publicador/agregarCATPadreRequest", output = "http://services/Publicador/agregarCATPadreResponse", fault = {
+        @FaultAction(className = CategoriaException_Exception.class, value = "http://services/Publicador/agregarCATPadre/Fault/CategoriaException")
+    })
+    public void agregarCATPadre(
+        @WebParam(name = "arg0", targetNamespace = "")
+        String arg0)
+        throws CategoriaException_Exception
+    ;
+
+    /**
+     * 
+     * @param arg1
+     * @param arg0
+     * @throws CategoriaException_Exception
+     */
+    @WebMethod
+    @RequestWrapper(localName = "agregarCategoriaProducto", targetNamespace = "http://services/", className = "webservices.AgregarCategoriaProducto")
+    @ResponseWrapper(localName = "agregarCategoriaProductoResponse", targetNamespace = "http://services/", className = "webservices.AgregarCategoriaProductoResponse")
+    @Action(input = "http://services/Publicador/agregarCategoriaProductoRequest", output = "http://services/Publicador/agregarCategoriaProductoResponse", fault = {
+        @FaultAction(className = CategoriaException_Exception.class, value = "http://services/Publicador/agregarCategoriaProducto/Fault/CategoriaException")
+    })
+    public void agregarCategoriaProducto(
+        @WebParam(name = "arg0", targetNamespace = "")
+        int arg0,
+        @WebParam(name = "arg1", targetNamespace = "")
+        String arg1)
+        throws CategoriaException_Exception
+    ;
+
+    /**
+     * 
+     * @param arg1
+     * @param arg0
+     * @throws CategoriaException_Exception
+     */
+    @WebMethod
+    @RequestWrapper(localName = "agregarProductoCategoria", targetNamespace = "http://services/", className = "webservices.AgregarProductoCategoria")
+    @ResponseWrapper(localName = "agregarProductoCategoriaResponse", targetNamespace = "http://services/", className = "webservices.AgregarProductoCategoriaResponse")
+    @Action(input = "http://services/Publicador/agregarProductoCategoriaRequest", output = "http://services/Publicador/agregarProductoCategoriaResponse", fault = {
+        @FaultAction(className = CategoriaException_Exception.class, value = "http://services/Publicador/agregarProductoCategoria/Fault/CategoriaException")
+    })
+    public void agregarProductoCategoria(
+        @WebParam(name = "arg0", targetNamespace = "")
+        String arg0,
+        @WebParam(name = "arg1", targetNamespace = "")
+        int arg1)
+        throws CategoriaException_Exception
+    ;
+
+    /**
+     * 
+     * @param arg0
+     * @throws CategoriaException_Exception
+     */
+    @WebMethod
+    @RequestWrapper(localName = "agregarCATProducto", targetNamespace = "http://services/", className = "webservices.AgregarCATProducto")
+    @ResponseWrapper(localName = "agregarCATProductoResponse", targetNamespace = "http://services/", className = "webservices.AgregarCATProductoResponse")
+    @Action(input = "http://services/Publicador/agregarCATProductoRequest", output = "http://services/Publicador/agregarCATProductoResponse", fault = {
+        @FaultAction(className = CategoriaException_Exception.class, value = "http://services/Publicador/agregarCATProducto/Fault/CategoriaException")
+    })
+    public void agregarCATProducto(
+        @WebParam(name = "arg0", targetNamespace = "")
+        String arg0)
+        throws CategoriaException_Exception
+    ;
+
+    /**
+     * 
+     * @param arg1
+     * @param arg0
+     * @throws CategoriaException_Exception
+     */
+    @WebMethod
+    @RequestWrapper(localName = "asignarlePadreCategoria", targetNamespace = "http://services/", className = "webservices.AsignarlePadreCategoria")
+    @ResponseWrapper(localName = "asignarlePadreCategoriaResponse", targetNamespace = "http://services/", className = "webservices.AsignarlePadreCategoriaResponse")
+    @Action(input = "http://services/Publicador/asignarlePadreCategoriaRequest", output = "http://services/Publicador/asignarlePadreCategoriaResponse", fault = {
+        @FaultAction(className = CategoriaException_Exception.class, value = "http://services/Publicador/asignarlePadreCategoria/Fault/CategoriaException")
+    })
+    public void asignarlePadreCategoria(
+        @WebParam(name = "arg0", targetNamespace = "")
+        String arg0,
+        @WebParam(name = "arg1", targetNamespace = "")
+        String arg1)
+        throws CategoriaException_Exception
+    ;
+
+    /**
+     * 
+     * @param arg0
+     * @return
+     *     returns java.lang.Integer
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "imprimirNumRef", targetNamespace = "http://services/", className = "webservices.ImprimirNumRef")
+    @ResponseWrapper(localName = "imprimirNumRefResponse", targetNamespace = "http://services/", className = "webservices.ImprimirNumRefResponse")
+    @Action(input = "http://services/Publicador/imprimirNumRefRequest", output = "http://services/Publicador/imprimirNumRefResponse")
+    public Integer imprimirNumRef(
+        @WebParam(name = "arg0", targetNamespace = "")
+        int arg0);
+
+    /**
+     * 
+     * @param arg0
+     * @return
+     *     returns java.lang.String
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "imprimirNombreProd", targetNamespace = "http://services/", className = "webservices.ImprimirNombreProd")
+    @ResponseWrapper(localName = "imprimirNombreProdResponse", targetNamespace = "http://services/", className = "webservices.ImprimirNombreProdResponse")
+    @Action(input = "http://services/Publicador/imprimirNombreProdRequest", output = "http://services/Publicador/imprimirNombreProdResponse")
+    public String imprimirNombreProd(
+        @WebParam(name = "arg0", targetNamespace = "")
+        int arg0);
+
+    /**
+     * 
+     * @param arg0
+     * @return
+     *     returns java.lang.String
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "imprimirDescripcion", targetNamespace = "http://services/", className = "webservices.ImprimirDescripcion")
+    @ResponseWrapper(localName = "imprimirDescripcionResponse", targetNamespace = "http://services/", className = "webservices.ImprimirDescripcionResponse")
+    @Action(input = "http://services/Publicador/imprimirDescripcionRequest", output = "http://services/Publicador/imprimirDescripcionResponse")
+    public String imprimirDescripcion(
+        @WebParam(name = "arg0", targetNamespace = "")
+        int arg0);
+
+    /**
+     * 
+     * @param arg0
+     * @return
+     *     returns float
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "imprimirPrecioProd", targetNamespace = "http://services/", className = "webservices.ImprimirPrecioProd")
+    @ResponseWrapper(localName = "imprimirPrecioProdResponse", targetNamespace = "http://services/", className = "webservices.ImprimirPrecioProdResponse")
+    @Action(input = "http://services/Publicador/imprimirPrecioProdRequest", output = "http://services/Publicador/imprimirPrecioProdResponse")
+    public float imprimirPrecioProd(
+        @WebParam(name = "arg0", targetNamespace = "")
+        int arg0);
+
+    /**
+     * 
+     * @param arg0
+     * @return
+     *     returns float
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "imprimirStock", targetNamespace = "http://services/", className = "webservices.ImprimirStock")
+    @ResponseWrapper(localName = "imprimirStockResponse", targetNamespace = "http://services/", className = "webservices.ImprimirStockResponse")
+    @Action(input = "http://services/Publicador/imprimirStockRequest", output = "http://services/Publicador/imprimirStockResponse")
+    public float imprimirStock(
+        @WebParam(name = "arg0", targetNamespace = "")
+        int arg0);
+
+    /**
+     * 
+     * @param arg0
+     * @return
+     *     returns webservices.DtProducto
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "obtenerDTProducto", targetNamespace = "http://services/", className = "webservices.ObtenerDTProducto")
+    @ResponseWrapper(localName = "obtenerDTProductoResponse", targetNamespace = "http://services/", className = "webservices.ObtenerDTProductoResponse")
+    @Action(input = "http://services/Publicador/obtenerDTProductoRequest", output = "http://services/Publicador/obtenerDTProductoResponse")
+    public DtProducto obtenerDTProducto(
+        @WebParam(name = "arg0", targetNamespace = "")
+        int arg0);
+
+    /**
+     * 
+     * @param arg0
+     * @return
+     *     returns webservices.DtCliente
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "obtenerDTCliente", targetNamespace = "http://services/", className = "webservices.ObtenerDTCliente")
+    @ResponseWrapper(localName = "obtenerDTClienteResponse", targetNamespace = "http://services/", className = "webservices.ObtenerDTClienteResponse")
+    @Action(input = "http://services/Publicador/obtenerDTClienteRequest", output = "http://services/Publicador/obtenerDTClienteResponse")
+    public DtCliente obtenerDTCliente(
+        @WebParam(name = "arg0", targetNamespace = "")
+        String arg0);
+
+    /**
+     * 
      * @param arg0
      * @return
      *     returns java.lang.String
@@ -97,6 +456,81 @@ public interface Publicador {
     public String verificarClienteYCrearCarrito(
         @WebParam(name = "arg0", targetNamespace = "")
         String arg0);
+
+    /**
+     * 
+     * @param arg0
+     * @return
+     *     returns webservices.OrdenDeCompra
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "iniciarOrden", targetNamespace = "http://services/", className = "webservices.IniciarOrden")
+    @ResponseWrapper(localName = "iniciarOrdenResponse", targetNamespace = "http://services/", className = "webservices.IniciarOrdenResponse")
+    @Action(input = "http://services/Publicador/iniciarOrdenRequest", output = "http://services/Publicador/iniciarOrdenResponse")
+    public OrdenDeCompra iniciarOrden(
+        @WebParam(name = "arg0", targetNamespace = "")
+        String arg0);
+
+    /**
+     * 
+     * @param arg0
+     * @return
+     *     returns webservices.OrdenDeCompra
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "obtenerOrden", targetNamespace = "http://services/", className = "webservices.ObtenerOrden")
+    @ResponseWrapper(localName = "obtenerOrdenResponse", targetNamespace = "http://services/", className = "webservices.ObtenerOrdenResponse")
+    @Action(input = "http://services/Publicador/obtenerOrdenRequest", output = "http://services/Publicador/obtenerOrdenResponse")
+    public OrdenDeCompra obtenerOrden(
+        @WebParam(name = "arg0", targetNamespace = "")
+        int arg0);
+
+    /**
+     * 
+     * @param arg0
+     */
+    @WebMethod
+    @RequestWrapper(localName = "imprimirITemsORDENS", targetNamespace = "http://services/", className = "webservices.ImprimirITemsORDENS")
+    @ResponseWrapper(localName = "imprimirITemsORDENSResponse", targetNamespace = "http://services/", className = "webservices.ImprimirITemsORDENSResponse")
+    @Action(input = "http://services/Publicador/imprimirITemsORDENSRequest", output = "http://services/Publicador/imprimirITemsORDENSResponse")
+    public void imprimirITemsORDENS(
+        @WebParam(name = "arg0", targetNamespace = "")
+        int arg0);
+
+    /**
+     * 
+     * @param arg2
+     * @param arg1
+     * @param arg0
+     */
+    @WebMethod
+    @RequestWrapper(localName = "agregarItemsAOrden", targetNamespace = "http://services/", className = "webservices.AgregarItemsAOrden")
+    @ResponseWrapper(localName = "agregarItemsAOrdenResponse", targetNamespace = "http://services/", className = "webservices.AgregarItemsAOrdenResponse")
+    @Action(input = "http://services/Publicador/agregarItemsAOrdenRequest", output = "http://services/Publicador/agregarItemsAOrdenResponse")
+    public void agregarItemsAOrden(
+        @WebParam(name = "arg0", targetNamespace = "")
+        int arg0,
+        @WebParam(name = "arg1", targetNamespace = "")
+        int arg1,
+        @WebParam(name = "arg2", targetNamespace = "")
+        int arg2);
+
+    /**
+     * 
+     * @param arg1
+     * @param arg0
+     */
+    @WebMethod
+    @RequestWrapper(localName = "realizarCompraPRUEBA", targetNamespace = "http://services/", className = "webservices.RealizarCompraPRUEBA")
+    @ResponseWrapper(localName = "realizarCompraPRUEBAResponse", targetNamespace = "http://services/", className = "webservices.RealizarCompraPRUEBAResponse")
+    @Action(input = "http://services/Publicador/realizarCompraPRUEBARequest", output = "http://services/Publicador/realizarCompraPRUEBAResponse")
+    public void realizarCompraPRUEBA(
+        @WebParam(name = "arg0", targetNamespace = "")
+        String arg0,
+        @WebParam(name = "arg1", targetNamespace = "")
+        int arg1);
 
     /**
      * 
@@ -159,21 +593,6 @@ public interface Publicador {
      * 
      * @param arg0
      * @return
-     *     returns webservices.Usuario
-     */
-    @WebMethod
-    @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "obtenerUsuario", targetNamespace = "http://services/", className = "webservices.ObtenerUsuario")
-    @ResponseWrapper(localName = "obtenerUsuarioResponse", targetNamespace = "http://services/", className = "webservices.ObtenerUsuarioResponse")
-    @Action(input = "http://services/Publicador/obtenerUsuarioRequest", output = "http://services/Publicador/obtenerUsuarioResponse")
-    public Usuario obtenerUsuario(
-        @WebParam(name = "arg0", targetNamespace = "")
-        String arg0);
-
-    /**
-     * 
-     * @param arg0
-     * @return
      *     returns webservices.Proveedor
      */
     @WebMethod
@@ -199,6 +618,39 @@ public interface Publicador {
     public Carrito obtenerCarritoCliente(
         @WebParam(name = "arg0", targetNamespace = "")
         String arg0);
+
+    /**
+     * 
+     * @param arg1
+     * @param arg0
+     * @return
+     *     returns webservices.Item
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "prodsAItem", targetNamespace = "http://services/", className = "webservices.ProdsAItem")
+    @ResponseWrapper(localName = "prodsAItemResponse", targetNamespace = "http://services/", className = "webservices.ProdsAItemResponse")
+    @Action(input = "http://services/Publicador/prodsAItemRequest", output = "http://services/Publicador/prodsAItemResponse")
+    public Item prodsAItem(
+        @WebParam(name = "arg0", targetNamespace = "")
+        int arg0,
+        @WebParam(name = "arg1", targetNamespace = "")
+        int arg1);
+
+    /**
+     * 
+     * @param arg0
+     * @return
+     *     returns webservices.Proveedor
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "obtenerProvDeProducto", targetNamespace = "http://services/", className = "webservices.ObtenerProvDeProducto")
+    @ResponseWrapper(localName = "obtenerProvDeProductoResponse", targetNamespace = "http://services/", className = "webservices.ObtenerProvDeProductoResponse")
+    @Action(input = "http://services/Publicador/obtenerProvDeProductoRequest", output = "http://services/Publicador/obtenerProvDeProductoResponse")
+    public Proveedor obtenerProvDeProducto(
+        @WebParam(name = "arg0", targetNamespace = "")
+        int arg0);
 
     /**
      * 
@@ -342,7 +794,7 @@ public interface Publicador {
         @WebParam(name = "arg0", targetNamespace = "")
         int arg0,
         @WebParam(name = "arg1", targetNamespace = "")
-        Cliente arg1);
+        String arg1);
 
     /**
      * 
@@ -778,25 +1230,5 @@ public interface Publicador {
         String arg5,
         @WebParam(name = "arg6", targetNamespace = "")
         int arg6);
-
-    /**
-     * 
-     * @param arg1
-     * @param arg0
-     * @throws CategoriaException_Exception
-     */
-    @WebMethod
-    @RequestWrapper(localName = "agregarProductoCategoria", targetNamespace = "http://services/", className = "webservices.AgregarProductoCategoria")
-    @ResponseWrapper(localName = "agregarProductoCategoriaResponse", targetNamespace = "http://services/", className = "webservices.AgregarProductoCategoriaResponse")
-    @Action(input = "http://services/Publicador/agregarProductoCategoriaRequest", output = "http://services/Publicador/agregarProductoCategoriaResponse", fault = {
-        @FaultAction(className = CategoriaException_Exception.class, value = "http://services/Publicador/agregarProductoCategoria/Fault/CategoriaException")
-    })
-    public void agregarProductoCategoria(
-        @WebParam(name = "arg0", targetNamespace = "")
-        String arg0,
-        @WebParam(name = "arg1", targetNamespace = "")
-        int arg1)
-        throws CategoriaException_Exception
-    ;
 
 }

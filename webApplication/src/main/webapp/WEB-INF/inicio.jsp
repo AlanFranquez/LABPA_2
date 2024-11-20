@@ -172,16 +172,16 @@ if (usr != null && usr instanceof Proveedor) {
                     </div>
                     <div class="card-body d-flex flex-column">
                         <div class="d-flex justify-content-between align-items-start">
-                            <p><a href="#!" class="text-dark"><%= p.getNombre() %></a></p>
-                            <p class="text-dark">#<%= p.getNumRef() %></p>
+                            <p><a href="#!" class="text-dark"><%= port.imprimirNombreProd(p.getNumRef()) %></a></p>
+                            <p class="text-dark">#<%= port.imprimirNumRef(p.getNumRef()) %></p>
                         </div>
-                            <p style="color: gray"><%= p.getDescripcion() %></p>
+                            <p style="color: gray"><%= port.imprimirDescripcion(p.getNumRef()) %></p>
                         
                        
                         <div class="">
                             <p class="text-dark">$<%= p.getPrecio() %></p>
                       
-                            <p class="alert alert-danger">Cantidad disponible: <%= p.getStock() %></p>
+                            <p class="alert alert-danger">Cantidad disponible: <%= port.imprimirStock(p.getNumRef()) %></p>
                         </div>
                         <div class="d-flex justify-content-center align-items-center">
                            <form action="agregarAlCarrito" method="post" style="display: inline-block;" onsubmit="return validarCantidad(this)">

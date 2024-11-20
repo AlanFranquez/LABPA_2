@@ -1,14 +1,14 @@
-<%@page import="services.PublicadorService"%>
-<%@page import="services.Publicador"%>
-<%@page import="services.Proveedor"%>
+<%@page import="webservices.PublicadorService"%>
+<%@page import="webservices.Publicador"%>
+<%@page import="webservices.Proveedor"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ page import="java.util.List"%>
 <%@ page import="java.util.ArrayList"%>
-<%@ page import="services.Producto"%>
-<%@ page import="services.Usuario"%>
-<%@ page import="services.Carrito"%>
-<%@ page import="services.Cliente"%>
+<%@ page import="webservices.Producto"%>
+<%@ page import="webservices.Usuario"%>
+<%@ page import="webservices.Carrito"%>
+<%@ page import="webservices.Cliente"%>
 
 <!DOCTYPE html>
 <html>
@@ -184,12 +184,12 @@ if (usr != null && usr instanceof Proveedor) {
 												<%}%>
 												
 												<div class="card-body d-flex flex-column">
-													<h5 class="card-title"><%=dt != null ? dt.getNombre() : "Producto no encontrado"%></h5>
+													<h5 class="card-title"><%=dt != null ? port.imprimirNombreProd(dt.getNumRef()) : "Producto no encontrado"%></h5>
 													<p class="card-text">
-														<strong>Precio:</strong> $<%=dt != null ? dt.getPrecio() : "N/A"%></p>
+														<strong>Precio:</strong> $<%=dt != null ? port.imprimirPrecioProd(dt.getNumRef()) : "N/A"%></p>
 													<p class="card-text">
 														<span style="color: red;">Cantidad disponible:</span>
-														<%=dt != null ? dt.getStock() : "N/A"%></p>
+														<%=dt != null ? port.imprimirStock(dt.getNumRef()) : "N/A"%></p>
 													<div class="mt-auto">
 														<form action="agregarAlCarrito" method="post"
 															style="display: inline-block;"
