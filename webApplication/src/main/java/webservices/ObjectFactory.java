@@ -57,6 +57,7 @@ public class ObjectFactory {
     private final static QName _GetHistorialEstadoResponse_QNAME = new QName("http://services/", "getHistorialEstadoResponse");
     private final static QName _ObtenerCarritoDeClienteResponse_QNAME = new QName("http://services/", "obtenerCarritoDeClienteResponse");
     private final static QName _GetProductoItem_QNAME = new QName("http://services/", "getProductoItem");
+    private final static QName _SetEstadoResponse_QNAME = new QName("http://services/", "setEstadoResponse");
     private final static QName _ObtenerDTProductoResponse_QNAME = new QName("http://services/", "obtenerDTProductoResponse");
     private final static QName _ObtenerProducto_QNAME = new QName("http://services/", "obtenerProducto");
     private final static QName _ImprimirNumRefOrden_QNAME = new QName("http://services/", "imprimirNumRefOrden");
@@ -70,11 +71,13 @@ public class ObjectFactory {
     private final static QName _ObtenerUsuarioResponse_QNAME = new QName("http://services/", "obtenerUsuarioResponse");
     private final static QName _ComprobarSiProductoExisteCarritoResponse_QNAME = new QName("http://services/", "comprobarSiProductoExisteCarritoResponse");
     private final static QName _ProdsAItem_QNAME = new QName("http://services/", "prodsAItem");
+    private final static QName _SetEstado_QNAME = new QName("http://services/", "setEstado");
     private final static QName _GetItemsOrdenResponse_QNAME = new QName("http://services/", "getItemsOrdenResponse");
     private final static QName _ImprimirCantidad_QNAME = new QName("http://services/", "imprimirCantidad");
     private final static QName _ImprimirPrecioTotal_QNAME = new QName("http://services/", "imprimirPrecioTotal");
     private final static QName _AgregarProveedor_QNAME = new QName("http://services/", "agregarProveedor");
     private final static QName _ComprobarClienteResponse_QNAME = new QName("http://services/", "comprobarClienteResponse");
+    private final static QName _SetEstadoPrueba_QNAME = new QName("http://services/", "setEstadoPrueba");
     private final static QName _ObtenerCarritoClienteResponse_QNAME = new QName("http://services/", "obtenerCarritoClienteResponse");
     private final static QName _ImprimirFechaOrden_QNAME = new QName("http://services/", "imprimirFechaOrden");
     private final static QName _AgregarImagenesProd_QNAME = new QName("http://services/", "agregarImagenesProd");
@@ -90,6 +93,7 @@ public class ObjectFactory {
     private final static QName _SaludarResponse_QNAME = new QName("http://services/", "saludarResponse");
     private final static QName _GetNickDTClienteResponse_QNAME = new QName("http://services/", "getNickDTClienteResponse");
     private final static QName _GetImagenesDTCliente_QNAME = new QName("http://services/", "getImagenesDTCliente");
+    private final static QName _SetEstadoPruebaResponse_QNAME = new QName("http://services/", "setEstadoPruebaResponse");
     private final static QName _SetEstadoOrden_QNAME = new QName("http://services/", "setEstadoOrden");
     private final static QName _RealizarCompraPRUEBAResponse_QNAME = new QName("http://services/", "realizarCompraPRUEBAResponse");
     private final static QName _AgregarCategoriaProducto_QNAME = new QName("http://services/", "agregarCategoriaProducto");
@@ -490,6 +494,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link SetEstadoResponse }
+     * 
+     */
+    public SetEstadoResponse createSetEstadoResponse() {
+        return new SetEstadoResponse();
+    }
+
+    /**
      * Create an instance of {@link ObtenerDTProductoResponse }
      * 
      */
@@ -642,6 +654,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link SetEstadoPrueba }
+     * 
+     */
+    public SetEstadoPrueba createSetEstadoPrueba() {
+        return new SetEstadoPrueba();
+    }
+
+    /**
      * Create an instance of {@link ObtenerCarritoClienteResponse }
      * 
      */
@@ -663,6 +683,14 @@ public class ObjectFactory {
      */
     public ProdsAItem createProdsAItem() {
         return new ProdsAItem();
+    }
+
+    /**
+     * Create an instance of {@link SetEstado }
+     * 
+     */
+    public SetEstado createSetEstado() {
+        return new SetEstado();
     }
 
     /**
@@ -887,6 +915,14 @@ public class ObjectFactory {
      */
     public GetImagenesDTCliente createGetImagenesDTCliente() {
         return new GetImagenesDTCliente();
+    }
+
+    /**
+     * Create an instance of {@link SetEstadoPruebaResponse }
+     * 
+     */
+    public SetEstadoPruebaResponse createSetEstadoPruebaResponse() {
+        return new SetEstadoPruebaResponse();
     }
 
     /**
@@ -1963,6 +1999,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link SetEstadoResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://services/", name = "setEstadoResponse")
+    public JAXBElement<SetEstadoResponse> createSetEstadoResponse(SetEstadoResponse value) {
+        return new JAXBElement<SetEstadoResponse>(_SetEstadoResponse_QNAME, SetEstadoResponse.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link ObtenerDTProductoResponse }{@code >}}
      * 
      */
@@ -2080,6 +2125,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link SetEstado }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://services/", name = "setEstado")
+    public JAXBElement<SetEstado> createSetEstado(SetEstado value) {
+        return new JAXBElement<SetEstado>(_SetEstado_QNAME, SetEstado.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link GetItemsOrdenResponse }{@code >}}
      * 
      */
@@ -2122,6 +2176,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://services/", name = "comprobarClienteResponse")
     public JAXBElement<ComprobarClienteResponse> createComprobarClienteResponse(ComprobarClienteResponse value) {
         return new JAXBElement<ComprobarClienteResponse>(_ComprobarClienteResponse_QNAME, ComprobarClienteResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link SetEstadoPrueba }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://services/", name = "setEstadoPrueba")
+    public JAXBElement<SetEstadoPrueba> createSetEstadoPrueba(SetEstadoPrueba value) {
+        return new JAXBElement<SetEstadoPrueba>(_SetEstadoPrueba_QNAME, SetEstadoPrueba.class, null, value);
     }
 
     /**
@@ -2257,6 +2320,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://services/", name = "getImagenesDTCliente")
     public JAXBElement<GetImagenesDTCliente> createGetImagenesDTCliente(GetImagenesDTCliente value) {
         return new JAXBElement<GetImagenesDTCliente>(_GetImagenesDTCliente_QNAME, GetImagenesDTCliente.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link SetEstadoPruebaResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://services/", name = "setEstadoPruebaResponse")
+    public JAXBElement<SetEstadoPruebaResponse> createSetEstadoPruebaResponse(SetEstadoPruebaResponse value) {
+        return new JAXBElement<SetEstadoPruebaResponse>(_SetEstadoPruebaResponse_QNAME, SetEstadoPruebaResponse.class, null, value);
     }
 
     /**

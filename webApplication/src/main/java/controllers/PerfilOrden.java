@@ -74,7 +74,10 @@ public class PerfilOrden extends HttpServlet {
             System.out.println("=======");
             
             List<webservices.Item> items = port.imprimirITemsORDENS(numeroOrden, cliente.getNick());
+           String estado = port.getEstadoOrden(numeroOrden, cliente.getNick());
             
+           
+            System.out.print("ESTADO -->" + estado);
             for(webservices.Item it: items) {
             	System.out.print("LISTA --> " + it.getProducto().getNumRef());
             }
@@ -116,8 +119,7 @@ public class PerfilOrden extends HttpServlet {
         
         webservices.Usuario user = (webservices.Usuario) sess.getAttribute("usuarioLogueado");
         webservices.Cliente cliente = port.obtenerCliente(user.getNick());
-        DtCliente tmp = port.crearDTCliente(cliente);
-        request.setAttribute("usuarioOrdenEsp", tmp);
+        request.setAttribute("usuarioOrdenEsp", cliente);
 
         if (ordenParam != null && !ordenParam.isEmpty()) {
             int numeroOrden;
@@ -130,25 +132,18 @@ public class PerfilOrden extends HttpServlet {
             
             
             
-            EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-            EntityManager em = emf.createEntityManager();
-            
-            em.getTransaction().begin();
             
             if ("confirmar".equals(accion)) {
             	webservices.OrdenDeCompra orden = port.getCompra(numeroOrden, cliente.getNick());
                 if (orden != null) {
-                	DtEstado estado = port.crearEstado("Entregada", "El cliente ha recibido el pedido.");
-             	    port.setEstadoOrden(orden, estado);
+             	    port.setEstado(orden.getNumero(), cliente.getNick(), "Entregada", "El cliente ha recibido el pedido.");
                 } else {
                     response.sendError(HttpServletResponse.SC_NOT_FOUND, "Orden no encontrada.");
                     return;
                 }
             }
-            em.getTransaction().commit();
-            em.close();
 
-            request.setAttribute("ordencompra", port.mostrarCompraCliente(cliente, numeroOrden));
+            request.setAttribute("ordencompra", port.getCompra(numeroOrden, cliente.getNick()));
             response.sendRedirect("perfilOrden?nickname=" + port.getNickCliente(cliente) + "&orden=" + numeroOrden);
 
         } else {

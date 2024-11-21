@@ -188,8 +188,7 @@ public class Cliente extends Usuario {
     	return false;
     }
     
-    
-   
+ 
     
     
     public Carrito getCarrito() {

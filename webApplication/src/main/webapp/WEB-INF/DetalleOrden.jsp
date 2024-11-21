@@ -94,15 +94,47 @@ if (usr != null && usr instanceof Proveedor) {
 	%>
 
 
-    <% if(port.imprimirEstadoOrden(usr.getNick(), orden.getNumero()).equalsIgnoreCase("En camino")) { %>
-        <form action="perfilOrden" method="post">
+    <% if(port.getEstadoOrden(orden.getNumero(), usr.getNick()).equalsIgnoreCase("En camino")) { %>
+        
+        <div class="text-center">
+        <div class="alert alert-primary" role="alert">
+ 			El pedido actualmente se encuentra EN CAMINO
+		</div>
+        
+          <form action="perfilOrden" method="post">
             <input type="hidden" name="numeroOrden" value="<%= port.imprimirNumRefOrden(usr.getNick(), orden.getNumero()) %>">
             <input type="hidden" name="accion" value="confirmar">
             <button type="submit" class="btn btn-success">Confirmar</button>
         </form>
-    <% } %>
+        </div>
+        
+        
+      
+    <% } 
+    
+    else if(port.getEstadoOrden(orden.getNumero(), usr.getNick()).equalsIgnoreCase("Entregada")){ %>
+    <div class="text-center">
+        <div class="alert alert-success" role="alert">
+ 			Se ha ENTREGADO el pedido
+		</div>
+	</div>
+    	
+    
+   <% } else { %>
+   
+	   <div class="text-center">
+	        <div class="alert alert-warning" role="alert">
+	 			Orden en estado: <%= port.getEstadoOrden(orden.getNumero(), usr.getNick()) %>
+			</div>
+		</div>
+    	
+   
+   <%} %>
+   
+    
+    
 
-    <div class="card mt-3">
+    <div class="card mt-3 container">
         <div class="card-body">
             <p><strong>Precio Total: </strong><%= port.imprimirPrecioTotal(usr.getNick(), orden.getNumero()) %> USD</p>
             <p><strong>Fecha de Compra: </strong><%= port.imprimirFechaOrden(usr.getNick(), orden.getNumero()) %></p>
@@ -132,8 +164,9 @@ if (usr != null && usr instanceof Proveedor) {
             <p><strong>Total de la orden:</strong> $<%= port.imprimirPrecioTotal(usr.getNick(), orden.getNumero()) %></p>
         </div>
     </div>
-
+	<div class="text-center">
     <a href="perfilCliente?nickname=<%= request.getParameter("nickname") %>" class="btn btn-secondary mt-3">Volver al Perfil</a>
+	</div>
 </div>
 
 <div class="part-final d-flex justify-content-center align-items-center" style="background-color: #2C2C2C;

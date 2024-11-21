@@ -161,7 +161,7 @@ if (usr != null && port.getTipo(nickUser).equals("proveedor")) {
                             <br>
             
                             
-                            <a style="text-decoration: none; color: white" href="perfilOrden?nickname=<%= port.getNickDTCliente(nickUser) %>&orden=<%= port.getEstadoOrden(dt.getNumero()) %>" >VER DETALLES</a>
+                            <a style="text-decoration: none; color: white" href="perfilOrden?nickname=<%= port.getNickDTCliente(nickUser) %>&orden=<%= port.getEstadoOrden(dt.getNumero(), usr.getNick()) %>" >VER DETALLES</a>
 
                            
                              <p class="card-text"><b>Precio total: </b><%= port.imprimirPrecioTotal(usr.getNick(), dt.getNumero()) %></p>

@@ -452,7 +452,9 @@ public class Publicador {
 	
 	@WebMethod
 	public String imprimirFechaCliente(String nickName) {
-		return obtenerCliente(nickName).crearDt().getNacimientoFormateado();
+		DTFecha fecha = obtenerCliente(nickName).getNacimiento();
+		
+		return fecha.getDia() + "/" + fecha.getMes() + "/" + fecha.getAnio();
 	}
 
 	// CARLITOS
@@ -523,8 +525,8 @@ public class Publicador {
 		//	}
 			
 	@WebMethod
-	public List<DTEstado> getHistorialEstado(OrdenDeCompra o){
-		return o.getHistorialEstado();
+	public List<DTEstado> getHistorialEstado(int numeroOrden, String nickCliente){
+		return obtenerCliente(nickCliente).getCompra(numeroOrden).getHistorialEstado();
 	}
 			
 	@WebMethod
@@ -543,8 +545,19 @@ public class Publicador {
 	}
 			
 	@WebMethod
-	public String getEstadoOrden(int o) {
-		return em.find(OrdenDeCompra.class, o).crearDT().getEstado();
+	public String getEstadoOrden(int o, String nick) {
+		return getCompra(o, nick).getEstado();
+	}
+	
+	@WebMethod
+	public void setEstado(int numeroOrden, String nickname, String nombreEstado, String comentario) {
+		DTEstado nuevoEstado = new DTEstado(nombreEstado, comentario);
+		getCompra(numeroOrden, nickname).setEstado(nuevoEstado);
+	}
+	
+	@WebMethod
+	public void setEstadoPrueba(String nickname, String nombreEstado, String comentario) {
+		obtenerCliente(nickname).getCompras().get(0).setEstado(new DTEstado(nombreEstado, comentario));
 	}
 			
 	@WebMethod

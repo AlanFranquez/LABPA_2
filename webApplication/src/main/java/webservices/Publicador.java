@@ -972,6 +972,27 @@ public interface Publicador {
 
     /**
      * 
+     * @param arg3
+     * @param arg2
+     * @param arg1
+     * @param arg0
+     */
+    @WebMethod
+    @RequestWrapper(localName = "setEstado", targetNamespace = "http://services/", className = "webservices.SetEstado")
+    @ResponseWrapper(localName = "setEstadoResponse", targetNamespace = "http://services/", className = "webservices.SetEstadoResponse")
+    @Action(input = "http://services/Publicador/setEstadoRequest", output = "http://services/Publicador/setEstadoResponse")
+    public void setEstado(
+        @WebParam(name = "arg0", targetNamespace = "")
+        int arg0,
+        @WebParam(name = "arg1", targetNamespace = "")
+        String arg1,
+        @WebParam(name = "arg2", targetNamespace = "")
+        String arg2,
+        @WebParam(name = "arg3", targetNamespace = "")
+        String arg3);
+
+    /**
+     * 
      * @param arg0
      * @return
      *     returns java.lang.String
@@ -1065,6 +1086,7 @@ public interface Publicador {
 
     /**
      * 
+     * @param arg1
      * @param arg0
      * @return
      *     returns java.util.List<webservices.DtEstado>
@@ -1076,7 +1098,9 @@ public interface Publicador {
     @Action(input = "http://services/Publicador/getHistorialEstadoRequest", output = "http://services/Publicador/getHistorialEstadoResponse")
     public List<DtEstado> getHistorialEstado(
         @WebParam(name = "arg0", targetNamespace = "")
-        OrdenDeCompra arg0);
+        int arg0,
+        @WebParam(name = "arg1", targetNamespace = "")
+        String arg1);
 
     /**
      * 
@@ -1110,6 +1134,7 @@ public interface Publicador {
 
     /**
      * 
+     * @param arg1
      * @param arg0
      * @return
      *     returns java.lang.String
@@ -1121,7 +1146,27 @@ public interface Publicador {
     @Action(input = "http://services/Publicador/getEstadoOrdenRequest", output = "http://services/Publicador/getEstadoOrdenResponse")
     public String getEstadoOrden(
         @WebParam(name = "arg0", targetNamespace = "")
-        int arg0);
+        int arg0,
+        @WebParam(name = "arg1", targetNamespace = "")
+        String arg1);
+
+    /**
+     * 
+     * @param arg2
+     * @param arg1
+     * @param arg0
+     */
+    @WebMethod
+    @RequestWrapper(localName = "setEstadoPrueba", targetNamespace = "http://services/", className = "webservices.SetEstadoPrueba")
+    @ResponseWrapper(localName = "setEstadoPruebaResponse", targetNamespace = "http://services/", className = "webservices.SetEstadoPruebaResponse")
+    @Action(input = "http://services/Publicador/setEstadoPruebaRequest", output = "http://services/Publicador/setEstadoPruebaResponse")
+    public void setEstadoPrueba(
+        @WebParam(name = "arg0", targetNamespace = "")
+        String arg0,
+        @WebParam(name = "arg1", targetNamespace = "")
+        String arg1,
+        @WebParam(name = "arg2", targetNamespace = "")
+        String arg2);
 
     /**
      * 

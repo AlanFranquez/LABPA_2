@@ -160,7 +160,7 @@ public class InitServlet extends HttpServlet {
             	 System.out.print("ORDEN DE JUAN123 -->" + ed.getNumero());
              }
              
-             
+             port.setEstadoPrueba("Juan123", "En Camino", "El pedido ha sido enviado y está en camino.");
              /*
 
              // Crear la OrdenDeCompra con el proveedor
