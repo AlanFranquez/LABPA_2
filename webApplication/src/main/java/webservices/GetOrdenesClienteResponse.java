@@ -10,9 +10,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for getOrdenesClienteResponse complex type.
+ * <p>Clase Java para getOrdenesClienteResponse complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
  * 
  * <pre>
  * &lt;complexType name="getOrdenesClienteResponse">
@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class GetOrdenesClienteResponse {
 
-    @XmlElement(name = "return")
+    @XmlElement(name = "return", nillable = true)
     protected List<OrdenDeCompra> _return;
 
     /**

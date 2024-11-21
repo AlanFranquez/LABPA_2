@@ -6,6 +6,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import webservices.ObtenerProducto;
+import webservices.Publicador;
+import webservices.PublicadorService;
 
 import java.beans.PersistenceDelegate;
 import java.io.IOException;
@@ -16,11 +19,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-import com.market.svcentral.Cliente;
-import com.market.svcentral.Comentario;
-import com.market.svcentral.Factory;
-import com.market.svcentral.ISistema;
-import com.market.svcentral.Producto;
 
 @WebServlet("/enviarComentario")
 public class enviarComentario extends HttpServlet {
@@ -29,17 +27,10 @@ public class enviarComentario extends HttpServlet {
 	private EntityManager em;
 	
        
-    private ISistema sist;
- // Contador de comentarios
-    private static int contadorComentarios = 0;
 
     @Override
     public void init() throws ServletException {
-        try {
-            sist = Factory.getSistema();
-        } catch (Exception exeption) {
-            throw new ServletException("No se pudo inicializar ISistema", exeption);
-        }
+        
     }
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -49,10 +40,9 @@ public class enviarComentario extends HttpServlet {
 		String mensaje = request.getParameter("comentario");
 		String parametro = request.getParameter("dtprod");
 		
-		emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-		em = emf.createEntityManager();
+		PublicadorService p = new PublicadorService();
+		Publicador port = p.getPublicadorPort();
 		
-		em.getTransaction().begin();
 		
 
 		if (parametro == null || parametro.isEmpty()) {
@@ -67,25 +57,17 @@ public class enviarComentario extends HttpServlet {
 			return;
 		}
 		
-		Cliente cliente = (Cliente) session.getAttribute("usuarioLogueado");
-		Producto producto1 = em.find(Producto.class, paramNum);
+		webservices.Cliente cliente = (webservices.Cliente) session.getAttribute("usuarioLogueado");
+		webservices.Producto producto1 = port.obtenerProducto(paramNum);
 
 		// Crear el comentario
-		Comentario comentario = new Comentario(comentarioId, mensaje, cliente, LocalDateTime.now());
-		producto1.agregarComentario(comentario);
-		em.persist(comentario);
-		System.out.print("Comentario guardado en la base de datos");
-	
 		
-		
-		em.getTransaction().commit();
-		em.close();
-		emf.close();
-		
+		port.agregarComentario(comentarioId, mensaje, cliente.getNick(), paramNum);	
 
-		sist.notificarComentaristas(producto1, mensaje, cliente);
+		port.notificarComentarista(paramNum, mensaje, cliente.getNick());
 		
 		// Redirigir a la página del producto
 		response.sendRedirect("perfilProducto?producto=" + paramNum);
 	}
 }
+

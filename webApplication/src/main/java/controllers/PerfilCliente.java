@@ -93,9 +93,8 @@ public class PerfilCliente extends HttpServlet {
         // Concatenar la carpeta 'media' a la ruta
         String absoluteImagePath = getServletContext().getRealPath("/media" + imagePath);
 
+        
 
-        /*
-        // Crear un archivo con esa ruta
         File imageFile = new File(absoluteImagePath); // Cambia a la ruta de tu imagen
         BufferedImage image = ImageIO.read(imageFile);
 
@@ -106,8 +105,9 @@ public class PerfilCliente extends HttpServlet {
 
         // Codificar la imagen en Base64
         String base64Image = Base64.getEncoder().encodeToString(imageBytes);
+
         
-        */
+        
         
         // Obtener las órdenes de compra del cliente
         List<OrdenDeCompra> ordenes = port.getOrdenesCliente(port.getNickCliente(cli));
@@ -124,7 +124,7 @@ public class PerfilCliente extends HttpServlet {
             String parametro = request.getParameter("nickname");
 
             if (parametro != null && port.getNickCliente(cli).equals(parametro)) {
-
+            	request.setAttribute("imagenEnBits", base64Image);
             	request.setAttribute("usuarioLogueado", user);
                 request.setAttribute("usuario", cli);
                 request.setAttribute("ordenes", ordenes);  // Pasar la lista de ordenes correctamente

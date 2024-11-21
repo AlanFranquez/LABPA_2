@@ -1,5 +1,6 @@
 package com.market.svcentral;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,14 +8,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement
 @Entity
-public class OrdenDeCompra {
+public class OrdenDeCompra implements Serializable{
     @Id
     private int numero;
     private float precioTotal;
     private LocalDateTime fecha;
-    private int contadorCompras = 5;
 
     @OneToMany(cascade = CascadeType.PERSIST)
     private Map<Integer, Item> items;
@@ -31,9 +33,6 @@ public class OrdenDeCompra {
     private Proveedor proveedor;
 
     public OrdenDeCompra() {
-        this.items = new HashMap<>();
-        this.comentarios = new ArrayList<>();
-        this.estados = new ArrayList<>();
     }
 
     public OrdenDeCompra(Map<Integer, Item> itemsAdquiridos, float precioTotal, Proveedor proveedor) {
@@ -67,6 +66,8 @@ public class OrdenDeCompra {
         DTEstado estadoComprada = new DTEstado("Comprada", "El cliente ha realizado la compra");
         this.estados.add(estadoComprada);
     }
+    
+    
     
     public void agregarItem(Producto p, int cant) {
     	Item nuevoItem = new Item(cant, p);

@@ -244,14 +244,23 @@ public class Producto {
 	public List<Puntaje> obtenerPuntajes() {
 		return this.puntajes;
 	}
-	public int[] obtenerPuntaje() {
-		int total = 0;
-		int varios[] = {0, 0, 0, 0, 0, 0};
-		for (Puntaje p : this.puntajes) {
-			varios[p.getValor()] += 1;
-			total += p.getValor();
-		}
-		varios[0] = total / this.puntajes.size();
-		return varios;
+	public Integer[] obtenerPuntaje() {
+	    int total = 0;
+	    Integer[] varios = {0, 0, 0, 0, 0, 0};
+
+	    if (this.puntajes == null || this.puntajes.isEmpty()) {
+	        // Devuelve valores predeterminados si no hay puntajes
+	        return varios;
+	    }
+
+	    for (Puntaje p : this.puntajes) {
+	        varios[p.getValor()] += 1;
+	        total += p.getValor();
+	    }
+
+	    // Calcula el promedio solo si hay elementos en la lista
+	    varios[0] = total / this.puntajes.size();
+	    return varios;
 	}
+
 }

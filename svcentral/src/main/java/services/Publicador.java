@@ -1,12 +1,21 @@
 package services;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
+import javax.imageio.ImageIO;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
@@ -24,6 +33,7 @@ import com.market.svcentral.Cat_Padre;
 import com.market.svcentral.Cat_Producto;
 import com.market.svcentral.Categoria;
 import com.market.svcentral.Cliente;
+import com.market.svcentral.Comentario;
 import com.market.svcentral.DTCliente;
 import com.market.svcentral.DTEstado;
 import com.market.svcentral.DTFecha;
@@ -456,6 +466,28 @@ public class Publicador {
 		
 		return fecha.getDia() + "/" + fecha.getMes() + "/" + fecha.getAnio();
 	}
+	
+	@WebMethod
+    public void agregarComentario(int comentarioId, String mensaje, String nickCliente, int numRef) {
+        Comentario comentario = new Comentario(comentarioId, mensaje, obtenerCliente(nickCliente), LocalDateTime.now());
+        Producto p1 = obtenerProducto(numRef);
+
+        p1.agregarComentario(comentario);
+        em.persist(comentario);
+        em.merge(p1);
+        System.out.print("Comentario guardado en la base de datos");
+    }
+
+    @WebMethod
+    public Comentario[] listarComentarios(int numRef) {
+        List<Comentario> coments = obtenerProducto(numRef).getComentarios();
+
+        return coments.toArray(new Comentario[0]);
+    }
+    @WebMethod
+    public void notificarComentarista(int numRef, String mensaje, String nickCliente) {
+        s.notificarComentaristas(obtenerProducto(numRef), mensaje, obtenerCliente(nickCliente));
+    }
 
 	// CARLITOS
 	@WebMethod
@@ -606,14 +638,14 @@ public class Publicador {
 	}
 			
 	@WebMethod
-	public List<OrdenDeCompra> getOrdenesCliente(String c) {
-		if (c == null) {
-	        throw new IllegalArgumentException("El cliente no puede ser nulo");
-	    }
-		
-		return obtenerCliente(c).getOrdenes();
-	}
-			
+    public OrdenDeCompra[] getOrdenesCliente(String c) {
+        if (c == null) {
+            throw new IllegalArgumentException("El cliente no puede ser nulo");
+        }
+         List<OrdenDeCompra> ordenes = obtenerCliente(c).getOrdenes();
+        return ordenes.toArray(new OrdenDeCompra[0]);
+    }	
+	
 	@WebMethod
 	public String getNickDTCliente(String c) {
 		return em.find(Usuario.class, c).getNick();
@@ -643,6 +675,133 @@ public class Publicador {
 	public DTOrdenDeCompra crearDTOrden(int numref) {
 		return em.find(OrdenDeCompra.class, numref).crearDT();
 	}
+	
+	@WebMethod
+	public List<Comentario> getComentariosProd(int num) {
+		return em.find(Producto.class, num).getComentarios();
+	}
+	
+	@WebMethod
+	public List<String> getImagenesDTProd(Producto p){
+		return p.getImagenes();
+	}
+	
+	@WebMethod
+	public int getNumDTProd(DtProducto p){
+		return p.getNumRef();
+	}
+	
+	@WebMethod
+	public Boolean comproProducto(String nick, int id) {
+		return em.find(Cliente.class, nick).comproProducto(id);
+	}
+	
+	@WebMethod
+	public String getDescDTProd(DtProducto p) {
+		return p.getDescripcion();
+	}
+	
+	@WebMethod
+	public float getPrecioDTProd(DtProducto p) {
+		return p.getPrecio();
+	}
+	
+	@WebMethod
+	public List<Cat_Producto> getCategoriasDTProd(Producto p) {
+		return p.getCategorias();
+	}
+
+	@WebMethod
+	public String getEspecsDTProd(Producto p) {
+		return p.getEspecificaciones();
+	}
+	
+	@WebMethod
+	public String getnickProvDTProd(int numRef) {
+		return obtenerProducto(numRef).crearDT().getNicknameProveedor();
+	}
+	
+	@WebMethod
+	public int getStockDTProd(DtProducto p) {
+		return p.getStock();
+	}
+	
+	@WebMethod
+	public Integer[] getPuntajeDTProd(int numRef) {
+		return obtenerProducto(numRef).obtenerPuntaje();
+	}
+	
+	@WebMethod
+	public DTCliente getAutorComentario(Comentario c) {
+		return c.getAutor().crearDt();
+	}
+	
+	@WebMethod
+	public String getImagenAutor(DTCliente c) throws IOException {
+	     // Ruta relativa proporcionada por el servicio
+	        String relativa = "media/" + c.getImagenes();
+
+	        // Concatenar la carpeta 'media' a la ruta
+	     // Obtener el recurso desde el classpath
+	        ClassLoader classLoader = getClass().getClassLoader();
+	        URL resourceUrl = classLoader.getResource(relativa);
+
+	        // Crear un archivo con esa ruta
+	        File imageFile = new File(resourceUrl.getFile()); // Cambia a la ruta de tu imagen
+	        BufferedImage image = ImageIO.read(imageFile);
+
+	        // Convertir la imagen a un arreglo de bytes
+	        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	        ImageIO.write(image, "jpg", baos);
+	        byte[] imageBytes = baos.toByteArray();
+
+	        // Codificar la imagen en Base64
+	        String base64Image = Base64.getEncoder().encodeToString(imageBytes);
+	        return base64Image;
+	}
+	
+	@WebMethod
+	public String getTextoCom(Comentario c) {
+		return c.getTexto();
+	}
+	
+	@WebMethod
+	public String getfechaCom(Comentario c) {
+		return c.getFecha().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+	}
+	
+	@WebMethod
+	public int getNumeroCom(Comentario c) {
+		return c.getNumero();
+	}
+	
+	@WebMethod
+	public List<Comentario> getRespuestas(Comentario c) {
+		return c.getRespuestas();
+	}
+	
+	@WebMethod
+	public Boolean existeProdCarrito(Carrito c, int num) {
+		return c.existeProducto(num);
+	}
+	
+	@WebMethod
+	public String getNickPorDTCliente(DTCliente c) {
+		return c.getNick();
+	}
+	
+	
+	
+	/*
+	PaginaExito.java
+	PerfilCliente.java -
+	PerfilClienteMOBILE.java -
+	PerfilOrden.java
+	PerfilOrdenMOBILE.java
+	PerfilProducto.java
+	perfilProductoMOBILE.java
+	PerfilProveedor.java
+	*/
 
 	// FABRICIO
 	/*

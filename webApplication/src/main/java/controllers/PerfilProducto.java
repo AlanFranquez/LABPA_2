@@ -6,20 +6,26 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import webservices.Publicador;
+import webservices.PublicadorService;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+import javax.imageio.ImageIO;
 
-import com.market.svcentral.Comentario;
-import com.market.svcentral.DtProducto;
-import com.market.svcentral.Factory;
-import com.market.svcentral.ISistema;
-import com.market.svcentral.Producto;
-import com.market.svcentral.Usuario;
+import com.market.svcentral.Cat_Producto;
+
+import webservices.PublicadorService;
+import webservices.CatProducto;
+import webservices.DtCliente;
+import webservices.OrdenDeCompra;
+import webservices.Publicador;
 
 /**
  * Servlet implementation class PerfilProducto
@@ -35,18 +41,7 @@ public class PerfilProducto extends HttpServlet {
         super();
         // TODO Auto-generated constructor stub
     }
-    
-    
-    private ISistema sistema;
 
-    @Override
-    public void init() throws ServletException {
-        try {
-            sistema = Factory.getSistema();  
-        } catch (Exception e) {
-            throw new ServletException("No se pudo inicializar ISistema", e);  
-        }
-    }
 
 	
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -54,6 +49,8 @@ public class PerfilProducto extends HttpServlet {
 
         String userAgent = request.getHeader("User-Agent");
         
+        PublicadorService p = new PublicadorService();
+        Publicador port = p.getPublicadorPort();
         
         if((userAgent != null) && (
                 userAgent.contains("Mobile") || 
@@ -72,20 +69,18 @@ public class PerfilProducto extends HttpServlet {
             return;
         }
 
-        Object usuarioLogueado = session.getAttribute("usuarioLogueado");
+        webservices.Usuario usuarioLogueado = (webservices.Usuario) session.getAttribute("usuarioLogueado");
 
         if (usuarioLogueado == null) {
             response.sendRedirect("formlogin");
             return;
         }
-        Usuario user = (Usuario) usuarioLogueado;
+        webservices.Usuario user = (webservices.Usuario) usuarioLogueado;
         request.setAttribute("usuario", user);
+        request.setAttribute("nickusuario", user.getNick());
+        
 
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
 
-        try {
             String parametro = request.getParameter("producto");
             if (parametro == null) {
                 response.sendRedirect("perfilCliente");
@@ -93,10 +88,14 @@ public class PerfilProducto extends HttpServlet {
             }
 
             int paramNumero = Integer.parseInt(parametro);
-
-            Producto producto = em.find(Producto.class, paramNumero);
-
-            for(Comentario c: producto.getComentarios()) {
+            
+           
+            
+            webservices.Producto producto =  port.obtenerProducto(paramNumero);
+            List<webservices.Comentario> coms = port.getComentariosProd(paramNumero);
+            
+            
+            for(webservices.Comentario c: coms) {
             	
             	System.out.println();
             	System.out.println(c.getTexto());
@@ -106,25 +105,60 @@ public class PerfilProducto extends HttpServlet {
                 response.sendRedirect("perfilCliente");
                 return;
             }
-
-            DtProducto dtprod = producto.crearDT();
             
-            List<Comentario> comentarios = producto.getComentarios();
 
-            request.setAttribute("dtprod", dtprod);
-            request.setAttribute("comentarios", comentarios);
+            //webservices.DtProducto dtprod = port.crearDTProd(producto);
+            
+            List<CatProducto> cats = port.getCategoriasDTProd(producto);
+            
+            // Obtener la lista de rutas de imágenes
+            List<String> imagenes = port.getImagenesDTProd(producto);
+
+            // Lista para almacenar las imágenes codificadas en Base64
+            List<String> imagenesBase64 = new ArrayList<>();
+
+            // Procesar cada imagen
+            for (String imagePath : imagenes) {
+                try {
+                    // Obtener la ruta absoluta de la imagen (concatenar con la carpeta 'media')
+                    String absoluteImagePath = getServletContext().getRealPath("/media" + imagePath);
+                    
+                    // Crear un archivo a partir de la ruta
+                    File imageFile = new File(absoluteImagePath);
+
+                    // Leer la imagen
+                    BufferedImage image = ImageIO.read(imageFile);
+
+                    if (image != null) {
+                        // Convertir la imagen a un arreglo de bytes
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        ImageIO.write(image, "jpg", baos);
+                        byte[] imageBytes = baos.toByteArray();
+
+                        // Codificar la imagen en Base64
+                        String base64Image = Base64.getEncoder().encodeToString(imageBytes);
+
+                        // Agregar la imagen codificada a la lista
+                        imagenesBase64.add(base64Image);
+                    } else {
+                        System.err.println("No se pudo leer la imagen: " + absoluteImagePath);
+                    }
+                } catch (Exception e) {
+                    // Manejar cualquier error al procesar una imagen
+                    System.err.println("Error al procesar la imagen: " + imagePath);
+                    e.printStackTrace();
+                }
+            }
+            
+            // Guardar la lista completa de imágenes Base64 en el request
+            request.setAttribute("imagenesBase64", imagenesBase64);
+            request.setAttribute("categoriasp", cats);
+            request.setAttribute("prod", producto);
+            request.setAttribute("comentarios", coms);
             request.getRequestDispatcher("/WEB-INF/PerfilProducto.jsp").forward(request, response);
-        } catch (NumberFormatException e) {
-            // Si el parámetro no es un número válido, redirigir al perfil del cliente
-            response.sendRedirect("perfilCliente");
-        } catch (Exception e) {
-            // Manejar otras excepciones si es necesario
-            response.sendRedirect("errorPage"); // O una página de error adecuada
-        } finally {
-            em.getTransaction().commit();
-            em.close();
-            emf.close();
-        }
+   
+
+
     }
 
 
