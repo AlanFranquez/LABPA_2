@@ -6,11 +6,7 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.Map"%>
 <%@ page import="webservices.PublicadorService" %>
-<<<<<<< HEAD
 <%@ page import="services.Publicador" %>
-=======
-<%@ page import="webservices.Publicador" %>
->>>>>>> f0d2a67c84e6eaf95d7043b2a93563b77109231c
 <%@ page import="webservices.DtCliente" %>
 <%@ page import="webservices.Usuario" %>
 <%@ page import="webservices.OrdenDeCompra" %>
@@ -33,15 +29,10 @@
     <%
     	webservices.PublicadorService p = new PublicadorService();
     	webservices.Publicador port = p.getPublicadorPort();
-		
-<<<<<<< HEAD
-		webservices.DtCliente user = (webservices.DtCliente) request.getAttribute("usuario");
-    
-		webservices.Usuario usr = (webservices.Usuario) request.getAttribute("usuarioLogueado");
-=======
+
     
 		webservices.Usuario usr = (webservices.Usuario) request.getAttribute("usuario");
->>>>>>> f0d2a67c84e6eaf95d7043b2a93563b77109231c
+
     	
     	List<webservices.OrdenDeCompra> ordenes = (List<webservices.OrdenDeCompra>) request.getAttribute("ordenes");
     	
@@ -107,15 +98,12 @@ if (usr != null && port.getTipo(nickUser).equals("proveedor")) {
     <main class="container mt-5 d-flex"> 
     <section class="row justify-content-center align-items-center">
         <div class="col-md-6 col-12 text-center">
-<<<<<<< HEAD
-                <img class="img-fluid rounded-circle" style="width: 200px; height: 200px; object-fit: cover;" src="media/<%= port.getImagenesDTCliente(nickUser) %>" alt="Imagen de cliente" />
-        </div>
-=======
+
     <img class="img-fluid rounded-circle" style="width: 200px; height: 200px; object-fit: cover;" 
          src="data:image/jpg;base64,<%= request.getAttribute("imagenBase64") %>" 
          alt="Imagen de cliente" />
 </div>
->>>>>>> f0d2a67c84e6eaf95d7043b2a93563b77109231c
+
         <div class="col-md-6 col-12">
             <p>Tipo de Usuario: <b>Cliente</b></p>
             <p>Nickname: <b><%= port.getNickDTCliente(nickUser) %></b></p>
@@ -135,11 +123,9 @@ if (usr != null && port.getTipo(nickUser).equals("proveedor")) {
       	<% } else { 
       		
       	
-<<<<<<< HEAD
-      		for(OrdenDeCompra dt : ordenes) {
-=======
+
       		for(webservices.OrdenDeCompra dt : ordenes) {
->>>>>>> f0d2a67c84e6eaf95d7043b2a93563b77109231c
+
       			%>
       			
       	<div class="container align-items-center justify-content-center">
@@ -147,50 +133,36 @@ if (usr != null && port.getTipo(nickUser).equals("proveedor")) {
                 <div class="row g-0">
                     <div class="col-md-8">
                         <div class="card-body">
-<<<<<<< HEAD
-                            <h3 class="card-title"><%= port.getNumRefOrden(dt.getNumero()) %></h3> 
-=======
+
                            
                             <h3 class="card-title"><%= port.imprimirNumRefOrden(usr.getNick(), dt.getNumero()) %></h1>
                             
->>>>>>> f0d2a67c84e6eaf95d7043b2a93563b77109231c
+
                             
                             <% 
                             
-<<<<<<< HEAD
-                            if ("Entregado".equals(port.getEstadoOrden(dt.getNumero()))) { 
-=======
+
                             if ("Entregado".equals(port.imprimirEstadoOrden(usr.getNick(), dt.getNumero()))) { 
->>>>>>> f0d2a67c84e6eaf95d7043b2a93563b77109231c
+
                             
                             %>
                             
 
-<<<<<<< HEAD
-                            	<span class="badge mb-2" style="background-color: green; font-weight: normal; color: white"><%= port.getEstadoOrden(dt.getNumero()) %></span>
-                            
-                            <% } else {%>
-                            	<span class="badge mb-2" style="background-color: yellow; font-weight: normal; color: black"><%= port.getEstadoOrden(dt.getNumero()) %></span>
-=======
+
                             	<span class="badge mb-2" style="background-color: green; font-weight: normal; color: white"><%= port.imprimirEstadoOrden(usr.getNick(), dt.getNumero()) %></span>
                             
                             <% } else {%>
                             	<span class="badge mb-2" style="background-color: yellow; font-weight: normal; color: black"><%= port.imprimirEstadoOrden(usr.getNick(), dt.getNumero()) %></span>
->>>>>>> f0d2a67c84e6eaf95d7043b2a93563b77109231c
+
                             
                             <% }%>
                             
                             
                             <br>
-                            
-<<<<<<< HEAD
-                            <p class="card-text"><b>Precio total: </b><%= port.getPrecioTotalOrden(dt.getNumero()) %></p>
-                            <p class="card-text"><b>Fecha de compra: </b><%= port.getFechaOrden(dt.getNumero()) %></p>
-                           
-                            <button class="btn" style="border: none; background-color: #2C2C2C">
+            
                             
                             <a style="text-decoration: none; color: white" href="perfilOrden?nickname=<%= port.getNickDTCliente(nickUser) %>&orden=<%= port.getEstadoOrden(dt.getNumero()) %>" >VER DETALLES</a>
-=======
+
                            
                              <p class="card-text"><b>Precio total: </b><%= port.imprimirPrecioTotal(usr.getNick(), dt.getNumero()) %></p>
                             <p class="card-text"><b>Fecha de compra: </b><%= port.imprimirFechaOrden(usr.getNick(), dt.getNumero())%></p>
@@ -198,7 +170,7 @@ if (usr != null && port.getTipo(nickUser).equals("proveedor")) {
                             <button class="btn" style="border: none; background-color: #2C2C2C">
                             
                             <a style="text-decoration: none; color: white" href="perfilOrden?nickname=<%= port.getNickDTCliente(nickUser) %>&orden=<%= dt.getNumero() %>" >VER DETALLES</a>
->>>>>>> f0d2a67c84e6eaf95d7043b2a93563b77109231c
+
                             </button>
     
 

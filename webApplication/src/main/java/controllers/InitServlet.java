@@ -6,7 +6,6 @@ import jakarta.servlet.http.HttpServlet;
 import webservices.CategoriaException_Exception;
 import webservices.DtEstado;
 import webservices.DtFecha;
-import webservices.ObtenerProducto;
 import webservices.Publicador;
 import webservices.PublicadorService;
 import webservices.UsuarioRepetidoException_Exception;
