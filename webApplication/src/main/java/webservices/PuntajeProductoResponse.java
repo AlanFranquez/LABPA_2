@@ -10,16 +10,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Clase Java para getOrdenesClienteResponse complex type.
+ * <p>Clase Java para puntajeProductoResponse complex type.
  * 
  * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
  * 
  * <pre>
- * &lt;complexType name="getOrdenesClienteResponse">
+ * &lt;complexType name="puntajeProductoResponse">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="return" type="{http://services/}ordenDeCompra" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="return" type="{http://www.w3.org/2001/XMLSchema}int" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -29,13 +29,13 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "getOrdenesClienteResponse", propOrder = {
+@XmlType(name = "puntajeProductoResponse", propOrder = {
     "_return"
 })
-public class GetOrdenesClienteResponse {
+public class PuntajeProductoResponse {
 
     @XmlElement(name = "return", nillable = true)
-    protected List<OrdenDeCompra> _return;
+    protected List<Integer> _return;
 
     /**
      * Gets the value of the return property.
@@ -55,13 +55,13 @@ public class GetOrdenesClienteResponse {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link OrdenDeCompra }
+     * {@link Integer }
      * 
      * 
      */
-    public List<OrdenDeCompra> getReturn() {
+    public List<Integer> getReturn() {
         if (_return == null) {
-            _return = new ArrayList<OrdenDeCompra>();
+            _return = new ArrayList<Integer>();
         }
         return this._return;
     }

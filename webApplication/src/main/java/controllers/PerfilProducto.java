@@ -6,8 +6,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import webservices.Comentario;
 import webservices.DtProducto;
-import webservices.Producto;
 import webservices.Publicador;
 import webservices.PublicadorService;
 import webservices.Usuario;
@@ -79,22 +79,14 @@ public class PerfilProducto extends HttpServlet {
 
             int paramNumero = Integer.parseInt(parametro);
 
-            Producto producto = port.obtenerProducto(paramNumero)
-
-            for(Comentario c: producto.getComentarios()) {
-            	
-            	System.out.println();
-            	System.out.println(c.getTexto());
-            }
+            DtProducto dtprod = port.obtenerDTProducto(paramNumero);
             
-            if (producto == null) {
+            List<Comentario> comentarios = port.comentariosProducto(paramNumero);
+            
+            if (dtprod == null) {
                 response.sendRedirect("perfilCliente");
                 return;
             }
-
-            DtProducto dtprod = producto.crearDT();
-            
-            List<Comentario> comentarios = producto.getComentarios();
 
             request.setAttribute("dtprod", dtprod);
             request.setAttribute("comentarios", comentarios);
@@ -105,11 +97,8 @@ public class PerfilProducto extends HttpServlet {
         } catch (Exception e) {
             // Manejar otras excepciones si es necesario
             response.sendRedirect("errorPage"); // O una página de error adecuada
-        } finally {
-            em.getTransaction().commit();
-            em.close();
-            emf.close();
-        }
+        } 
+
     }
 
 
