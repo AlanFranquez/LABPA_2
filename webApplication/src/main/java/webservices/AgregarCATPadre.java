@@ -7,8 +7,7 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
-
- * <p>Java class for agregarCATPadre complex type.
+ * <p>Clase Java para agregarCATPadre complex type.
  * 
  * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
  * 

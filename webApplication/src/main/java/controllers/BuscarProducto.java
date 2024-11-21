@@ -6,32 +6,26 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import webservices.Cliente;
+import webservices.Producto;
+import webservices.Publicador;
+import webservices.PublicadorService;
+import webservices.Usuario;
 
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-
-import com.market.svcentral.Cliente;
-import com.market.svcentral.Factory;
-import com.market.svcentral.ISistema;
-import com.market.svcentral.Producto;
-import com.market.svcentral.Usuario;
 @WebServlet("/buscarproductos")
 public class BuscarProducto extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private ISistema sist;
 
+    PublicadorService p = new PublicadorService();
+    Publicador port = p.getPublicadorPort();
+    
     @Override
     public void init() throws ServletException {
-        try {
-            sist = Factory.getSistema();
-        } catch (Exception e) {
-            throw new ServletException("No se pudo inicializar ISistema", e);
-        }
+
     }
 
     @Override
@@ -72,37 +66,10 @@ public class BuscarProducto extends HttpServlet {
 
         Usuario user = (Usuario) session.getAttribute("usuarioLogueado");
         
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-		EntityManager em = emf.createEntityManager();
-		List<Producto> productos = null;
-		em.getTransaction().begin();
+		List<Producto> productos = port.obtenerProductos();
 		
-		
-
-        if (searchQuery == null || searchQuery.trim().isEmpty()) {
-        	try {
-        		productos = em.createQuery("SELECT p FROM Producto p", Producto.class)
-        			    .getResultList();
-        		System.out.print("Busqueda en la base de datos :)");
-    			
-    		} catch (Exception e) {
-    			System.out.print(e);
-    			return;
-    		}
-        } else {
-        	try {
-        		String jpql = "SELECT p FROM Producto p WHERE p.nombre LIKE :searchQuery";
-        		productos = em.createQuery(jpql, Producto.class)
-        		    .setParameter("searchQuery", "%" + searchQuery + "%")
-        		    .getResultList();
-        		
-        		System.out.print("Busqueda en la base de datos :)");
-			} catch (Exception e) {
-				System.out.print(e);
-    			return;
-			}
-        	
-            productos = sist.buscarProductos(searchQuery);
+        if (searchQuery != null && !searchQuery.trim().isEmpty()) {
+        	productos = port.buscarProductos(searchQuery);
         }
 
         if ("alfabeticamente".equals(ordenacion)) {
@@ -121,9 +88,5 @@ public class BuscarProducto extends HttpServlet {
         request.setAttribute("usuarioLogueado", user);
         request.setAttribute("productos", productos);
         request.getRequestDispatcher("/WEB-INF/listaProductos.jsp").forward(request, response);
-        
-        em.getTransaction().commit();
-        em.close();
-        emf.close();
     }
 }

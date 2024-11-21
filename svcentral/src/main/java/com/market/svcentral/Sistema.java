@@ -737,7 +737,7 @@ public class Sistema implements ISistema {
 	 public void realizarCompraPRUEBA(int orden, String nickCliente) {
 		 EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
 		 EntityManager em = emf.createEntityManager();
-		 
+		 em.getTransaction().begin();
 		 OrdenDeCompra ord = em.find(OrdenDeCompra.class, orden);
 		 OrdenDeCompra guardar = ord;
 		 em.remove(ord);
@@ -778,6 +778,8 @@ public class Sistema implements ISistema {
 				 System.out.println("Producto no encontrado: " + numeroRef);
 			 }
 		 }
+		 em.getTransaction().commit();
+		 em.close();
 	 }
 	 
 	 
@@ -790,7 +792,11 @@ public class Sistema implements ISistema {
 	 	}
 	 	
 	 public void cambiarEstadoOrden(String estado, String com, int numero, String cliente) {
-	 		Cliente client = em.find(Cliente.class, cliente);
+		 EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+		 EntityManager em = emf.createEntityManager();
+		 em.getTransaction().begin();
+		 
+		 Cliente client = em.find(Cliente.class, cliente);
 	 		
 	 		if (client != null) {
 	 			DTEstado nuevoEstado = new DTEstado(estado, com);
@@ -812,15 +818,20 @@ public class Sistema implements ISistema {
 	 	                System.out.println("Cambio de estado Error: No se proporcionó una dirección de correo válida.");
 	 	            }
 	 	        } catch (Exception e) {
+	 	        	em.getTransaction().commit();
+	 		 		em.close();
 	 	            System.out.println("Error al intentar enviar el correo de cambio de estado: " + e.toString());
 	 	            e.printStackTrace();  // Imprime el rastro completo de la excepción en la consola
 	 	            // e.printStackTrace();
 	 	        }
-	 	        
+	 	        em.getTransaction().commit();
+		 		em.close();
 	 			return;
 	 		}
 	 		
 	 		System.out.print("no se pudo cambiar el estado");
+	 		em.getTransaction().commit();
+	 		em.close();
 	 	}
 	 
 	 public void cambiarEstadoOrdenconDT(DTEstado est, int numero, String cliente) {

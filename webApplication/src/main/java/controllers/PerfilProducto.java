@@ -6,20 +6,14 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import webservices.DtProducto;
+import webservices.Producto;
+import webservices.Publicador;
+import webservices.PublicadorService;
+import webservices.Usuario;
 
 import java.io.IOException;
 import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-
-import com.market.svcentral.Comentario;
-import com.market.svcentral.DtProducto;
-import com.market.svcentral.Factory;
-import com.market.svcentral.ISistema;
-import com.market.svcentral.Producto;
-import com.market.svcentral.Usuario;
 
 /**
  * Servlet implementation class PerfilProducto
@@ -27,7 +21,8 @@ import com.market.svcentral.Usuario;
 @WebServlet("/perfilProducto")
 public class PerfilProducto extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+	PublicadorService p = new PublicadorService();
+    Publicador port = p.getPublicadorPort();
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -37,15 +32,9 @@ public class PerfilProducto extends HttpServlet {
     }
     
     
-    private ISistema sistema;
 
     @Override
     public void init() throws ServletException {
-        try {
-            sistema = Factory.getSistema();  
-        } catch (Exception e) {
-            throw new ServletException("No se pudo inicializar ISistema", e);  
-        }
     }
 
 	
@@ -81,10 +70,6 @@ public class PerfilProducto extends HttpServlet {
         Usuario user = (Usuario) usuarioLogueado;
         request.setAttribute("usuario", user);
 
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-
         try {
             String parametro = request.getParameter("producto");
             if (parametro == null) {
@@ -94,7 +79,7 @@ public class PerfilProducto extends HttpServlet {
 
             int paramNumero = Integer.parseInt(parametro);
 
-            Producto producto = em.find(Producto.class, paramNumero);
+            Producto producto = port.obtenerProducto(paramNumero)
 
             for(Comentario c: producto.getComentarios()) {
             	

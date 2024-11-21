@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for imprimirITemsORDENSResponse complex type.
+ * <p>Clase Java para imprimirITemsORDENSResponse complex type.
  * 
  * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
  * 

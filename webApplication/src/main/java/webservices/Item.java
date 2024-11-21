@@ -43,8 +43,7 @@ public class Item {
     protected Producto producto;
 
     /**
-
-     * Gets the value of the id property.
+     * Obtiene el valor de la propiedad id.
      * 
      * @return
      *     possible object is
@@ -56,7 +55,7 @@ public class Item {
     }
 
     /**
-     * Sets the value of the id property.
+     * Define el valor de la propiedad id.
      * 
      * @param value
      *     allowed object is
@@ -68,7 +67,7 @@ public class Item {
     }
 
     /**
-     * Gets the value of the cant property.
+     * Obtiene el valor de la propiedad cant.
      * 
      */
     public int getCant() {
@@ -84,7 +83,7 @@ public class Item {
     }
 
     /**
-     * Gets the value of the subTotal property.
+     * Obtiene el valor de la propiedad subTotal.
      * 
      */
     public float getSubTotal() {
@@ -92,7 +91,7 @@ public class Item {
     }
 
     /**
-     * Sets the value of the subTotal property.
+     * Define el valor de la propiedad subTotal.
      * 
      */
     public void setSubTotal(float value) {
@@ -100,7 +99,7 @@ public class Item {
     }
 
     /**
-     * Gets the value of the producto property.
+     * Obtiene el valor de la propiedad producto.
      * 
      * @return
      *     possible object is

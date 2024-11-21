@@ -6,6 +6,15 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import webservices.Carrito;
+import webservices.Cliente;
+import webservices.Item;
+import webservices.OrdenDeCompra;
+import webservices.Producto;
+import webservices.Proveedor;
+import webservices.Publicador;
+import webservices.PublicadorService;
+import webservices.Usuario;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,22 +22,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.NoResultException;
-import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
-
-import com.market.svcentral.Carrito;
-import com.market.svcentral.Cliente;
-import com.market.svcentral.DTEstado;
-import com.market.svcentral.Factory;
-import com.market.svcentral.ISistema;
-import com.market.svcentral.Item;
-import com.market.svcentral.OrdenDeCompra;
-import com.market.svcentral.Producto;
-import com.market.svcentral.Proveedor;
-import com.market.svcentral.Usuario;
 
 /**
  * Servlet implementation class RealizarCompra
@@ -37,15 +30,11 @@ import com.market.svcentral.Usuario;
 public class RealizarCompra extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    private ISistema sist;
-
+    PublicadorService p = new PublicadorService();
+    Publicador port = p.getPublicadorPort();
+    
     @Override
     public void init() throws ServletException {
-        try {
-            sist = Factory.getSistema();
-        } catch (Exception exeption) {
-            throw new ServletException("No se pudo inicializar ISistema", exeption);
-        }
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -79,13 +68,15 @@ public class RealizarCompra extends HttpServlet {
 
         Usuario user = (Usuario) session.getAttribute("usuarioLogueado");
 
-        if (!user.getTipo().equals("cliente")) {
+        if (port.getTipo(user.getNick()).equals("cliente")) {
             response.sendRedirect("home");
             return;
         }
 
         Cliente cliente = (Cliente) user;
-        if (cliente.getCarrito() == null || cliente.getCarrito().getProductos().isEmpty()) {
+        Carrito carrito = port.obtenerCarritoCliente(cliente.getNick());
+        
+        if (cliente.getCarrito() == null || port.clienteTieneCarrito(cliente.getNick())) {
             response.sendRedirect("home");
             return;
         }
@@ -103,27 +94,21 @@ public class RealizarCompra extends HttpServlet {
             return;
         }
 
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-        EntityManager em = emf.createEntityManager();
-
-        em.getTransaction().begin();
-
         Usuario u = (Usuario) session.getAttribute("usuarioLogueado");
-        Usuario user = em.find(Usuario.class, u.getNick());
+        webservices.Usuario user = port.obtenerUsuario(u.getNick());
 
-        if (!user.getTipo().equals("cliente")) {
+        if (!port.getTipo(user.getNick()).equals("cliente")) {
             response.sendRedirect("home");
             return;
         }
 
-        Cliente cliente = (Cliente) user;
-        if (cliente.getCarrito() == null || cliente.getCarrito().getProductos().isEmpty()) {
+        webservices.Cliente cliente = (webservices.Cliente) user;
+        if (cliente.getCarrito() == null || port.clienteTieneCarrito(user.getNick())) {
             response.sendRedirect("home");
             return;
         }
 
-        Carrito carrito = cliente.getCarrito();
-        List<Item> items = carrito.getProductos();
+        List<Item> items = port.getItemsCarrito(user.getNick());
         
         List<Producto> prodsComprados = new ArrayList<Producto>();
         
@@ -134,13 +119,13 @@ public class RealizarCompra extends HttpServlet {
 
         // Organizar los productos por proveedor
         for (Item item : items) {
-            Proveedor proveedor = item.getProveedor();
+            Proveedor proveedor = port.getProveedorItem(item.getId());
             ordenesPorProveedor.putIfAbsent(proveedor, new HashMap<>());
             ordenesPorProveedor.get(proveedor).put(item.getProducto().getNumRef(), item);
             
             System.out.print("IMPRIMIENDO ITEMS" + item.getProducto().getNombre());
             
-            prodsComprados.add(em.find(Producto.class, item.getProducto().getNumRef()));
+            prodsComprados.add(port.obtenerProducto(item.getProducto().getNumRef()));
         }
         session.setAttribute("productosComprados",prodsComprados);
 
@@ -153,35 +138,20 @@ public class RealizarCompra extends HttpServlet {
             Map<Integer, Item> itemsPorProveedor = entry.getValue();
 
             // Calcular el precio total para este proveedor
+            List <Item> listaItems = new ArrayList<>();
             float precioTotalPorProveedor = 0;
             for (Item item : itemsPorProveedor.values()) {
                 precioTotalPorProveedor += item.getSubTotal();
+                listaItems.add(item);
             }
 
             // Sumar el precio total del proveedor al total general
             precioTotalGeneral += precioTotalPorProveedor;
 
-            // Crear la OrdenDeCompra
-            OrdenDeCompra ordenCompra = new OrdenDeCompra(itemsPorProveedor, precioTotalPorProveedor, proveedor);
-
-            // Crear el estado "Comprada"
-            DTEstado estadoComprada = new DTEstado("Comprada", "La compra ha sido realizada correctamente.");
-            
-            // Asignar el estado a la orden de compra
-            ordenCompra.setEstado(estadoComprada);
-            
-            sist.realizarCompra(ordenCompra, cliente.getNick());
-            cliente.agregarCompra(ordenCompra);
-            em.merge(cliente);
-
-            em.persist(ordenCompra);
+            port.crearOrden(listaItems, precioTotalPorProveedor, proveedor.getNick(), user.getNick());
         }
-
-        carrito.vaciarCarrito();
-
-        em.getTransaction().commit();
-        em.close();
-        emf.close();
+//        port.vaciarCarritoCli(cliente.getNick());
+        port.vaciarCarrito(user.getNick());
 
         // Guardar el precio total general en la sesión
         session.setAttribute("mensajeExito", "Su compra se ha realizado con éxito.");
