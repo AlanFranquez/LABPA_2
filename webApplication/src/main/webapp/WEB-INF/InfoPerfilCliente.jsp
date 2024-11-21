@@ -109,7 +109,7 @@ if (usr != null && port.getTipo(nickUser).equals("proveedor")) {
             <p>Nickname: <b><%= port.getNickDTCliente(nickUser) %></b></p>
             <p>Nombre: <b><%= port.getNombreDTCliente(nickUser) %></b></p>
             <p>Apellido: <b><%= port.getApellidoDTCliente(nickUser) %></b></p>
-            <p>Fecha de Nacimiento: <br><b><%= port.getFechaNacDTClienteString(nickUser) %></b></p> 
+            <p>Fecha de Nacimiento: <br><b><%= port.imprimirFechaCliente(usr.getNick()) %></b></p> 
         </div>
     </section>
 </main>

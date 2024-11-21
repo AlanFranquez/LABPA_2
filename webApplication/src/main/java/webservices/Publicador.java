@@ -55,6 +55,24 @@ public interface Publicador {
 
     /**
      * 
+     * @param arg2
+     * @param arg1
+     * @param arg0
+     */
+    @WebMethod
+    @RequestWrapper(localName = "agregarValoracion", targetNamespace = "http://services/", className = "webservices.AgregarValoracion")
+    @ResponseWrapper(localName = "agregarValoracionResponse", targetNamespace = "http://services/", className = "webservices.AgregarValoracionResponse")
+    @Action(input = "http://services/Publicador/agregarValoracionRequest", output = "http://services/Publicador/agregarValoracionResponse")
+    public void agregarValoracion(
+        @WebParam(name = "arg0", targetNamespace = "")
+        int arg0,
+        @WebParam(name = "arg1", targetNamespace = "")
+        int arg1,
+        @WebParam(name = "arg2", targetNamespace = "")
+        String arg2);
+
+    /**
+     * 
      * @param arg0
      * @return
      *     returns webservices.Producto
@@ -888,6 +906,21 @@ public interface Publicador {
         String arg0,
         @WebParam(name = "arg1", targetNamespace = "")
         int arg1);
+
+    /**
+     * 
+     * @param arg0
+     * @return
+     *     returns java.lang.String
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "imprimirFechaCliente", targetNamespace = "http://services/", className = "webservices.ImprimirFechaCliente")
+    @ResponseWrapper(localName = "imprimirFechaClienteResponse", targetNamespace = "http://services/", className = "webservices.ImprimirFechaClienteResponse")
+    @Action(input = "http://services/Publicador/imprimirFechaClienteRequest", output = "http://services/Publicador/imprimirFechaClienteResponse")
+    public String imprimirFechaCliente(
+        @WebParam(name = "arg0", targetNamespace = "")
+        String arg0);
 
     /**
      * 

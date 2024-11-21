@@ -38,6 +38,7 @@ import com.market.svcentral.Producto;
 import com.market.svcentral.Proveedor;
 import com.market.svcentral.Usuario;
 import com.market.svcentral.exceptions.CategoriaException;
+import com.market.svcentral.exceptions.ProductoException;
 import com.market.svcentral.exceptions.UsuarioRepetidoException;
 
 @WebService
@@ -65,6 +66,15 @@ public class Publicador {
 	}
 
 	// ALAN
+	
+	@WebMethod
+	public void agregarValoracion(int puntaje, int numRef, String nickName) {
+		try {
+			obtenerCliente(nickName).agregarPuntaje(puntaje, numRef);
+		} catch (ProductoException e) {
+			e.printStackTrace();
+		}
+	}
 
 	@WebMethod
 	public Producto obtenerProducto(int numRef) {
@@ -438,6 +448,11 @@ public class Publicador {
 	@WebMethod
 	public String imprimirFechaOrden(String nickName, int orden) {
 		return getCompra(orden, nickName).crearDT().getFechaString();
+	}
+	
+	@WebMethod
+	public String imprimirFechaCliente(String nickName) {
+		return obtenerCliente(nickName).crearDt().getNacimientoFormateado();
 	}
 
 	// CARLITOS

@@ -231,6 +231,9 @@ public class Cliente extends Usuario {
     }
     
     public void agregarPuntaje(Integer valor, Integer numRef) throws ProductoException {
+    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+    	EntityManager em = emf.createEntityManager();
+    	
     	for (OrdenDeCompra entry : listaCompras) {
     		OrdenDeCompra orden = entry;
     		for (Map.Entry<Integer, Item> entry2 : orden.getItems().entrySet()) {
@@ -241,11 +244,24 @@ public class Cliente extends Usuario {
         				if(this.listaPuntajes.containsKey(numRef)) {
         		            Puntaje p = this.listaPuntajes.get(numRef);
         		            p.setvalor(valor);
+        		            em.merge(p);
         				}else {
+        					
+        					em.getTransaction().begin();
+        					
         		            Puntaje puntaje = new Puntaje(valor, numRef);
         		            producto.agregarPuntaje(puntaje);
-        		            this.listaPuntajes.put(numRef, puntaje);        					
+        		            this.listaPuntajes.put(numRef, puntaje);
+        		            
+        		            em.persist(puntaje);
+        		            em.merge(this);
+        		            em.merge(producto);
+        		            
+        		            em.getTransaction().commit();
         				}
+        				
+        				em.close();
+        		    	emf.close();
         				return;        				
         			}catch (PuntajeInvalidoException e) {
         				System.out.println(e.getMessage());
@@ -254,6 +270,8 @@ public class Cliente extends Usuario {
         	}
     	}
     	throw new ProductoException("El cliente no compró el producto");
+    	
+    	
     }
 	 
 }

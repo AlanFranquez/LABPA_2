@@ -1,9 +1,6 @@
+<%@page import="webservices.PublicadorService"%>
+<%@page import="webservices.Publicador"%>
 <%@page import="java.util.HashMap"%>
-<%@page import="com.market.svcentral.DTCliente"%>
-<%@page import="com.market.svcentral.DTOrdenDeCompra"%>
-<%@page import="com.market.svcentral.DTFecha" %>
-<%@page import="com.market.svcentral.Usuario" %>
-<%@page import="com.market.svcentral.Cliente" %>
 <%@page import="java.util.Collection"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
@@ -24,9 +21,12 @@
 <body>
 
 	<%
-    	DTCliente user = (DTCliente) request.getAttribute("usuario");
+		PublicadorService p = new PublicadorService();
+		Publicador port = p.getPublicadorPort();
     
-    	Usuario usr = (Usuario) request.getAttribute("usuarioLogueado");
+    	webservices.Usuario usr = (webservices.Usuario) request.getAttribute("usuarioLogueado");
+    	
+    	List<webservices.OrdenDeCompra> ordenes = (List<webservices.OrdenDeCompra>) request.getAttribute("ordenes");
     %>
 
 <%-- NAVBAR --%>
@@ -67,48 +67,100 @@
 <main class="container my-5">
     <section class="row justify-content-center align-items-center text-center text-md-start">
         <div class="col-md-4 col-12 mb-4">
-            <img class="img-fluid rounded-circle" style="width: 200px; height: 200px; object-fit: cover;" src="media/<%= user.getImagenes() %>" alt="Imagen de cliente" />
+            <img class="img-fluid rounded-circle" style="width: 200px; height: 200px; object-fit: cover;" src="media/<%= usr.getImagen() %>" alt="Imagen de cliente" />
         </div>
         <div class="col-md-6 col-12">
             <p>Tipo de Usuario: <b>Cliente</b></p>
-            <p>Nickname: <b><%= user.getNick() %></b></p>
-            <p>Nombre: <b><%= user.getNombre() %></b></p>
-            <p>Apellido: <b><%= user.getApellido() %></b></p>
-            <p>Fecha de Nacimiento: <br><b><%= user.getNacimientoFormateado() %></b></p>
+            <p>Nickname: <b><%= usr.getNick() %></b></p>
+            <p>Nombre: <b><%= usr.getNombre() %></b></p>
+            <p>Apellido: <b><%= usr.getApellido() %></b></p>
+            <p>Fecha de Nacimiento: <br><b><%= port.imprimirFechaCliente(usr.getNick()) %></b></p>
         </div>
     </section>
 </main>
 
 <%-- SECCIÓN COMPRAS REALIZADAS --%>
-<section class="container">
-    <h2 class="text-center mt-5">Compras Realizadas</h2>
-    <% if(user.getOrdenes().isEmpty()) { %>
-        <p class="text-center mt-4">No ha realizado compras :(</p>
-    <% } else { 
-        Map<Integer, OrdenDeCompra> ordenesCliente = user.getOrdenes();
-        List<DTOrdenDeCompra> listaOrden = new ArrayList<>();
-        for (OrdenDeCompra orden : ordenesCliente.values()) {
-            listaOrden.add(orden.crearDT());
-        }
-        for(DTOrdenDeCompra dt : listaOrden) { %>
-            <div class="container my-3">
-                <div class="card">
-                    <div class="row g-0">
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <h3 class="card-title"><%= dt.getNumero() %></h3>
-                                <span class="badge mb-2" style="background-color: <%= dt.getEstado().equals("Entregado") ? "green" : "yellow" %>; color: <%= dt.getEstado().equals("Entregado") ? "white" : "black" %>;"><%= dt.getEstado() %></span>
-                                <p class="card-text"><b>Precio total:</b> <%= dt.getPrecioTotal() %></p>
-                                <p class="card-text"><b>Fecha de compra:</b> <%= dt.getFechaString() %></p>
-                                <a href="perfilOrdenMOBILE?nickname=<%= user.getNick() %>&orden=<%= dt.getNumero() %>" class="btn btn-dark">Ver detalles</a>
-                            </div>
+<section>
+        <h2 class="comprasTitle text-center mt-5">Compras Realizadas</h2>
+        
+        <% if(ordenes == null || ordenes.isEmpty())  {
+        	
+      	%>
+      	<p class="text-center mt-4">No ha realizado compras :(</p>
+      	<% } else { 
+      		
+      	
+
+      		for(webservices.OrdenDeCompra dt : ordenes) {
+
+      			%>
+      			
+      	<div class="container align-items-center justify-content-center">
+            <div class="card">
+                <div class="row g-0">
+                    <div class="col-md-8">
+                        <div class="card-body">
+
+                           
+                            <h3 class="card-title"><%= port.imprimirNumRefOrden(usr.getNick(), dt.getNumero()) %></h1>
+                            
+
+                            
+                            <% 
+                            
+
+                            if ("Entregado".equals(port.imprimirEstadoOrden(usr.getNick(), dt.getNumero()))) { 
+
+                            
+                            %>
+                            
+
+
+                            	<span class="badge mb-2" style="background-color: green; font-weight: normal; color: white"><%= port.imprimirEstadoOrden(usr.getNick(), dt.getNumero()) %></span>
+                            
+                            <% } else {%>
+                            	<span class="badge mb-2" style="background-color: yellow; font-weight: normal; color: black"><%= port.imprimirEstadoOrden(usr.getNick(), dt.getNumero()) %></span>
+
+                            
+                            <% }%>
+                            
+                            
+                            <br>
+            
+                            
+                            <a style="text-decoration: none; color: white" href="perfilOrden?nickname=<%= port.getNickDTCliente(usr.getNick()) %>&orden=<%= port.getEstadoOrden(dt.getNumero()) %>" >VER DETALLES</a>
+
+                           
+                             <p class="card-text"><b>Precio total: </b><%= port.imprimirPrecioTotal(usr.getNick(), dt.getNumero()) %></p>
+                            <p class="card-text"><b>Fecha de compra: </b><%= port.imprimirFechaOrden(usr.getNick(), dt.getNumero())%></p>
+                           
+                            <button class="btn" style="border: none; background-color: #2C2C2C">
+                            
+                            <a style="text-decoration: none; color: white" href="perfilOrden?nickname=<%= port.getNickDTCliente(usr.getNick()) %>&orden=<%= dt.getNumero() %>" >VER DETALLES</a>
+
+                            </button>
+    
+
                         </div>
+                        	
+                        	
+                        
                     </div>
                 </div>
             </div>
-        <% } 
-    } %>
-</section>
+           </div>
+          
+          
+      			
+      	<% } %>
+      	
+      		
+      	
+                
+      	<% } %>
+        
+        
+    </section>
 
 <%-- PIE DE PÁGINA --%>
 <footer class="d-flex justify-content-center align-items-center bg-dark text-white py-4">
