@@ -26,7 +26,7 @@ public class Cliente extends Usuario {
 	
 	
 	@OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private Map<Integer, OrdenDeCompra> listaCompras;
+    private List<OrdenDeCompra> listaCompras;
     
     @OneToMany (cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "cliente_nick")
@@ -39,19 +39,19 @@ public class Cliente extends Usuario {
     private Carrito carrito;
     
     public Cliente() {
-        
+    
     }
     
     // Constructor
     public Cliente(String nombre, String nick, String apellido, String correo, DTFecha fecha, String contrasena) {
         super(nombre, nick, apellido, correo, fecha, "cliente", contrasena);
-        this.listaCompras = new HashMap<>();
+        this.listaCompras = new ArrayList<OrdenDeCompra>();
         this.listaComentarios = new HashMap<>();
         this.carrito = new Carrito();
         this.listaPuntajes = new HashMap<>();
     }
     // gets, sets
-    public Map<Integer, OrdenDeCompra> getCompras() {
+    public List<OrdenDeCompra> getCompras() {
         return listaCompras;
     }
     
@@ -66,8 +66,8 @@ public class Cliente extends Usuario {
 
     
     public void agregarRespuesta(int numeroComentario, String nombreProducto, Comentario respuesta) {
-    	for (Map.Entry<Integer, OrdenDeCompra> entry : listaCompras.entrySet()) {
-    		OrdenDeCompra orden = entry.getValue();
+    	for (OrdenDeCompra entry : listaCompras) {
+    		OrdenDeCompra orden = entry;
     		
     		
     		
@@ -87,8 +87,8 @@ public class Cliente extends Usuario {
     
     
     public void agregarComentario(Comentario comentario, String nombreProducto) throws ProductoException {
-    	for (Map.Entry<Integer, OrdenDeCompra> entry : listaCompras.entrySet()) {
-    		OrdenDeCompra orden = entry.getValue();
+    	for (OrdenDeCompra entry : listaCompras) {
+    		OrdenDeCompra orden = entry;
     		
     		
     		
@@ -116,8 +116,8 @@ public class Cliente extends Usuario {
     public List<DTOrdenDeCompra> mostrarCompras() {
     	List<DTOrdenDeCompra> lista = new ArrayList<DTOrdenDeCompra>();
     	System.out.println(this.cantCompras());
-    	for (OrdenDeCompra orden : listaCompras.values()) {
-    		lista.add(orden.crearDT());
+    	for (OrdenDeCompra entry : listaCompras) {
+    		lista.add(entry.crearDT());
     	}
     	return lista;
     }
@@ -132,17 +132,30 @@ public class Cliente extends Usuario {
     }
 
     public void agregarCompra(OrdenDeCompra orden) {
-        listaCompras.put(orden.getNumero(), orden);
+        listaCompras.add(orden);
     }
     public OrdenDeCompra obtenerOrden(int num) {
-        return listaCompras.get(num);
+        for(OrdenDeCompra op: this.listaCompras) {
+        	if(op.getNumero() == num) {
+        		return op;
+        	}
+        }
+        
+        return null;
+    	
     }
     public void eliminarOrden(int num) {
         listaCompras.remove(num);
     }
     public boolean existeOrden(int num) {
-        return listaCompras.containsKey(num);
-    }
+      for(OrdenDeCompra o: this.listaCompras) {
+    	  if(o.getNumero() == num) {
+    		  return true;
+    	  }
+      }
+      
+      return false;
+   }
     public int cantCompras() {
         return listaCompras.size();
     }
@@ -151,13 +164,13 @@ public class Cliente extends Usuario {
     	return this;
     }
     
-    public Map<Integer, OrdenDeCompra> traerCompras(){
+    public List<OrdenDeCompra> traerCompras(){
     	return this.listaCompras;
     }
     
     public Boolean comproProducto(int numeroRef) {
-    	for (Map.Entry<Integer, OrdenDeCompra> entry : listaCompras.entrySet()) {
-    		OrdenDeCompra orden = entry.getValue();
+    	for (OrdenDeCompra entry : listaCompras) {
+    		OrdenDeCompra orden = entry;
     		
     		Map<Integer, Item> items = orden.getItems();
     		
@@ -177,14 +190,7 @@ public class Cliente extends Usuario {
     
     
    
-    // Mas que un set de integers creo que debería de ser un arreglo de dtOrdenCompra
-    public Set<Integer> getAllOrdenes() {
-        Set<Integer> res = new HashSet<>();
-        for (OrdenDeCompra ordenActual : listaCompras.values()) {
-            res.add(ordenActual.getNumero());
-        }
-        return res;
-    }
+    
     
     public Carrito getCarrito() {
         return this.carrito;
@@ -195,7 +201,7 @@ public class Cliente extends Usuario {
     }
     
     public List<OrdenDeCompra> getOrdenes() {
-        return new ArrayList<>(listaCompras.values());
+    	return this.listaCompras;
     }
     
     public DTCliente crearDt() {
@@ -208,7 +214,7 @@ public class Cliente extends Usuario {
     
     
     public boolean haCompradoDelProveedor(Proveedor proveedor) {
-        for (OrdenDeCompra orden : this.listaCompras.values()) {
+    	for (OrdenDeCompra orden : listaCompras) {
             // Imprimir el proveedor de la orden para depuración
             System.out.println("Comparando con proveedor: " + orden.getProveedor().getNombre());
             
@@ -229,8 +235,8 @@ public class Cliente extends Usuario {
     }
     
     public void agregarPuntaje(Integer valor, Integer numRef) throws ProductoException {
-    	for (Map.Entry<Integer, OrdenDeCompra> entry : listaCompras.entrySet()) {
-    		OrdenDeCompra orden = entry.getValue();
+    	for (OrdenDeCompra entry : listaCompras) {
+    		OrdenDeCompra orden = entry;
     		for (Map.Entry<Integer, Item> entry2 : orden.getItems().entrySet()) {
         		Item item = entry2.getValue();
         		if (item.getProducto().getNumRef() == numRef) {

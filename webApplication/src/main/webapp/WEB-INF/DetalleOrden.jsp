@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 
-<%@page import="services.*"%>
+<%@page import="webservices.*"%>
+<%@page import="webservices.Publicador"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Map"%>
 
@@ -10,9 +11,9 @@
 	PublicadorService p = new PublicadorService();
 	Publicador port = p.getPublicadorPort();
 
-	services.DtOrdenDeCompra orden = (DtOrdenDeCompra) request.getAttribute("ordencompra");
-    List<services.Item> items = port.getItemsOrden(orden);
-    List<services.DtEstado> estados = port.getHistorialEstado(orden);
+	webservices.OrdenDeCompra orden = (webservices.OrdenDeCompra) request.getAttribute("ordencompra");
+    List<webservices.Item> items = (List<webservices.Item>) request.getAttribute("items");
+    
     
     
 %>
@@ -28,10 +29,10 @@
 <body>
 
 <%
-    DtCliente user = (DtCliente) request.getAttribute("usuarioOrdenEsp");
-	Usuario usr = (Usuario) request.getAttribute("usuarioLogueado");
+	Usuario usr = (Usuario) request.getAttribute("usuario");
 %>
    
+
 
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2C2C2C;">
     <div class="container">
@@ -48,101 +49,54 @@
                     </form>
                 </li>
             </ul>
-            <ul class="navbar-nav">
+            <ul class="navbar-nav align-items-center">
                 <li class="nav-item">
+                   <% 
+if (usr != null && usr instanceof Proveedor) { 
+%> 
+    <a class="nav-link" href="perfilProveedor?nickname=<%= usr.getNick() %>">Perfil</a> 
+<% 
+} else if (usr != null && usr instanceof Cliente) { 
+%> 
+    <a class="nav-link" href="perfilCliente?nickname=<%= usr.getNick() %>">Perfil</a>
+<% 
+}
+%>
                 </li>
                 <%
-                if (user != null && port.getTipo(usr).equals("cliente")) {
+                if (usr != null && usr instanceof Cliente) {
                 %>
-                <li class="nav-item">
-                	<a class="nav-link" href="Carrito">
+                <li class="nav-item"><a class="nav-link" href="Carrito">
                     <svg xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" viewBox="0 0 24 24">
                         <path fill="white" d="M17 18c-1.11 0-2 .89-2 2a2 2 0 0 0 2 2a2 2 0 0 0 2-2a2 2 0 0 0-2-2M1 2v2h2l3.6 7.59l-1.36 2.45c-.15.28-.24.61-.24.96a2 2 0 0 0 2 2h12v-2H7.42a.25.25 0 0 1-.25-.25q0-.075.03-.12L8.1 13h7.45c.75 0 1.41-.42 1.75-1.03l3.58-6.47c.07-.16.12-.33.12-.5a1 1 0 0 0-1-1H5.21l-.94-2M7 18c-1.11 0-2 .89-2 2a2 2 0 0 0 2 2a2 2 0 0 0 2-2a2 2 0 0 0-2-2" />
                     </svg>
-                </a>
-                </li>
+                </a></li>
                 <%
                 }
                 %>
-                
                 <li class="nav-item">
                     <button class="btn btn-danger">
-                        <a class="nav-link" href="logout">Cerrar Sesion</a>
-                    <% if (user != null && port.getTipo(usr).equals("proveedor")) { %>
-                        <a class="nav-link" href="perfilProveedor?nickname=<%= port.getNombreUsuario(usr) %>">Perfil</a>
-                    <% } else if (user != null && port.getTipo(usr).equals("cliente")) { %>
-                        <a class="nav-link" href="perfilCliente?nickname=<%= port.getNombreUsuario(usr) %>">Perfil</a>
-                    <% } %>
+                        <a class="nav-link" href="logout">Cerrar Sesión</a>
+                    </button>
                 </li>
             </ul>
         </div>
     </div>
 </nav>
-
    
 
-<div class="container mt-5">
-    <h1>Detalles de la Orden Nro <%= port.getNumRefOrden(orden) %></h1>
-    
-    <div style="
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    max-width: 600px;
-    margin: 20px auto;
-    padding: 20px;
-    text-align: center;">
-    
-    <h3>Seguimiento de la Orden</h3>
-    <ul style="list-style-type: none; margin: 0; padding: 0; position: relative; text-align: left;">
-        <% for (DtEstado estado : estados) { %>
-            <li style="padding: 10px 0; position: relative; padding-left: 30px;">
-                <span style="
-                    font-weight: bold; 
-                    color: <%= port.getEstado(estado).equalsIgnoreCase("Entregada") ? "#00b200" : "#FFA500" %>;">
-                    Estado:
-                </span> 
-                <%= port.getEstado(estado) %> - <%= port.getFechaEstado(estado) %> <br>
-                <span style="color: #666; font-weight: bold; ">Comentarios:</span> <%= port.getComEstado(estado) %>
-                
-                <!-- Punto de estado con color condicional -->
-                <span style="
-                    position: absolute;
-                    left: 10px;
-                    top: 5px;
-                    width: 10px;
-                    height: 10px;
-                    background-color: <%= port.getEstado(estado).equalsIgnoreCase("Entregada") ? "#00b200" : "#FFA500" %>;
-                    border-radius: 50%;
-                    border: 2px solid white;"></span>
-                
-                <!-- Línea vertical con color condicional -->
-                <% if (!estado.equals(estados.get(estados.size() - 1))) { %>
-                    <span style="
-                        position: absolute;
-                        left: 14px;
-                        top: 20px;
-                        bottom: 0;
-                        width: 2px;
-                        background-color: <%= port.getEstado(estado).equalsIgnoreCase("Entregada") ? "#00b200" : "#FFA500" %>;">
-                    </span>
-                <% } %>
-            </li>
-        <% } %>
-    </ul>
-</div>
 
 
     <% 
-    if(port.getEstadoOrden(orden).equalsIgnoreCase("En camino")) { 
+    if(port.imprimirEstadoOrden(usr.getNick(), orden.getNumero()).equalsIgnoreCase("En camino")) { 
         request.setAttribute("agregarEstado", "si");
     }
 	%>
 
 
-    <% if(port.getEstadoOrden(orden).equalsIgnoreCase("En camino")) { %>
+    <% if(port.imprimirEstadoOrden(usr.getNick(), orden.getNumero()).equalsIgnoreCase("En camino")) { %>
         <form action="perfilOrden" method="post">
-            <input type="hidden" name="numeroOrden" value="<%= port.getNumRefOrden(orden) %>">
+            <input type="hidden" name="numeroOrden" value="<%= port.imprimirNumRefOrden(usr.getNick(), orden.getNumero()) %>">
             <input type="hidden" name="accion" value="confirmar">
             <button type="submit" class="btn btn-success">Confirmar</button>
         </form>
@@ -150,8 +104,8 @@
 
     <div class="card mt-3">
         <div class="card-body">
-            <p><strong>Precio Total: </strong><%= port.getPrecioTotalOrden(orden) %> USD</p>
-            <p><strong>Fecha de Compra: </strong><%= port.getFechaOrden(orden) %></p>
+            <p><strong>Precio Total: </strong><%= port.imprimirPrecioTotal(usr.getNick(), orden.getNumero()) %> USD</p>
+            <p><strong>Fecha de Compra: </strong><%= port.imprimirFechaOrden(usr.getNick(), orden.getNumero()) %></p>
 
             
 
@@ -159,26 +113,23 @@
             <hr>
             <ul>
             <% 
-    		for (services.Item item : items) { 
-        		DtItem dtit = port.crearDTItem(item);
-        		services.Producto prod = port.getProductoItem(dtit);
-            	services.DtProducto dtprod = port.crearDTProd(prod);
+    		for (webservices.Item item : items) { 
 			%>
-        		
-        		<a class="link" href="perfilProducto?producto=<%= port.getNumRefOrden(orden)%>">Ver Producto</a>
+				<h1><%= port.imprimirNumRef(item.getProducto().getNumRef()) %></h1>
+			
+        		<a class="link" href="perfilProducto?producto=<%= port%>">Ver Producto</a>
         		<li>
             		
-            		<p><strong>Nombre: </strong> <%= port.getNombreProd(dtprod) %></p> 
-            		<p><strong>Precio Unitario: </strong> $<%= port.getPrecioProd(dtprod) %> USD</p>
-            		<p><strong>Cantidad:</strong> <%= port.getCantProdItem(dtit) %></p>
-            		<p><strong>Subtotal: </strong> $<%= port.getSubTotaItem(dtit) %></p>
+            		<p><strong>Nombre: </strong> <%= port.imprimirNumRef(item.getProducto().getNumRef())%></p> 
+            		<p><strong>Precio Unitario: </strong> $<%= port.imprimirPrecioProd(item.getProducto().getNumRef()) %> USD</p>
+            		<p><strong>Cantidad:</strong> <%= port.imprimirCantidad(orden.getNumero(), usr.getNick(), item.getProducto().getNumRef()) %></p>
+            		<p><strong>Subtotal: </strong> $<%= port.imprimirSubTotal(orden.getNumero(), usr.getNick(), item.getProducto().getNumRef()) %></p>
         		</li>
 			<% 
     		} 
 			%>
-
             </ul>
-            <p><strong>Total de la orden:</strong> $<%= port.getPrecioTotalOrden(orden) %></p>
+            <p><strong>Total de la orden:</strong> $<%= port.imprimirPrecioTotal(usr.getNick(), orden.getNumero()) %></p>
         </div>
     </div>
 

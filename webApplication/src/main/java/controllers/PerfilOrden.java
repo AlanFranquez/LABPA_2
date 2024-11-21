@@ -8,12 +8,15 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 
+import webservices.DtCliente;
+import webservices.PublicadorService;
 import webservices.*;
 
 
@@ -63,15 +66,30 @@ public class PerfilOrden extends HttpServlet {
             }
 
             // Obtener la orden específica
-            DtOrdenDeCompra orden = port.mostrarCompraCliente(cliente, numeroOrden);
+            OrdenDeCompra orden = port.getCompra(numeroOrden, cliente.getNick());
+            
+            
+            System.out.println("=======");
+            System.out.println(orden.getNumero());
+            System.out.println("=======");
+            
+            List<webservices.Item> items = port.imprimirITemsORDENS(numeroOrden, cliente.getNick());
+            
+            for(webservices.Item it: items) {
+            	System.out.print("LISTA --> " + it.getProducto().getNumRef());
+            }
+            
             if (orden != null) {
-            	DtCliente dtcli = port.crearDTCliente(cliente);
+            	
                 request.setAttribute("ordencompra", orden);
-                request.setAttribute("usuario", dtcli);
+                request.setAttribute("usuario", cliente);
+                request.setAttribute("items", items);
                 request.getRequestDispatcher("/WEB-INF/DetalleOrden.jsp").forward(request, response);
             } else {
                 response.sendError(HttpServletResponse.SC_NOT_FOUND, "Orden no encontrada.");
             }
+            
+            
         } else {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Falta el número de orden.");
         }
@@ -118,7 +136,7 @@ public class PerfilOrden extends HttpServlet {
             em.getTransaction().begin();
             
             if ("confirmar".equals(accion)) {
-            	webservices.OrdenDeCompra orden = port.getCompra(numeroOrden, cliente);
+            	webservices.OrdenDeCompra orden = port.getCompra(numeroOrden, cliente.getNick());
                 if (orden != null) {
                 	DtEstado estado = port.crearEstado("Entregada", "El cliente ha recibido el pedido.");
              	    port.setEstadoOrden(orden, estado);

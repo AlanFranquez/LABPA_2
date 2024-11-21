@@ -756,6 +756,11 @@ public class Sistema implements ISistema {
 		 EntityManager em = emf.createEntityManager();
 		 
 		 OrdenDeCompra ord = em.find(OrdenDeCompra.class, orden);
+		 OrdenDeCompra guardar = ord;
+		 em.remove(ord);
+		 
+		 
+		 em.persist(guardar);
 		 
 		 Cliente cliente = em.find(Cliente.class, nickCliente);
 		    System.out.println("Realizando compra para el cliente: " + nickCliente);
@@ -770,9 +775,11 @@ public class Sistema implements ISistema {
 		    System.out.println("Orden guardada: " + ord.getNumero());
 		    
 		    // Agregar compra al cliente
-		    cliente.agregarCompra(this.ordenes.get(ord.getNumero()));
+		    cliente.agregarCompra(ord);
 		    
 		    em.merge(cliente);
+		    em.merge(ord);
+		    
 		    
 		    Map<Integer, Item> itemsAdquiridos = ord.getItems();
 		    for (Map.Entry<Integer, Item> entry : itemsAdquiridos.entrySet()) {
@@ -1055,7 +1062,7 @@ public class Sistema implements ISistema {
 	        
 	        OrdenDeCompra ord = em.find(OrdenDeCompra.class, numeroOrden);
 	        
-	        ord.agregarItem(getProducto(numProducto), cantidad);
+	        ord.agregarItem(em.find(Producto.class, numProducto), cantidad);
 	        
 	        em.merge(ord);
 	        

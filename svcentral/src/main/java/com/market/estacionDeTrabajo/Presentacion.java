@@ -1231,10 +1231,10 @@ public class Presentacion {
         if(cliente.getOrdenes().isEmpty()) {
         	panel.add(new JLabel("   Todavia no existen ordenes"));
         } else {
-        	Map<Integer, OrdenDeCompra> ordenesCliente = cliente.getOrdenes();
+        	List<OrdenDeCompra> ordenesCliente = cliente.getOrdenes();
         	
         	
-            for (OrdenDeCompra orden : ordenesCliente.values()) {
+            for (OrdenDeCompra orden : ordenesCliente) {
                 DTOrdenDeCompra dtOrden = orden.crearDT();
                 panel.add(new JLabel(dtOrden.toString()));
             }

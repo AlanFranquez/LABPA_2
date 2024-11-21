@@ -94,6 +94,7 @@ public class PerfilCliente extends HttpServlet {
         String absoluteImagePath = getServletContext().getRealPath("/media" + imagePath);
 
 
+        /*
         // Crear un archivo con esa ruta
         File imageFile = new File(absoluteImagePath); // Cambia a la ruta de tu imagen
         BufferedImage image = ImageIO.read(imageFile);
@@ -106,20 +107,25 @@ public class PerfilCliente extends HttpServlet {
         // Codificar la imagen en Base64
         String base64Image = Base64.getEncoder().encodeToString(imageBytes);
         
+        */
+        
         // Obtener las órdenes de compra del cliente
         List<OrdenDeCompra> ordenes = port.getOrdenesCliente(port.getNickCliente(cli));
         
+        for(webservices.OrdenDeCompra orden : ordenes) {
+        	System.out.print("=========  " + orden.getNumero());
+        	System.out.print("=========  $" + port.imprimirPrecioTotal(cli.getNick(), orden.getNumero()));
+        }
+        
         // Verificar si el cliente es válido
         if (cli != null) {
-            DtCliente dtcli = port.crearDTCliente(cli);
 
             // Obtener el parámetro "nickname"
             String parametro = request.getParameter("nickname");
 
             if (parametro != null && port.getNickCliente(cli).equals(parametro)) {
-            	request.setAttribute("imagenBase64", base64Image);
             	request.setAttribute("usuarioLogueado", user);
-                request.setAttribute("usuario", dtcli);
+                request.setAttribute("usuario", cli);
                 request.setAttribute("ordenes", ordenes);  // Pasar la lista de ordenes correctamente
                 request.getRequestDispatcher("/WEB-INF/InfoPerfilCliente.jsp").forward(request, response);
                 return;

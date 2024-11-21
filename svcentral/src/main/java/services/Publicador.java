@@ -1,6 +1,7 @@
 package services;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -147,6 +148,34 @@ public class Publicador {
 	public Integer imprimirNumRef(int numRef) {
 		return obtenerProducto(numRef).crearDT().getNumRef();
 	}
+	
+	@WebMethod
+	public Integer imprimirCantidad(int numeroOrden, String nick, int numeroProd) {
+			Map<Integer, Item> items = getCompra(numeroOrden, nick).getItems();
+		
+		
+		for(Map.Entry<Integer, Item> entry : items.entrySet()) {
+			if(entry.getValue().getProducto().getNumRef() == numeroProd) {
+				return entry.getValue().getCant();
+			}
+		}
+		
+		return 0;
+	}
+	
+	@WebMethod
+	public float imprimirSubTotal(int numeroOrden, String nick, int numeroProd) {
+			Map<Integer, Item> items = getCompra(numeroOrden, nick).getItems();
+		
+		
+		for(Map.Entry<Integer, Item> entry : items.entrySet()) {
+			if(entry.getValue().getProducto().getNumRef() == numeroProd) {
+				return entry.getValue().getSubTotal();
+			}
+		}
+		
+		return 0;
+	}
 
 	@WebMethod
 	public String imprimirNombreProd(int numRef) {
@@ -253,17 +282,21 @@ public class Publicador {
 	    return orden;
 	}
 	
+	
 	@WebMethod
-	public void imprimirITemsORDENS(int numeroOrden) {
+	public List<Item> imprimirITemsORDENS(int numeroOrden, String nick) {
 		
-		Map<Integer, Item> items = obtenerOrden(numeroOrden).getItems();
+		Map<Integer, Item> items = getCompra(numeroOrden, nick).getItems();
 		
-		for(Map.Entry<Integer, Item> it : items.entrySet()) {
-			Item itt = it.getValue();
+		List<Item> prods = new ArrayList<Item>();
+		
+		for(Map.Entry<Integer, Item> entry : items.entrySet()) {
+			Item it = entry.getValue();
 			
-			
-			System.out.print("PRODUCTOS DESDE LA ORDEN DE COMPRA -->" + itt.getProducto().getNombre());
+			prods.add(it);
 		}
+		
+		return prods;
 	}
 	
 	@WebMethod
@@ -271,8 +304,17 @@ public class Publicador {
 		s.agregarItemsAOrden(numeroOrden, numProducto, cantidad);
 	}
 	
-	public void realizarCompraPRUEBA(String nickCliente, int numeroOrden) {
-		s.realizarCompraPRUEBA(numeroOrden, nickCliente);
+	public void realizarCompraPRUEBA(List<Item> items, float precioTotal, String nickProveedor, String nickCliente) {
+		Map<Integer, Item> prods = new HashMap<>();
+		
+		for(Item p: items) {
+			prods.put(p.getProducto().getNumRef(), p);
+		}
+		
+		OrdenDeCompra nuevaCompra = new OrdenDeCompra(prods, precioTotal, obtenerProveedor(nickCliente));
+		
+		s.realizarCompra(nuevaCompra, nickCliente);
+		obtenerCliente(nickCliente).agregarCompra(nuevaCompra);
 	}
 
 	@WebMethod
@@ -317,6 +359,14 @@ public class Publicador {
 	public Proveedor obtenerProveedor(String nick) {
 		return (Proveedor) em.find(Proveedor.class, nick);
 	}
+	
+	@WebMethod
+	public void agregarCompraCliente(String nick, int numero) {
+		obtenerCliente(nick).agregarCompra(obtenerOrden(numero));
+		
+		em.merge(obtenerCliente(nick));
+	}
+	
 
 	@WebMethod
 	public Carrito obtenerCarritoCliente(String nick) {
@@ -369,10 +419,31 @@ public class Publicador {
 	public List<String> obtenerImagenesProducto(Producto p) {
 		return this.obtenerProducto(p.getNumRef()).crearDT().getImagenes();
 	}
+	
+	@WebMethod
+	public String imprimirNumRefOrden(String nickname, int orden) {
+		return String.valueOf(getCompra(orden, nickname).crearDT().getNumero());
+	}
+	
+	@WebMethod
+	public String imprimirEstadoOrden(String nickName, int orden) {
+		return getCompra(orden, nickName).crearDT().getEstado();
+	}
+	
+	@WebMethod
+	public float imprimirPrecioTotal(String nickName, int orden) {
+		return getCompra(orden, nickName).getPrecioTotal();
+	}
+	
+	@WebMethod
+	public String imprimirFechaOrden(String nickName, int orden) {
+		return getCompra(orden, nickName).crearDT().getFechaString();
+	}
 
 	// CARLITOS
 
-	// CARLITOS
+	
+	
 	
 			@WebMethod
 			public DTOrdenDeCompra mostrarCompraCliente(Cliente c, int numO) {
@@ -401,8 +472,8 @@ public class Publicador {
 			}
 			
 			@WebMethod
-			public OrdenDeCompra getCompra(int num, Cliente c) {
-				return c.getCompra(num);
+			public OrdenDeCompra getCompra(int num, String nickName) {
+				return obtenerCliente(nickName).obtenerOrden(num);
 			}
 			
 			@WebMethod
@@ -431,14 +502,14 @@ public class Publicador {
 			    return o.getItems().values().stream().collect(Collectors.toList());
 			}
 			
-			@WebMethod
-			public List<OrdenDeCompra> listarComprasPorNick(String nick) {
-			    Cliente cliente = obtenerCliente(nick);
-			    if (cliente == null) {
-			        return null;
-			    }
-			    return cliente.getCompras().values().stream().collect(Collectors.toList());
-			}
+			//@WebMethod
+			//public List<OrdenDeCompra> listarComprasPorNick(String nick) {
+			  //  Cliente cliente = obtenerCliente(nick);
+			    //if (cliente == null) {
+			      //  return null;
+			   // }
+			    //return cliente.getCompras().values().stream().collect(Collectors.toList());
+		//	}
 			
 			@WebMethod
 			public List<DTEstado> getHistorialEstado(OrdenDeCompra o){
@@ -516,7 +587,7 @@ public class Publicador {
 			        throw new IllegalArgumentException("El cliente no puede ser nulo");
 			    }
 				
-				return em.find(Cliente.class, c).getOrdenes();
+				return obtenerCliente(c).getOrdenes();
 			}
 			
 			@WebMethod
@@ -541,7 +612,7 @@ public class Publicador {
 			
 			@WebMethod
 			public String getFechaNacDTClienteString(String c) {
-				return em.find(Cliente.class, c).crearDt().getNacimientoFormateado();
+				return String.valueOf(obtenerCliente(c).crearDt().getNacimientoFormateado());
 			}
 			
 			@WebMethod

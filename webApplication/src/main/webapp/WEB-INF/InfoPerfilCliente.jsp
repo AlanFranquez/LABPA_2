@@ -6,7 +6,7 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.Map"%>
 <%@ page import="webservices.PublicadorService" %>
-<%@ page import="services.Publicador" %>
+<%@ page import="webservices.Publicador" %>
 <%@ page import="webservices.DtCliente" %>
 <%@ page import="webservices.Usuario" %>
 <%@ page import="webservices.OrdenDeCompra" %>
@@ -30,9 +30,8 @@
     	webservices.PublicadorService p = new PublicadorService();
     	webservices.Publicador port = p.getPublicadorPort();
 		
-		webservices.DtCliente user = (webservices.DtCliente) request.getAttribute("usuario");
     
-		webservices.Usuario usr = (webservices.Usuario) request.getAttribute("usuarioLogueado");
+		webservices.Usuario usr = (webservices.Usuario) request.getAttribute("usuario");
     	
     	List<webservices.OrdenDeCompra> ordenes = (List<webservices.OrdenDeCompra>) request.getAttribute("ordenes");
     	
@@ -121,7 +120,7 @@ if (usr != null && port.getTipo(nickUser).equals("proveedor")) {
       	<% } else { 
       		
       	
-      		for(OrdenDeCompra dt : ordenes) {
+      		for(webservices.OrdenDeCompra dt : ordenes) {
       			%>
       			
       	<div class="container align-items-center justify-content-center">
@@ -129,28 +128,29 @@ if (usr != null && port.getTipo(nickUser).equals("proveedor")) {
                 <div class="row g-0">
                     <div class="col-md-8">
                         <div class="card-body">
-                            <h3 class="card-title"><%= port.getNumRefOrden(dt.getNumero()) %></h3> 
+                           
+                            <h3 class="card-title"><%= port.imprimirNumRefOrden(usr.getNick(), dt.getNumero()) %></h1>
                             
-                         	
+                            
                             <% 
                             
-                            if ("Entregado".equals(port.getEstadoOrden(dt.getNumero()))) { 
+                            if ("Entregado".equals(port.imprimirEstadoOrden(usr.getNick(), dt.getNumero()))) { 
                             
                             %>
                             
 
-                            	<span class="badge mb-2" style="background-color: green; font-weight: normal; color: white"><%= port.getEstadoOrden(dt.getNumero()) %></span>
+                            	<span class="badge mb-2" style="background-color: green; font-weight: normal; color: white"><%= port.imprimirEstadoOrden(usr.getNick(), dt.getNumero()) %></span>
                             
                             <% } else {%>
-                            	<span class="badge mb-2" style="background-color: yellow; font-weight: normal; color: black"><%= port.getEstadoOrden(dt.getNumero()) %></span>
+                            	<span class="badge mb-2" style="background-color: yellow; font-weight: normal; color: black"><%= port.imprimirEstadoOrden(usr.getNick(), dt.getNumero()) %></span>
                             
                             <% }%>
                             
-                            
                             <br>
                             
-                            <p class="card-text"><b>Precio total: </b><%= port.getPrecioTotalOrden(dt.getNumero()) %></p>
-                            <p class="card-text"><b>Fecha de compra: </b><%= port.getFechaOrden(dt.getNumero()) %></p>
+                           
+                             <p class="card-text"><b>Precio total: </b><%= port.imprimirPrecioTotal(usr.getNick(), dt.getNumero()) %></p>
+                            <p class="card-text"><b>Fecha de compra: </b><%= port.imprimirFechaOrden(usr.getNick(), dt.getNumero())%></p>
                            
                             <button class="btn" style="border: none; background-color: #2C2C2C">
                             

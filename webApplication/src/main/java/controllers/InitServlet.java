@@ -6,12 +6,14 @@ import jakarta.servlet.http.HttpServlet;
 import webservices.CategoriaException_Exception;
 import webservices.DtEstado;
 import webservices.DtFecha;
+import webservices.ObtenerProducto;
 import webservices.Publicador;
 import webservices.PublicadorService;
 import webservices.UsuarioRepetidoException_Exception;
 
 import java.security.KeyStore.Entry;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -147,20 +149,18 @@ public class InitServlet extends HttpServlet {
              
              webservices.Proveedor nick = port.obtenerProvDeProducto(1);
              
-             webservices.OrdenDeCompra orden = port.iniciarOrden(nick.getNick());
+             List<webservices.Item> items = new ArrayList<webservices.Item>();
+             items.add(port.prodsAItem(5, 1));
              
-             port.agregarItemsAOrden(orden.getNumero(), 3, 5);
-             
-             port.realizarCompraPRUEBA("Juan123", orden.getNumero());
-             
-             webservices.OrdenDeCompra obtenerOrden = port.obtenerOrden(803);
+             port.realizarCompraPRUEBA(items, 500, nick.getNick(), "Juan123");
              
              
+             List<webservices.OrdenDeCompra> ordenes= port.getOrdenesCliente("Juan123");
              
-             port.imprimirITemsORDENS(803);
- //            System.out.print("Se realizó la orden");
-  
-          // Crear un nuevo Item y obtener su Proveedor
+             for(webservices.OrdenDeCompra ed: ordenes) {
+            	 System.out.print("ORDEN DE JUAN123 -->" + ed.getNumero());
+             }
+             
              
              /*
 
