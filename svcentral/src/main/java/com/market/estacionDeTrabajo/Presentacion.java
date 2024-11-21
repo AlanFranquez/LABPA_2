@@ -22,11 +22,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
@@ -376,8 +372,6 @@ public class Presentacion {
 								JOptionPane.showMessageDialog(null,e.getMessage());
 								return;
 							}
-                        	Usuario u = s.getUsuario(nickname);
-                        	
                         	System.out.println("Imagen seleccionada: " + (imagenSelecc != null));
                         	//if(imagenSelecc != null) {
                         		//u.setImagen(imagenSelecc);
@@ -1233,8 +1227,6 @@ public class Presentacion {
         if(ordenesCliente.isEmpty()) {
         	panel.add(new JLabel("   Todavia no existen ordenes"));
         } else {
-        	
-        	
             for (DTOrdenDeCompra orden : ordenesCliente) {
                 panel.add(new JLabel(orden.toString()));
             }

@@ -6,9 +6,16 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 import java.util.logging.Logger;
+
+import javax.imageio.ImageIO;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -59,6 +66,8 @@ public class PerfilCliente extends HttpServlet {
             return;
         }
         
+        
+        
         EntityManagerFactory emf = null;
         EntityManager em = null;
 
@@ -77,19 +86,47 @@ public class PerfilCliente extends HttpServlet {
             return;
         }
         
+        // Ruta de la imagen
+     // Ruta relativa proporcionada por el servicio
+        String imagePath = port.getImagenesDTCliente(user.getNick()); // '/images/p3.jpg'
+
+        // Concatenar la carpeta 'media' a la ruta
+        String absoluteImagePath = getServletContext().getRealPath("/media" + imagePath);
+
+
+        /*
+        // Crear un archivo con esa ruta
+        File imageFile = new File(absoluteImagePath); // Cambia a la ruta de tu imagen
+        BufferedImage image = ImageIO.read(imageFile);
+
+        // Convertir la imagen a un arreglo de bytes
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(image, "jpg", baos);
+        byte[] imageBytes = baos.toByteArray();
+
+        // Codificar la imagen en Base64
+        String base64Image = Base64.getEncoder().encodeToString(imageBytes);
+        
+        */
+        
         // Obtener las órdenes de compra del cliente
         List<OrdenDeCompra> ordenes = port.getOrdenesCliente(port.getNickCliente(cli));
         
+        for(webservices.OrdenDeCompra orden : ordenes) {
+        	System.out.print("=========  " + orden.getNumero());
+        	System.out.print("=========  $" + port.imprimirPrecioTotal(cli.getNick(), orden.getNumero()));
+        }
+        
         // Verificar si el cliente es válido
         if (cli != null) {
-            DtCliente dtcli = port.crearDTCliente(cli);
 
             // Obtener el parámetro "nickname"
             String parametro = request.getParameter("nickname");
 
             if (parametro != null && port.getNickCliente(cli).equals(parametro)) {
-                request.setAttribute("usuarioLogueado", user);
-                request.setAttribute("usuario", dtcli);
+
+            	request.setAttribute("usuarioLogueado", user);
+                request.setAttribute("usuario", cli);
                 request.setAttribute("ordenes", ordenes);  // Pasar la lista de ordenes correctamente
                 request.getRequestDispatcher("/WEB-INF/InfoPerfilCliente.jsp").forward(request, response);
                 return;

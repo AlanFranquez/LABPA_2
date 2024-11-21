@@ -134,4 +134,10 @@ public interface ISistema {
 	public List<Producto> obtenerProductosDestacados();
 
 	public abstract void agregarImagenProd(String img, int numRef);
+	
+	public Integer iniciarOrdenVacia(String nickProveedor);
+	
+	public void realizarCompraPRUEBA(int orden, String nickCliente);
+	
+	public void agregarItemsAOrden(int numeroOrden, int numProducto, int cantidad);
 }

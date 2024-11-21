@@ -1,14 +1,15 @@
 package com.market.svcentral;
+import java.util.List;
 import java.util.Map;
 
 public class DTCliente {
     private String nombre, nick, apellido, correo, tipo;
     private DTFecha nacimiento;
     
-    private Map<Integer, OrdenDeCompra> ordenes;
+    private List<OrdenDeCompra> ordenes;
 	private String imagen;
     
-    public DTCliente(String nombre, String nick, String apellido, String correo, DTFecha nacimiento, String imagen, Map<Integer, OrdenDeCompra> ordenes) {
+    public DTCliente(String nombre, String nick, String apellido, String correo, DTFecha nacimiento, String imagen, List<OrdenDeCompra> ordenes) {
         this.nombre = nombre;
         this.nick = nick;
         this.apellido = apellido;
@@ -72,7 +73,7 @@ public class DTCliente {
     public String getImagenes() {
         return imagen;
     }
-    public Map<Integer, OrdenDeCompra> getOrdenes() {
+    public List<OrdenDeCompra> getOrdenes() {
         return ordenes;
     }
     

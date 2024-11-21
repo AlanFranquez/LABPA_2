@@ -58,26 +58,22 @@
 	<dependency>
     	<groupId>jakarta.persistence</groupId>
     	<artifactId>jakarta.persistence-api</artifactId>
-    	<version>2.2.3</version> <!-- o la versión que estés usando -->
+    	<version>2.2.3</version> 
 	</dependency>
 
 
-<!-- JAX-WS Runtime (Cliente y servidor de servicios web) -->
-    <!-- JAX-WS Runtime (Cliente y servidor de servicios web) -->
     <dependency>
         <groupId>com.sun.xml.ws</groupId>
         <artifactId>jaxws-rt</artifactId>
         <version>2.3.2</version>
     </dependency>
 
-    <!-- JAX-WS API -->
     <dependency>
         <groupId>javax.xml.ws</groupId>
         <artifactId>jaxws-api</artifactId>
         <version>2.3.1</version>
     </dependency>
 
-    <!-- JWS API para anotaciones como @WebService -->
     <dependency>
         <groupId>javax.jws</groupId>
         <artifactId>javax.jws-api</artifactId>

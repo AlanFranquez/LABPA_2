@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="arg0" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="arg1" type="{http://services/}cliente" minOccurs="0"/>
+ *         &lt;element name="arg1" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlType;
 public class GetCompra {
 
     protected int arg0;
-    protected Cliente arg1;
+    protected String arg1;
 
     /**
      * Obtiene el valor de la propiedad arg0.
@@ -57,10 +57,10 @@ public class GetCompra {
      * 
      * @return
      *     possible object is
-     *     {@link Cliente }
+     *     {@link String }
      *     
      */
-    public Cliente getArg1() {
+    public String getArg1() {
         return arg1;
     }
 
@@ -69,10 +69,10 @@ public class GetCompra {
      * 
      * @param value
      *     allowed object is
-     *     {@link Cliente }
+     *     {@link String }
      *     
      */
-    public void setArg1(Cliente value) {
+    public void setArg1(String value) {
         this.arg1 = value;
     }
 
