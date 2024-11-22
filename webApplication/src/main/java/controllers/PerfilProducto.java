@@ -86,18 +86,19 @@ public class PerfilProducto extends HttpServlet {
                 response.sendRedirect("perfilCliente");
                 return;
             }
-
+            
+            System.out.print("VALOR A CONVERTIR -> " + parametro);
             int paramNumero = Integer.parseInt(parametro);
             
            
             
             webservices.Producto producto =  port.obtenerProducto(paramNumero);
-            List<webservices.Comentario> coms = port.getComentariosProd(paramNumero);
+            List<webservices.Comentario> coms = port.listarComentarios(paramNumero);
             
             
             for(webservices.Comentario c: coms) {
             	
-            	System.out.println();
+            	System.out.println("COMENTARIOS");
             	System.out.println(c.getTexto());
             }
             
@@ -153,8 +154,8 @@ public class PerfilProducto extends HttpServlet {
             // Guardar la lista completa de imágenes Base64 en el request
             request.setAttribute("imagenesBase64", imagenesBase64);
             request.setAttribute("categoriasp", cats);
+            request.setAttribute("coms", coms);
             request.setAttribute("prod", producto);
-            request.setAttribute("comentarios", coms);
             request.getRequestDispatcher("/WEB-INF/PerfilProducto.jsp").forward(request, response);
    
 

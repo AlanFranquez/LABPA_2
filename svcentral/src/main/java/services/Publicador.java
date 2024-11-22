@@ -170,6 +170,16 @@ public class Publicador {
 	}
 	
 	@WebMethod
+	public String imprimirEspec(int numRef) {
+		return obtenerProducto(numRef).crearDT().getEspecs();
+	}
+	
+	@WebMethod
+	public String imprimirCats(int numRef) {
+		return obtenerProducto(numRef).crearDT().getCategorias();
+	}
+	
+	@WebMethod
 	public Integer imprimirCantidad(int numeroOrden, String nick, int numeroProd) {
 			Map<Integer, Item> items = getCompra(numeroOrden, nick).getItems();
 		
@@ -200,6 +210,25 @@ public class Publicador {
 	@WebMethod
 	public String imprimirNombreProd(int numRef) {
 		return obtenerProducto(numRef).crearDT().getNombre();
+	}
+	
+	@WebMethod
+	public String imprimirAutor(int comentarioId, int numProd) {
+		return this.obtenerProducto(numProd).getComentario(comentarioId).getAutor().crearDt().getNick();
+	}
+	
+	@WebMethod
+	public String imprimirTextoComentario(int comentarioId, int numProd) {
+		return this.obtenerProducto(numProd).getComentario(comentarioId).getTexto();
+	}
+	
+	@WebMethod
+	public String imprimirFechaComentario(int comentarioId, int numProd) {
+		LocalDateTime nuevaFecha = this.obtenerProducto(numProd).getComentario(comentarioId).getFecha();
+		
+	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+
+	    return nuevaFecha.format(formatter);
 	}
 
 	@WebMethod
@@ -445,6 +474,9 @@ public class Publicador {
 		return String.valueOf(getCompra(orden, nickname).crearDT().getNumero());
 	}
 	
+	
+	
+	
 	@WebMethod
 	public String imprimirEstadoOrden(String nickName, int orden) {
 		return getCompra(orden, nickName).crearDT().getEstado();
@@ -469,25 +501,50 @@ public class Publicador {
 	
 	@WebMethod
     public void agregarComentario(int comentarioId, String mensaje, String nickCliente, int numRef) {
-        Comentario comentario = new Comentario(comentarioId, mensaje, obtenerCliente(nickCliente), LocalDateTime.now());
-        Producto p1 = obtenerProducto(numRef);
+        emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+        em = emf.createEntityManager();
+		em.getTransaction().begin();
+		
+		
+        
+        Comentario nuevoComentario = new Comentario(comentarioId, mensaje, obtenerCliente(nickCliente), LocalDateTime.now());
+        Producto p = obtenerProducto(numRef);
+        Cliente c = obtenerCliente(nickCliente);
+        
+        p.agregarComentario(nuevoComentario);
+        try {
+			c.agregarComentario(nuevoComentario, nickCliente);
+		} catch (ProductoException e) {
+			e.printStackTrace();
+		}
 
-        p1.agregarComentario(comentario);
-        em.persist(comentario);
-        em.merge(p1);
-        System.out.print("Comentario guardado en la base de datos");
+        
+        em.persist(nuevoComentario);
+        em.merge(obtenerProducto(numRef));
+        em.merge(obtenerCliente(nickCliente));
+        em.flush();
+        em.getTransaction().commit();
+        
+        
+        
     }
 
     @WebMethod
-    public Comentario[] listarComentarios(int numRef) {
+    public List<Comentario> listarComentarios(int numRef) {
         List<Comentario> coments = obtenerProducto(numRef).getComentarios();
 
-        return coments.toArray(new Comentario[0]);
+        return coments;
     }
     @WebMethod
     public void notificarComentarista(int numRef, String mensaje, String nickCliente) {
         s.notificarComentaristas(obtenerProducto(numRef), mensaje, obtenerCliente(nickCliente));
     }
+    
+    
+    @WebMethod
+	public String getNickAutor(Comentario c) {
+		return c.getAutor().crearDt().getNick();
+	}
 
 	// CARLITOS
 	@WebMethod
@@ -676,10 +733,7 @@ public class Publicador {
 		return em.find(OrdenDeCompra.class, numref).crearDT();
 	}
 	
-	@WebMethod
-	public List<Comentario> getComentariosProd(int num) {
-		return em.find(Producto.class, num).getComentarios();
-	}
+	
 	
 	@WebMethod
 	public List<String> getImagenesDTProd(Producto p){
@@ -693,7 +747,7 @@ public class Publicador {
 	
 	@WebMethod
 	public Boolean comproProducto(String nick, int id) {
-		return em.find(Cliente.class, nick).comproProducto(id);
+		return obtenerCliente(nick).comproProducto(id);
 	}
 	
 	@WebMethod

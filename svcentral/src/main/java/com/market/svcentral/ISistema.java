@@ -140,4 +140,6 @@ public interface ISistema {
 	public void realizarCompraPRUEBA(int orden, String nickCliente);
 	
 	public void agregarItemsAOrden(int numeroOrden, int numProducto, int cantidad);
+	
+	public void agregarComentario(int numRef, int comentarioId, String mensaje, String nickCliente) throws ProductoException;
 }

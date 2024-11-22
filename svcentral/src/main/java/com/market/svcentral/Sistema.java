@@ -1055,4 +1055,29 @@ public class Sistema implements ISistema {
 	 }
 	 
 	 
+	 public void agregarComentario(int numRef, int comentarioId, String mensaje, String nickCliente) throws ProductoException {
+		 EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+	     EntityManager em = emf.createEntityManager();
+	     em.getTransaction().begin();
+	     
+	     
+	     Producto producto = em.find(Producto.class, numRef);
+	     Cliente cl = em.find(Cliente.class, nickCliente);
+	     Comentario nuevoComentario = new Comentario(comentarioId, mensaje, cl, LocalDateTime.now());
+	     
+	     cl.agregarComentario(nuevoComentario, producto.getNombre());
+	     producto.agregarComentario(nuevoComentario);
+	     
+	     
+	     em.persist(nuevoComentario);
+	     
+	     em.merge(cl);
+	     em.merge(producto);
+	     em.getTransaction().commit();
+	     
+	     em.close();
+	     emf.close();
+	 }
+	 
+	 
 }

@@ -143,7 +143,7 @@ if (usr != null && port.getTipo(nickUser).equals("proveedor")) {
                             <% 
                             
 
-                            if ("Entregado".equals(port.imprimirEstadoOrden(usr.getNick(), dt.getNumero()))) { 
+                            if ("Entregada".equals(port.imprimirEstadoOrden(usr.getNick(), dt.getNumero()))) { 
 
                             
                             %>

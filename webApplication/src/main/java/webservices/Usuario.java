@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Clase Java para usuario complex type.
+ * <p>Java class for usuario complex type.
  * 
- * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="usuario">
@@ -57,7 +57,7 @@ public class Usuario {
     protected String nombre;
 
     /**
-     * Obtiene el valor de la propiedad apellido.
+     * Gets the value of the apellido property.
      * 
      * @return
      *     possible object is
@@ -69,7 +69,7 @@ public class Usuario {
     }
 
     /**
-     * Define el valor de la propiedad apellido.
+     * Sets the value of the apellido property.
      * 
      * @param value
      *     allowed object is
@@ -81,7 +81,7 @@ public class Usuario {
     }
 
     /**
-     * Obtiene el valor de la propiedad contrasena.
+     * Gets the value of the contrasena property.
      * 
      * @return
      *     possible object is
@@ -93,7 +93,7 @@ public class Usuario {
     }
 
     /**
-     * Define el valor de la propiedad contrasena.
+     * Sets the value of the contrasena property.
      * 
      * @param value
      *     allowed object is
@@ -105,7 +105,7 @@ public class Usuario {
     }
 
     /**
-     * Obtiene el valor de la propiedad correo.
+     * Gets the value of the correo property.
      * 
      * @return
      *     possible object is
@@ -117,7 +117,7 @@ public class Usuario {
     }
 
     /**
-     * Define el valor de la propiedad correo.
+     * Sets the value of the correo property.
      * 
      * @param value
      *     allowed object is
@@ -129,7 +129,7 @@ public class Usuario {
     }
 
     /**
-     * Obtiene el valor de la propiedad imagen.
+     * Gets the value of the imagen property.
      * 
      * @return
      *     possible object is
@@ -141,7 +141,7 @@ public class Usuario {
     }
 
     /**
-     * Define el valor de la propiedad imagen.
+     * Sets the value of the imagen property.
      * 
      * @param value
      *     allowed object is
@@ -153,7 +153,7 @@ public class Usuario {
     }
 
     /**
-     * Obtiene el valor de la propiedad nacimiento.
+     * Gets the value of the nacimiento property.
      * 
      * @return
      *     possible object is
@@ -165,7 +165,7 @@ public class Usuario {
     }
 
     /**
-     * Define el valor de la propiedad nacimiento.
+     * Sets the value of the nacimiento property.
      * 
      * @param value
      *     allowed object is
@@ -177,7 +177,7 @@ public class Usuario {
     }
 
     /**
-     * Obtiene el valor de la propiedad nick.
+     * Gets the value of the nick property.
      * 
      * @return
      *     possible object is
@@ -189,7 +189,7 @@ public class Usuario {
     }
 
     /**
-     * Define el valor de la propiedad nick.
+     * Sets the value of the nick property.
      * 
      * @param value
      *     allowed object is
@@ -201,7 +201,7 @@ public class Usuario {
     }
 
     /**
-     * Obtiene el valor de la propiedad nombre.
+     * Gets the value of the nombre property.
      * 
      * @return
      *     possible object is
@@ -213,7 +213,7 @@ public class Usuario {
     }
 
     /**
-     * Define el valor de la propiedad nombre.
+     * Sets the value of the nombre property.
      * 
      * @param value
      *     allowed object is

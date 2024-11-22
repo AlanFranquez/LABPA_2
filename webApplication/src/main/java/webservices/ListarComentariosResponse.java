@@ -10,9 +10,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Clase Java para listarComentariosResponse complex type.
+ * <p>Java class for listarComentariosResponse complex type.
  * 
- * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="listarComentariosResponse">
@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class ListarComentariosResponse {
 
-    @XmlElement(name = "return", nillable = true)
+    @XmlElement(name = "return")
     protected List<Comentario> _return;
 
     /**

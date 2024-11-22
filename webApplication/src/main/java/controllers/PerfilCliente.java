@@ -85,7 +85,7 @@ public class PerfilCliente extends HttpServlet {
             response.sendRedirect("home");
             return;
         }
-        
+        /*
         // Ruta de la imagen
      // Ruta relativa proporcionada por el servicio
         String imagePath = port.getImagenesDTCliente(user.getNick()); // '/images/p3.jpg'
@@ -107,7 +107,7 @@ public class PerfilCliente extends HttpServlet {
         String base64Image = Base64.getEncoder().encodeToString(imageBytes);
 
         
-        
+        */
         
         // Obtener las órdenes de compra del cliente
         List<OrdenDeCompra> ordenes = port.getOrdenesCliente(port.getNickCliente(cli));
@@ -124,7 +124,7 @@ public class PerfilCliente extends HttpServlet {
             String parametro = request.getParameter("nickname");
 
             if (parametro != null && port.getNickCliente(cli).equals(parametro)) {
-            	request.setAttribute("imagenEnBits", base64Image);
+            	//request.setAttribute("imagenEnBits", base64Image);
             	request.setAttribute("usuarioLogueado", user);
                 request.setAttribute("usuario", cli);
                 request.setAttribute("ordenes", ordenes);  // Pasar la lista de ordenes correctamente

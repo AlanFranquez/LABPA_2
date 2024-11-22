@@ -7,9 +7,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Clase Java para agregarItemsAOrden complex type.
+ * <p>Java class for agregarItemsAOrden complex type.
  * 
- * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="agregarItemsAOrden">
@@ -40,7 +40,7 @@ public class AgregarItemsAOrden {
     protected int arg2;
 
     /**
-     * Obtiene el valor de la propiedad arg0.
+     * Gets the value of the arg0 property.
      * 
      */
     public int getArg0() {
@@ -48,7 +48,7 @@ public class AgregarItemsAOrden {
     }
 
     /**
-     * Define el valor de la propiedad arg0.
+     * Sets the value of the arg0 property.
      * 
      */
     public void setArg0(int value) {
@@ -56,7 +56,7 @@ public class AgregarItemsAOrden {
     }
 
     /**
-     * Obtiene el valor de la propiedad arg1.
+     * Gets the value of the arg1 property.
      * 
      */
     public int getArg1() {
@@ -64,7 +64,7 @@ public class AgregarItemsAOrden {
     }
 
     /**
-     * Define el valor de la propiedad arg1.
+     * Sets the value of the arg1 property.
      * 
      */
     public void setArg1(int value) {
@@ -72,7 +72,7 @@ public class AgregarItemsAOrden {
     }
 
     /**
-     * Obtiene el valor de la propiedad arg2.
+     * Gets the value of the arg2 property.
      * 
      */
     public int getArg2() {
@@ -80,7 +80,7 @@ public class AgregarItemsAOrden {
     }
 
     /**
-     * Define el valor de la propiedad arg2.
+     * Sets the value of the arg2 property.
      * 
      */
     public void setArg2(int value) {

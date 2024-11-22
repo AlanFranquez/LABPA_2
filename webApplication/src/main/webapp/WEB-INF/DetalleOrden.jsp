@@ -149,7 +149,7 @@ if (usr != null && usr instanceof Proveedor) {
 			%>
 				<h1><%= port.imprimirNumRef(item.getProducto().getNumRef()) %></h1>
 			
-        		<a class="link" href="perfilProducto?producto=<%= port%>">Ver Producto</a>
+        		<a class="link" href="perfilProducto?producto=<%= item.getProducto().getNumRef()%>">Ver Producto</a>
         		<li>
             		
             		<p><strong>Nombre: </strong> <%= port.imprimirNumRef(item.getProducto().getNumRef())%></p> 

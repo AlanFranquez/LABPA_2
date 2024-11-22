@@ -1,12 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ page import="webservices.PublicadorService" %>
-<%@ page import="webservices.Publicador" %>
-<%@ page import="webservices.DtCliente" %>
-<%@ page import="webservices.Usuario" %>
-<%@ page import="webservices.OrdenDeCompra" %>
-<%@ page import="webservices.DtOrdenDeCompra" %>
-<%@ page import="webservices.*" %>
+<%@ page import="webservices.PublicadorService"%>
+<%@ page import="webservices.Publicador"%>
+<%@ page import="webservices.DtCliente"%>
+<%@ page import="webservices.Usuario"%>
+<%@ page import="webservices.OrdenDeCompra"%>
+<%@ page import="webservices.DtOrdenDeCompra"%>
+<%@ page import="webservices.*"%>
 <%@page import="java.util.Collections"%>
 <%@page import="java.util.List"%>
 <!DOCTYPE html>
@@ -20,8 +20,8 @@ Publicador port = p.getPublicadorPort();
 //List<String> imagenesBase64 = request.getAttribute("imagenesBase64");
 Producto prod = (Producto) request.getAttribute("prod");
 Usuario usr = (Usuario) request.getAttribute("usuario");
-List<Comentario> comentarios = (List<Comentario>) request.getAttribute("comentarios");
 int id = port.imprimirNumRef(prod.getNumRef());
+List<webservices.Comentario> comentarios = (List<webservices.Comentario>) request.getAttribute("coms");
 String nickUser = usr.getNick();
 
 Cliente cl = null;
@@ -34,22 +34,24 @@ if (port.getTipo(nickUser).equals("cliente")) {
 }
 
 Boolean comproProducto = false;
-if(cl != null) {
-	
-comproProducto = port.comproProducto(nickUser, id);
+if (cl != null) {
+
+	comproProducto = port.comproProducto(nickUser, id);
 }
 %>
 
 <meta charset="UTF-8">
-<title><%= port.imprimirNombreProd(id) %></title>
+<title><%=port.imprimirNombreProd(id)%></title>
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
 	rel="stylesheet"
 	integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
 	crossorigin="anonymous">
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-<link rel="stylesheet" type="text/css" href="./media/styles/InfoProducto.css">
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+<link rel="stylesheet" type="text/css"
+	href="./media/styles/InfoProducto.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link
@@ -59,74 +61,82 @@ comproProducto = port.comproProducto(nickUser, id);
 <body>
 
 
-	
 
-<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2C2C2C;">
-    <div class="container">
-        <a href="home" class="navbar-brand">ITSCODIGO</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav mx-auto align-items-center">
-                <li class="nav-item">
-                    <form action="buscarproductos" method="POST" class="d-flex">
-                        <input type="text" name="query" placeholder="Buscar productos..." class="form-control me-2" aria-label="Buscar">
-                        <button type="submit" class="btn btn-outline-light">Buscar</button>
-                    </form>
-                </li>
-            </ul>
-            <ul class="navbar-nav align-items-center">
-                <li class="nav-item">
-                   <% 
-if (usr != null && port.getTipo(nickUser).equals("proveedor")) { 
-%> 
-    <a class="nav-link" href="perfilProveedor?nickname=<%=usr.getNick()%>">Perfil</a> 
-<% 
-} else if (usr != null && port.getTipo(nickUser).equals("cliente")) { 
-%> 
-    <a class="nav-link" href="perfilCliente?nickname=<%=usr.getNick()%>">Perfil</a>
-<% 
-}
-%>
-                </li>
-                <%
-                if (usr != null && port.getTipo(nickUser).equals("cliente")) {
-                %>
-                <li class="nav-item"><a class="nav-link" href="Carrito">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" viewBox="0 0 24 24">
-                        <path fill="white" d="M17 18c-1.11 0-2 .89-2 2a2 2 0 0 0 2 2a2 2 0 0 0 2-2a2 2 0 0 0-2-2M1 2v2h2l3.6 7.59l-1.36 2.45c-.15.28-.24.61-.24.96a2 2 0 0 0 2 2h12v-2H7.42a.25.25 0 0 1-.25-.25q0-.075.03-.12L8.1 13h7.45c.75 0 1.41-.42 1.75-1.03l3.58-6.47c.07-.16.12-.33.12-.5a1 1 0 0 0-1-1H5.21l-.94-2M7 18c-1.11 0-2 .89-2 2a2 2 0 0 0 2 2a2 2 0 0 0 2-2a2 2 0 0 0-2-2" />
+
+	<nav class="navbar navbar-expand-lg navbar-dark"
+		style="background-color: #2C2C2C;">
+		<div class="container">
+			<a href="home" class="navbar-brand">ITSCODIGO</a>
+			<button class="navbar-toggler" type="button"
+				data-bs-toggle="collapse" data-bs-target="#navbarNav"
+				aria-controls="navbarNav" aria-expanded="false"
+				aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNav">
+				<ul class="navbar-nav mx-auto align-items-center">
+					<li class="nav-item">
+						<form action="buscarproductos" method="POST" class="d-flex">
+							<input type="text" name="query" placeholder="Buscar productos..."
+								class="form-control me-2" aria-label="Buscar">
+							<button type="submit" class="btn btn-outline-light">Buscar</button>
+						</form>
+					</li>
+				</ul>
+				<ul class="navbar-nav align-items-center">
+					<li class="nav-item">
+						<%
+						if (usr != null && port.getTipo(nickUser).equals("proveedor")) {
+						%> <a class="nav-link"
+						href="perfilProveedor?nickname=<%=usr.getNick()%>">Perfil</a> <%
+ } else if (usr != null && port.getTipo(nickUser).equals("cliente")) {
+ %> <a class="nav-link" href="perfilCliente?nickname=<%=usr.getNick()%>">Perfil</a>
+						<%
+						}
+						%>
+					</li>
+					<%
+					if (usr != null && port.getTipo(nickUser).equals("cliente")) {
+					%>
+					<li class="nav-item"><a class="nav-link" href="Carrito"> <svg
+								xmlns="http://www.w3.org/2000/svg" width="30px" height="30px"
+								viewBox="0 0 24 24">
+                        <path fill="white"
+									d="M17 18c-1.11 0-2 .89-2 2a2 2 0 0 0 2 2a2 2 0 0 0 2-2a2 2 0 0 0-2-2M1 2v2h2l3.6 7.59l-1.36 2.45c-.15.28-.24.61-.24.96a2 2 0 0 0 2 2h12v-2H7.42a.25.25 0 0 1-.25-.25q0-.075.03-.12L8.1 13h7.45c.75 0 1.41-.42 1.75-1.03l3.58-6.47c.07-.16.12-.33.12-.5a1 1 0 0 0-1-1H5.21l-.94-2M7 18c-1.11 0-2 .89-2 2a2 2 0 0 0 2 2a2 2 0 0 0 2-2a2 2 0 0 0-2-2" />
                     </svg>
-                </a></li>
-                <%
-                }
-                %>
-                <li class="nav-item">
-                    <button class="btn btn-danger">
-                        <a class="nav-link" href="logout">Cerrar Sesión</a>
-                    </button>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
+					</a></li>
+					<%
+					}
+					%>
+					<li class="nav-item">
+						<button class="btn btn-danger">
+							<a class="nav-link" href="logout">Cerrar Sesión</a>
+						</button>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
 
 
 	<main class="container mt-5">
 		<div class="row justify-content-center align-items-center">
 			<div class="col-md-6">
-				<div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
-    
+				<div id="productCarousel" class="carousel slide"
+					data-bs-ride="carousel">
 
-    <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-    </button>
-</div>
+
+					<button class="carousel-control-prev" type="button"
+						data-bs-target="#productCarousel" data-bs-slide="prev">
+						<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+						<span class="visually-hidden">Previous</span>
+					</button>
+					<button class="carousel-control-next" type="button"
+						data-bs-target="#productCarousel" data-bs-slide="next">
+						<span class="carousel-control-next-icon" aria-hidden="true"></span>
+						<span class="visually-hidden">Next</span>
+					</button>
+				</div>
 
 			</div>
 			<div class="col-md-6">
@@ -139,24 +149,25 @@ if (usr != null && port.getTipo(nickUser).equals("proveedor")) {
 					<%=prod != null ? port.imprimirNumRef(id) : "N/A"%></p>
 				<p>
 					<strong>Categorías:</strong>
-					<%=prod != null ? request.getAttribute("categoriasp") : "N/A"%>
+					<%=prod != null ? port.imprimirCats(prod.getNumRef()) : "N/A"%>
 				</p>
 				<div></div>
 				<p>
 					<strong>Especificaciones:</strong>
-					<%=prod != null ? port.getEspecsDTProd(prod) : "N/A"%></p>
+					<%=prod != null ? port.imprimirEspec(prod.getNumRef()) : "N/A"%></p>
 				<p>
 					<strong>Proveedor:</strong>
 					<%=prod != null ? port.getnickProvDTProd(id) : "N/A"%></p>
 				<p>
-					<strong>Cantidad Disponible: </strong><%= port.imprimirStock(id) %></p>
+					<strong>Cantidad Disponible: </strong><%=port.imprimirStock(id)%></p>
 				<form action="agregarAlCarrito" method="post"
 					onsubmit="return validarCantidad(this)">
 					<input type="hidden" name="numRef"
 						value="<%=prod != null ? port.imprimirNumRef(id) : ""%>">
 					<div class="row align-items-center">
 						<%
-						if (port.getTipo(nickUser).equals("cliente") && carr != null && !port.existeProdCarrito(carr,  port.imprimirNumRef(id))) {
+						if (port.getTipo(nickUser).equals("cliente") && carr != null
+								&& !port.existeProdCarrito(carr, port.imprimirNumRef(id))) {
 						%>
 						<div class="col-auto">
 							<input class="text-center" type="number" name="cantidad" min="1"
@@ -175,206 +186,92 @@ if (usr != null && port.getTipo(nickUser).equals("proveedor")) {
 					</div>
 				</form>
 
-				
+
 
 			</div>
 		</div>
-		
+
 		<%
-				if (port.getTipo(nickUser).equals("cliente") && comproProducto) {
-				%>
-				<div class="mt-5">
-					<a
-						href="RealizarReclamo?numRef=<%=prod != null ?  port.imprimirNumRef(id) : ""%>"
-						class="btn btn-warning">Realizar Reclamo</a>
-				</div>
-				<%
-				}
-				%>
+		if (port.getTipo(nickUser).equals("cliente") && comproProducto) {
+		%>
+		<div class="mt-5">
+			<a
+				href="RealizarReclamo?numRef=<%=prod != null ? port.imprimirNumRef(id) : ""%>"
+				class="btn btn-warning">Realizar Reclamo</a>
+		</div>
+		<%
+		}
+		%>
 	</main>
 
-<div class="container my-4 p-3 border rounded shadow-sm">
-    <%
-    List<Integer> puntajes = port.getPuntajeDTProd(id);
-    %>
-    <h3 class="text-primary">Puntaje Medio: <span class="fw-bold"><%=puntajes.get(0)%></span></h3>
-    
-    <ul class="list-group my-3">
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-            1 Estrella 
-            <span class="badge bg-primary rounded-pill"><%=puntajes.get(1)%></span>
-        </li>
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-            2 Estrellas 
-            <span class="badge bg-secondary rounded-pill"><%=puntajes.get(2)%></span>
-        </li>
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-            3 Estrellas 
-            <span class="badge bg-success rounded-pill"><%=puntajes.get(3)%></span>
-        </li>
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-            4 Estrellas 
-            <span class="badge bg-warning rounded-pill"><%=puntajes.get(4)%></span>
-        </li>
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-            5 Estrellas 
-            <span class="badge bg-danger rounded-pill"><%=puntajes.get(5)%></span>
-        </li>
-    </ul>
-</div>
+	<br><br>
+
+	<div class="container my-4 p-3 border rounded shadow-sm">
+		<%
+		List<Integer> puntajes = port.getPuntajeDTProd(id);
+		%>
+		<h3 class="text-primary">
+			Puntaje Medio: <span class="fw-bold"><%=puntajes.get(0)%></span>
+		</h3>
+
+		<ul class="list-group my-3">
+			<li
+				class="list-group-item d-flex justify-content-between align-items-center">
+				1 Estrella <span class="badge bg-primary rounded-pill"><%=puntajes.get(1)%></span>
+			</li>
+			<li
+				class="list-group-item d-flex justify-content-between align-items-center">
+				2 Estrellas <span class="badge bg-secondary rounded-pill"><%=puntajes.get(2)%></span>
+			</li>
+			<li
+				class="list-group-item d-flex justify-content-between align-items-center">
+				3 Estrellas <span class="badge bg-success rounded-pill"><%=puntajes.get(3)%></span>
+			</li>
+			<li
+				class="list-group-item d-flex justify-content-between align-items-center">
+				4 Estrellas <span class="badge bg-warning rounded-pill"><%=puntajes.get(4)%></span>
+			</li>
+			<li
+				class="list-group-item d-flex justify-content-between align-items-center">
+				5 Estrellas <span class="badge bg-danger rounded-pill"><%=puntajes.get(5)%></span>
+			</li>
+		</ul>
+	</div>
 
 	<%
 	if (usr != null && port.getTipo(nickUser).equals("cliente") && comproProducto) {
 	%>
 	<div class="container my-4 p-3 border rounded shadow-sm">
-    <span id="valoracion" class="d-block mb-3 fs-5 fw-bold">Valoración</span>
-    <div class="col-auto star-widget">
-        <form id="puntaje" action="agregarValoracion" method="post" style="display: inline-block; text-align: center;">
-            <input type="radio" name="rate" id="rate-5" value="5">
-            <label for="rate-5" class="bi bi-star"></label>
-            <input type="radio" name="rate" id="rate-4" value="4">
-            <label for="rate-4" class="bi bi-star"></label>
-            <input type="radio" name="rate" id="rate-3" value="3">
-            <label for="rate-3" class="bi bi-star"></label>
-            <input type="radio" name="rate" id="rate-2" value="2">
-            <label for="rate-2" class="bi bi-star"></label>
-            <input type="radio" name="rate" id="rate-1" value="1">
-            <label for="rate-1" class="bi bi-star"></label>
-            <input type="hidden" name="dtprod" value="<%=id%>">
-            <button type="submit" class="btn btn-primary mt-3" id="submit-btn" disabled>Enviar</button>
-        </form>
-    </div>
-</div>
-
-
-
-	<% } %>
-
-
-	<br>
-	<br>
-	<br>
-	<div class="container mt-5">
-		<h2>Comentarios</h2>
-		<div id="commentSection">
-			<%
-			%>
-
-			<%
-			if (comentarios == null || comentarios.isEmpty()) {
-			%>
-			<div class="alert alert-info" role="alert">Todavía no hay
-				comentarios.</div>
-			<%
-			} else {
-			%>
-			<div class="column">
-				<%
-				for (Comentario c : comentarios) {
-					int comentarioId = port.getNumeroCom(c);
-				%>
-				<div class="col-md-6 mb-4">
-					<div class="card shadow-sm" style="border: none;">
-						<div class="card-body">
-							<div class="d-flex align-items-start">
-
-								<img src="data:image/jpeg;base64,<%=port.getImagenAutor(port.getAutorComentario(c))%>" 
-     									alt="Autor" 
-     									class="mr-3"
-     									style="width: 80px; height: 80px; object-fit: cover; border-radius: 50%;">
-								<div class="ml-3" style="margin-left: 15px;">
-									<h5 class="mt-0" style="font-size: 1.25em;"><%=port.getNickPorDTCliente(port.getAutorComentario(c))%></h5>
-									<p style="font-size: 1em;"><%=port.getTextoCom(c)%></p>
-									<small class="text-muted"><%=port.getfechaCom(c)%></small>
-									<br>
-									<%
-									if (comproProducto) {
-									%>
-									<div class="accordion" id="accordion<%=comentarioId%>">
-										<div class="accordion-item">
-											<h2 class="accordion-header" id="heading<%=comentarioId%>">
-												<button class="accordion-button collapsed" type="button"
-													data-bs-toggle="collapse"
-													data-bs-target="#collapse<%=comentarioId%>"
-													aria-expanded="false"
-													aria-controls="collapse<%=comentarioId%>">
-													Responder</button>
-											</h2>
-											<div id="collapse<%=comentarioId%>"
-												class="accordion-collapse collapse"
-												aria-labelledby="heading<%=comentarioId%>">
-												<div class="accordion-body">
-													<form id="formularioRespuesta" action="enviarRespuesta"
-														method="post">
-														<textarea name="respuesta" class="form-control" rows="3"
-															placeholder="Escribe tu respuesta..." required></textarea>
-														<input type="hidden" name="dtprod" value="<%=id%>">
-														<input type="hidden" name="comentarioId"
-															value="<%=port.getNumeroCom(c)%>">
-														<button class="btn btn-primary mt-3" type="submit">Enviar
-															Respuesta</button>
-													</form>
-												</div>
-											</div>
-										</div>
-									</div>
-
-									<%
-									}
-									%>
-									<div class="mt-3">
-										<h6>Respuestas:</h6>
-										<%
-										List<Comentario> respuestas = port.getRespuestas(c); // Método para obtener las respuestas
-										%>
-										<%
-										if (respuestas == null || respuestas.isEmpty()) {
-										%>
-										<div class="alert alert-secondary" role="alert">No hay
-											respuestas a este comentario.</div>
-										<%
-										} else {
-										%>
-										<%
-										for (Comentario r : respuestas) {
-										%>
-										<div class="card mt-2" style="border: none;">
-											<div class="card-body">
-												<div class="d-flex align-items-start">
-													<img src="media/<%=port.getImagenAutor(port.getAutorComentario(r))%>"
-														alt="Autor" class="mr-3"
-														style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;">
-													<div class="ml-3" style="margin-left: 15px;">
-														<h6 class="mt-0" style="font-size: 1.1em;"><%=port.getNickPorDTCliente(port.getAutorComentario(r))%></h6>
-														<p style="font-size: 0.9em;"><%=port.getTextoCom(r)%></p>
-														<small class="text-muted"><%=port.getfechaCom(r)%></small>
-													</div>
-												</div>
-											</div>
-										</div>
-										<%
-										}
-										%>
-										<%
-										}
-										%>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<%
-				}
-				%>
-			</div>
-			<%
-			}
-			%>
+		<span id="valoracion" class="d-block mb-3 fs-5 fw-bold">Valoración</span>
+		<div class="col-auto star-widget">
+			<form id="puntaje" action="agregarValoracion" method="post"
+				style="display: inline-block; text-align: center;">
+				<input type="radio" name="rate" id="rate-5" value="5"> <label
+					for="rate-5" class="bi bi-star"></label> <input type="radio"
+					name="rate" id="rate-4" value="4"> <label for="rate-4"
+					class="bi bi-star"></label> <input type="radio" name="rate"
+					id="rate-3" value="3"> <label for="rate-3"
+					class="bi bi-star"></label> <input type="radio" name="rate"
+					id="rate-2" value="2"> <label for="rate-2"
+					class="bi bi-star"></label> <input type="radio" name="rate"
+					id="rate-1" value="1"> <label for="rate-1"
+					class="bi bi-star"></label> <input type="hidden" name="dtprod"
+					value="<%=id%>">
+				<button type="submit" class="btn btn-primary mt-3" id="submit-btn"
+					disabled>Enviar</button>
+			</form>
 		</div>
+	</div>
 
+
+
+	<%
+	}
+	%>
+
+	<div class="container">
 		<%
-		if (usr != null && port.getTipo(nickUser).equals("cliente") && comproProducto) {
+		if (usr != null && usr instanceof Cliente && comproProducto) {
 		%>
 		<div class="mt-4">
 			<h3>Deja un comentario</h3>
@@ -391,26 +288,60 @@ if (usr != null && port.getTipo(nickUser).equals("proveedor")) {
 		%>
 	</div>
 
+<div class="container mt-5">
 
+<h1>COMENTARIOS</h1>
 
-	<!-- PARTE FINAL PAGINA -->
+	<%
+	if (comentarios == null) {
+	%>
+	<div class="alert alert-info" role="alert">Todavía no hay
+		comentarios.</div>
+	<%
+	} else {
+	%>
 
+	<%
+	for (Comentario c : comentarios) {
+	%>
 
-	<div
-		class="part-final d-flex justify-content-center align-items-center">
-		<p class="text-center">
-			Todos los derechos reservados, 2024. <br> Laboratorio PA.
-		</p>
+	<div class="card card-body">
+		<h6 class="font-weight-bold"><%=port.imprimirTextoComentario(c.getNumero(), id)%></h6>
+		<p><%=port.imprimirAutor(c.getNumero(), id)%></p>
+		<p><%=port.imprimirFechaComentario(c.getNumero(), id)%></p>
 	</div>
 
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-		integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-		crossorigin="anonymous">
+
+
+	
+
+			<%
+			}
+			}
+			%>
+
+</div>
+
+	
+
+			<!-- PARTE FINAL PAGINA -->
+
+
+			<div
+				class="part-final d-flex justify-content-center align-items-center">
+				<p class="text-center">
+					Todos los derechos reservados, 2024. <br> Laboratorio PA.
+				</p>
+			</div>
+
+			<script
+				src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+				integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+				crossorigin="anonymous">
 
 </script>
 
-	<script>
+			<script>
 function validarCantidad(form) {
     const cantidadInput = form.cantidad;
     const stock = parseInt(cantidadInput.max);
@@ -426,7 +357,7 @@ function validarCantidad(form) {
 }
 </script>
 
-<script>
+			<script>
     const submitButton = document.getElementById('submit-btn');
     const radios = document.querySelectorAll('input[name="rate"]');
 
@@ -445,7 +376,7 @@ function validarCantidad(form) {
     });
 </script>
 
-	<script type="text/javascript">
+			<script type="text/javascript">
 document.getElementById("formulario").addEventListener("submit", function(event) {
     event.preventDefault(); 
 

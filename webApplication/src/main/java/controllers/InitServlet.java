@@ -161,6 +161,16 @@ public class InitServlet extends HttpServlet {
              }
              
              port.setEstadoPrueba("Juan123", "En Camino", "El pedido ha sido enviado y está en camino.");
+             
+             
+             //port.agregarComentario(123, "nuevoComentario", "Juan123", 1);
+             
+             
+             List<webservices.Comentario> comentarios = port.listarComentarios(1);
+             
+             for(webservices.Comentario c : comentarios) {
+            	 System.out.print("COMENTARIO --> "+ c.getTexto());
+             }
              /*
 
              // Crear la OrdenDeCompra con el proveedor
