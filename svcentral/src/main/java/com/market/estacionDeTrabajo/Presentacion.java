@@ -541,7 +541,10 @@ public class Presentacion {
 						String textCat = categoriaField.getText();
 						boolean tieneProds = prodsSI.isSelected();
 						boolean tienePadre = padreSI.isSelected();
-						String nombreCatPadre = padresCategorias.getSelectedItem().toString();
+						String nombreCatPadre = "";
+						if(tienePadre && padresCategorias.getSelectedItem().toString() != "") {
+							nombreCatPadre = padresCategorias.getSelectedItem().toString();
+						}
 						
 						if(textCat.isEmpty()) {
 							JOptionPane.showMessageDialog(null, "El campo de nombre está vacio");

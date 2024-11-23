@@ -1,9 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@page import="com.market.svcentral.DtProducto"%>
+<%@page import="webservices.DtProducto"%>
 <%@page import="com.market.svcentral.Usuario"%>
 <%@page import="com.market.svcentral.Comentario"%>
 
+
+<%@page import="webservices.Publicador"%>
+<%@page import="webservices.PublicadorService"%>
 <%@page import="com.market.svcentral.Cliente"%>
 <%@page import="com.market.svcentral.Carrito"%>
 <%@page import="java.util.Collections"%>
@@ -14,11 +17,14 @@
 <head>
 
 <%
+PublicadorService p = new PublicadorService();
+Publicador port = p.getPublicadorPort();
+
 DtProducto prod = (DtProducto) request.getAttribute("dtprod");
 Usuario usr = (Usuario) request.getAttribute("usuario");
-List<String> imagenes = prod.getImagenes();
+List<String> imagenes = port.imagenesProducto(prod);
 List<Comentario> comentarios = (List<Comentario>) request.getAttribute("comentarios");
-int id = prod.getNumRef();
+int id = port.numRefProducto(prod);
 
 Cliente cl = null;
 Carrito carr = null;
@@ -36,7 +42,7 @@ comproProducto = cl.comproProducto(id);
 %>
 
 <meta charset="UTF-8">
-<title><%=prod.getNombre()%></title>
+<title><%=port.nombreProducto(prod)%></title>
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
 	rel="stylesheet"
@@ -155,37 +161,37 @@ if (usr != null && usr.getTipo().equals("proveedor")) {
 				</div>
 			</div>
 			<div class="col-md-6">
-				<h1 class="display-4"><%=prod != null ? prod.getNombre() : "Producto no encontrado"%></h1>
-				<p class="lead"><%=prod != null ? prod.getDescripcion() : "Descripción no disponible."%></p>
+				<h1 class="display-4"><%=prod != null ? port.nombreProducto(prod) : "Producto no encontrado"%></h1>
+				<p class="lead"><%=prod != null ? port.descripProducto(prod) : "Descripción no disponible."%></p>
 				<p>
-					<strong>Precio:</strong> $<%=prod != null ? prod.getPrecio() : "N/A"%></p>
+					<strong>Precio:</strong> $<%=prod != null ? port.precioProducto(prod) : "N/A"%></p>
 				<p>
 					<strong>Número de Referencia:</strong>
-					<%=prod != null ? prod.getNumRef() : "N/A"%></p>
+					<%=prod != null ? id : "N/A"%></p>
 				<p>
 					<strong>Categorías:</strong>
-					<%=prod != null ? prod.getCategorias() : "N/A"%>
+					<%=prod != null ? port.categoriasProducto(prod) : "N/A"%>
 				</p>
 				<div></div>
 				<p>
 					<strong>Especificaciones:</strong>
-					<%=prod != null ? prod.getEspecs() : "N/A"%></p>
+					<%=prod != null ? port.specsProducto(prod) : "N/A"%></p>
 				<p>
 					<strong>Proveedor:</strong>
-					<%=prod != null ? prod.getNicknameProveedor() : "N/A"%></p>
+					<%=prod != null ? port.nickProvProducto(prod) : "N/A"%></p>
 				<p>
-					<strong>Cantidad Disponible: </strong><%=prod.getStock()%></p>
+					<strong>Cantidad Disponible: </strong><%=port.stockProducto(prod)%></p>
 				<form action="agregarAlCarrito" method="post"
 					onsubmit="return validarCantidad(this)">
 					<input type="hidden" name="numRef"
-						value="<%=prod != null ? prod.getNumRef() : ""%>">
+						value="<%=prod != null ? id : ""%>">
 					<div class="row align-items-center">
 						<%
-						if (usr.getTipo().equals("cliente") && carr != null && !carr.existeProducto(prod.getNumRef())) {
+						if (usr.getTipo().equals("cliente") && carr != null && !carr.existeProducto(id)) {
 						%>
 						<div class="col-auto">
 							<input class="text-center" type="number" name="cantidad" min="1"
-								max="<%=prod.getStock()%>" value="1" style="width: 60px;"
+								max="<%=port.stockProducto(prod)%>" value="1" style="width: 60px;"
 								onchange="validarCantidad(this.form)">
 						</div>
 						<div class="col-auto">
@@ -210,7 +216,7 @@ if (usr != null && usr.getTipo().equals("proveedor")) {
 				%>
 				<div class="mt-5">
 					<a
-						href="RealizarReclamo?numRef=<%=prod != null ? prod.getNumRef() : ""%>"
+						href="RealizarReclamo?numRef=<%=prod != null ? id : ""%>"
 						class="btn btn-warning">Realizar Reclamo</a>
 				</div>
 				<%
@@ -220,30 +226,31 @@ if (usr != null && usr.getTipo().equals("proveedor")) {
 
 <div class="container my-4 p-3 border rounded shadow-sm">
     <%
-    int[] puntajes = prod.obtenerPuntaje();
+    List <Integer> puntajes = port.puntajeProducto(prod);
+    
     %>
-    <h3 class="text-primary">Puntaje Medio: <span class="fw-bold"><%=puntajes[0]%></span></h3>
+    <h3 class="text-primary">Puntaje Medio: <span class="fw-bold"><%=puntajes.get(0)%></span></h3>
     
     <ul class="list-group my-3">
         <li class="list-group-item d-flex justify-content-between align-items-center">
             1 Estrella 
-            <span class="badge bg-primary rounded-pill"><%=puntajes[1]%></span>
+            <span class="badge bg-primary rounded-pill"><%=puntajes.get(1)%></span>
         </li>
         <li class="list-group-item d-flex justify-content-between align-items-center">
             2 Estrellas 
-            <span class="badge bg-secondary rounded-pill"><%=puntajes[2]%></span>
+            <span class="badge bg-secondary rounded-pill"><%=puntajes.get(2)%></span>
         </li>
         <li class="list-group-item d-flex justify-content-between align-items-center">
             3 Estrellas 
-            <span class="badge bg-success rounded-pill"><%=puntajes[3]%></span>
+            <span class="badge bg-success rounded-pill"><%=puntajes.get(3)%></span>
         </li>
         <li class="list-group-item d-flex justify-content-between align-items-center">
             4 Estrellas 
-            <span class="badge bg-warning rounded-pill"><%=puntajes[4]%></span>
+            <span class="badge bg-warning rounded-pill"><%=puntajes.get(4)%></span>
         </li>
         <li class="list-group-item d-flex justify-content-between align-items-center">
             5 Estrellas 
-            <span class="badge bg-danger rounded-pill"><%=puntajes[5]%></span>
+            <span class="badge bg-danger rounded-pill"><%=puntajes.get(5)%></span>
         </li>
     </ul>
 </div>

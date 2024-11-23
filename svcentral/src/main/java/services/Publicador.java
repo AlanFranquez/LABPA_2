@@ -19,6 +19,7 @@ import com.market.svcentral.Cat_Padre;
 import com.market.svcentral.Cat_Producto;
 import com.market.svcentral.Categoria;
 import com.market.svcentral.Cliente;
+import com.market.svcentral.Comentario;
 import com.market.svcentral.DTCliente;
 import com.market.svcentral.DTEstado;
 import com.market.svcentral.DTFecha;
@@ -573,13 +574,13 @@ public class Publicador {
 	}
 			
 	@WebMethod
-	public List<OrdenDeCompra> getOrdenesCliente(String c) {
-		if (c == null) {
-	        throw new IllegalArgumentException("El cliente no puede ser nulo");
-	    }
-		
-		return obtenerCliente(c).getOrdenes();
-	}
+    public OrdenDeCompra[] getOrdenesCliente(String c) {
+        if (c == null) {
+            throw new IllegalArgumentException("El cliente no puede ser nulo");
+        }
+        List<OrdenDeCompra> ordenes = obtenerCliente(c).getOrdenes();
+        return ordenes.toArray(new OrdenDeCompra[0]);
+    }
 			
 	@WebMethod
 	public String getNickDTCliente(String c) {
@@ -647,9 +648,13 @@ public class Publicador {
 	}
 	
 	@WebMethod
-	public void crearOrden(Map <Integer, Item> itemsProveedor, int precioTotal, String proveedorNick, String cliNick) {
+	public void crearOrden(List<Item> listItems, float precioTotal, String proveedorNick, String cliNick) {
 		Proveedor prov = em.find(Proveedor.class, proveedorNick);
-		OrdenDeCompra orden = new OrdenDeCompra(itemsProveedor, precioTotal, prov);
+		Map<Integer, Item> items= new HashMap<>();
+		for(Item i : listItems) {
+			items.put(i.getProducto().getNumRef(), i);
+		}
+		OrdenDeCompra orden = new OrdenDeCompra(items, precioTotal, prov);
 
 		s.realizarCompra(orden, cliNick);
 		s.cambiarEstadoOrden("Comprada", "La compra ha sido realizada correctamente.", orden.getNumero(), cliNick);
@@ -691,6 +696,43 @@ public class Publicador {
 		em.close();
 		
 		em.merge(carrito);
+	}
+	
+	@WebMethod
+	public List<Comentario> comentariosProducto (int numRef) {
+		return em.find(Producto.class, numRef).getComentarios();
+	}
+	
+	@WebMethod
+	public List<String> imagenesProducto(DtProducto prod){
+		return prod.getImagenes();
+	}
+	public int numRefProducto(DtProducto prod){
+		return prod.getNumRef();
+	}
+	public String nombreProducto(DtProducto prod) {
+		return prod.getNombre();
+	}
+	public String descripProducto(DtProducto prod) {
+		return prod.getDescripcion();
+	}
+	public float precioProducto(DtProducto prod) {
+		return prod.getPrecio();
+	}
+	public String categoriasProducto(DtProducto prod) {
+		return prod.getCategorias();
+	}
+	public String specsProducto(DtProducto prod) {
+		return prod.getEspecs();
+	}
+	public String nickProvProducto(DtProducto prod) {
+		return prod.getNicknameProveedor();
+	}
+	public Integer stockProducto(DtProducto prod) {
+		return prod.getStock();
+	}
+	public int[] puntajeProducto(DtProducto prod) {
+		return prod.obtenerPuntaje();
 	}
 	
 	// RENZO
