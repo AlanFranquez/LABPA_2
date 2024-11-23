@@ -6,6 +6,12 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import webservices.Publicador;
+import webservices.PublicadorService;
+import webservices.Item;
+import webservices.Cliente;
+import webservices.OrdenDeCompra;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -14,8 +20,6 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 import com.market.svcentral.Usuario;
-import com.market.svcentral.Item;
-import com.market.svcentral.Cliente;
 
 /**
  * Servlet implementation class Carrito
@@ -39,120 +43,91 @@ public class CarritoServlet extends HttpServlet {
         HttpSession session = request.getSession(false);
 
         // Verificar si la sesión es válida
+        
+        PublicadorService service = new PublicadorService();
+        Publicador port = service.getPublicadorPort();
+        webservices.Usuario usuario = (webservices.Usuario) session.getAttribute("usuarioLogueado");
         if (session == null || session.getAttribute("usuarioLogueado") == null) {
             response.sendRedirect("home");
             return;
         }
-
-
-    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-    	EntityManager em = emf.createEntityManager();
-    	em.getTransaction().begin();
         
-        Usuario u = (Usuario) session.getAttribute("usuarioLogueado");
-
-        Usuario user = em.find(Usuario.class, u.getNick());
         
-        // Verificar si el usuario es un cliente
-        if (user instanceof Cliente) {
-            Cliente cliente = (Cliente) user;
-
-            List<Item> itemsCarrito = cliente.getCarrito().getProductos();
-
-            request.setAttribute("itemsCarrito", itemsCarrito);
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        Usuario user = em.find(Usuario.class, usuario.getNick());
+        webservices.Cliente cli = port.obtenerCliente(user.getNick());
+        
+        
+     // Verificar si el cliente es válido
+        if (cli != null) {
+            	request.setAttribute("usuarioLogueado", user);
+                request.setAttribute("usuario", cli);
+                request.setAttribute("estado", "logueado");
+                request.getRequestDispatcher("/WEB-INF/Carrito.jsp").forward(request, response);
+                return;
         }
-        if (user != null) {
-            request.setAttribute("usuario", user); 
-            request.setAttribute("estado", "logueado");
-            request.getRequestDispatcher("/WEB-INF/Carrito.jsp").forward(request, response);
-        } else {
-            response.sendRedirect("formlogin");
-            request.setAttribute("estado", "noLogueado");
-        }
-        
+        // Obtener los productos del carrito del cliente utilizando el Web Service
+        List<Item> itemsCarrito = port.getProductosCarrito(usuario.getNick());
+        // Pasar los productos del carrito al JSP
+        request.setAttribute("itemsCarrito", itemsCarrito);
+        request.setAttribute("usuario", usuario); 
+        request.setAttribute("estado", "logueado");
+
+        // Redirigir al JSP del carrito
+        request.getRequestDispatcher("/WEB-INF/Carrito.jsp").forward(request, response);
+
         em.getTransaction().commit();
         em.close();
         emf.close();
-        
     }
-    
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    	HttpSession session = req.getSession(false);
-    	String param = req.getParameter("numRef");
-    	
-    	String action = req.getParameter("action");
-    	String cant = req.getParameter("cantidad");
-    	
-    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-    	EntityManager em = emf.createEntityManager();
-    	
-
+        HttpSession session = req.getSession(false);
+        String param = req.getParameter("numRef");
+        String action = req.getParameter("action");
+        String cant = req.getParameter("cantidad");
+        
         // Verificar si la sesión es válida
         if (session == null || session.getAttribute("usuarioLogueado") == null) {
             resp.sendRedirect("home");
             return;
         }
-        
-        System.out.println("Cantidad recibida: " + req.getParameter("cantidad"));
-        em.getTransaction().begin();
-        
-        int paramNumero = 0;
-        if ("eliminar".equals(action)) {
-              try {
-              	paramNumero = Integer.parseInt(param);
-              } catch (Exception e) {
-              	 System.out.print("Hubo un error");
-              	 resp.sendRedirect("home");
-              	 return;
-      		}
-              Usuario u = (Usuario) session.getAttribute("usuarioLogueado");
-              Usuario user = em.find(Usuario.class, u.getNick());
-              
-              
-              if (user instanceof Cliente) {
-                  Cliente cliente = (Cliente) user;
 
-                  cliente.getCarrito().eliminarProd(paramNumero);
-                  System.out.println("Producto con numRef " + paramNumero + " eliminado del carrito.");
-                  session.setAttribute("carrito", cliente.getCarrito());
-              }
-              
+        // Inicializar el cliente del Web Service
+        PublicadorService publicadorService = new PublicadorService();
+        Publicador port = publicadorService.getPublicadorPort();
 
+        // Obtener el usuario logueado desde la sesión
+        webservices.Usuario usuarioLogueado = (webservices.Usuario) session.getAttribute("usuarioLogueado");
+
+        try {
+            if ("eliminar".equals(action)) {
+                int numRef = Integer.parseInt(param);
+                port.eliminarProductoDelCarrito(numRef, usuarioLogueado.getNick());
+                System.out.println("Producto con numRef " + numRef + " eliminado del carrito.");
+            }
+
+            if ("actualizarCant".equals(action)) {
+                int cantNum = Integer.parseInt(cant);
+                if (cantNum <= 0) {
+                    throw new IllegalArgumentException("La cantidad debe ser mayor a 0");
+                }
+            }
+        } catch (NumberFormatException e) {
+            System.err.println("Error al convertir parámetros: " + e.getMessage());
+            resp.sendRedirect("Carrito?error=parametrosInvalidos");
+            return;
+        } catch (Exception e) {
+            System.err.println("Error al interactuar con el servicio web: " + e.getMessage());
+            resp.sendRedirect("Carrito?error=servicioNoDisponible");
+            return;
         }
-        
-        if ("actualizarCant".equals(action)) {
-        	 Usuario u = (Usuario) session.getAttribute("usuarioLogueado");
-             Usuario user = em.find(Usuario.class, u.getNick());
-        	
-        	Cliente cliente = (Cliente) user;
-        	int cantNum = 0;
-        	
-        	try {
-        		cantNum = Integer.parseInt(cant);
-              	paramNumero = Integer.parseInt(param);
-              } catch (Exception e) {
-              	 System.out.print("Hubo un error");
-              	 resp.sendRedirect("home");
-              	 return;
-      		}
-        	
-        	
-        	
-        	Item item = cliente.getCarrito().getItem(paramNumero);
-        	
-        	if (item != null) {
-        		item.setCant(cantNum);
-        		System.out.print(item.getCant());
-        	}
-        }
-        
-        em.getTransaction().commit();
-        em.close();
-        emf.close();
-        
+
+        // Redirigir al carrito después de realizar la acción
         resp.sendRedirect("Carrito");
     }
 }
-
 

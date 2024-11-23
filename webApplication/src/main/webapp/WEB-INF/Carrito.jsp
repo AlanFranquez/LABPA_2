@@ -1,13 +1,14 @@
+<%@page import="webservices.GetTipo"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@page import="com.market.svcentral.DtProducto"%>
-<%@page import="com.market.svcentral.Cliente"%>
-<%@page import="com.market.svcentral.Producto"%>
-<%@page import="java.util.Collections"%>
+
 <%@page import="java.util.List"%>
-<%@page import="com.market.svcentral.Usuario"%>
-<%@ page import="com.market.svcentral.Item"%>
-<%@ page import="java.util.List"%>
+<%@page import="webservices.DtProducto" %>
+<%@page import="webservices.Cliente" %>
+<%@page import="webservices.Producto" %>
+<%@page import="webservices.Usuario" %>
+<%@page import="webservices.Item" %>
+<%@page import="services.Publicador" %>
 
 <!DOCTYPE html>
 <html>
@@ -28,12 +29,14 @@
 </head>
 <body>
 	<%
+	webservices.PublicadorService p = new webservices.PublicadorService();
+	webservices.Publicador port = p.getPublicadorPort();
+	
+	webservices.Usuario usr = (webservices.Usuario) request.getAttribute("usuario");
+	webservices.Cliente cliente = (webservices.Cliente) session.getAttribute("usuarioLogueado");
 	String estadoUser = (String) request.getAttribute("estado");
-	Usuario usr = (Usuario) request.getAttribute("usuario");
-	Cliente cl = null;
-	if (usr.getTipo() == "cliente") {
-		cl = (Cliente) usr;
-	}
+	
+	String nickUser = port.getNickCliente(cliente);
 	%>
 
 	
@@ -56,11 +59,11 @@
             <ul class="navbar-nav align-items-center">
                 <li class="nav-item">
                    <% 
-if (usr != null && usr.getTipo().equals("proveedor")) { 
+if (usr != null && port.getTipo(nickUser).equals("proveedor")) { 
 %> 
     <a class="nav-link" href="perfilProveedor?nickname=<%=usr.getNick()%>">Perfil</a> 
 <% 
-} else if (usr != null && usr.getTipo().equals("cliente")) { 
+} else if (usr != null && port.getTipo(nickUser).equals("cliente")) { 
 %> 
     <a class="nav-link" href="perfilCliente?nickname=<%=usr.getNick()%>">Perfil</a>
 <% 
@@ -68,7 +71,7 @@ if (usr != null && usr.getTipo().equals("proveedor")) {
 %>
                 </li>
                 <%
-                if (usr != null && usr.getTipo().equals("cliente")) {
+                if (usr != null && port.getTipo(nickUser).equals("cliente")) {
                 %>
                 <li class="nav-item"><a class="nav-link" href="Carrito">
                     <svg xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" viewBox="0 0 24 24">
@@ -113,11 +116,11 @@ if (usr != null && usr.getTipo().equals("proveedor")) {
 								class="row d-flex justify-content-between align-items-center">
 								<div class="col-md-2 col-lg-2 col-xl-2">
 									<%
-									if (producto.crearDT().getImagenes() == null || producto.crearDT().getImagenes().isEmpty()) {
+									if (port.obtenerImagenesProducto(producto) == null || port.obtenerImagenesProducto(producto).isEmpty()) {
 									%>
 									<img class="img-fluid rounded-3"
 										src="https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png"
-										alt="<%=producto.crearDT().getNombre()%>"
+										alt="<%=port.getNombreProd(port.crearDTProd(producto))%>"
 										style="object-fit: cover;">
 
 									<%
@@ -125,8 +128,8 @@ if (usr != null && usr.getTipo().equals("proveedor")) {
 									%>
 
 									<img class="img-fluid rounded-3"
-										src="media/<%=producto.crearDT().getImagenes().getFirst()%>"
-										alt="<%=producto.crearDT().getNombre()%>"
+										src="media/<%=port.obtenerPrimeraImagenProducto(producto)%>"
+										alt="<%=port.getNombreProd(port.crearDTProd(producto))%>"
 										style="object-fit: cover;">
 									<%}%>
 								</div>

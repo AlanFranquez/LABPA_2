@@ -1003,10 +1003,53 @@ public class Publicador {
 	}
 	
 	// RENZO
+	
+		@WebMethod
+	    public void eliminarProductoDelCarrito(int numRef, String nickCliente) {
+	        try {
+	            Cliente cliente = obtenerCliente(nickCliente);
+	            
+	            if (cliente != null) {
+	                Carrito carrito = cliente.getCarrito();
+	                carrito.eliminarProd(numRef); 
+	            } else {
+	                throw new Exception("Cliente no encontrado.");
+	            }
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	    }
 
-	public String saludar() {
-		return "Hola Mundo";
-	}
+		@WebMethod
+	    public void agregarProductoAlCarrito(Item item, String nickCliente) {
+	        try {
+	            Cliente cliente = obtenerCliente(nickCliente);
+	            
+	            if (cliente != null) {
+	                Carrito carrito = cliente.getCarrito();
+	                carrito.agregarProducto(item); 
+	            } else {
+	                throw new Exception("Cliente no encontrado.");
+	            }
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	    }
+		
+		@WebMethod
+		public List<Item> getProductosCarrito(String c) {
+			if (c == null) {
+		        throw new IllegalArgumentException("El cliente no puede ser nulo");
+		    }
+			
+			return obtenerCarritoCliente(c).getProductos();
+		}
+		
+
+		public String saludar() {
+			return "Hola Mundo";
+		}
+
 
 
 }
