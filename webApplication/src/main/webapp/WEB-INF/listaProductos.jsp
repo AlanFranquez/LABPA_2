@@ -169,7 +169,7 @@ if (usr != null && usr instanceof Proveedor) {
 										<div class="col-md-4 col-sm-6 mb-4">
 											<div class="card h-100 text-center">
 											
-												<% if(port.obtenerImagenesProducto(dt) == null || port.obtenerImagenesProducto(dt).isEmpty()) {%>
+												<% if(port.obtenerImagenesProducto(dt.getNumRef()) == null || port.obtenerImagenesProducto(dt.getNumRef()).isEmpty()) {%>
 												<img class="card-img-top"
 													src="https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png"
 													alt="<%=dt.getNombre()%>"
@@ -178,7 +178,7 @@ if (usr != null && usr instanceof Proveedor) {
 												<% } else { %>
 													
 													<img class="card-img-top"
-													src="media/<%=port.obtenerPrimeraImagenProducto(dt)%>"
+													src="media/<%=port.obtenerPrimeraImagenProducto(dt.getNumRef())%>"
 													alt="<%=dt.getNombre()%>"
 													style="height: 200px; object-fit: cover;">
 												<%}%>
@@ -206,7 +206,7 @@ if (usr != null && usr instanceof Proveedor) {
 																	class="btn" style="color: #0000EE; cursor: pointer">Ver
 																	Detalles</a>
 																<%
-																if (usr instanceof Cliente && carr != null && port.comprobarSiProductoExisteCarrito(usr.getNick(), dt.getNumRef())) {
+																if (usr instanceof Cliente && carr != null && !port.comprobarSiProductoExisteCarrito(usr.getNick(), dt.getNumRef())) {
 																%>
 																<button type="submit" class="btn btn-primary"
 																	id="addToCartButton">Agregar al Carrito</button>

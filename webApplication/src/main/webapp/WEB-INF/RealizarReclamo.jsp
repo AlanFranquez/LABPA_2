@@ -1,12 +1,5 @@
 <%@page import="java.util.HashMap"%>
-<%@page import="com.market.svcentral.Producto" %>
-<%@page import="com.market.svcentral.DTCliente" %>
-<%@page import="com.market.svcentral.Cliente" %>
-<%@page import="com.market.svcentral.DTFecha" %>
-<%@page import="com.market.svcentral.DTProveedor" %>
-<%@page import="com.market.svcentral.DtProducto" %>
-<%@page import="com.market.svcentral.Usuario" %>
-<%@page import="com.market.svcentral.OrdenDeCompra" %>
+<%@page import="webservices.*"%>
 
 <%@page import="java.util.Collection"%>
 <%@page import="java.util.List"%>
@@ -32,9 +25,12 @@
 <body>
 
 	<%
-	Usuario usr = (Usuario) request.getAttribute("usuarioLogueado");
+	PublicadorService p = new PublicadorService();
+	Publicador port = p.getPublicadorPort();
+	
+	webservices.Usuario usr = (webservices.Usuario) request.getAttribute("usuarioLogueado");
 
-	Producto prodAreclamar = (Producto) request.getAttribute("productoReclamo");
+	webservices.Producto prodAreclamar = (webservices.Producto) request.getAttribute("productoReclamo");
 	%>
 
 
@@ -58,11 +54,11 @@
             <ul class="navbar-nav align-items-center">
                 <li class="nav-item">
                    <% 
-if (usr != null && usr.getTipo().equals("proveedor")) { 
+if (usr != null && usr instanceof Proveedor) { 
 %> 
     <a class="nav-link" href="perfilProveedor?nickname=<%=usr.getNick()%>">Perfil</a> 
 <% 
-} else if (usr != null && usr.getTipo().equals("cliente")) { 
+} else if (usr != null && usr instanceof Proveedor) { 
 %> 
     <a class="nav-link" href="perfilCliente?nickname=<%=usr.getNick()%>">Perfil</a>
 <% 
@@ -70,7 +66,7 @@ if (usr != null && usr.getTipo().equals("proveedor")) {
 %>
                 </li>
                 <%
-                if (usr != null && usr.getTipo().equals("cliente")) {
+                if (usr != null && usr instanceof Cliente) {
                 %>
                 <li class="nav-item"><a class="nav-link" href="Carrito">
                     <svg xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" viewBox="0 0 24 24">
@@ -97,31 +93,30 @@ if (usr != null && usr.getTipo().equals("proveedor")) {
 
 		<%
 		
-		DtProducto dt = prodAreclamar.crearDT();
 		
-		if(dt.getImagenes() == null || dt.getImagenes().isEmpty()) {%>
+		if(port.obtenerImagenesProducto(prodAreclamar.getNumRef()) == null || port.obtenerImagenesProducto(prodAreclamar.getNumRef()).isEmpty()) {%>
 		<img class="card-img-top img-fluid"
 			src="https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png"
-			alt="<%=dt.getNombre()%>"
+			alt="<%=port.imprimirNombreProd(prodAreclamar.getNumRef())%>"
 			style="height: 100px; object-fit: cover; width: 100px; border-radius: 5px; border: 1px solid black;">
 		
 		<% } else { %>
 			
 			<img class="card-img-top img-fluid"
-			src="media/<%=dt.getImagenes().getFirst() %>"
-			alt="<%=dt.getNombre()%>"
+			src="media/<%=port.obtenerPrimeraImagenProducto(prodAreclamar.getNumRef()) %>"
+			alt="<%=port.imprimirNombreProd(prodAreclamar.getNumRef())%>"
 			style="height: 100px; object-fit: cover; width: 100px; border-radius: 5px;">
 		<%}%>
-		<p class="lead"><%=prodAreclamar.crearDT().getNombre()%></p>
+		<p class="lead"><%=port.imprimirNombreProd(prodAreclamar.getNumRef())%></p>
 		<p>
-			<b>Numero de Referencia: </b><%=prodAreclamar.crearDT().getNumRef()%></p>
+			<b>Numero de Referencia: </b><%=port.imprimirNumRef(prodAreclamar.getNumRef())%></p>
 		<p>
-			$<%=prodAreclamar.crearDT().getPrecio()%></p>
+			$<%=port.imprimirPrecioProd(prodAreclamar.getNumRef())%></p>
 		<p>
-			<b>Proveedor: </b><%=prodAreclamar.crearDT().getNombreProveedor()%></p>
+			<b>Proveedor: </b><%=prodAreclamar.getProveedor().getNombre()%></p>
 		<hr>
 		<h3 class="mt-2">Realizar Reclamo</h3>
-		<p style="color: dark-grey">Realiza tu reclamo, el mismo podr� ser
+		<p style="color: dark-grey">Realiza tu reclamo, el mismo podra ser
 			visto unicamente por el proveedor</p>
 		<form action="RealizarReclamo" method="POST">
 

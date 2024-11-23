@@ -155,9 +155,9 @@ if (usr != null && usr instanceof Proveedor) {
                 <div class="card mb-5 flex-fill" style="border-radius: 15px; min-height: 400px;">
                 
                     <div class="overflow-hidden" style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
-                        <% if(port.obtenerImagenesProducto(p) != null && !port.obtenerImagenesProducto(p).isEmpty())  {%>
+                        <% if(port.obtenerImagenesProducto(p.getNumRef()) != null && !port.obtenerImagenesProducto(p.getNumRef()).isEmpty())  {%>
                         
-                          <img src="media/<%= port.obtenerPrimeraImagenProducto(p) %>"
+                          <img src="media/<%= port.obtenerPrimeraImagenProducto(p.getNumRef()) %>"
                              class="img-fluid" alt="Producto" 
                              style="width: 100%; height: 200px; object-fit: cover;" />
                         

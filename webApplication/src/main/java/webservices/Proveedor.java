@@ -7,9 +7,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Clase Java para proveedor complex type.
+ * <p>Java class for proveedor complex type.
  * 
- * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="proveedor">
@@ -39,7 +39,7 @@ public class Proveedor
     protected String link;
 
     /**
-     * Obtiene el valor de la propiedad compania.
+     * Gets the value of the compania property.
      * 
      * @return
      *     possible object is
@@ -51,7 +51,7 @@ public class Proveedor
     }
 
     /**
-     * Define el valor de la propiedad compania.
+     * Sets the value of the compania property.
      * 
      * @param value
      *     allowed object is
@@ -63,7 +63,7 @@ public class Proveedor
     }
 
     /**
-     * Obtiene el valor de la propiedad link.
+     * Gets the value of the link property.
      * 
      * @return
      *     possible object is
@@ -75,7 +75,7 @@ public class Proveedor
     }
 
     /**
-     * Define el valor de la propiedad link.
+     * Sets the value of the link property.
      * 
      * @param value
      *     allowed object is

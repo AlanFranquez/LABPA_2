@@ -10,6 +10,11 @@ import webservices.Publicador;
 import webservices.PublicadorService;
 import webservices.UsuarioRepetidoException_Exception;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.security.KeyStore.Entry;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -17,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.imageio.ImageIO;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -91,8 +97,7 @@ public class InitServlet extends HttpServlet {
  			}
              
           
-             //sistema.agregarImagenUsuario("Perez", "/images/p1.jpg");
-
+             
              
             try {
 				port.agregarCATPadre("Living");

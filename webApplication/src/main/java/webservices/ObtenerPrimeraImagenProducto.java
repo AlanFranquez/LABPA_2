@@ -7,16 +7,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Clase Java para obtenerPrimeraImagenProducto complex type.
+ * <p>Java class for obtenerPrimeraImagenProducto complex type.
  * 
- * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="obtenerPrimeraImagenProducto">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://services/}producto" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,29 +31,21 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class ObtenerPrimeraImagenProducto {
 
-    protected Producto arg0;
+    protected int arg0;
 
     /**
-     * Obtiene el valor de la propiedad arg0.
+     * Gets the value of the arg0 property.
      * 
-     * @return
-     *     possible object is
-     *     {@link Producto }
-     *     
      */
-    public Producto getArg0() {
+    public int getArg0() {
         return arg0;
     }
 
     /**
-     * Define el valor de la propiedad arg0.
+     * Sets the value of the arg0 property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link Producto }
-     *     
      */
-    public void setArg0(Producto value) {
+    public void setArg0(int value) {
         this.arg0 = value;
     }
 

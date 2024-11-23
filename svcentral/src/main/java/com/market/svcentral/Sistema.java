@@ -870,13 +870,19 @@ public class Sistema implements ISistema {
 	 // Caso de uso: alta reclamo
 	 	
 	 	 	public void agregarReclamo(String texto, LocalDateTime fecha, Producto p, Proveedor prov, Cliente autor) throws ReclamoException {
-	 	 		
-	 	 		
+	 	 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+	 	 		EntityManager em = emf.createEntityManager();
+	 	 		em.getTransaction().begin();
 	 	 		Reclamo r = new Reclamo(texto, fecha, p, prov, autor);
 	 	 		
 	 	 		
 	 	 		
 	 	 		this.getProducto(p.getNumRef()).agregarReclamo(r);
+	 	 		em.persist(r);
+	 	 		em.merge(getProducto(p.getNumRef()));
+	 	 		em.getTransaction().commit();
+	 	 		em.close();
+	 	 		emf.close();
 	 	 	}
 	 
 	 

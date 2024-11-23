@@ -101,14 +101,9 @@ public class PerfilProducto extends HttpServlet {
             	System.out.println(c.getTexto());
             }
             
-            List<Comentario> comentarios = port.comentariosProducto(paramNumero);
             
-            if (dtprod == null) {
-                response.sendRedirect("perfilCliente");
-                return;
-            }
             
-
+/*
             //webservices.DtProducto dtprod = port.crearDTProd(producto);
             
             List<CatProducto> cats = port.getCategoriasDTProd(producto);
@@ -150,11 +145,11 @@ public class PerfilProducto extends HttpServlet {
                     System.err.println("Error al procesar la imagen: " + imagePath);
                     e.printStackTrace();
                 }
-            }
+            }*/
             
             // Guardar la lista completa de imágenes Base64 en el request
-            request.setAttribute("imagenesBase64", imagenesBase64);
-            request.setAttribute("categoriasp", cats);
+            //request.setAttribute("imagenesBase64", imagenesBase64);
+            //request.setAttribute("categoriasp", cats);
             request.setAttribute("coms", coms);
             request.setAttribute("prod", producto);
             request.getRequestDispatcher("/WEB-INF/PerfilProducto.jsp").forward(request, response);

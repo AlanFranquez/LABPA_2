@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -41,9 +42,11 @@ import com.market.svcentral.Item;
 import com.market.svcentral.OrdenDeCompra;
 import com.market.svcentral.Producto;
 import com.market.svcentral.Proveedor;
+import com.market.svcentral.Reclamo;
 import com.market.svcentral.Usuario;
 import com.market.svcentral.exceptions.CategoriaException;
 import com.market.svcentral.exceptions.ProductoException;
+import com.market.svcentral.exceptions.ReclamoException;
 import com.market.svcentral.exceptions.UsuarioRepetidoException;
 
 @WebService
@@ -71,6 +74,24 @@ public class Publicador {
 	}
 
 	// ALAN
+	@WebMethod
+	public void agregarImagenUsuario(String nickName, byte[] imagenBytes) {
+	    Cliente cliente = obtenerCliente(nickName);
+	    
+	    EntityManagerFactory prueba = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+	    EntityManager prob = prueba.createEntityManager();
+	    
+	    // Persistir el cambio
+	    prob.getTransaction().begin();
+	    
+        String base64Image = Base64.getEncoder().encodeToString(imagenBytes);
+	    
+	    cliente.setImagen(base64Image);
+	    prob.merge(cliente);
+	    prob.getTransaction().commit();
+	    prob.close();
+	    prueba.close();
+	}
 	
 	@WebMethod
 	public void agregarValoracion(int puntaje, int numRef, String nickName) {
@@ -114,18 +135,7 @@ public class Publicador {
 	}
 	
 	
-	
-	@WebMethod
-	public void agregarImagenUsuario(String nickname, String imagen) {
 
-		
-		Usuario u = obtenerUsuario(nickname);
-		u.setImagen(imagen);
-		
-		em.merge(u);
-		
-		
-	}
 	
 	@WebMethod
 	public void agregarImagenesProd(int numRef, String img) {
@@ -455,18 +465,24 @@ public class Publicador {
 	}
 
 	@WebMethod
-	public String obtenerPrimeraImagenProducto(Producto p) {
-		return this.obtenerProducto(p.getNumRef()).crearDT().getImagenes().get(0);
+	public String obtenerPrimeraImagenProducto(int numRef) {
+		return this.obtenerProducto(numRef).crearDT().getImagenes().get(0);
 	}
 
 	@WebMethod
-	public List<String> obtenerImagenesProducto(Producto p) {
-		return this.obtenerProducto(p.getNumRef()).crearDT().getImagenes();
+	public List<String> obtenerImagenesProducto(int numRef) {
+		return this.obtenerProducto(numRef).crearDT().getImagenes();
 	}
 	
 	@WebMethod
 	public String imprimirNumRefOrden(String nickname, int orden) {
 		return String.valueOf(getCompra(orden, nickname).crearDT().getNumero());
+	}
+	
+	@WebMethod
+	public void realizarReclamo(int num, String mensaje, String cliente) throws ReclamoException {
+
+		s.agregarReclamo(mensaje, LocalDateTime.now(), obtenerProducto(num), obtenerProvDeProducto(num), obtenerCliente(cliente));		
 	}
 	
 	

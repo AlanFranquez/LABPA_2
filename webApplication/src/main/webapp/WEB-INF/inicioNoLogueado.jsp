@@ -99,9 +99,9 @@ List<Producto> prods = (List<Producto>) request.getAttribute("prods");
             <div class="col-md-8 col-lg-6 col-xl-4 d-flex">
                 <div class="card flex-fill" style="border-radius: 15px; min-height: 400px;">
                     <div class="overflow-hidden" style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
-                        <% if(port.obtenerImagenesProducto(p) != null && !port.obtenerImagenesProducto(p).isEmpty())  {%>
+                        <% if(port.obtenerImagenesProducto(p.getNumRef()) != null && !port.obtenerImagenesProducto(p.getNumRef()).isEmpty())  {%>
                         
-                          <img src="media/<%= port.obtenerImagenesProducto(p).get(0) %>"
+                          <img src="media/<%= port.obtenerPrimeraImagenProducto(p.getNumRef()) %>"
                              class="img-fluid" alt="Producto" 
                              style="width: 100%; height: 200px; object-fit: cover;" />
                         

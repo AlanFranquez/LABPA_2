@@ -6,16 +6,16 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import webservices.ObtenerProducto;
+import webservices.Publicador;
+import webservices.PublicadorService;
+import webservices.ReclamoException;
+import webservices.ReclamoException_Exception;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
-import com.market.svcentral.*;
-import com.market.svcentral.exceptions.*;
 
 /**
  * Servlet implementation class RealizarReclamo
@@ -32,15 +32,9 @@ public class RealizarReclamo extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
     
-    private ISistema sist;
-
     @Override
     public void init() throws ServletException {
-        try {
-            sist = Factory.getSistema();
-        } catch (Exception exeption) {
-            throw new ServletException("No se pudo inicializar ISistema", exeption);  
-        }
+       
     }
 
 	/**
@@ -50,7 +44,8 @@ public class RealizarReclamo extends HttpServlet {
 		HttpSession session = request.getSession();
 		
 		String userAgent = request.getHeader("User-Agent");
-        
+        PublicadorService p = new PublicadorService();
+        Publicador port = p.getPublicadorPort();
 	     
         if((userAgent != null) && (
                 userAgent.contains("Mobile") || 
@@ -79,10 +74,10 @@ public class RealizarReclamo extends HttpServlet {
 			return;
 		}
 		
-		Producto p1 = sist.getProducto(numeroRef);
-		Proveedor proveedor = p1.getProveedor();
-		Usuario usr = (Usuario) session.getAttribute("usuarioLogueado");
-		if(usr == null || !usr.getTipo().equals("cliente")) {
+		webservices.Producto p1 = port.obtenerProducto(numeroRef);
+		webservices.Proveedor proveedor = port.obtenerProvDeProducto(numeroRef);
+		webservices.Usuario usr = (webservices.Usuario) session.getAttribute("usuarioLogueado");
+		if(usr == null || usr instanceof webservices.Proveedor) {
 			response.sendRedirect("home");
 			return;
 		}
@@ -102,12 +97,15 @@ public class RealizarReclamo extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		
+		PublicadorService p = new PublicadorService();
+        Publicador port = p.getPublicadorPort();
+		
 		if(session == null || session.getAttribute("usuarioLogueado") == null) {
 			response.sendRedirect("home");
 			return;
 		}
 		
-		Cliente cl = (Cliente) session.getAttribute("usuarioLogueado");
+		webservices.Cliente cl = (webservices.Cliente) session.getAttribute("usuarioLogueado");
 		if(cl == null) {
 			response.sendRedirect("home");
 			return;
@@ -122,10 +120,7 @@ public class RealizarReclamo extends HttpServlet {
 			return;
 		}
 		
-		
-		Producto p1 = sist.getProducto(numeroReferencia);
-		Proveedor prov = p1.getProveedor();
-		
+		webservices.Producto prod = port.obtenerProducto(numeroReferencia);
 		String mensaje = request.getParameter("mensaje");
 		if(mensaje == null) {
 			response.sendRedirect("RealizarReclamo");
@@ -133,29 +128,15 @@ public class RealizarReclamo extends HttpServlet {
 		}
 		
 		try {
-			Reclamo nuevoReclamo = new Reclamo(mensaje, LocalDateTime.now(), p1, prov, cl);
-			sist.agregarReclamo(mensaje, LocalDateTime.now(), p1, prov, cl);
-			
-			EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-			EntityManager em = emf.createEntityManager();
-			
-			em.getTransaction().begin();
-			
-			em.persist(nuevoReclamo);
-			
-			em.getTransaction().commit();
-			
-			emf.close();
-		} catch (ReclamoException e) {
-			System.out.print(e.getMessage());
+			port.realizarReclamo(numeroReferencia, mensaje, cl.getNick());
+		} catch (ReclamoException_Exception e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		// Recordar cambiarlo"
 		request.getRequestDispatcher("/WEB-INF/ReclamoExitoso.jsp").forward(request, response);;
-		for(Reclamo r: p1.getReclamos()) {
-			System.out.println(r.getTexto());
-		}
+		
 		
 		
 	}
