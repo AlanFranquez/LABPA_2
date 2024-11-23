@@ -1090,7 +1090,11 @@ public class Publicador {
 	         
 	    }
 		
-		
+		@WebMethod
+		public List<Reclamo> obtenerReclamosProd(int numRef){
+			Producto p = em.find(Producto.class, numRef);
+			return p.getReclamos();
+		}
 		
 		@WebMethod
 		public List<Item> getProductosCarrito(String c) {

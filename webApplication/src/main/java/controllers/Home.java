@@ -3,10 +3,6 @@ package controllers;
 import java.io.IOException;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -64,12 +60,9 @@ public class Home extends HttpServlet {
         } 
 
         // Inicia el EntityManager
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-        EntityManager em = emf.createEntityManager();
         List<webservices.Producto> productos = null;
 
         try {
-            em.getTransaction().begin();
             System.out.println("Iniciando transacción de base de datos.");
 
             productos = port.obtenerProductos();
@@ -135,14 +128,11 @@ public class Home extends HttpServlet {
         request.getRequestDispatcher("/WEB-INF/inicio.jsp").forward(request, response);
         // Commit y cierre de transacción
         try {
-            em.getTransaction().commit();
             System.out.println("Transacción commit completada.");
         } catch (Exception e) {
             System.out.println("Error al hacer commit de la transacción.");
             e.printStackTrace();
         } finally {
-            em.close();
-            emf.close();
             System.out.println("EntityManager y EntityManagerFactory cerrados.");
         }
     }

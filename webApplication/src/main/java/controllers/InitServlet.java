@@ -23,24 +23,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
-
-import com.market.svcentral.Cliente;
-import com.market.svcentral.Comentario;
-import com.market.svcentral.DTEstado;
-import com.market.svcentral.DTFecha;
-import com.market.svcentral.Factory;
-import com.market.svcentral.ISistema;
-import com.market.svcentral.Item;
-import com.market.svcentral.OrdenDeCompra;
-import com.market.svcentral.Producto;
-import com.market.svcentral.usuarioRandom;
-import com.market.svcentral.exceptions.CategoriaException;
-import com.market.svcentral.exceptions.UsuarioRepetidoException;
-import com.market.svcentral.Proveedor;
 
 @WebServlet(urlPatterns = {"/initServlet"}, loadOnStartup = 1)
 public class InitServlet extends HttpServlet {
@@ -52,7 +34,6 @@ public class InitServlet extends HttpServlet {
 	@Override
     public void init() throws ServletException {
     	System.out.print("El SISTEMA INICIO VAMO ARRIBA");
-    	ISistema sistema = Factory.getSistema();
     
     		PublicadorService p = new PublicadorService();
     		Publicador port = p.getPublicadorPort();
@@ -216,8 +197,6 @@ public class InitServlet extends HttpServlet {
             	 System.out.print(p.getNombre());
              }
              
-             em.persist(orden);
-             em.persist(c);
               */
              
              

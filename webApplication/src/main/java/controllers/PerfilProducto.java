@@ -19,7 +19,6 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import com.market.svcentral.Cat_Producto;
 
 import webservices.PublicadorService;
 import webservices.CatProducto;

@@ -6,10 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -20,13 +16,6 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import webservices.Publicador;
 import webservices.PublicadorService;
-
-import com.market.svcentral.exceptions.CategoriaException;
-import com.market.svcentral.Cat_Producto;
-import com.market.svcentral.Categoria;
-import com.market.svcentral.Factory;
-import com.market.svcentral.ISistema;
-import com.market.svcentral.Proveedor;
 
 @WebServlet("/registrarproducto")
 @MultipartConfig

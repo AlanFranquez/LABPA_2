@@ -10,12 +10,7 @@ import webservices.Publicador;
 import webservices.PublicadorService;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
-
-import javax.persistence.Persistence;
-
 
 @WebServlet("/enviarComentario")
 public class enviarComentario extends HttpServlet {
@@ -50,7 +45,6 @@ public class enviarComentario extends HttpServlet {
 			response.sendRedirect("formlogin");
 			return;
 		}
-		
 		
 		webservices.Cliente cliente = (webservices.Cliente) session.getAttribute("usuarioLogueado");
 		webservices.Producto producto1 = port.obtenerProducto(paramNum);

@@ -6,19 +6,12 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import webservices.OrdenDeCompra;
+import webservices.Publicador;
+import webservices.PublicadorService;
 
 import java.io.IOException;
 import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
-
-import webservices.DtCliente;
-import webservices.PublicadorService;
-import webservices.*;
-
 
 /**
  * Servlet implementation class PerfilOrden

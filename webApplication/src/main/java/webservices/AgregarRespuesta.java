@@ -7,9 +7,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for agregarRespuesta complex type.
+ * <p>Clase Java para agregarRespuesta complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
  * 
  * <pre>
  * &lt;complexType name="agregarRespuesta">
@@ -43,7 +43,7 @@ public class AgregarRespuesta {
     protected String arg3;
 
     /**
-     * Gets the value of the arg0 property.
+     * Obtiene el valor de la propiedad arg0.
      * 
      */
     public int getArg0() {
@@ -51,7 +51,7 @@ public class AgregarRespuesta {
     }
 
     /**
-     * Sets the value of the arg0 property.
+     * Define el valor de la propiedad arg0.
      * 
      */
     public void setArg0(int value) {
@@ -59,7 +59,7 @@ public class AgregarRespuesta {
     }
 
     /**
-     * Gets the value of the arg1 property.
+     * Obtiene el valor de la propiedad arg1.
      * 
      * @return
      *     possible object is
@@ -71,7 +71,7 @@ public class AgregarRespuesta {
     }
 
     /**
-     * Sets the value of the arg1 property.
+     * Define el valor de la propiedad arg1.
      * 
      * @param value
      *     allowed object is
@@ -83,7 +83,7 @@ public class AgregarRespuesta {
     }
 
     /**
-     * Gets the value of the arg2 property.
+     * Obtiene el valor de la propiedad arg2.
      * 
      */
     public int getArg2() {
@@ -91,7 +91,7 @@ public class AgregarRespuesta {
     }
 
     /**
-     * Sets the value of the arg2 property.
+     * Define el valor de la propiedad arg2.
      * 
      */
     public void setArg2(int value) {
@@ -99,7 +99,7 @@ public class AgregarRespuesta {
     }
 
     /**
-     * Gets the value of the arg3 property.
+     * Obtiene el valor de la propiedad arg3.
      * 
      * @return
      *     possible object is
@@ -111,7 +111,7 @@ public class AgregarRespuesta {
     }
 
     /**
-     * Sets the value of the arg3 property.
+     * Define el valor de la propiedad arg3.
      * 
      * @param value
      *     allowed object is

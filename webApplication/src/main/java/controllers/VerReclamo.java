@@ -1,14 +1,9 @@
 package controllers;
-import com.market.svcentral.exceptions.ReclamoException;
-import com.market.svcentral.Cliente;
-import com.market.svcentral.Factory;
-import com.market.svcentral.ISistema;
-import com.market.svcentral.Producto;
-import com.market.svcentral.Proveedor;
-import com.market.svcentral.Reclamo;
-import com.market.svcentral.Usuario;
 
 import java.util.List;
+
+import com.market.svcentral.Reclamo;
+
 import java.util.ArrayList;
 
 import jakarta.servlet.ServletException;
@@ -17,6 +12,10 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import webservices.Producto;
+import webservices.Proveedor;
+import webservices.Publicador;
+import webservices.PublicadorService;
 
 import java.io.IOException;
 
@@ -26,6 +25,9 @@ import java.io.IOException;
 @WebServlet("/VerReclamos")
 public class VerReclamo extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	PublicadorService p = new PublicadorService();
+    Publicador port = p.getPublicadorPort();
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -35,15 +37,9 @@ public class VerReclamo extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
     
-    private ISistema sist;
 
     @Override
     public void init() throws ServletException {
-        try {
-            sist = Factory.getSistema();
-        } catch (Exception exeption) {
-            throw new ServletException("No se pudo inicializar ISistema", exeption);  
-        }
     }
     
     
@@ -76,8 +72,8 @@ public class VerReclamo extends HttpServlet {
         if (usuario instanceof Proveedor) {
             Proveedor proveedor = (Proveedor) usuario;
             List<Reclamo> reclamosTotales = new ArrayList<>();
-            for (Producto producto : proveedor.getProductos()) {
-                List<Reclamo> reclamos = producto.getReclamos();
+            for (Producto producto : port.obtenerProductos()) {
+                List<Reclamo> reclamos = port.obtenerReclamosProd(producto.getNumRef());
                 if (reclamos != null) {
                     reclamosTotales.addAll(reclamos); 
                 }

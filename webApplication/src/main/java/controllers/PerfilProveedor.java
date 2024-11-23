@@ -6,17 +6,13 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import webservices.Producto;
+import webservices.Proveedor;
+import webservices.Publicador;
+import webservices.PublicadorService;
 
 import java.io.IOException;
 import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-
-import webservices.*;
-
-
 
 /**
  * Servlet implementation class Perfil
