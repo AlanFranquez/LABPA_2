@@ -12,20 +12,15 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
-import javax.jws.soap.SOAPBinding.ParameterStyle;
-import javax.jws.soap.SOAPBinding.Style;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.ws.Endpoint;
 
 import com.market.svcentral.Carrito;
@@ -930,6 +925,10 @@ public class Publicador {
 	 * wsimport -keep -p webservices http://localhost:1234/publicador?wsdl
 	 * 
 	 * 
+	 * netstat -ano | findstr :1234
+	 * 
+	 * taskkill /PID <ID_proceso> /F
+	 * 
 	 * ProductoServlet.java RealizarCompra.java RealizarReclamo.java
 	 * RegistrarUsuarios1.java RegistrarUsuarios2.java Saludo.java Usuarios.java
 	 * ValidarAjax.java VerReclamo.java
@@ -950,10 +949,64 @@ public class Publicador {
 		s.agregarProductoCategoria(catName, numRef);
 	}
 
+	@WebMethod
+	public void realizarCompra(OrdenDeCompra ordenCompra, String nick) {
+		s.realizarCompra(ordenCompra, nick);
+		
+	}
+	
+	@WebMethod
+	public void crearOrden(Map <Integer, Item> itemsProveedor, int precioTotal, String proveedorNick, String cliNick) {
+		Proveedor prov = em.find(Proveedor.class, proveedorNick);
+		OrdenDeCompra orden = new OrdenDeCompra(itemsProveedor, precioTotal, prov);
+
+		s.realizarCompra(orden, cliNick);
+		s.cambiarEstadoOrden("Comprada", "La compra ha sido realizada correctamente.", orden.getNumero(), cliNick);
+		
+	}
+	
+	@WebMethod
+	public List<Producto> buscarProductos(String searchQuery){
+		return s.buscarProductos(searchQuery);
+	}
+	
+	@WebMethod
+	public boolean clienteTieneCarrito(String nick){
+		Cliente cl = em.find(Cliente.class, nick);
+
+		return cl.getCarrito().getProductos().isEmpty();
+	}
+	
+	@WebMethod
+	public List<Item> getItemsCarrito(String nick){
+		Cliente cl = em.find(Cliente.class, nick);
+
+		return cl.getCarrito().getProductos();
+	}
+	@WebMethod
+	public Proveedor getProveedorItem(Long id){
+		return em.find(Item.class, id).getProveedor();
+	}
+	
+	@WebMethod
+	public void vaciarCarrito(String nick){
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+		EntityManager em = emf.createEntityManager();
+		em.getTransaction().begin();
+		Cliente cli = em.find(Cliente.class, nick);
+		Carrito carrito = cli.getCarrito();
+		carrito.vaciarCarrito();
+		em.getTransaction().commit();
+		em.close();
+		
+		em.merge(carrito);
+	}
+	
 	// RENZO
 
 	public String saludar() {
 		return "Hola Mundo";
 	}
+
 
 }

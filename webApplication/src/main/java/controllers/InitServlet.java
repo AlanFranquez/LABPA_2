@@ -112,17 +112,24 @@ public class InitServlet extends HttpServlet {
 			}
              
              
-             
-             DtEstado estado3 = port.crearEstado("En preparación", "El proveedor está preparando el pedido.");
-             DtEstado estado4 = port.crearEstado("En camino", "El pedido ha sido enviado y está en camino.");
-             DtEstado estado5 = port.crearEstado("Entregada", "El cliente ha recibido el pedido.");
+             try {
+            	 DtEstado estado3 = port.crearEstado("En preparación", "El proveedor está preparando el pedido.");
+            	 DtEstado estado4 = port.crearEstado("En camino", "El pedido ha sido enviado y está en camino.");
+            	 DtEstado estado5 = port.crearEstado("Entregada", "El cliente ha recibido el pedido.");            	 
+            	 System.out.print("SE CREAN LOS ESTADOS");
+             }catch (Exception e) {
+            	 e.printStackTrace();
+             }
 
-             System.out.print("SE CREAN LOS ESTADOS");
 
-         
-             port.agregarProducto("Pelota", 1, "Pelota inflable ideal", "Increible", 120, "Perez", 100);
-            port.agregarProducto("Cargador", 2, "Cargador tipo c", "Muy bueno", 220, "Perez", 20);
-             port.agregarProducto("Television", 3, "Televisión en Excelente estado", "Muy bueno", 330, "Jorge", 120);
+         try {
+        	 port.agregarProducto("Pelota", 1, "Pelota inflable ideal", "Increible", 120, "Perez", 100);
+        	 port.agregarProducto("Cargador", 2, "Cargador tipo c", "Muy bueno", 220, "Perez", 20);
+        	 port.agregarProducto("Television", 3, "Televisión en Excelente estado", "Muy bueno", 330, "Jorge", 120);
+        	 System.out.println(port.obtenerDTProducto(1).toString());
+         } catch (Exception e) {
+        	 e.printStackTrace();
+         }
              
              
              
@@ -145,19 +152,23 @@ public class InitServlet extends HttpServlet {
 				System.out.println(e.getMessage());
 			}
              
-             
-             webservices.Proveedor nick = port.obtenerProvDeProducto(1);
-             
-             List<webservices.Item> items = new ArrayList<webservices.Item>();
-             items.add(port.prodsAItem(5, 1));
-             
-             port.realizarCompraPRUEBA(items, 500, nick.getNick(), "Juan123");
-             
-             
-             List<webservices.OrdenDeCompra> ordenes= port.getOrdenesCliente("Juan123");
-             
-             for(webservices.OrdenDeCompra ed: ordenes) {
-            	 System.out.print("ORDEN DE JUAN123 -->" + ed.getNumero());
+             try {
+            	 webservices.Proveedor nick = port.obtenerProvDeProducto(1);
+            	 
+            	 List<webservices.Item> items = new ArrayList<webservices.Item>();
+            	 items.add(port.prodsAItem(5, 1));
+            	 
+            	 port.realizarCompraPRUEBA(items, 500, nick.getNick(), "Juan123");
+            	 
+            	 
+            	 List<webservices.OrdenDeCompra> ordenes= port.getOrdenesCliente("Juan123");
+            	 
+            	 for(webservices.OrdenDeCompra ed: ordenes) {
+            		 System.out.print("ORDEN DE JUAN123 -->" + ed.getNumero());
+            	 }
+            	 
+             } catch (Exception e) {
+            	 e.printStackTrace();
              }
              
              port.setEstadoPrueba("Juan123", "En Camino", "El pedido ha sido enviado y está en camino.");

@@ -33,7 +33,8 @@ import webservices.Publicador;
 @WebServlet("/perfilProducto")
 public class PerfilProducto extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+	PublicadorService p = new PublicadorService();
+    Publicador port = p.getPublicadorPort();
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -41,7 +42,6 @@ public class PerfilProducto extends HttpServlet {
         super();
         // TODO Auto-generated constructor stub
     }
-
 
 	
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -80,7 +80,6 @@ public class PerfilProducto extends HttpServlet {
         request.setAttribute("nickusuario", user.getNick());
         
 
-
             String parametro = request.getParameter("producto");
             if (parametro == null) {
                 response.sendRedirect("perfilCliente");
@@ -102,7 +101,9 @@ public class PerfilProducto extends HttpServlet {
             	System.out.println(c.getTexto());
             }
             
-            if (producto == null) {
+            List<Comentario> comentarios = port.comentariosProducto(paramNumero);
+            
+            if (dtprod == null) {
                 response.sendRedirect("perfilCliente");
                 return;
             }
