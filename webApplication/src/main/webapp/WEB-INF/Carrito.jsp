@@ -8,7 +8,7 @@
 <%@page import="webservices.Producto" %>
 <%@page import="webservices.Usuario" %>
 <%@page import="webservices.Item" %>
-<%@page import="services.Publicador" %>
+<%@page import="webservices.Publicador" %>
 
 <!DOCTYPE html>
 <html>
@@ -120,7 +120,7 @@ if (usr != null && port.getTipo(nickUser).equals("proveedor")) {
 									%>
 									<img class="img-fluid rounded-3"
 										src="https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png"
-										alt="<%=port.getNombreProd(port.crearDTProd(producto))%>"
+										alt="<%=port.imprimirNombreProd(producto.getNumRef())%>"
 										style="object-fit: cover;">
 
 									<%

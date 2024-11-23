@@ -56,12 +56,16 @@ public class CarritoServlet extends HttpServlet {
             	request.setAttribute("usuarioLogueado", usuario);
                 request.setAttribute("usuario", cli);
                 request.setAttribute("estado", "logueado");
-                request.getRequestDispatcher("/WEB-INF/Carrito.jsp").forward(request, response);
-                return;
+                //request.getRequestDispatcher("/WEB-INF/Carrito.jsp").forward(request, response);
+                //return;
         }
         // Obtener los productos del carrito del cliente utilizando el Web Service
-        List<Item> itemsCarrito = port.getProductosCarrito(usuario.getNick());
-        // Pasar los productos del carrito al JSP
+        List<webservices.Item> itemsCarrito = port.getItemsCarrito(usuario.getNick());
+        
+        for(webservices.Item i : itemsCarrito) {
+        	System.out.println("ITEM -->" + i.getProducto().getNombre());
+        }
+        
         request.setAttribute("itemsCarrito", itemsCarrito);
         request.setAttribute("usuario", usuario); 
         request.setAttribute("estado", "logueado");
@@ -98,10 +102,13 @@ public class CarritoServlet extends HttpServlet {
             }
 
             if ("actualizarCant".equals(action)) {
+            	int numRef = Integer.parseInt(param);
                 int cantNum = Integer.parseInt(cant);
                 if (cantNum <= 0) {
                     throw new IllegalArgumentException("La cantidad debe ser mayor a 0");
                 }
+                
+                port.editarCantidadItem(numRef, usuarioLogueado.getNick(), cantNum);
             }
         } catch (NumberFormatException e) {
             System.err.println("Error al convertir parámetros: " + e.getMessage());

@@ -403,6 +403,32 @@ public class Publicador {
 	public Usuario obtenerUsuario(String nick) {
 		return em.find(Usuario.class, nick);
 	}
+	
+	@WebMethod
+    public void editarCantidadItem(int numRef, String nickCliente, int nuevaCantidad) {
+        try {
+        	EntityManagerFactory emf2 = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+        	EntityManager em2 = emf2.createEntityManager();
+            Cliente cliente = obtenerCliente(nickCliente);
+            
+            
+            em2.getTransaction().begin();
+            if (cliente != null) {
+                Carrito carrito = cliente.getCarrito();
+                carrito.getItem(numRef).setCant(nuevaCantidad);
+                
+                em2.merge(carrito);
+            } else {
+                throw new Exception("Cliente no encontrado.");
+            }
+            
+            em2.getTransaction().commit();
+            em2.close();
+            emf2.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 	@WebMethod
 	public Cliente obtenerCliente(String nick) {
@@ -994,10 +1020,10 @@ public class Publicador {
 	}
 	
 	@WebMethod
-	public List<Item> getItemsCarrito(String nick){
-		Cliente cl = em.find(Cliente.class, nick);
+	public Item[] getItemsCarrito(String nick){
+		Carrito cl = obtenerCliente(nick).getCarrito();
 
-		return cl.getCarrito().getProductos();
+		return cl.getProductos().toArray(new Item[0]);
 	}
 	@WebMethod
 	public Proveedor getProveedorItem(Long id){
@@ -1006,14 +1032,14 @@ public class Publicador {
 	
 	@WebMethod
 	public void vaciarCarrito(String nick){
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-		EntityManager em = emf.createEntityManager();
-		em.getTransaction().begin();
-		Cliente cli = em.find(Cliente.class, nick);
+		EntityManagerFactory emf2 = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+		EntityManager em2 = emf2.createEntityManager();
+		em2.getTransaction().begin();
+		Cliente cli = em2.find(Cliente.class, nick);
 		Carrito carrito = cli.getCarrito();
 		carrito.vaciarCarrito();
-		em.getTransaction().commit();
-		em.close();
+		em2.getTransaction().commit();
+		em2.close();
 		
 		em.merge(carrito);
 	}
@@ -1023,14 +1049,24 @@ public class Publicador {
 		@WebMethod
 	    public void eliminarProductoDelCarrito(int numRef, String nickCliente) {
 	        try {
+	        	EntityManagerFactory emf2 = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+	        	EntityManager em2 = emf2.createEntityManager();
 	            Cliente cliente = obtenerCliente(nickCliente);
 	            
+	            
+	            em2.getTransaction().begin();
 	            if (cliente != null) {
 	                Carrito carrito = cliente.getCarrito();
-	                carrito.eliminarProd(numRef); 
+	                carrito.eliminarProd(numRef);
+	                
+	                em2.merge(carrito);
 	            } else {
 	                throw new Exception("Cliente no encontrado.");
 	            }
+	            
+	            em2.getTransaction().commit();
+	            em2.close();
+	            emf2.close();
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	        }
@@ -1038,10 +1074,20 @@ public class Publicador {
 
 		@WebMethod
 	    public void agregarProductoAlCarrito(Item item, String nickCliente) {
+			EntityManagerFactory fac = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+			EntityManager emfac = fac.createEntityManager();
+			
+			
+			emfac.getTransaction().begin();
 	            Cliente cliente = obtenerCliente(nickCliente);
 	                Carrito carrito = cliente.getCarrito();
 	                carrito.agregarProducto(item); 
 	                System.out.println("Producto agregado al carrito de " + nickCliente);
+	         emfac.merge(carrito);
+	         emfac.getTransaction().commit();
+	         emfac.close();
+	         fac.close();
+	         
 	    }
 		
 		

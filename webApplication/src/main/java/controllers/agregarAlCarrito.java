@@ -37,7 +37,7 @@ public class agregarAlCarrito extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession();
+        HttpSession session = request.getSession(false);
         PublicadorService service = new PublicadorService();
         Publicador port = service.getPublicadorPort();
         
@@ -67,11 +67,9 @@ public class agregarAlCarrito extends HttpServlet {
             		Item item = port.prodsAItem(cantidad, numero);
             		port.agregarProductoAlCarrito(item, cl.getNick());
             		System.out.println("Producto agregado-Servlet.");
-            		System.out.println("carrito:" + port.obtenerItemCarrito(numRef, numero));
             	}
             	
                 
-            	session.setAttribute("usuarioLogueado", cl);
                 
                response.sendRedirect("Carrito");
             } else {
