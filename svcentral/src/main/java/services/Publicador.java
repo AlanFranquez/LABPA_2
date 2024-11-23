@@ -1038,19 +1038,13 @@ public class Publicador {
 
 		@WebMethod
 	    public void agregarProductoAlCarrito(Item item, String nickCliente) {
-	        try {
 	            Cliente cliente = obtenerCliente(nickCliente);
-	            
-	            if (cliente != null) {
 	                Carrito carrito = cliente.getCarrito();
 	                carrito.agregarProducto(item); 
-	            } else {
-	                throw new Exception("Cliente no encontrado.");
-	            }
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	        }
+	                System.out.println("Producto agregado al carrito de " + nickCliente);
 	    }
+		
+		
 		
 		@WebMethod
 		public List<Item> getProductosCarrito(String c) {
@@ -1059,6 +1053,13 @@ public class Publicador {
 		    }
 			
 			return obtenerCarritoCliente(c).getProductos();
+		}
+		
+		@WebMethod
+		public Item obtenerItemCarrito(String nick, int numRef) {
+		    Cliente cl = em.find(Cliente.class, nick);
+		    Carrito carrito = cl.getCarrito();
+		    return carrito.getItem(numRef); 
 		}
 		
 

@@ -15,12 +15,6 @@ import webservices.OrdenDeCompra;
 import java.io.IOException;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-
-import com.market.svcentral.Usuario;
-
 /**
  * Servlet implementation class Carrito
  */
@@ -53,16 +47,13 @@ public class CarritoServlet extends HttpServlet {
         }
         
         
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        Usuario user = em.find(Usuario.class, usuario.getNick());
-        webservices.Cliente cli = port.obtenerCliente(user.getNick());
+        
+        webservices.Cliente cli = port.obtenerCliente(usuario.getNick());
         
         
      // Verificar si el cliente es válido
         if (cli != null) {
-            	request.setAttribute("usuarioLogueado", user);
+            	request.setAttribute("usuarioLogueado", usuario);
                 request.setAttribute("usuario", cli);
                 request.setAttribute("estado", "logueado");
                 request.getRequestDispatcher("/WEB-INF/Carrito.jsp").forward(request, response);
@@ -77,10 +68,6 @@ public class CarritoServlet extends HttpServlet {
 
         // Redirigir al JSP del carrito
         request.getRequestDispatcher("/WEB-INF/Carrito.jsp").forward(request, response);
-
-        em.getTransaction().commit();
-        em.close();
-        emf.close();
     }
 
     @Override

@@ -116,7 +116,7 @@ if (usr != null && port.getTipo(nickUser).equals("proveedor")) {
 								class="row d-flex justify-content-between align-items-center">
 								<div class="col-md-2 col-lg-2 col-xl-2">
 									<%
-									if (port.obtenerImagenesProducto(producto) == null || port.obtenerImagenesProducto(producto).isEmpty()) {
+									if (port.obtenerImagenesProducto(producto.getNumRef()) == null || port.obtenerImagenesProducto(producto.getNumRef()).isEmpty()) {
 									%>
 									<img class="img-fluid rounded-3"
 										src="https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png"
@@ -128,7 +128,7 @@ if (usr != null && port.getTipo(nickUser).equals("proveedor")) {
 									%>
 
 									<img class="img-fluid rounded-3"
-										src="media/<%=port.obtenerPrimeraImagenProducto(producto)%>"
+										src="media/<%=port.obtenerPrimeraImagenProducto(producto.getNumRef())%>"
 										alt="<%=port.getNombreProd(port.crearDTProd(producto))%>"
 										style="object-fit: cover;">
 									<%}%>
