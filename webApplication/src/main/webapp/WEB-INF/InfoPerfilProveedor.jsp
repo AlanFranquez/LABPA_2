@@ -130,9 +130,9 @@ if (user != null && port.getTipo(nickUser).equals("proveedor")) {
              <div class="col-md-8 col-lg-6 col-xl-4 d-flex">
                 <div class="card flex-fill" style="border-radius: 15px; min-height: 400px;">
                     <div class="overflow-hidden" style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
-                        <% if(port.obtenerImagenesProducto(pdt) != null && !port.obtenerImagenesProducto(pdt).isEmpty())  {%>
+                        <% if(port.obtenerImagenesProducto(id) != null && !port.obtenerImagenesProducto(id).isEmpty())  {%>
                         
-                          <img src="media/<%= port.obtenerImagenesProducto(pdt).getFirst() %>"
+                          <img src="media/<%= port.obtenerImagenesProducto(id).getFirst() %>"
                              class="img-fluid" alt="Producto" 
                              style="width: 100%; height: 200px; object-fit: cover;" />
                         

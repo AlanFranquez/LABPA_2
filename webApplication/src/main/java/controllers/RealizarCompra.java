@@ -38,7 +38,8 @@ public class RealizarCompra extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession();
+/*
+HttpSession session = request.getSession();
         
         // Lógica de redirección para móviles
         String userAgent = request.getHeader("User-Agent");
@@ -84,10 +85,11 @@ public class RealizarCompra extends HttpServlet {
         request.setAttribute("usuarioLogueado", user);
         request.setAttribute("carrito", cliente.getCarrito());
         request.getRequestDispatcher("/WEB-INF/realizarCompra.jsp").forward(request, response);
+        */
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession();
+        /*HttpSession session = request.getSession();
         
         if (session == null || session.getAttribute("usuarioLogueado") == null) {
             response.sendRedirect("home");
@@ -158,5 +160,6 @@ public class RealizarCompra extends HttpServlet {
         session.setAttribute("precioTotal", String.valueOf(precioTotalGeneral)); // Total general de todas las órdenes
         
         response.sendRedirect("PaginaExito");
+        */
     }
 }

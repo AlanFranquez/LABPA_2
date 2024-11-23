@@ -20,6 +20,7 @@ import javax.persistence.Transient;
 
 import com.market.svcentral.exceptions.ProductoException;
 import com.market.svcentral.exceptions.PuntajeInvalidoException;
+
 @Entity
 @DiscriminatorValue("cliente")
 public class Cliente extends Usuario {

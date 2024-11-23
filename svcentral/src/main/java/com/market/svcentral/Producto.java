@@ -56,8 +56,13 @@ public class Producto {
 	
 	
 	public Producto() {
-		
+	    this.categorias = new ArrayList<>();
+	    this.comentarios = new ArrayList<>();
+	    this.imagenes = new ArrayList<>();
+	    this.puntajes = new ArrayList<>();
+	    this.reclamos = new ArrayList<>();
 	}
+
 	
 	// Constructor:
 	public Producto(String nombre, String descripcion, float precio, Integer numRef, String especificaciones, Proveedor prov, int stock) {
@@ -217,22 +222,38 @@ public class Producto {
     }
 	
 	public DtProducto crearDT() {
-		String tab = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;•";
-		String catStr = "";
-		if (this.categorias.isEmpty()) {
-			catStr = "El producto no tiene categorias asignadas";
-		}
-		for (Cat_Producto cat : this.categorias) {	
-			catStr = catStr + "<br>" + tab + cat.getNombre();
-			Cat_Padre cPadre = cat.getPadre();
-            while (cPadre != null) {
-            	catStr = catStr + " -> " + cPadre.getNombre();
-                cPadre = cPadre.getPadre();
-            }
-		}
-		catStr = catStr + "</html>";
-		return new DtProducto(this.getNombre(), this.getDescripcion(), this.getPrecio(), this.getNumRef(), this.getEspecificaciones(), this.getProveedor(), catStr, this.getImagenes(), this.getStock(), this.getComentarios(), this.getCantidadComprada(), this.getReclamos(), this.obtenerPuntajes());
+	    String tab = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;•";
+	    StringBuilder catStr = new StringBuilder();
+	    if (this.categorias == null || this.categorias.isEmpty()) {
+	        catStr.append("El producto no tiene categorias asignadas");
+	    } else {
+	        for (Cat_Producto cat : this.categorias) {
+	            catStr.append("<br>").append(tab).append(cat.getNombre());
+	            Cat_Padre cPadre = cat.getPadre();
+	            while (cPadre != null) {
+	                catStr.append(" -> ").append(cPadre.getNombre());
+	                cPadre = cPadre.getPadre();
+	            }
+	        }
+	    }
+	    catStr.append("</html>");
+	    return new DtProducto(
+	        this.getNombre(),
+	        this.getDescripcion(),
+	        this.getPrecio(),
+	        this.getNumRef(),
+	        this.getEspecificaciones(),
+	        this.getProveedor(),
+	        catStr.toString(),
+	        this.getImagenes(),
+	        this.getStock(),
+	        this.getComentarios(),
+	        this.getCantidadComprada(),
+	        this.getReclamos(),
+	        this.obtenerPuntajes()
+	    );
 	}
+
 
 	public int getCantidadComprada() {
 		return this.cantidadCompras;
