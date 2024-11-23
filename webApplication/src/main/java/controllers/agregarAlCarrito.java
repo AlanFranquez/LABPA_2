@@ -12,7 +12,6 @@ import java.io.IOException;
 import webservices.Publicador;
 import webservices.PublicadorService;
 import webservices.Carrito;
-import webservices.Cliente;
 import webservices.Item;
 import webservices.Producto;
 
