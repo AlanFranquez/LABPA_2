@@ -7,9 +7,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for comentario complex type.
+ * <p>Clase Java para comentario complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
  * 
  * <pre>
  * &lt;complexType name="comentario">
@@ -46,7 +46,7 @@ public class Comentario {
     protected String texto;
 
     /**
-     * Gets the value of the autor property.
+     * Obtiene el valor de la propiedad autor.
      * 
      * @return
      *     possible object is
@@ -58,7 +58,7 @@ public class Comentario {
     }
 
     /**
-     * Sets the value of the autor property.
+     * Define el valor de la propiedad autor.
      * 
      * @param value
      *     allowed object is
@@ -70,7 +70,7 @@ public class Comentario {
     }
 
     /**
-     * Gets the value of the comentarioPadre property.
+     * Obtiene el valor de la propiedad comentarioPadre.
      * 
      * @return
      *     possible object is
@@ -82,7 +82,7 @@ public class Comentario {
     }
 
     /**
-     * Sets the value of the comentarioPadre property.
+     * Define el valor de la propiedad comentarioPadre.
      * 
      * @param value
      *     allowed object is
@@ -94,7 +94,7 @@ public class Comentario {
     }
 
     /**
-     * Gets the value of the fecha property.
+     * Obtiene el valor de la propiedad fecha.
      * 
      * @return
      *     possible object is
@@ -106,7 +106,7 @@ public class Comentario {
     }
 
     /**
-     * Sets the value of the fecha property.
+     * Define el valor de la propiedad fecha.
      * 
      * @param value
      *     allowed object is
@@ -118,7 +118,7 @@ public class Comentario {
     }
 
     /**
-     * Gets the value of the numero property.
+     * Obtiene el valor de la propiedad numero.
      * 
      */
     public int getNumero() {
@@ -126,7 +126,7 @@ public class Comentario {
     }
 
     /**
-     * Sets the value of the numero property.
+     * Define el valor de la propiedad numero.
      * 
      */
     public void setNumero(int value) {
@@ -134,7 +134,7 @@ public class Comentario {
     }
 
     /**
-     * Gets the value of the texto property.
+     * Obtiene el valor de la propiedad texto.
      * 
      * @return
      *     possible object is
@@ -146,7 +146,7 @@ public class Comentario {
     }
 
     /**
-     * Sets the value of the texto property.
+     * Define el valor de la propiedad texto.
      * 
      * @param value
      *     allowed object is

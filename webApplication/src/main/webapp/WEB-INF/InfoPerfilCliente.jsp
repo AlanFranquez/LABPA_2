@@ -31,7 +31,7 @@
     	webservices.Publicador port = p.getPublicadorPort();
     	
 
-    
+    	
 		webservices.Usuario usr = (webservices.Usuario) request.getAttribute("usuario");
 
     	

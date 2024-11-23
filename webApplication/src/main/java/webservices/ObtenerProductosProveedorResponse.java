@@ -10,16 +10,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for getComentariosProdResponse complex type.
+ * <p>Clase Java para obtenerProductosProveedorResponse complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
  * 
  * <pre>
- * &lt;complexType name="getComentariosProdResponse">
+ * &lt;complexType name="obtenerProductosProveedorResponse">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="return" type="{http://services/}comentario" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="return" type="{http://services/}producto" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -29,13 +29,13 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "getComentariosProdResponse", propOrder = {
+@XmlType(name = "obtenerProductosProveedorResponse", propOrder = {
     "_return"
 })
-public class GetComentariosProdResponse {
+public class ObtenerProductosProveedorResponse {
 
-    @XmlElement(name = "return")
-    protected List<Comentario> _return;
+    @XmlElement(name = "return", nillable = true)
+    protected List<Producto> _return;
 
     /**
      * Gets the value of the return property.
@@ -55,13 +55,13 @@ public class GetComentariosProdResponse {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link Comentario }
+     * {@link Producto }
      * 
      * 
      */
-    public List<Comentario> getReturn() {
+    public List<Producto> getReturn() {
         if (_return == null) {
-            _return = new ArrayList<Comentario>();
+            _return = new ArrayList<Producto>();
         }
         return this._return;
     }
