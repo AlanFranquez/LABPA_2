@@ -501,9 +501,11 @@ public class Publicador {
 	
 	@WebMethod
     public void agregarComentario(int comentarioId, String mensaje, String nickCliente, int numRef) {
-        emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-        em = emf.createEntityManager();
-		em.getTransaction().begin();
+       
+		EntityManagerFactory prueba = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+		EntityManager prubem = prueba.createEntityManager();
+		
+		prubem.getTransaction().begin();
 		
 		
         
@@ -519,22 +521,67 @@ public class Publicador {
 		}
 
         
-        em.persist(nuevoComentario);
-        em.merge(obtenerProducto(numRef));
-        em.merge(obtenerCliente(nickCliente));
-        em.flush();
-        em.getTransaction().commit();
+        prubem.persist(nuevoComentario);
+        prubem.merge(obtenerProducto(numRef));
+        prubem.merge(obtenerCliente(nickCliente));
+        prubem.flush();
+        prubem.getTransaction().commit();
         
+        prubem.close();
+        prueba.close();
         
-        
+    } 
+	
+	@WebMethod
+    public void agregarRespuesta(int comentarioPadre, String mensaje, int respuestaID, String nick) {
+		EntityManagerFactory prueba = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+		EntityManager prubem = prueba.createEntityManager();
+		
+		prubem.getTransaction().begin();
+		
+		Comentario respuesta = new Comentario(respuestaID, mensaje, obtenerCliente(nick), LocalDateTime.now());
+		
+		Comentario padre = em.find(Comentario.class, comentarioPadre);
+		
+		padre.agregarRespuesta(respuesta);
+		
+		prubem.persist(respuesta);
+		prubem.merge(padre);
+		prubem.flush();
+		
+		prubem.getTransaction().commit();
+		prubem.close();
+		prueba.close();
+		
     }
+
 
     @WebMethod
-    public List<Comentario> listarComentarios(int numRef) {
+    public Comentario[] listarComentarios(int numRef) {
         List<Comentario> coments = obtenerProducto(numRef).getComentarios();
 
-        return coments;
+        return coments.toArray(new Comentario[0]);
     }
+    
+    @WebMethod
+    public Comentario[] listarRespuestas(int numRef, int comentarioId) {
+        List<Comentario> coments = obtenerProducto(numRef).getComentario(comentarioId).getRespuestas();
+
+        return coments.toArray(new Comentario[0]);
+    }
+ 
+    @WebMethod
+    public String imprimirFechaRespuesta(int numRef, int comentarioId, int respuestaId) {
+        LocalDateTime coments = obtenerProducto(numRef).getComentario(comentarioId).getRespuesta(numRef).getFecha();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        String formattedDate = coments.format(formatter);
+        
+        return formattedDate;
+    }
+ 
+
+    
     @WebMethod
     public void notificarComentarista(int numRef, String mensaje, String nickCliente) {
         s.notificarComentaristas(obtenerProducto(numRef), mensaje, obtenerCliente(nickCliente));
@@ -545,7 +592,8 @@ public class Publicador {
 	public String getNickAutor(Comentario c) {
 		return c.getAutor().crearDt().getNick();
 	}
-
+    
+   
 	// CARLITOS
 	@WebMethod
 	public DTOrdenDeCompra mostrarCompraCliente(Cliente c, int numO) {

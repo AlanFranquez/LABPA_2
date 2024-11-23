@@ -51,6 +51,16 @@ public class Comentario {
     public List<Comentario> getRespuestas() {
         return this.respuestas;
     }
+    
+    public Comentario getRespuesta(int num) {
+        for(Comentario c : this.respuestas) {
+        	if(c.getNumero() == num) {
+        		return c;
+        	}
+        }
+        
+        return null;
+    }
 
     // Getters y setters
     public int getNumero() {

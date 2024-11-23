@@ -1029,6 +1029,27 @@ public interface Publicador {
 
     /**
      * 
+     * @param arg3
+     * @param arg2
+     * @param arg1
+     * @param arg0
+     */
+    @WebMethod
+    @RequestWrapper(localName = "agregarRespuesta", targetNamespace = "http://services/", className = "webservices.AgregarRespuesta")
+    @ResponseWrapper(localName = "agregarRespuestaResponse", targetNamespace = "http://services/", className = "webservices.AgregarRespuestaResponse")
+    @Action(input = "http://services/Publicador/agregarRespuestaRequest", output = "http://services/Publicador/agregarRespuestaResponse")
+    public void agregarRespuesta(
+        @WebParam(name = "arg0", targetNamespace = "")
+        int arg0,
+        @WebParam(name = "arg1", targetNamespace = "")
+        String arg1,
+        @WebParam(name = "arg2", targetNamespace = "")
+        int arg2,
+        @WebParam(name = "arg3", targetNamespace = "")
+        String arg3);
+
+    /**
+     * 
      * @param arg0
      * @return
      *     returns java.util.List<webservices.Comentario>
@@ -1041,6 +1062,60 @@ public interface Publicador {
     public List<Comentario> listarComentarios(
         @WebParam(name = "arg0", targetNamespace = "")
         int arg0);
+
+    /**
+     * 
+     * @param arg1
+     * @param arg0
+     * @return
+     *     returns java.util.List<webservices.Comentario>
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "listarRespuestas", targetNamespace = "http://services/", className = "webservices.ListarRespuestas")
+    @ResponseWrapper(localName = "listarRespuestasResponse", targetNamespace = "http://services/", className = "webservices.ListarRespuestasResponse")
+    @Action(input = "http://services/Publicador/listarRespuestasRequest", output = "http://services/Publicador/listarRespuestasResponse")
+    public List<Comentario> listarRespuestas(
+        @WebParam(name = "arg0", targetNamespace = "")
+        int arg0,
+        @WebParam(name = "arg1", targetNamespace = "")
+        int arg1);
+
+    /**
+     * 
+     * @param arg0
+     * @return
+     *     returns java.util.List<webservices.Comentario>
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "getRespuestas", targetNamespace = "http://services/", className = "webservices.GetRespuestas")
+    @ResponseWrapper(localName = "getRespuestasResponse", targetNamespace = "http://services/", className = "webservices.GetRespuestasResponse")
+    @Action(input = "http://services/Publicador/getRespuestasRequest", output = "http://services/Publicador/getRespuestasResponse")
+    public List<Comentario> getRespuestas(
+        @WebParam(name = "arg0", targetNamespace = "")
+        Comentario arg0);
+
+    /**
+     * 
+     * @param arg2
+     * @param arg1
+     * @param arg0
+     * @return
+     *     returns java.lang.String
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "imprimirFechaRespuesta", targetNamespace = "http://services/", className = "webservices.ImprimirFechaRespuesta")
+    @ResponseWrapper(localName = "imprimirFechaRespuestaResponse", targetNamespace = "http://services/", className = "webservices.ImprimirFechaRespuestaResponse")
+    @Action(input = "http://services/Publicador/imprimirFechaRespuestaRequest", output = "http://services/Publicador/imprimirFechaRespuestaResponse")
+    public String imprimirFechaRespuesta(
+        @WebParam(name = "arg0", targetNamespace = "")
+        int arg0,
+        @WebParam(name = "arg1", targetNamespace = "")
+        int arg1,
+        @WebParam(name = "arg2", targetNamespace = "")
+        int arg2);
 
     /**
      * 
@@ -1791,21 +1866,6 @@ public interface Publicador {
     @ResponseWrapper(localName = "getNumeroComResponse", targetNamespace = "http://services/", className = "webservices.GetNumeroComResponse")
     @Action(input = "http://services/Publicador/getNumeroComRequest", output = "http://services/Publicador/getNumeroComResponse")
     public int getNumeroCom(
-        @WebParam(name = "arg0", targetNamespace = "")
-        Comentario arg0);
-
-    /**
-     * 
-     * @param arg0
-     * @return
-     *     returns java.util.List<webservices.Comentario>
-     */
-    @WebMethod
-    @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getRespuestas", targetNamespace = "http://services/", className = "webservices.GetRespuestas")
-    @ResponseWrapper(localName = "getRespuestasResponse", targetNamespace = "http://services/", className = "webservices.GetRespuestasResponse")
-    @Action(input = "http://services/Publicador/getRespuestasRequest", output = "http://services/Publicador/getRespuestasResponse")
-    public List<Comentario> getRespuestas(
         @WebParam(name = "arg0", targetNamespace = "")
         Comentario arg0);
 

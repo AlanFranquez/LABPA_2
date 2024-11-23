@@ -9,6 +9,7 @@
 <%@ page import="webservices.*"%>
 <%@page import="java.util.Collections"%>
 <%@page import="java.util.List"%>
+<%@page import="java.util.Formatter"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -204,7 +205,8 @@ if (cl != null) {
 		%>
 	</main>
 
-	<br><br>
+	<br>
+	<br>
 
 	<div class="container my-4 p-3 border rounded shadow-sm">
 		<%
@@ -269,7 +271,7 @@ if (cl != null) {
 	}
 	%>
 
-	<div class="container">
+	<div class="container mt-5">
 		<%
 		if (usr != null && usr instanceof Cliente && comproProducto) {
 		%>
@@ -287,61 +289,107 @@ if (cl != null) {
 		}
 		%>
 	</div>
-
-<div class="container mt-5">
-
-<h1>COMENTARIOS</h1>
-
-	<%
-	if (comentarios == null) {
-	%>
-	<div class="alert alert-info" role="alert">Todavía no hay
-		comentarios.</div>
-	<%
-	} else {
-	%>
-
-	<%
-	for (Comentario c : comentarios) {
-	%>
-
-	<div class="card card-body">
-		<h6 class="font-weight-bold"><%=port.imprimirTextoComentario(c.getNumero(), id)%></h6>
-		<p><%=port.imprimirAutor(c.getNumero(), id)%></p>
-		<p><%=port.imprimirFechaComentario(c.getNumero(), id)%></p>
-	</div>
-
-
-
 	
+	<div class="container mt-5">
 
-			<%
-			}
-			}
-			%>
+<%
+for (Comentario c : comentarios) {
+%>
+<div class="card card-body">
+    <div>
+        <div class="card mt-2" style="border: none;">
+            <div class="card-body">
+                <div class="d-flex align-items-start">
+                    <img src="media/"
+                         alt="Autor" class="mr-3"
+                         style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;">
+                    <div class="ml-3" style="margin-left: 15px;">
+                        <h6 style="font-size: 1.1em;"><b><%=port.imprimirAutor(c.getNumero(), id)%></b></h6>
+                        <p style="font-size: 0.9em;"><%=port.imprimirTextoComentario(c.getNumero(), id)%></p>
+                        <small class="text-muted"><%=port.imprimirFechaComentario(c.getNumero(), id)%></small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <% if (comproProducto) { %>
+    <div class="accordion" id="accordion<%=c.getNumero()%>">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="heading<%=c.getNumero()%>">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapse<%=c.getNumero()%>"
+                        aria-expanded="false" aria-controls="collapse<%=c.getNumero()%>">
+                    Responder
+                </button>
+            </h2>
+            <div id="collapse<%=c.getNumero()%>"
+                 class="accordion-collapse collapse"
+                 aria-labelledby="heading<%=c.getNumero()%>">
+                <div class="accordion-body">
+                    <form id="formularioRespuesta" action="enviarRespuesta" method="post">
+                        <textarea name="respuesta" class="form-control" rows="3"
+                                  placeholder="Escribe tu respuesta..." required></textarea>
+                        <input type="hidden" name="dtprod" value="<%=id%>">
+                        <input type="hidden" name="comentarioId" value="<%=c.getNumero()%>">
+                        <button class="btn btn-primary mt-3" type="submit">Enviar Respuesta</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <% } %>
+
+    <div class="mt-3">
+        <h6>Respuestas:</h6>
+        <%
+        List<Comentario> respuestas = port.listarRespuestas(id, c.getNumero());
+        if (respuestas == null || respuestas.isEmpty()) {
+        %>
+        <div class="alert alert-secondary" role="alert">No hay respuestas a este comentario.</div>
+        <% } else { %>
+        <% for (Comentario r : respuestas) { %>
+        <div class="card mt-2" style="border: none;">
+            <div class="card-body">
+                <div class="d-flex align-items-start">
+                    <img src="media/"
+                         alt="Autor" class="mr-3"
+                         style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;">
+                    <div class="ml-3" style="margin-left: 15px;">
+                        <h6 class="mt-0" style="font-size: 1.1em;"><%=r.getAutor().getNick()%></h6>
+                        <p style="font-size: 0.9em;"><%=r.getTexto()%></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% } %>
+        <% } %>
+    </div>
+</div>
+<% } %>
+
 
 </div>
 
-	
-
-			<!-- PARTE FINAL PAGINA -->
+	<!-- PARTE FINAL PAGINA -->
 
 
-			<div
-				class="part-final d-flex justify-content-center align-items-center">
-				<p class="text-center">
-					Todos los derechos reservados, 2024. <br> Laboratorio PA.
-				</p>
-			</div>
+	<div
+		class="part-final d-flex justify-content-center align-items-center">
+		<p class="text-center">
+			Todos los derechos reservados, 2024. <br> Laboratorio PA.
+		</p>
+	</div>
 
-			<script
-				src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-				integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-				crossorigin="anonymous">
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+		crossorigin="anonymous">
 
 </script>
 
-			<script>
+	<script>
 function validarCantidad(form) {
     const cantidadInput = form.cantidad;
     const stock = parseInt(cantidadInput.max);
@@ -357,7 +405,7 @@ function validarCantidad(form) {
 }
 </script>
 
-			<script>
+	<script>
     const submitButton = document.getElementById('submit-btn');
     const radios = document.querySelectorAll('input[name="rate"]');
 
@@ -376,7 +424,7 @@ function validarCantidad(form) {
     });
 </script>
 
-			<script type="text/javascript">
+	<script type="text/javascript">
 document.getElementById("formulario").addEventListener("submit", function(event) {
     event.preventDefault(); 
 

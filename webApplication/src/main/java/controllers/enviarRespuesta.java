@@ -6,34 +6,21 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import webservices.Publicador;
+import webservices.PublicadorService;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.Random;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-
-import com.market.svcentral.Cliente;
-import com.market.svcentral.Comentario;
-import com.market.svcentral.Factory;
-import com.market.svcentral.ISistema;
-import com.market.svcentral.Producto;
 
 @WebServlet("/enviarRespuesta")
 public class enviarRespuesta extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    private ISistema sist;
 
     @Override
     public void init() throws ServletException {
-        try {
-            sist = Factory.getSistema();
-        } catch (Exception exeption) {
-            throw new ServletException("No se pudo inicializar ISistema", exeption);
-        }
+        
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -42,10 +29,8 @@ public class enviarRespuesta extends HttpServlet {
         String respuestaTexto = request.getParameter("respuesta");
         String comentarioIdStr = request.getParameter("comentarioId");
         
-    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-		EntityManager em = emf.createEntityManager();
-		
-		em.getTransaction().begin();
+        PublicadorService p = new PublicadorService();
+        Publicador port = p.getPublicadorPort();
         
         String parametro = request.getParameter("dtprod");
 
@@ -55,11 +40,7 @@ public class enviarRespuesta extends HttpServlet {
 		}
 		
 		int paramNum = Integer.parseInt(parametro);
-		Producto producto1 = em.find(Producto.class, paramNum);
-		if (session == null || session.getAttribute("usuarioLogueado") == null) {
-			response.sendRedirect("formlogin");
-			return;
-		}
+		
 		
 
         if (comentarioIdStr == null || comentarioIdStr.isEmpty()) {
@@ -68,27 +49,16 @@ public class enviarRespuesta extends HttpServlet {
         }
 
         int comentarioId = Integer.parseInt(comentarioIdStr);
-        System.out.print("ESTE ES EL COMENTARIO: " + producto1.getComentario(comentarioId).getTexto());
+        
        
         
-        Cliente cli = (Cliente) session.getAttribute("usuarioLogueado");
-        Comentario coment = producto1.getComentario(comentarioId);
-        
-        if (coment == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Comentario no encontrado.");
-            return;
-        }
+        webservices.Cliente cli = (webservices.Cliente) session.getAttribute("usuarioLogueado");
+       
         
         Random rand = new Random();
         int numeroRandom = rand.nextInt(20000);
 
-        Comentario respuesta = new Comentario(numeroRandom, respuestaTexto, cli, LocalDateTime.now());
-        coment.agregarRespuesta(respuesta);
-       
-		
-		em.getTransaction().commit();
-		
-		emf.close();
+        port.agregarRespuesta(comentarioId, respuestaTexto, numeroRandom, cli.getNick());
 
         // Redirigir a la página del producto
         response.sendRedirect("perfilProducto?producto=" + paramNum);

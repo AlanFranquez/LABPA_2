@@ -171,6 +171,9 @@ public class InitServlet extends HttpServlet {
              for(webservices.Comentario c : comentarios) {
             	 System.out.print("COMENTARIO --> "+ c.getTexto());
              }
+             
+             port.agregarRespuesta(5874, "lalalala", 2, "Juan123");
+             System.out.print("SE AGREGO RESPUESTA");
              /*
 
              // Crear la OrdenDeCompra con el proveedor
