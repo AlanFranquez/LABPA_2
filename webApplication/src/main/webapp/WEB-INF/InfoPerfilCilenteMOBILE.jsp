@@ -27,6 +27,8 @@
     	webservices.Usuario usr = (webservices.Usuario) request.getAttribute("usuarioLogueado");
     	
     	List<webservices.OrdenDeCompra> ordenes = (List<webservices.OrdenDeCompra>) request.getAttribute("ordenes");
+    	webservices.Cliente usuarioLogueado = (webservices.Cliente) request.getAttribute("usuarioLogueado");
+    	String nickUser = port.getNickCliente(usuarioLogueado);
     %>
 
 <%-- NAVBAR --%>
@@ -71,9 +73,9 @@
         </div>
         <div class="col-md-6 col-12">
             <p>Tipo de Usuario: <b>Cliente</b></p>
-            <p>Nickname: <b><%= usr.getNick() %></b></p>
-            <p>Nombre: <b><%= usr.getNombre() %></b></p>
-            <p>Apellido: <b><%= usr.getApellido() %></b></p>
+            <p>Nickname: <b><%= port.getNickDTCliente(nickUser) %></b></p>
+            <p>Nombre: <b><%= port.getNombreDTCliente(nickUser) %></b></p>
+            <p>Apellido: <b><%= port.getApellidoDTCliente(nickUser) %></b></p>
             <p>Fecha de Nacimiento: <br><b><%= port.imprimirFechaCliente(usr.getNick()) %></b></p>
         </div>
     </section>
@@ -128,7 +130,7 @@
                             <br>
             
                             
-                            <a style="text-decoration: none; color: white" href="perfilOrden?nickname=<%= port.getNickDTCliente(usr.getNick()) %>&orden=<%= port.getEstadoOrden(dt.getNumero()) %>" >VER DETALLES</a>
+                            <a style="text-decoration: none; color: white" href="perfilOrden?nickname=<%= port.getNickDTCliente(usr.getNick()) %>&orden=<%= port.getEstadoOrden(dt.getNumero(), usr.getNick()) %>" >VER DETALLES</a>
 
                            
                              <p class="card-text"><b>Precio total: </b><%= port.imprimirPrecioTotal(usr.getNick(), dt.getNumero()) %></p>

@@ -892,6 +892,26 @@ public class Publicador {
 		return c.getNick();
 	}
 	
+	@WebMethod
+	public Producto[] obtenerProductosProveedor(String nick) {
+		List<Producto> productos = null;
+		String jpql = "SELECT p FROM Producto p WHERE p.proveedor.nick = :proveedorNick";
+		productos = em.createQuery(jpql, Producto.class)
+                .setParameter("proveedorNick", nick)  // Usar el valor del parámetro correctamente
+                .getResultList();
+		return productos.toArray(new Producto[0]);
+		
+	}
+	
+	@WebMethod
+	public String getSitioWeb(String c) {
+		return em.find(Proveedor.class, c).getLink();
+	}
+	
+	@WebMethod
+	public String getCompania(String c) {
+		return em.find(Proveedor.class, c).getCompania();
+	}
 	
 	
 	/*

@@ -1,19 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <%@page import="java.util.HashMap"%>
-<%@page import="com.market.svcentral.Producto"%>
-<%@page import="com.market.svcentral.DTCliente"%>
-<%@page import="com.market.svcentral.DTOrdenDeCompra"%>
-<%@page import="com.market.svcentral.DTFecha" %>
-<%@page import="com.market.svcentral.DTProveedor" %>
-<%@page import="com.market.svcentral.Proveedor" %>
-<%@page import="com.market.svcentral.DtProducto" %>
-<%@page import="com.market.svcentral.Usuario" %>
+<%@page import="webservices.*"%>
 <%@page import="java.util.Collection"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.Map"%>
-<%@page import="com.market.svcentral.OrdenDeCompra"%>
+
 
 
 <!DOCTYPE html>
@@ -29,9 +22,16 @@
 <body>
     
     <%
+    	webservices.PublicadorService p = new PublicadorService();
+		webservices.Publicador port = p.getPublicadorPort();
+	
+    
     	Proveedor user = (Proveedor) request.getAttribute("usuario");
     	Usuario usr = (Usuario) request.getAttribute("usuarioLogueado");
     	List<Producto> prods = (List<Producto>) request.getAttribute("productos");
+    	
+    	webservices.Proveedor usuarioLogueado = (webservices.Proveedor) request.getAttribute("usuario");
+    	String nickUser = port.getNombreUsuario(usuarioLogueado);
     %>
    
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2C2C2C;">
@@ -52,11 +52,11 @@
             <ul class="navbar-nav align-items-center">
                 <li class="nav-item">
                    <% 
-if (user != null && user.getTipo().equals("proveedor")) { 
+if (user != null && port.getTipo(nickUser).equals("proveedor")) { 
 %> 
     <a class="nav-link" href="perfilProveedor?nickname=<%=user.getNick()%>">Perfil</a> 
 <% 
-} else if (user != null && user.getTipo().equals("cliente")) { 
+} else if (user != null && port.getTipo(nickUser).equals("cliente")) { 
 %> 
     <a class="nav-link" href="perfilCliente?nickname=<%=user.getNick()%>">Perfil</a>
 <% 
@@ -64,7 +64,7 @@ if (user != null && user.getTipo().equals("proveedor")) {
 %>
                 </li>
                 <%
-                if (user != null && user.getTipo().equals("cliente")) {
+                if (user != null && port.getTipo(nickUser).equals("cliente")) {
                 %>
                 <li class="nav-item"><a class="nav-link" href="Carrito">
                     <svg xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" viewBox="0 0 24 24">
@@ -91,16 +91,18 @@ if (user != null && user.getTipo().equals("proveedor")) {
             <% if (user.getImagen() == null) { %>
                 <p>No Hay imagen disponible :/</p>
             <% } else { %>
-                <img class="img-fluid rounded-circle" style="width: 200px; height: 200px; object-fit: cover;" src="media<%= user.getImagen() %>" alt="Imagen de proveedor" />
+                <img class="img-fluid rounded-circle" style="width: 200px; height: 200px; object-fit: cover;" 
+         src="data:image/jpg;base64,<%= request.getAttribute("imagenEnBits") %>" 
+         alt="Imagen de cliente" />
             <% } %>            	
         </div>
         <div class="col-md-6 col-12">
             <p>Tipo de Usuario: <b>Proveedor</b></p>
-            <p>Nickname: <b><%= user.getNick() %></b></p>
-            <p>Nombre: <b><%= user.getNombre() %></b></p>
-            <p>Apellido: <b><%= user.getApellido() %></b></p>              
-            <p>Sitio WEB: <a href="<%= user.getLink() %>"><%= user.getLink() %></a></p>
-            <p><b><%= user.getCompania() %></b></p>
+            <p>Nickname: <b><%= port.getNickDTCliente(nickUser) %></b></p>
+            <p>Nombre: <b><%= port.getNombreDTCliente(nickUser) %></b></p>
+            <p>Apellido: <b><%= port.getApellidoDTCliente(nickUser) %></b></p>              
+            <p>Sitio WEB: <a href="<%= port.getSitioWeb(nickUser) %>"><%= port.getSitioWeb(nickUser) %></a></p>
+            <p><b><%= port.getCompania(nickUser) %></b></p>
         </div>
     </section>
 </main>
@@ -113,23 +115,24 @@ if (user != null && user.getTipo().equals("proveedor")) {
     <% } else { 
         List<DtProducto> listaDTProductos = new ArrayList<>();
         
-        for (Producto p : prods) {
-            DtProducto dtp = p.crearDT();
+        for (Producto pr : prods) {
+            DtProducto dtp = port.crearDTProd(pr);
             listaDTProductos.add(dtp);
         }
     %>
     <div class="row row-cols-1 row-cols-md-3 g-4">
-        <% for (Producto p : prods) { 
-            DtProducto dtp = p.crearDT();
+        <% for (Producto pdt : prods) { 
+            DtProducto dtp = port.crearDTProd(pdt);
+            int id = port.imprimirNumRef(pdt.getNumRef());
         %>
             
             
              <div class="col-md-8 col-lg-6 col-xl-4 d-flex">
                 <div class="card flex-fill" style="border-radius: 15px; min-height: 400px;">
                     <div class="overflow-hidden" style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
-                        <% if(dtp.getImagenes() != null && !dtp.getImagenes().isEmpty())  {%>
+                        <% if(port.obtenerImagenesProducto(pdt) != null && !port.obtenerImagenesProducto(pdt).isEmpty())  {%>
                         
-                          <img src="media/<%= dtp.getImagenes().getFirst() %>"
+                          <img src="media/<%= port.obtenerImagenesProducto(pdt).getFirst() %>"
                              class="img-fluid" alt="Producto" 
                              style="width: 100%; height: 200px; object-fit: cover;" />
                         
@@ -144,18 +147,18 @@ if (user != null && user.getTipo().equals("proveedor")) {
                     </div>
                     <div class="card-body d-flex flex-column">
                         <div class="d-flex justify-content-between align-items-start">
-                            <p><a href="#!" class="text-dark"><%= dtp.getNombre() %></a></p>
-                            <p class="text-dark">#<%= dtp.getNumRef() %></p>
+                            <p><a href="#!" class="text-dark"><%= port.imprimirNombreProd(id) %></a></p>
+                            <p class="text-dark">#<%= port.imprimirNumRef(id) %></p>
                         </div>
-                            <p style="color: gray"><%= dtp.getDescripcion() %></p>
+                            <p style="color: gray"><%= port.imprimirDescripcion(id) %></p>
                         
                        
                         <div class="">
-                            <p class="text-dark">$<%= dtp.getPrecio() %></p>
+                            <p class="text-dark">$<%= port.imprimirPrecioProd(id) %></p>
                       
-                            <p class="alert alert-danger">Cantidad disponible: <%= dtp.getStock() %></p>
+                            <p class="alert alert-danger">Cantidad disponible: <%= port.imprimirStock(id) %></p>
                         </div>
-						<a href="perfilProducto?producto=<%= dtp != null ? dtp.getNumRef() : "" %>" class="btn" style="color: #0000EE; cursor: pointer">Ver Detalles</a>
+						<a href="perfilProducto?producto=<%= dtp != null ? port.imprimirNumRef(id) : "" %>" class="btn" style="color: #0000EE; cursor: pointer">Ver Detalles</a>
                         
                     </div>
                 </div>

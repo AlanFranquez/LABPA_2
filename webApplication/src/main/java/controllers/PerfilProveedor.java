@@ -14,9 +14,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-import com.market.svcentral.DTProveedor;
-import com.market.svcentral.Producto;
-import com.market.svcentral.Proveedor;
+import webservices.*;
+
+
 
 /**
  * Servlet implementation class Perfil
@@ -39,20 +39,16 @@ public class PerfilProveedor extends HttpServlet {
             return;
         }
         
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-        EntityManager em = emf.createEntityManager();
+        PublicadorService p = new PublicadorService();
+        Publicador port = p.getPublicadorPort();
         
-        em.getTransaction().begin();
+        
         Proveedor u = (Proveedor) session.getAttribute("usuarioLogueado");
-        Proveedor usuarioLogueado = em.find(Proveedor.class, u.getNick());
+        webservices.Usuario usuarioLogueado = (webservices.Usuario) session.getAttribute("usuarioLogueado");
         String parametro = request.getParameter("nickname");
         
         if (usuarioLogueado.getNick().equals(parametro)) {
-        	List<Producto> productos = null;
-            String jpql = "SELECT p FROM Producto p WHERE p.proveedor.nick = :proveedorNick";  // Usar el parámetro correctamente
-            productos = em.createQuery(jpql, Producto.class)
-                .setParameter("proveedorNick", parametro)  // Usar el valor del parámetro correctamente
-                .getResultList();
+        	List<Producto> productos = port.obtenerProductosProveedor(parametro);
 
             request.setAttribute("usuario", usuarioLogueado);
             request.setAttribute("productos", productos);
@@ -63,10 +59,7 @@ public class PerfilProveedor extends HttpServlet {
         
        
         response.sendRedirect("home");
-        
-        em.getTransaction().commit();
-        em.close();
-        emf.close();
+
     }
 
 	/**
