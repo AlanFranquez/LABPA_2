@@ -93,7 +93,9 @@ public class ObjectFactory {
     private final static QName _AsignarlePadreCategoriaResponse_QNAME = new QName("http://services/", "asignarlePadreCategoriaResponse");
     private final static QName _ComprobarCliente_QNAME = new QName("http://services/", "comprobarCliente");
     private final static QName _ImprimirFechaClienteResponse_QNAME = new QName("http://services/", "imprimirFechaClienteResponse");
+    private final static QName _ObtenerReclamosProdResponse_QNAME = new QName("http://services/", "obtenerReclamosProdResponse");
     private final static QName _VaciarCarrito_QNAME = new QName("http://services/", "vaciarCarrito");
+    private final static QName _ObtenerReclamosProd_QNAME = new QName("http://services/", "obtenerReclamosProd");
     private final static QName _AgregarRespuestaResponse_QNAME = new QName("http://services/", "agregarRespuestaResponse");
     private final static QName _AgregarProductoResponse_QNAME = new QName("http://services/", "agregarProductoResponse");
     private final static QName _ImprimirEspecResponse_QNAME = new QName("http://services/", "imprimirEspecResponse");
@@ -1918,6 +1920,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ObtenerReclamosProdResponse }
+     * 
+     */
+    public ObtenerReclamosProdResponse createObtenerReclamosProdResponse() {
+        return new ObtenerReclamosProdResponse();
+    }
+
+    /**
      * Create an instance of {@link VaciarCarrito }
      * 
      */
@@ -1947,6 +1957,14 @@ public class ObjectFactory {
      */
     public AgregarRespuestaResponse createAgregarRespuestaResponse() {
         return new AgregarRespuestaResponse();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerReclamosProd }
+     * 
+     */
+    public ObtenerReclamosProd createObtenerReclamosProd() {
+        return new ObtenerReclamosProd();
     }
 
     /**
@@ -2507,6 +2525,14 @@ public class ObjectFactory {
      */
     public DtOrdenDeCompra createDtOrdenDeCompra() {
         return new DtOrdenDeCompra();
+    }
+
+    /**
+     * Create an instance of {@link Reclamo }
+     * 
+     */
+    public Reclamo createReclamo() {
+        return new Reclamo();
     }
 
     /**
@@ -3211,12 +3237,30 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ObtenerReclamosProdResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://services/", name = "obtenerReclamosProdResponse")
+    public JAXBElement<ObtenerReclamosProdResponse> createObtenerReclamosProdResponse(ObtenerReclamosProdResponse value) {
+        return new JAXBElement<ObtenerReclamosProdResponse>(_ObtenerReclamosProdResponse_QNAME, ObtenerReclamosProdResponse.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link VaciarCarrito }{@code >}}
      * 
      */
     @XmlElementDecl(namespace = "http://services/", name = "vaciarCarrito")
     public JAXBElement<VaciarCarrito> createVaciarCarrito(VaciarCarrito value) {
         return new JAXBElement<VaciarCarrito>(_VaciarCarrito_QNAME, VaciarCarrito.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ObtenerReclamosProd }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://services/", name = "obtenerReclamosProd")
+    public JAXBElement<ObtenerReclamosProd> createObtenerReclamosProd(ObtenerReclamosProd value) {
+        return new JAXBElement<ObtenerReclamosProd>(_ObtenerReclamosProd_QNAME, ObtenerReclamosProd.class, null, value);
     }
 
     /**
