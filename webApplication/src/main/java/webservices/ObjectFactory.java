@@ -56,6 +56,7 @@ public class ObjectFactory {
     private final static QName _ImprimirNombreProdResponse_QNAME = new QName("http://services/", "imprimirNombreProdResponse");
     private final static QName _ImprimirTextoComentario_QNAME = new QName("http://services/", "imprimirTextoComentario");
     private final static QName _ObtenerProvDeProducto_QNAME = new QName("http://services/", "obtenerProvDeProducto");
+    private final static QName _ListarClientesResponse_QNAME = new QName("http://services/", "listarClientesResponse");
     private final static QName _UsuarioRepetidoException_QNAME = new QName("http://services/", "UsuarioRepetidoException");
     private final static QName _ObtenerImagenUsuario_QNAME = new QName("http://services/", "obtenerImagenUsuario");
     private final static QName _Item_QNAME = new QName("http://services/", "item");
@@ -229,6 +230,7 @@ public class ObjectFactory {
     private final static QName _GetCompra_QNAME = new QName("http://services/", "getCompra");
     private final static QName _AgregarCATPadre_QNAME = new QName("http://services/", "agregarCATPadre");
     private final static QName _GetnickProvDTProdResponse_QNAME = new QName("http://services/", "getnickProvDTProdResponse");
+    private final static QName _ListarClientes_QNAME = new QName("http://services/", "listarClientes");
     private final static QName _RealizarCompraResponse_QNAME = new QName("http://services/", "realizarCompraResponse");
     private final static QName _RealizarCompra_QNAME = new QName("http://services/", "realizarCompra");
     private final static QName _OrdenDeCompra_QNAME = new QName("http://services/", "ordenDeCompra");
@@ -564,6 +566,14 @@ public class ObjectFactory {
      */
     public GetnickProvDTProdResponse createGetnickProvDTProdResponse() {
         return new GetnickProvDTProdResponse();
+    }
+
+    /**
+     * Create an instance of {@link ListarClientes }
+     * 
+     */
+    public ListarClientes createListarClientes() {
+        return new ListarClientes();
     }
 
     /**
@@ -1612,6 +1622,14 @@ public class ObjectFactory {
      */
     public ObtenerProvDeProducto createObtenerProvDeProducto() {
         return new ObtenerProvDeProducto();
+    }
+
+    /**
+     * Create an instance of {@link ListarClientesResponse }
+     * 
+     */
+    public ListarClientesResponse createListarClientesResponse() {
+        return new ListarClientesResponse();
     }
 
     /**
@@ -3108,6 +3126,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://services/", name = "obtenerProvDeProducto")
     public JAXBElement<ObtenerProvDeProducto> createObtenerProvDeProducto(ObtenerProvDeProducto value) {
         return new JAXBElement<ObtenerProvDeProducto>(_ObtenerProvDeProducto_QNAME, ObtenerProvDeProducto.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ListarClientesResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://services/", name = "listarClientesResponse")
+    public JAXBElement<ListarClientesResponse> createListarClientesResponse(ListarClientesResponse value) {
+        return new JAXBElement<ListarClientesResponse>(_ListarClientesResponse_QNAME, ListarClientesResponse.class, null, value);
     }
 
     /**
@@ -4665,6 +4692,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://services/", name = "getnickProvDTProdResponse")
     public JAXBElement<GetnickProvDTProdResponse> createGetnickProvDTProdResponse(GetnickProvDTProdResponse value) {
         return new JAXBElement<GetnickProvDTProdResponse>(_GetnickProvDTProdResponse_QNAME, GetnickProvDTProdResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ListarClientes }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://services/", name = "listarClientes")
+    public JAXBElement<ListarClientes> createListarClientes(ListarClientes value) {
+        return new JAXBElement<ListarClientes>(_ListarClientes_QNAME, ListarClientes.class, null, value);
     }
 
     /**

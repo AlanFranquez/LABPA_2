@@ -5,15 +5,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.market.svcentral.Cliente;
-import com.market.svcentral.DTCliente;
-import com.market.svcentral.Factory;
-import com.market.svcentral.ISistema;
-import com.market.svcentral.Usuario;
+import webservices.*;
+
 
 /**
  * Servlet implementation class Usuarios
@@ -26,23 +25,21 @@ public class Usuarios extends HttpServlet {
      * @see HttpServlet#HttpServlet()
      */
 
-	private ISistema sistema;
 
-    @Override
-    public void init() throws ServletException {
-        try {
-            sistema = Factory.getSistema();  // Aquí puede estar fallando
-        } catch (Exception e) {
-            throw new ServletException("No se pudo inicializar ISistema", e);  // Manejar la excepción
-        }
-    }
-	
    
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+		HttpSession session = request.getSession(false);
+		// Si no hay usuario logueado
+        if (session == null || session.getAttribute("usuarioLogueado") == null) {
+            System.out.println("No hay usuario logueado. Redirigiendo a inicio no logueado.");
+            request.getRequestDispatcher("/WEB-INF/inicioNoLogueado.jsp").forward(request, response);
+            return;
+        }
         
-		
-        Usuario usr = sistema.getUsuario("agusmari");
+        PublicadorService p = new PublicadorService();
+        Publicador port = p.getPublicadorPort();
+        
+		webservices.Usuario usr = (webservices.Usuario) session.getAttribute("usuarioLogueado");
         if (usr == null) {
         	System.out.print("Hubo un problema");
         } else {
@@ -51,17 +48,17 @@ public class Usuarios extends HttpServlet {
         
         
 	
-		List<DTCliente> clientesPredeterminados = new ArrayList<>();
+		List<Cliente> clientesPredeterminados = new ArrayList<>();
 		String user = request.getParameter("usuario");
-		clientesPredeterminados = sistema.listarClientes();
+		clientesPredeterminados = port.listarClientes();
+		
 		
 		if (user == null) {
 			request.setAttribute("clientes", clientesPredeterminados);
-			 request.getRequestDispatcher("/WEB-INF/listaUsuarios.jsp").forward(request, response);
+			request.getRequestDispatcher("/WEB-INF/listaUsuarios.jsp").forward(request, response);
 			 
 		} else {
-			Cliente encontrado = (Cliente) sistema.getUsuario(user);
-			DTCliente dtEncontrado = encontrado.crearDt();
+			DtCliente dtEncontrado = port.obtenerDTCliente(user);
 			
 			
 			request.setAttribute("user", dtEncontrado);

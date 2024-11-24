@@ -1004,6 +1004,12 @@ public class Publicador {
 		return em.find(Proveedor.class, c).getCompania();
 	}
 	
+	@WebMethod
+	public List<Cliente> listarClientes() {
+	    return em.createQuery("SELECT c FROM Cliente c WHERE c.tipo = 'cliente'").getResultList();
+	}
+
+	
 
 
 	// FABRICIO
