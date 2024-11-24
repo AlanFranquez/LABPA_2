@@ -1,11 +1,4 @@
-<%@page import="com.market.svcentral.Sistema"%>
-<%@page import="com.market.svcentral.Usuario"%>
-<%@page import="com.market.svcentral.Producto"%>
-<%@page import="com.market.svcentral.DTCliente"%>
-<%@page import="com.market.svcentral.DtProducto"%>
-<%@page import="com.market.svcentral.Carrito"%>
-<%@page import="com.market.svcentral.Cliente"%>
-<%@page import="com.market.svcentral.Item"%>
+<%@page import="webservices.*"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
 <%@page language="java" contentType="text/html; charset=UTF-8"
@@ -23,6 +16,9 @@
 <body>
 
 <%
+PublicadorService p = new PublicadorService();
+Publicador port = p.getPublicadorPort();
+
 Usuario usr = (Usuario) request.getAttribute("usuarioLogueado");
 Carrito c = (Carrito) request.getAttribute("carrito");
 %>
@@ -46,11 +42,11 @@ Carrito c = (Carrito) request.getAttribute("carrito");
             <ul class="navbar-nav align-items-center">
                 <li class="nav-item">
                    <% 
-if (usr != null && usr.getTipo().equals("proveedor")) { 
+if (usr != null && usr instanceof Proveedor) { 
 %> 
     <a class="nav-link" href="perfilProveedor?nickname=<%=usr.getNick()%>">Perfil</a> 
 <% 
-} else if (usr != null && usr.getTipo().equals("cliente")) { 
+} else if (usr != null && usr instanceof Cliente) { 
 %> 
     <a class="nav-link" href="perfilCliente?nickname=<%=usr.getNick()%>">Perfil</a>
 <% 
@@ -58,7 +54,7 @@ if (usr != null && usr.getTipo().equals("proveedor")) {
 %>
                 </li>
                 <%
-                if (usr != null && usr.getTipo().equals("cliente")) {
+                if (usr != null && usr instanceof Cliente) {
                 %>
                 <li class="nav-item"><a class="nav-link" href="Carrito">
                     <svg xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" viewBox="0 0 24 24">
@@ -81,26 +77,26 @@ if (usr != null && usr.getTipo().equals("proveedor")) {
 
 <main class="container">
     <ul class="list-group list-group-flush">
-        <% List<Item> items = c.getProductos(); %>
+        <% List<Item> items = port.getItemsCarrito(usr.getNick()); %>
         <% for(Item i : items) { %>
             <li class="list-group-item d-flex column p-2 align-items-center mt-3" style="border: 1px solid gray; border-radius: 5px">
                 <div class="p-2">
                 	<%
-    List<String> imagenes = i.getProducto().crearDT().getImagenes();
+    List<String> imagenes = port.obtenerImagenesProducto(i.getProducto().getNumRef());
 %>
 
 <% if (imagenes == null || imagenes.isEmpty()) { %>
     <img alt="Img del producto" src="https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png" style="height: 100px; width: 100px;">
 <% } else { %>
-    <img alt="Img del producto" class="img-fluid mr-2"  style="max-width: 160px; height: auto;" src="media/<%= imagenes.getFirst() %>">
+    <img alt="Img del producto" class="img-fluid mr-2"  style="max-width: 160px; height: auto;" src="media/<%= port.obtenerPrimeraImagenProducto(i.getProducto().getNumRef()) %>">
 <% } %>
                    
                 </div>
                 <div>
-                    <h4><%= i.getProducto().crearDT().getNombre() %></h4>
+                    <h4><%= port.imprimirNombreProd(i.getProducto().getNumRef()) %></h4>
                     <p><b>Número de Referencia: </b><%= i.getProducto().getNumRef() %></p>
-                    <p><b>Descripción: </b><%= i.getProducto().crearDT().getDescripcion() %></p>
-                    <p><b>Precio: $</b><%= i.getProducto().getPrecio() %></p>
+                    <p><b>Descripción: </b><%= port.imprimirDescripcion(i.getProducto().getNumRef()) %></p>
+                    <p><b>Precio: $</b><%= port.imprimirPrecioProd(i.getProducto().getNumRef()) %></p>
                     <p><b>Cantidad Solicitada: </b><%= i.getCant() %></p>
                 </div>
             </li>

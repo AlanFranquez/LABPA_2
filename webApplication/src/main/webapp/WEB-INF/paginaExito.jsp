@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@page import="com.market.svcentral.Cliente"%>
+<%@page import="webservices.*"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -39,7 +39,7 @@
 			</div>
 		
 			<div class="col-md-6">
-				<h2>Felicidades, <%=cl.crearDt().getNick()%></h2>
+				<h2>Felicidades, <%=cl.getNombre()%></h2>
 			
 				<div class="alert alert-success">
 					<%=mensajeExito%>

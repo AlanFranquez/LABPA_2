@@ -38,8 +38,7 @@ public class RealizarCompra extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-/*
-HttpSession session = request.getSession();
+        HttpSession session = request.getSession();
         
         // Lógica de redirección para móviles
         String userAgent = request.getHeader("User-Agent");
@@ -57,11 +56,13 @@ HttpSession session = request.getSession();
 
         if (session == null || session.getAttribute("usuarioLogueado") == null) {
             response.sendRedirect("home");
+            System.out.print("NO HAY SESION");
             return;
         }
 
         if (session.getAttribute("mensajeExito") != null && !session.getAttribute("mensajeExito").equals("Su compra se ha realizado con éxito.")) {
             response.sendRedirect("home");
+            System.out.print("YA HAY MENSAJE DE EXITO");
             return;
         }
         
@@ -69,8 +70,9 @@ HttpSession session = request.getSession();
 
         Usuario user = (Usuario) session.getAttribute("usuarioLogueado");
 
-        if (port.getTipo(user.getNick()).equals("cliente")) {
+        if (user instanceof Proveedor) {
             response.sendRedirect("home");
+            System.out.print("NO ES UN CLIENTE");
             return;
         }
 
@@ -79,17 +81,17 @@ HttpSession session = request.getSession();
         
         if (cliente.getCarrito() == null || port.clienteTieneCarrito(cliente.getNick())) {
             response.sendRedirect("home");
+            System.out.print("EL CARRITO ES NULO");
             return;
         }
 
         request.setAttribute("usuarioLogueado", user);
         request.setAttribute("carrito", cliente.getCarrito());
         request.getRequestDispatcher("/WEB-INF/realizarCompra.jsp").forward(request, response);
-        */
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        /*HttpSession session = request.getSession();
+        HttpSession session = request.getSession();
         
         if (session == null || session.getAttribute("usuarioLogueado") == null) {
             response.sendRedirect("home");
@@ -121,7 +123,7 @@ HttpSession session = request.getSession();
 
         // Organizar los productos por proveedor
         for (Item item : items) {
-            Proveedor proveedor = port.getProveedorItem(item.getId());
+            Proveedor proveedor = port.obtenerProvDeProducto(item.getProducto().getNumRef());
             ordenesPorProveedor.putIfAbsent(proveedor, new HashMap<>());
             ordenesPorProveedor.get(proveedor).put(item.getProducto().getNumRef(), item);
             
@@ -150,7 +152,7 @@ HttpSession session = request.getSession();
             // Sumar el precio total del proveedor al total general
             precioTotalGeneral += precioTotalPorProveedor;
 
-            port.crearOrden(listaItems, precioTotalPorProveedor, proveedor.getNick(), user.getNick());
+            port.realizarCompraPRUEBA(listaItems, precioTotalPorProveedor, proveedor.getNick(), user.getNick());
         }
 //        port.vaciarCarritoCli(cliente.getNick());
         port.vaciarCarrito(user.getNick());
@@ -159,7 +161,6 @@ HttpSession session = request.getSession();
         session.setAttribute("mensajeExito", "Su compra se ha realizado con éxito.");
         session.setAttribute("precioTotal", String.valueOf(precioTotalGeneral)); // Total general de todas las órdenes
         
-        response.sendRedirect("PaginaExito");
-        */
+        request.getRequestDispatcher("/WEB-INF/paginaExito.jsp").forward(request, response);
     }
 }
