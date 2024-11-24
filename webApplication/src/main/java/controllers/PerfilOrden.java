@@ -75,15 +75,10 @@ public class PerfilOrden extends HttpServlet {
             	System.out.print("LISTA --> " + it.getProducto().getNumRef());
             }
             
-            if (orden != null) {
-            	
-                request.setAttribute("ordencompra", orden);
-                request.setAttribute("usuario", cliente);
-                request.setAttribute("items", items);
-                request.getRequestDispatcher("/WEB-INF/DetalleOrden.jsp").forward(request, response);
-            } else {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Orden no encontrada.");
-            }
+            request.setAttribute("ordencompra", orden);
+			request.setAttribute("usuario", cliente);
+			request.setAttribute("items", items);
+			request.getRequestDispatcher("/WEB-INF/DetalleOrden.jsp").forward(request, response);
             
             
         } else {

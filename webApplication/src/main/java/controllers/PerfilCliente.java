@@ -56,7 +56,7 @@ public class PerfilCliente extends HttpServlet {
                 userAgent.contains("iPad") || 
                 userAgent.contains("Windows Phone") || 
                 userAgent.contains("BlackBerry"))) {
-            request.getRequestDispatcher("/WEB-INF/construccion.jsp").forward(request, response);
+        	request.getRequestDispatcher("perfilClienteMOBILE").forward(request, response);
             return;
         }
         

@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -66,7 +67,10 @@ public class PerfilClienteMOBILE extends HttpServlet {
 
         // Si todas las condiciones se cumplen, cargar los datos de perfil
         webservices.Cliente cli = port.obtenerCliente(usuarioLogueado.getNick());
+     // Obtener las órdenes de compra del cliente
+        List<OrdenDeCompra> ordenes = port.getOrdenesCliente(port.getNickCliente(cli));
         
+        request.setAttribute("ordenes", ordenes);  // Pasar la lista de ordenes correctamente
         request.setAttribute("usuarioLogueado", usuarioLogueado);
         request.setAttribute("usuario", cli);
         request.getRequestDispatcher("/WEB-INF/InfoPerfilCilenteMOBILE.jsp").forward(request, response);

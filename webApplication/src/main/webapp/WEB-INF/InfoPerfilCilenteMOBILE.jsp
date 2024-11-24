@@ -130,7 +130,7 @@
                             <br>
             
                             
-                            <a style="text-decoration: none; color: white" href="perfilOrden?nickname=<%= port.getNickDTCliente(usr.getNick()) %>&orden=<%= port.getEstadoOrden(dt.getNumero(), usr.getNick()) %>" >VER DETALLES</a>
+                            
 
                            
                              <p class="card-text"><b>Precio total: </b><%= port.imprimirPrecioTotal(usr.getNick(), dt.getNumero()) %></p>
@@ -138,7 +138,7 @@
                            
                             <button class="btn" style="border: none; background-color: #2C2C2C">
                             
-                            <a style="text-decoration: none; color: white" href="perfilOrden?nickname=<%= port.getNickDTCliente(usr.getNick()) %>&orden=<%= dt.getNumero() %>" >VER DETALLES</a>
+                            <a style="text-decoration: none; color: white" href="perfilOrdenMOBILE?nickname=<%= port.getNickDTCliente(usr.getNick()) %>&orden=<%= dt.getNumero() %>" >VER DETALLES</a>
 
                             </button>
     

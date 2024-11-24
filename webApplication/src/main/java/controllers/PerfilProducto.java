@@ -59,7 +59,7 @@ public class PerfilProducto extends HttpServlet {
                 userAgent.contains("Windows Phone") || 
                 userAgent.contains("BlackBerry")
             )) {
-        	request.getRequestDispatcher("/WEB-INF/construccion.jsp").forward(request, response);
+        	request.getRequestDispatcher("perfilProductoMOBILE").forward(request, response);
         	return;
         } 
         

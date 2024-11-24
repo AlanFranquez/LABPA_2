@@ -6,10 +6,12 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import webservices.OrdenDeCompra;
 import webservices.Publicador;
 import webservices.PublicadorService;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -40,32 +42,33 @@ public class PerfilOrdenMOBILE extends HttpServlet {
         }
     }
 
-    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Detectar si el acceso proviene de un dispositivo móvil
+        //String nickname = request.getParameter("nickname");
+        String ordenParam = request.getParameter("orden");
+
         String userAgent = request.getHeader("User-Agent");
         boolean isMobile = isMobileDevice(userAgent);
         
-        if (!isMobile) {
-            response.sendRedirect("home");
+        HttpSession sess = request.getSession(false); // No crear una nueva sesión
+        if (sess == null || sess.getAttribute("usuarioLogueado") == null) {
+            response.sendRedirect("formlogin");
             return;
         }
+        
+        if(!isMobile) {
+        	response.sendRedirect("home");
+            return;
+        }
+        
         
         PublicadorService p = new PublicadorService();
         Publicador port = p.getPublicadorPort();
-        
-        String ordenParam = request.getParameter("orden");
-
-        HttpSession sess = request.getSession(false); // No crear una nueva sesión
-        if (sess == null || sess.getAttribute("usuarioLogueado") == null) {
-            response.sendRedirect("formloginMOBILE");
-            return;
-        }
 
         webservices.Usuario user = (webservices.Usuario) sess.getAttribute("usuarioLogueado");
         webservices.Cliente cliente = port.obtenerCliente(user.getNick());
-        request.setAttribute("usuarioOrdenEsp", cliente);
+        
 
+        // Comprobar que el parámetro de la orden no sea nulo y convertirlo a entero
         if (ordenParam != null && !ordenParam.isEmpty()) {
             int numeroOrden;
             try {
@@ -75,44 +78,59 @@ public class PerfilOrdenMOBILE extends HttpServlet {
                 return;
             }
 
-            webservices.OrdenDeCompra orden = port.getCompra(numeroOrden, cliente.getNick());
-            if (orden != null) {
-                request.setAttribute("ordencompra", orden);
-
-                request.getRequestDispatcher("/WEB-INF/DetalleOrdenMOBILE.jsp").forward(request, response);
-            } else {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Orden no encontrada.");
+            // Obtener la orden específica
+            OrdenDeCompra orden = port.getCompra(numeroOrden, cliente.getNick());
+            
+            
+            System.out.println("=======");
+            System.out.println(orden.getNumero());
+            System.out.println("=======");
+            
+            List<webservices.Item> items = port.imprimirITemsORDENS(numeroOrden, cliente.getNick());
+           String estado = port.getEstadoOrden(numeroOrden, cliente.getNick());
+            
+           
+            System.out.print("ESTADO -->" + estado);
+            for(webservices.Item it: items) {
+            	System.out.print("LISTA --> " + it.getProducto().getNumRef());
             }
+            
+            request.setAttribute("ordencompra", orden);
+			request.setAttribute("usuario", cliente);
+			request.setAttribute("items", items);
+			request.getRequestDispatcher("/WEB-INF/DetalleOrdenMOBILE.jsp").forward(request, response);
+            
+            
         } else {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Falta el número de orden.");
         }
-        
     }
 
-    @Override
+
+    /**
+     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String accion = request.getParameter("accion");
+    	String accion = request.getParameter("accion");
         String ordenParam = request.getParameter("numeroOrden");
+        
+        String userAgent = request.getHeader("User-Agent");
+        boolean isMobile = isMobileDevice(userAgent);
+        
+        HttpSession sess = request.getSession(false); // No crear una nueva sesión
+        if (sess == null || sess.getAttribute("usuarioLogueado") == null) {
+            response.sendRedirect("formlogin");
+            return;
+        }
+        
+        if(!isMobile) {
+        	response.sendRedirect("home");
+            return;
+        }
         
         PublicadorService p = new PublicadorService();
         Publicador port = p.getPublicadorPort();
         
-
-        // Detectar si el acceso proviene de un dispositivo móvil
-        String userAgent = request.getHeader("User-Agent");
-        boolean isMobile = isMobileDevice(userAgent);
-
-        if (!isMobile) {
-            response.sendRedirect("home");
-            return;
-        }
-
-        HttpSession sess = request.getSession(false);
-        if (sess == null || sess.getAttribute("usuarioLogueado") == null) {
-            response.sendRedirect("formloginMOBILE");
-            return;
-        }
-
         webservices.Usuario user = (webservices.Usuario) sess.getAttribute("usuarioLogueado");
         webservices.Cliente cliente = port.obtenerCliente(user.getNick());
         request.setAttribute("usuarioOrdenEsp", cliente);
@@ -125,22 +143,23 @@ public class PerfilOrdenMOBILE extends HttpServlet {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Número de orden inválido.");
                 return;
             }
-
+            
+            
+            
+            
             if ("confirmar".equals(accion)) {
             	webservices.OrdenDeCompra orden = port.getCompra(numeroOrden, cliente.getNick());
                 if (orden != null) {
-                	port.setEstado(orden.getNumero(), cliente.getNick(), "Entregada", "El cliente ha recibido el pedido.");
+             	    port.setEstado(orden.getNumero(), cliente.getNick(), "Entregada", "El cliente ha recibido el pedido.");
                 } else {
                     response.sendError(HttpServletResponse.SC_NOT_FOUND, "Orden no encontrada.");
                     return;
                 }
             }
-            
-            request.setAttribute("listaEstados", port.getHistorialEstado(numeroOrden, user.getNick()));
-            request.setAttribute("ordencompra", port.getCompra(numeroOrden, cliente.getNick()));
-            response.sendRedirect("perfilOrdenMOBILE?nickname=" + cliente.getNick() + "&orden=" + numeroOrden);
 
-            
+            request.setAttribute("ordencompra", port.getCompra(numeroOrden, cliente.getNick()));
+            response.sendRedirect("perfilOrden?nickname=" + port.getNickCliente(cliente) + "&orden=" + numeroOrden);
+
         } else {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Falta el número de orden.");
         }

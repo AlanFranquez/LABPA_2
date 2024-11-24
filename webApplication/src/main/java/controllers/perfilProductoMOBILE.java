@@ -7,22 +7,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-import java.beans.PersistenceDelegate;
+
 import java.io.IOException;
+import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+import webservices.*;
 
-import com.market.svcentral.DtProducto;
-import com.market.svcentral.Factory;
-import com.market.svcentral.ISistema;
-import com.market.svcentral.Producto;
-import com.market.svcentral.Usuario;
 
-/**
- * Servlet implementation class PerfilProducto
- */
 @WebServlet("/perfilProductoMOBILE")
 public class perfilProductoMOBILE extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -35,23 +26,10 @@ public class perfilProductoMOBILE extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
     
-    
-    private ISistema sistema;
-
-    @Override
-    public void init() throws ServletException {
-        try {
-            sistema = Factory.getSistema();  
-        } catch (Exception e) {
-            throw new ServletException("No se pudo inicializar ISistema", e);  
-        }
-    }
-
-	
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession(false); // Cambiado a false para no crear una nueva sesión
-        
-     // Detectar si el acceso proviene de un dispositivo móvil
+        HttpSession session = request.getSession(false);
+
+        // Detectar si el acceso proviene de un dispositivo móvil
         String userAgent = request.getHeader("User-Agent");
         boolean isMobile = isMobileDevice(userAgent);
 
@@ -59,55 +37,53 @@ public class perfilProductoMOBILE extends HttpServlet {
             response.sendRedirect("home");
             return;
         }
-       
+
+        PublicadorService p = new PublicadorService();
+        Publicador port = p.getPublicadorPort();
+
+
         if (session == null) {
-            response.sendRedirect("formloginMOBILE");
+            response.sendRedirect("formlogin");
             return;
         }
-        
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-        EntityManager em = emf.createEntityManager();
-        
-        em.getTransaction().begin();
 
-        Object usuarioLogueado = session.getAttribute("usuarioLogueado");
-        
+        webservices.Usuario usuarioLogueado = (webservices.Usuario) session.getAttribute("usuarioLogueado");
+
         if (usuarioLogueado == null) {
-        	response.sendRedirect("formlogin");
-        }
-        Usuario user = (Usuario) usuarioLogueado;
-        request.setAttribute("usuario", user);
-
-        try {
-            String parametro = request.getParameter("producto");
-            if (parametro == null) {
-                response.sendRedirect("perfilClienteMOBILE");
-                return;
-            }
-            int paramNumero = Integer.parseInt(parametro);
-            DtProducto dtprod = (em.find(Producto.class, paramNumero)).crearDT();
-
-            if (dtprod == null) {
-                response.sendRedirect("perfilClienteMOBILE");
-                return;
-            }
-            
-            request.setAttribute("dtprod", dtprod);
-            request.getRequestDispatcher("/WEB-INF/PerfilProductoMOBILE.jsp").forward(request, response);
-        } catch (NumberFormatException e) {
-            response.sendRedirect("perfilClienteMOBILE");
-        } catch (Exception e) {
-            // Manejar otras excepciones si es necesario
-            System.out.print(e); // O una página de error adecuada
+            response.sendRedirect("formlogin");
             return;
         }
+        webservices.Usuario user = (webservices.Usuario) usuarioLogueado;
+        request.setAttribute("usuario", user);
+        request.setAttribute("nickusuario", user.getNick());
+
+        String parametro = request.getParameter("producto");
+        if (parametro == null) {
+            response.sendRedirect("perfilCliente");
+            return;
+        }
+
+        System.out.print("VALOR A CONVERTIR -> " + parametro);
+        int paramNumero = Integer.parseInt(parametro);
+
+        // Obtener el producto del servicio
+        webservices.Producto producto =  port.obtenerProducto(paramNumero);
         
-        em.getTransaction().commit();
-        emf.close();
-        em.close();
-        
-        
+
+        List<webservices.Comentario> coms = port.listarComentarios(paramNumero);
+        for (webservices.Comentario c : coms) {
+            System.out.println("COMENTARIOS");
+            System.out.println(c.getTexto());
+        }
+
+        // Agregar atributos al request
+        request.setAttribute("coms", coms);
+        request.setAttribute("prod", producto);
+
+        // Redirigir al JSP correspondiente
+        request.getRequestDispatcher("/WEB-INF/PerfilProductoMOBILE.jsp").forward(request, response);
     }
+
     
  // Método auxiliar para detectar si el dispositivo es móvil
     private boolean isMobileDevice(String userAgent) {
