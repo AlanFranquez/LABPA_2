@@ -25,6 +25,7 @@ import javax.xml.namespace.QName;
 public class ObjectFactory {
 
     private final static QName _CrearDTClienteResponse_QNAME = new QName("http://services/", "crearDTClienteResponse");
+    private final static QName _IdReclamoResponse_QNAME = new QName("http://services/", "idReclamoResponse");
     private final static QName _BuscarProductos_QNAME = new QName("http://services/", "buscarProductos");
     private final static QName _ImprimirFechaRespuesta_QNAME = new QName("http://services/", "imprimirFechaRespuesta");
     private final static QName _ImprimirDescripcion_QNAME = new QName("http://services/", "imprimirDescripcion");
@@ -33,6 +34,7 @@ public class ObjectFactory {
     private final static QName _GetCompania_QNAME = new QName("http://services/", "getCompania");
     private final static QName _GetDescDTProdResponse_QNAME = new QName("http://services/", "getDescDTProdResponse");
     private final static QName _RealizarReclamo_QNAME = new QName("http://services/", "realizarReclamo");
+    private final static QName _IdReclamo_QNAME = new QName("http://services/", "idReclamo");
     private final static QName _NuevaFechaResponse_QNAME = new QName("http://services/", "nuevaFechaResponse");
     private final static QName _GetPrecioTotalOrdenResponse_QNAME = new QName("http://services/", "getPrecioTotalOrdenResponse");
     private final static QName _MostrarCompraClienteResponse_QNAME = new QName("http://services/", "mostrarCompraClienteResponse");
@@ -41,6 +43,7 @@ public class ObjectFactory {
     private final static QName _ObtenerCliente_QNAME = new QName("http://services/", "obtenerCliente");
     private final static QName _ImprimirFechaOrdenResponse_QNAME = new QName("http://services/", "imprimirFechaOrdenResponse");
     private final static QName _SetEstadoOrdenResponse_QNAME = new QName("http://services/", "setEstadoOrdenResponse");
+    private final static QName _ImprimirFechaReclamo_QNAME = new QName("http://services/", "imprimirFechaReclamo");
     private final static QName _AgregarCATPadreResponse_QNAME = new QName("http://services/", "agregarCATPadreResponse");
     private final static QName _GetCategoriasDTProdResponse_QNAME = new QName("http://services/", "getCategoriasDTProdResponse");
     private final static QName _GetHistorialEstado_QNAME = new QName("http://services/", "getHistorialEstado");
@@ -58,6 +61,7 @@ public class ObjectFactory {
     private final static QName _ImprimirAutor_QNAME = new QName("http://services/", "imprimirAutor");
     private final static QName _GetNickAutorResponse_QNAME = new QName("http://services/", "getNickAutorResponse");
     private final static QName _ImprimirTextoComentarioResponse_QNAME = new QName("http://services/", "imprimirTextoComentarioResponse");
+    private final static QName _ReclamoDTO_QNAME = new QName("http://services/", "reclamoDTO");
     private final static QName _ProdsAItem_QNAME = new QName("http://services/", "prodsAItem");
     private final static QName _SetEstado_QNAME = new QName("http://services/", "setEstado");
     private final static QName _GetItemsOrdenResponse_QNAME = new QName("http://services/", "getItemsOrdenResponse");
@@ -76,6 +80,7 @@ public class ObjectFactory {
     private final static QName _GetImagenesDTCliente_QNAME = new QName("http://services/", "getImagenesDTCliente");
     private final static QName _SetEstadoOrden_QNAME = new QName("http://services/", "setEstadoOrden");
     private final static QName _RealizarCompraPRUEBAResponse_QNAME = new QName("http://services/", "realizarCompraPRUEBAResponse");
+    private final static QName _ImprimirTextoReclamo_QNAME = new QName("http://services/", "imprimirTextoReclamo");
     private final static QName _EliminarProductoDelCarrito_QNAME = new QName("http://services/", "eliminarProductoDelCarrito");
     private final static QName _ObtenerProductoResponse_QNAME = new QName("http://services/", "obtenerProductoResponse");
     private final static QName _ObtenerOrden_QNAME = new QName("http://services/", "obtenerOrden");
@@ -133,12 +138,15 @@ public class ObjectFactory {
     private final static QName _ComproProducto_QNAME = new QName("http://services/", "comproProducto");
     private final static QName _GetNombreUsuario_QNAME = new QName("http://services/", "getNombreUsuario");
     private final static QName _GetEstado_QNAME = new QName("http://services/", "getEstado");
+    private final static QName _ImprimirAutorReclamo_QNAME = new QName("http://services/", "imprimirAutorReclamo");
     private final static QName _ExisteProdCarritoResponse_QNAME = new QName("http://services/", "existeProdCarritoResponse");
     private final static QName _GetNickPorDTCliente_QNAME = new QName("http://services/", "getNickPorDTCliente");
+    private final static QName _ImprimirNombreProdReclamo_QNAME = new QName("http://services/", "imprimirNombreProdReclamo");
     private final static QName _AgregarCATProductoResponse_QNAME = new QName("http://services/", "agregarCATProductoResponse");
     private final static QName _GetNickAutor_QNAME = new QName("http://services/", "getNickAutor");
     private final static QName _GetNickxDTClienteResponse_QNAME = new QName("http://services/", "getNickxDTClienteResponse");
     private final static QName _GetFechaNacDTClienteString_QNAME = new QName("http://services/", "getFechaNacDTClienteString");
+    private final static QName _ImprimirFechaReclamoResponse_QNAME = new QName("http://services/", "imprimirFechaReclamoResponse");
     private final static QName _ObtenerDTCliente_QNAME = new QName("http://services/", "obtenerDTCliente");
     private final static QName _AgregarCompraClienteResponse_QNAME = new QName("http://services/", "agregarCompraClienteResponse");
     private final static QName _GetNombreProdResponse_QNAME = new QName("http://services/", "getNombreProdResponse");
@@ -180,6 +188,7 @@ public class ObjectFactory {
     private final static QName _SetCarritoClienteResponse_QNAME = new QName("http://services/", "setCarritoClienteResponse");
     private final static QName _GetSitioWebResponse_QNAME = new QName("http://services/", "getSitioWebResponse");
     private final static QName _ImprimirDescripcionResponse_QNAME = new QName("http://services/", "imprimirDescripcionResponse");
+    private final static QName _ImprimirNombreProdReclamoResponse_QNAME = new QName("http://services/", "imprimirNombreProdReclamoResponse");
     private final static QName _GetNombreProd_QNAME = new QName("http://services/", "getNombreProd");
     private final static QName _AgregarProductoAlCarritoResponse_QNAME = new QName("http://services/", "agregarProductoAlCarritoResponse");
     private final static QName _ObtenerProductosProveedorResponse_QNAME = new QName("http://services/", "obtenerProductosProveedorResponse");
@@ -235,6 +244,8 @@ public class ObjectFactory {
     private final static QName _AgregarCategoriaProducto_QNAME = new QName("http://services/", "agregarCategoriaProducto");
     private final static QName _ImprimirPrecioProd_QNAME = new QName("http://services/", "imprimirPrecioProd");
     private final static QName _GetRespuestasResponse_QNAME = new QName("http://services/", "getRespuestasResponse");
+    private final static QName _ImprimirAutorReclamoResponse_QNAME = new QName("http://services/", "imprimirAutorReclamoResponse");
+    private final static QName _ObtenerReclamosResponse_QNAME = new QName("http://services/", "obtenerReclamosResponse");
     private final static QName _AgregarCATProducto_QNAME = new QName("http://services/", "agregarCATProducto");
     private final static QName _IOException_QNAME = new QName("http://services/", "IOException");
     private final static QName _ObtenerClienteResponse_QNAME = new QName("http://services/", "obtenerClienteResponse");
@@ -246,6 +257,7 @@ public class ObjectFactory {
     private final static QName _BuscarProductosResponse_QNAME = new QName("http://services/", "buscarProductosResponse");
     private final static QName _GetPrecioProd_QNAME = new QName("http://services/", "getPrecioProd");
     private final static QName _VaciarCarritoResponse_QNAME = new QName("http://services/", "vaciarCarritoResponse");
+    private final static QName _ObtenerReclamos_QNAME = new QName("http://services/", "obtenerReclamos");
     private final static QName _GetImagenesDTClienteResponse_QNAME = new QName("http://services/", "getImagenesDTClienteResponse");
     private final static QName _ProdsAItemResponse_QNAME = new QName("http://services/", "prodsAItemResponse");
     private final static QName _ObtenerPrimeraImagenProducto_QNAME = new QName("http://services/", "obtenerPrimeraImagenProducto");
@@ -254,6 +266,7 @@ public class ObjectFactory {
     private final static QName _GetNumeroCom_QNAME = new QName("http://services/", "getNumeroCom");
     private final static QName _GetPrecioProdResponse_QNAME = new QName("http://services/", "getPrecioProdResponse");
     private final static QName _GetTipoResponse_QNAME = new QName("http://services/", "getTipoResponse");
+    private final static QName _ImprimirTextoReclamoResponse_QNAME = new QName("http://services/", "imprimirTextoReclamoResponse");
     private final static QName _ImprimirFechaComentario_QNAME = new QName("http://services/", "imprimirFechaComentario");
     private final static QName _ComproProductoResponse_QNAME = new QName("http://services/", "comproProductoResponse");
     private final static QName _VerificarClienteYCrearCarrito_QNAME = new QName("http://services/", "verificarClienteYCrearCarrito");
@@ -445,6 +458,14 @@ public class ObjectFactory {
      */
     public ImprimirDescripcionResponse createImprimirDescripcionResponse() {
         return new ImprimirDescripcionResponse();
+    }
+
+    /**
+     * Create an instance of {@link ImprimirNombreProdReclamoResponse }
+     * 
+     */
+    public ImprimirNombreProdReclamoResponse createImprimirNombreProdReclamoResponse() {
+        return new ImprimirNombreProdReclamoResponse();
     }
 
     /**
@@ -840,6 +861,22 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ImprimirAutorReclamoResponse }
+     * 
+     */
+    public ImprimirAutorReclamoResponse createImprimirAutorReclamoResponse() {
+        return new ImprimirAutorReclamoResponse();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerReclamosResponse }
+     * 
+     */
+    public ObtenerReclamosResponse createObtenerReclamosResponse() {
+        return new ObtenerReclamosResponse();
+    }
+
+    /**
      * Create an instance of {@link GetRespuestasResponse }
      * 
      */
@@ -984,6 +1021,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ImprimirTextoReclamoResponse }
+     * 
+     */
+    public ImprimirTextoReclamoResponse createImprimirTextoReclamoResponse() {
+        return new ImprimirTextoReclamoResponse();
+    }
+
+    /**
      * Create an instance of {@link GetNumeroCom }
      * 
      */
@@ -1029,6 +1074,14 @@ public class ObjectFactory {
      */
     public VaciarCarritoResponse createVaciarCarritoResponse() {
         return new VaciarCarritoResponse();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerReclamos }
+     * 
+     */
+    public ObtenerReclamos createObtenerReclamos() {
+        return new ObtenerReclamos();
     }
 
     /**
@@ -1352,6 +1405,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link IdReclamo }
+     * 
+     */
+    public IdReclamo createIdReclamo() {
+        return new IdReclamo();
+    }
+
+    /**
      * Create an instance of {@link GetDescDTProdResponse }
      * 
      */
@@ -1421,6 +1482,14 @@ public class ObjectFactory {
      */
     public CrearDTClienteResponse createCrearDTClienteResponse() {
         return new CrearDTClienteResponse();
+    }
+
+    /**
+     * Create an instance of {@link IdReclamoResponse }
+     * 
+     */
+    public IdReclamoResponse createIdReclamoResponse() {
+        return new IdReclamoResponse();
     }
 
     /**
@@ -1533,6 +1602,14 @@ public class ObjectFactory {
      */
     public AgregarComentarioResponse createAgregarComentarioResponse() {
         return new AgregarComentarioResponse();
+    }
+
+    /**
+     * Create an instance of {@link ImprimirFechaReclamo }
+     * 
+     */
+    public ImprimirFechaReclamo createImprimirFechaReclamo() {
+        return new ImprimirFechaReclamo();
     }
 
     /**
@@ -1664,6 +1741,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ReclamoDTO }
+     * 
+     */
+    public ReclamoDTO createReclamoDTO() {
+        return new ReclamoDTO();
+    }
+
+    /**
      * Create an instance of {@link ImprimirCantidad }
      * 
      */
@@ -1749,6 +1834,14 @@ public class ObjectFactory {
      */
     public GetSubTotaItemResponse createGetSubTotaItemResponse() {
         return new GetSubTotaItemResponse();
+    }
+
+    /**
+     * Create an instance of {@link ImprimirTextoReclamo }
+     * 
+     */
+    public ImprimirTextoReclamo createImprimirTextoReclamo() {
+        return new ImprimirTextoReclamo();
     }
 
     /**
@@ -2280,6 +2373,22 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ImprimirNombreProdReclamo }
+     * 
+     */
+    public ImprimirNombreProdReclamo createImprimirNombreProdReclamo() {
+        return new ImprimirNombreProdReclamo();
+    }
+
+    /**
+     * Create an instance of {@link ImprimirFechaReclamoResponse }
+     * 
+     */
+    public ImprimirFechaReclamoResponse createImprimirFechaReclamoResponse() {
+        return new ImprimirFechaReclamoResponse();
+    }
+
+    /**
      * Create an instance of {@link ObtenerDTCliente }
      * 
      */
@@ -2325,6 +2434,14 @@ public class ObjectFactory {
      */
     public GetFechaNacDTClienteString createGetFechaNacDTClienteString() {
         return new GetFechaNacDTClienteString();
+    }
+
+    /**
+     * Create an instance of {@link ImprimirAutorReclamo }
+     * 
+     */
+    public ImprimirAutorReclamo createImprimirAutorReclamo() {
+        return new ImprimirAutorReclamo();
     }
 
     /**
@@ -2625,6 +2742,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link IdReclamoResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://services/", name = "idReclamoResponse")
+    public JAXBElement<IdReclamoResponse> createIdReclamoResponse(IdReclamoResponse value) {
+        return new JAXBElement<IdReclamoResponse>(_IdReclamoResponse_QNAME, IdReclamoResponse.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link BuscarProductos }{@code >}}
      * 
      */
@@ -2697,6 +2823,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link IdReclamo }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://services/", name = "idReclamo")
+    public JAXBElement<IdReclamo> createIdReclamo(IdReclamo value) {
+        return new JAXBElement<IdReclamo>(_IdReclamo_QNAME, IdReclamo.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link NuevaFechaResponse }{@code >}}
      * 
      */
@@ -2766,6 +2901,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://services/", name = "setEstadoOrdenResponse")
     public JAXBElement<SetEstadoOrdenResponse> createSetEstadoOrdenResponse(SetEstadoOrdenResponse value) {
         return new JAXBElement<SetEstadoOrdenResponse>(_SetEstadoOrdenResponse_QNAME, SetEstadoOrdenResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ImprimirFechaReclamo }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://services/", name = "imprimirFechaReclamo")
+    public JAXBElement<ImprimirFechaReclamo> createImprimirFechaReclamo(ImprimirFechaReclamo value) {
+        return new JAXBElement<ImprimirFechaReclamo>(_ImprimirFechaReclamo_QNAME, ImprimirFechaReclamo.class, null, value);
     }
 
     /**
@@ -2919,6 +3063,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://services/", name = "imprimirTextoComentarioResponse")
     public JAXBElement<ImprimirTextoComentarioResponse> createImprimirTextoComentarioResponse(ImprimirTextoComentarioResponse value) {
         return new JAXBElement<ImprimirTextoComentarioResponse>(_ImprimirTextoComentarioResponse_QNAME, ImprimirTextoComentarioResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ReclamoDTO }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://services/", name = "reclamoDTO")
+    public JAXBElement<ReclamoDTO> createReclamoDTO(ReclamoDTO value) {
+        return new JAXBElement<ReclamoDTO>(_ReclamoDTO_QNAME, ReclamoDTO.class, null, value);
     }
 
     /**
@@ -3081,6 +3234,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://services/", name = "realizarCompraPRUEBAResponse")
     public JAXBElement<RealizarCompraPRUEBAResponse> createRealizarCompraPRUEBAResponse(RealizarCompraPRUEBAResponse value) {
         return new JAXBElement<RealizarCompraPRUEBAResponse>(_RealizarCompraPRUEBAResponse_QNAME, RealizarCompraPRUEBAResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ImprimirTextoReclamo }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://services/", name = "imprimirTextoReclamo")
+    public JAXBElement<ImprimirTextoReclamo> createImprimirTextoReclamo(ImprimirTextoReclamo value) {
+        return new JAXBElement<ImprimirTextoReclamo>(_ImprimirTextoReclamo_QNAME, ImprimirTextoReclamo.class, null, value);
     }
 
     /**
@@ -3597,6 +3759,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ImprimirAutorReclamo }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://services/", name = "imprimirAutorReclamo")
+    public JAXBElement<ImprimirAutorReclamo> createImprimirAutorReclamo(ImprimirAutorReclamo value) {
+        return new JAXBElement<ImprimirAutorReclamo>(_ImprimirAutorReclamo_QNAME, ImprimirAutorReclamo.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link ExisteProdCarritoResponse }{@code >}}
      * 
      */
@@ -3612,6 +3783,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://services/", name = "getNickPorDTCliente")
     public JAXBElement<GetNickPorDTCliente> createGetNickPorDTCliente(GetNickPorDTCliente value) {
         return new JAXBElement<GetNickPorDTCliente>(_GetNickPorDTCliente_QNAME, GetNickPorDTCliente.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ImprimirNombreProdReclamo }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://services/", name = "imprimirNombreProdReclamo")
+    public JAXBElement<ImprimirNombreProdReclamo> createImprimirNombreProdReclamo(ImprimirNombreProdReclamo value) {
+        return new JAXBElement<ImprimirNombreProdReclamo>(_ImprimirNombreProdReclamo_QNAME, ImprimirNombreProdReclamo.class, null, value);
     }
 
     /**
@@ -3648,6 +3828,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://services/", name = "getFechaNacDTClienteString")
     public JAXBElement<GetFechaNacDTClienteString> createGetFechaNacDTClienteString(GetFechaNacDTClienteString value) {
         return new JAXBElement<GetFechaNacDTClienteString>(_GetFechaNacDTClienteString_QNAME, GetFechaNacDTClienteString.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ImprimirFechaReclamoResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://services/", name = "imprimirFechaReclamoResponse")
+    public JAXBElement<ImprimirFechaReclamoResponse> createImprimirFechaReclamoResponse(ImprimirFechaReclamoResponse value) {
+        return new JAXBElement<ImprimirFechaReclamoResponse>(_ImprimirFechaReclamoResponse_QNAME, ImprimirFechaReclamoResponse.class, null, value);
     }
 
     /**
@@ -4017,6 +4206,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://services/", name = "imprimirDescripcionResponse")
     public JAXBElement<ImprimirDescripcionResponse> createImprimirDescripcionResponse(ImprimirDescripcionResponse value) {
         return new JAXBElement<ImprimirDescripcionResponse>(_ImprimirDescripcionResponse_QNAME, ImprimirDescripcionResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ImprimirNombreProdReclamoResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://services/", name = "imprimirNombreProdReclamoResponse")
+    public JAXBElement<ImprimirNombreProdReclamoResponse> createImprimirNombreProdReclamoResponse(ImprimirNombreProdReclamoResponse value) {
+        return new JAXBElement<ImprimirNombreProdReclamoResponse>(_ImprimirNombreProdReclamoResponse_QNAME, ImprimirNombreProdReclamoResponse.class, null, value);
     }
 
     /**
@@ -4515,6 +4713,24 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ImprimirAutorReclamoResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://services/", name = "imprimirAutorReclamoResponse")
+    public JAXBElement<ImprimirAutorReclamoResponse> createImprimirAutorReclamoResponse(ImprimirAutorReclamoResponse value) {
+        return new JAXBElement<ImprimirAutorReclamoResponse>(_ImprimirAutorReclamoResponse_QNAME, ImprimirAutorReclamoResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ObtenerReclamosResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://services/", name = "obtenerReclamosResponse")
+    public JAXBElement<ObtenerReclamosResponse> createObtenerReclamosResponse(ObtenerReclamosResponse value) {
+        return new JAXBElement<ObtenerReclamosResponse>(_ObtenerReclamosResponse_QNAME, ObtenerReclamosResponse.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link AgregarCATProducto }{@code >}}
      * 
      */
@@ -4614,6 +4830,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ObtenerReclamos }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://services/", name = "obtenerReclamos")
+    public JAXBElement<ObtenerReclamos> createObtenerReclamos(ObtenerReclamos value) {
+        return new JAXBElement<ObtenerReclamos>(_ObtenerReclamos_QNAME, ObtenerReclamos.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link GetImagenesDTClienteResponse }{@code >}}
      * 
      */
@@ -4683,6 +4908,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://services/", name = "getTipoResponse")
     public JAXBElement<GetTipoResponse> createGetTipoResponse(GetTipoResponse value) {
         return new JAXBElement<GetTipoResponse>(_GetTipoResponse_QNAME, GetTipoResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ImprimirTextoReclamoResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://services/", name = "imprimirTextoReclamoResponse")
+    public JAXBElement<ImprimirTextoReclamoResponse> createImprimirTextoReclamoResponse(ImprimirTextoReclamoResponse value) {
+        return new JAXBElement<ImprimirTextoReclamoResponse>(_ImprimirTextoReclamoResponse_QNAME, ImprimirTextoReclamoResponse.class, null, value);
     }
 
     /**

@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Clase Java para getPrecioDTProdResponse complex type.
+ * <p>Java class for getPrecioDTProdResponse complex type.
  * 
- * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="getPrecioDTProdResponse">
@@ -36,7 +36,7 @@ public class GetPrecioDTProdResponse {
     protected float _return;
 
     /**
-     * Obtiene el valor de la propiedad return.
+     * Gets the value of the return property.
      * 
      */
     public float getReturn() {
@@ -44,7 +44,7 @@ public class GetPrecioDTProdResponse {
     }
 
     /**
-     * Define el valor de la propiedad return.
+     * Sets the value of the return property.
      * 
      */
     public void setReturn(float value) {

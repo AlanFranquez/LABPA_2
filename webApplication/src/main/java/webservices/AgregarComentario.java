@@ -7,9 +7,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Clase Java para agregarComentario complex type.
+ * <p>Java class for agregarComentario complex type.
  * 
- * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="agregarComentario">
@@ -43,7 +43,7 @@ public class AgregarComentario {
     protected int arg3;
 
     /**
-     * Obtiene el valor de la propiedad arg0.
+     * Gets the value of the arg0 property.
      * 
      */
     public int getArg0() {
@@ -51,7 +51,7 @@ public class AgregarComentario {
     }
 
     /**
-     * Define el valor de la propiedad arg0.
+     * Sets the value of the arg0 property.
      * 
      */
     public void setArg0(int value) {
@@ -59,7 +59,7 @@ public class AgregarComentario {
     }
 
     /**
-     * Obtiene el valor de la propiedad arg1.
+     * Gets the value of the arg1 property.
      * 
      * @return
      *     possible object is
@@ -71,7 +71,7 @@ public class AgregarComentario {
     }
 
     /**
-     * Define el valor de la propiedad arg1.
+     * Sets the value of the arg1 property.
      * 
      * @param value
      *     allowed object is
@@ -83,7 +83,7 @@ public class AgregarComentario {
     }
 
     /**
-     * Obtiene el valor de la propiedad arg2.
+     * Gets the value of the arg2 property.
      * 
      * @return
      *     possible object is
@@ -95,7 +95,7 @@ public class AgregarComentario {
     }
 
     /**
-     * Define el valor de la propiedad arg2.
+     * Sets the value of the arg2 property.
      * 
      * @param value
      *     allowed object is
@@ -107,7 +107,7 @@ public class AgregarComentario {
     }
 
     /**
-     * Obtiene el valor de la propiedad arg3.
+     * Gets the value of the arg3 property.
      * 
      */
     public int getArg3() {
@@ -115,7 +115,7 @@ public class AgregarComentario {
     }
 
     /**
-     * Define el valor de la propiedad arg3.
+     * Sets the value of the arg3 property.
      * 
      */
     public void setArg3(int value) {

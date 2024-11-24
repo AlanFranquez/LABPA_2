@@ -22,7 +22,9 @@ import javax.jws.soap.SOAPBinding;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
 import javax.xml.ws.Endpoint;
+import javax.xml.ws.WebServiceException;
 
 import com.market.svcentral.Carrito;
 import com.market.svcentral.Cat_Padre;
@@ -94,6 +96,31 @@ public class Publicador {
 	}
 	
 	@WebMethod
+	public ReclamoDTO[] obtenerReclamos(String nickProveedor) {
+	
+
+	        // Crear la consulta
+	        TypedQuery<Reclamo> query = em.createQuery(
+	            "SELECT r FROM Reclamo r WHERE r.proveedor.nick = :nickProveedor", 
+	            Reclamo.class
+	        );
+	        query.setParameter("nickProveedor", nickProveedor);
+	        
+	        List<Reclamo>reclamos = query.getResultList();
+	        List<ReclamoDTO> dtos = new ArrayList<ReclamoDTO>();
+	        
+	        for(Reclamo r : reclamos) {
+	        	ReclamoDTO dt = new ReclamoDTO(r.getTexto(), r.getAutor().getNick(), r.getProducto().getNombre(), r.getFechaFormat());
+	        	
+	        	dtos.add(dt);
+	        }
+	        
+	        return dtos.toArray(new ReclamoDTO[0]);
+	        		
+	    
+	}
+	
+	@WebMethod
 	public void agregarValoracion(int puntaje, int numRef, String nickName) {
 		try {
 			obtenerCliente(nickName).agregarPuntaje(puntaje, numRef);
@@ -105,6 +132,11 @@ public class Publicador {
 	@WebMethod
 	public Producto obtenerProducto(int numRef) {
 		return em.find(Producto.class, numRef);
+	}
+	
+	@WebMethod
+	public String idReclamo(Reclamo r) {
+		return r.getAutor().getNick();
 	}
 
 	@WebMethod
@@ -1028,6 +1060,27 @@ public class Publicador {
 	@WebMethod
 	public Proveedor getProveedorItem(Long id){
 		return em.find(Item.class, id).getProveedor();
+	}
+	
+	@WebMethod
+	public String imprimirAutorReclamo(Long id) {
+		return em.find(Reclamo.class, id).getAutor().getNick();
+	}
+	
+	@WebMethod
+	public String imprimirTextoReclamo(Long id) {
+		return em.find(Reclamo.class, id).getTexto();
+	}
+	
+	
+	@WebMethod
+	public String imprimirNombreProdReclamo(Long id) {
+		return em.find(Reclamo.class, id).getProducto().getNombre();
+	}
+	
+	@WebMethod
+	public String imprimirFechaReclamo(Long id) {
+		return em.find(Reclamo.class, id).getFechaFormat();
 	}
 	
 	@WebMethod

@@ -10,9 +10,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Clase Java para crearOrden complex type.
+ * <p>Java class for crearOrden complex type.
  * 
- * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="crearOrden">
@@ -68,7 +68,7 @@ public class CrearOrden {
     protected String arg3;
 
     /**
-     * Obtiene el valor de la propiedad arg0.
+     * Gets the value of the arg0 property.
      * 
      * @return
      *     possible object is
@@ -80,7 +80,7 @@ public class CrearOrden {
     }
 
     /**
-     * Define el valor de la propiedad arg0.
+     * Sets the value of the arg0 property.
      * 
      * @param value
      *     allowed object is
@@ -92,7 +92,7 @@ public class CrearOrden {
     }
 
     /**
-     * Obtiene el valor de la propiedad arg1.
+     * Gets the value of the arg1 property.
      * 
      */
     public int getArg1() {
@@ -100,7 +100,7 @@ public class CrearOrden {
     }
 
     /**
-     * Define el valor de la propiedad arg1.
+     * Sets the value of the arg1 property.
      * 
      */
     public void setArg1(int value) {
@@ -108,7 +108,7 @@ public class CrearOrden {
     }
 
     /**
-     * Obtiene el valor de la propiedad arg2.
+     * Gets the value of the arg2 property.
      * 
      * @return
      *     possible object is
@@ -120,7 +120,7 @@ public class CrearOrden {
     }
 
     /**
-     * Define el valor de la propiedad arg2.
+     * Sets the value of the arg2 property.
      * 
      * @param value
      *     allowed object is
@@ -132,7 +132,7 @@ public class CrearOrden {
     }
 
     /**
-     * Obtiene el valor de la propiedad arg3.
+     * Gets the value of the arg3 property.
      * 
      * @return
      *     possible object is
@@ -144,7 +144,7 @@ public class CrearOrden {
     }
 
     /**
-     * Define el valor de la propiedad arg3.
+     * Sets the value of the arg3 property.
      * 
      * @param value
      *     allowed object is
@@ -157,9 +157,9 @@ public class CrearOrden {
 
 
     /**
-     * <p>Clase Java para anonymous complex type.
+     * <p>Java class for anonymous complex type.
      * 
-     * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
+     * <p>The following schema fragment specifies the expected content contained within this class.
      * 
      * <pre>
      * &lt;complexType>
@@ -225,9 +225,9 @@ public class CrearOrden {
 
 
         /**
-         * <p>Clase Java para anonymous complex type.
+         * <p>Java class for anonymous complex type.
          * 
-         * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
+         * <p>The following schema fragment specifies the expected content contained within this class.
          * 
          * <pre>
          * &lt;complexType>
@@ -255,7 +255,7 @@ public class CrearOrden {
             protected Item value;
 
             /**
-             * Obtiene el valor de la propiedad key.
+             * Gets the value of the key property.
              * 
              * @return
              *     possible object is
@@ -267,7 +267,7 @@ public class CrearOrden {
             }
 
             /**
-             * Define el valor de la propiedad key.
+             * Sets the value of the key property.
              * 
              * @param value
              *     allowed object is
@@ -279,7 +279,7 @@ public class CrearOrden {
             }
 
             /**
-             * Obtiene el valor de la propiedad value.
+             * Gets the value of the value property.
              * 
              * @return
              *     possible object is
@@ -291,7 +291,7 @@ public class CrearOrden {
             }
 
             /**
-             * Define el valor de la propiedad value.
+             * Sets the value of the value property.
              * 
              * @param value
              *     allowed object is

@@ -137,6 +137,7 @@ public class InitServlet extends HttpServlet {
 			} catch (CategoriaException_Exception e) {
 				System.out.println(e.getMessage());
 			}
+             /*
              
              try {
             	 webservices.Proveedor nick = port.obtenerProvDeProducto(1);
@@ -171,6 +172,8 @@ public class InitServlet extends HttpServlet {
              
              port.agregarRespuesta(5874, "lalalala", 2, "Juan123");
              System.out.print("SE AGREGO RESPUESTA");
+             
+             */
              /*
 
              // Crear la OrdenDeCompra con el proveedor

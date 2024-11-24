@@ -1,7 +1,5 @@
 <%@page import="java.util.HashMap"%>
-<%@page import="com.market.svcentral.Usuario" %>
-<%@page import="com.market.svcentral.Reclamo" %>
-<%@page import="com.market.svcentral.Proveedor" %>
+<%@page import="webservices.*" %>
 <%@page import="java.util.Collection"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
@@ -19,7 +17,11 @@
 <title>Reclamos</title>
 </head>
 <body>
- <% 
+ <%
+ PublicadorService p = new PublicadorService();
+ Publicador port = p.getPublicadorPort();
+ 
+ 
 Proveedor proveedor = (Proveedor) request.getAttribute("proveedor"); 
 Usuario usr = (Usuario) request.getAttribute("usuarioLogueado");
  %>
@@ -45,15 +47,15 @@ Usuario usr = (Usuario) request.getAttribute("usuarioLogueado");
 
             <ul class="navbar-nav align-items-center">
                 <li class="nav-item">
-                    <% if (usr != null && usr.getTipo() == "proveedor") { %>
+                    <% if (usr != null && usr instanceof Proveedor) { %>
                         <a class="nav-link" href="perfilProveedor?nickname=<%= usr.getNick() %>">Perfil</a>
-                    <% } else if(usr != null && usr.getTipo() == "cliente"){ %>
+                    <% } else if(usr != null && usr instanceof Cliente){ %>
                         <a class="nav-link" href="perfilCliente?nickname=<%= usr.getNick() %>">Perfil</a>
                     <% } %>
                 </li>
                 
                 <%
-                if (usr != null && usr.getTipo() == "cliente") {
+                if (usr != null && usr instanceof Cliente) {
                 %>
                 <li class="nav-item">
                     <a class="nav-link" href="Carrito">
@@ -80,29 +82,33 @@ Usuario usr = (Usuario) request.getAttribute("usuarioLogueado");
         
        <% 
             // Obtener la lista de reclamos desde el request
-            List<Reclamo> reclamos = (List<Reclamo>) request.getAttribute("reclamos");
+            List<ReclamoDTO> reclamos = (List<ReclamoDTO>) request.getAttribute("reclamos");
+		
             if (reclamos != null && !reclamos.isEmpty()) {
-                for (Reclamo reclamo : reclamos) {
+                for (ReclamoDTO r : reclamos) {
+                	
         %>
-            <div class="card mb-3">
+            <div class="card mb-3 container">
+
                 <div class="card-body">
-                    <h5 class="card-title">Reclamo para el producto: <%= reclamo.getProducto().getNombre() %></h5>
-                    <p><b>Cliente:</b> <%= reclamo.getAutor().getNombre() %> (<%= reclamo.getAutor().getCorreo() %>)</p>
-                    <p><b>Texto del Reclamo:</b> <%= reclamo.getTexto() %></p>
-                    <p><b>Fecha:</b> <%= reclamo.getFechaFormat() %></p>
+                   
+                    <p><b>Fech</b> <%= r.getNombreProducto() %></p>
+                    <p><b>Cliente:</b> <%= r.getAutor()%></p>
+                    <p><b>Texto del Reclamo:</b> <%=  r.getTexto()%></p>
+                   
                 </div>
             </div>
         <% 
                 }
             } else {
         %>
-            <pclass="text-center font-weight-bold">No hay reclamos disponibles.</p>
+            <p class="text-center font-weight-bold">No hay reclamos disponibles.</p>
         <% 
             }
         %>
 <div class="part-final d-flex justify-content-center align-items-center" style="background-color: #2C2C2C;
 	width: 100%;
-	height: 200px; 
+	height: 400px; 
 	margin: 50px 0px 0px 0px;">
     <p class="text-center text-white">Todos los derechos reservados, 2024. <br> Laboratorio PA.</p>
 </div>

@@ -1,7 +1,9 @@
 package com.market.svcentral;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Random;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -10,13 +12,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.xml.bind.annotation.XmlAccessorType;
 
 
 @Entity
-public class Reclamo {
+@XmlAccessorType
+public class Reclamo implements Serializable {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private int id;
 	
 	
 	private LocalDateTime fecha;
@@ -40,6 +43,9 @@ public class Reclamo {
 	}
 
 	public Reclamo(String texto, LocalDateTime fecha, Producto producto, Proveedor proveedor, Cliente autor) {
+		Random nuevo = new Random();
+		this.id = nuevo.nextInt(5000);
+		
 		this.texto = texto;
 		this.fecha = fecha;
 		this.producto = producto;
@@ -49,6 +55,10 @@ public class Reclamo {
 
 	public String getTexto() {
 		return texto;
+	}
+	
+	public int getId() {
+		return this.id;
 	}
 
 	public void setTexto(String texto) {

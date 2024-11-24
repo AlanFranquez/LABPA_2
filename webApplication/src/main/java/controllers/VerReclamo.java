@@ -2,8 +2,6 @@ package controllers;
 
 import java.util.List;
 
-import com.market.svcentral.Reclamo;
-
 import java.util.ArrayList;
 
 import jakarta.servlet.ServletException;
@@ -25,76 +23,66 @@ import java.io.IOException;
 @WebServlet("/VerReclamos")
 public class VerReclamo extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
+
 	PublicadorService p = new PublicadorService();
-    Publicador port = p.getPublicadorPort();
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public VerReclamo() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
-    
-
-    @Override
-    public void init() throws ServletException {
-    }
-    
-    
+	Publicador port = p.getPublicadorPort();
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        
-        String userAgent = request.getHeader("User-Agent");
-        
-        
-        if((userAgent != null) && (
-                userAgent.contains("Mobile") || 
-                userAgent.contains("Android") || 
-                userAgent.contains("iPhone") || 
-                userAgent.contains("iPad") || 
-                userAgent.contains("Windows Phone") || 
-                userAgent.contains("BlackBerry")
-            )) {
-        	request.getRequestDispatcher("/WEB-INF/construccion.jsp").forward(request, response);
-        	return;
-        } 
-        if (session == null || session.getAttribute("usuarioLogueado") == null) {
-            response.sendRedirect("home");
-            return;
-        }
-        Object usuario = session.getAttribute("usuarioLogueado");
-        if (usuario instanceof Proveedor) {
-            Proveedor proveedor = (Proveedor) usuario;
-            List<Reclamo> reclamosTotales = new ArrayList<>();
-            for (Producto producto : port.obtenerProductos()) {
-                List<Reclamo> reclamos = port.obtenerReclamosProd(producto.getNumRef());
-                if (reclamos != null) {
-                    reclamosTotales.addAll(reclamos); 
-                }
-            
-            if (reclamos != null) {
-                request.setAttribute("reclamos", reclamos);
-            } else {
-                request.setAttribute("reclamos", new ArrayList<Reclamo>());
-            }
-            
-            request.setAttribute("proveedor", proveedor);
-            request.getRequestDispatcher("/WEB-INF/VerReclamo.jsp").forward(request, response);
-            }
-            } else {
-            response.sendRedirect("home");
-        }
-    }
+	public VerReclamo() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public void init() throws ServletException {
+	}
+
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		HttpSession session = request.getSession();
+
+		String userAgent = request.getHeader("User-Agent");
+
+		if ((userAgent != null) && (userAgent.contains("Mobile") || userAgent.contains("Android")
+				|| userAgent.contains("iPhone") || userAgent.contains("iPad") || userAgent.contains("Windows Phone")
+				|| userAgent.contains("BlackBerry"))) {
+			request.getRequestDispatcher("/WEB-INF/construccion.jsp").forward(request, response);
+			return;
+		}
+		if (session == null || session.getAttribute("usuarioLogueado") == null) {
+			response.sendRedirect("home");
+			return;
+		}
+		List<webservices.ReclamoDTO> reclamos = new ArrayList<>();
+		Object usuario = session.getAttribute("usuarioLogueado");
+		if (usuario instanceof Proveedor) {
+			Proveedor proveedor = (Proveedor) usuario;
+			
+			reclamos = port.obtenerReclamos(proveedor.getNick());
+			
+			request.setAttribute("proveedor", proveedor);
+			request.setAttribute("reclamos", reclamos);
+		} else {
+			response.sendRedirect("home");
+		}
+
+		
+
+		request.getRequestDispatcher("/WEB-INF/VerReclamo.jsp").forward(request, response);
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		doGet(request, response);
 	}
 
