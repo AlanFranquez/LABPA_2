@@ -1,5 +1,6 @@
 package com.market.svcentral;
 
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -25,6 +26,7 @@ public class Usuario {
     @Embedded
     private DTFecha nacimiento;
     
+    @Column(columnDefinition = "TEXT")
     private String imagen;
 
     public Usuario() {

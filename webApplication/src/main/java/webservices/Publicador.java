@@ -72,6 +72,33 @@ public interface Publicador {
      * 
      * @param arg0
      * @return
+     *     returns java.lang.String
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "obtenerImagenUsuario", targetNamespace = "http://services/", className = "webservices.ObtenerImagenUsuario")
+    @ResponseWrapper(localName = "obtenerImagenUsuarioResponse", targetNamespace = "http://services/", className = "webservices.ObtenerImagenUsuarioResponse")
+    @Action(input = "http://services/Publicador/obtenerImagenUsuarioRequest", output = "http://services/Publicador/obtenerImagenUsuarioResponse")
+    public String obtenerImagenUsuario(
+        @WebParam(name = "arg0", targetNamespace = "")
+        String arg0);
+
+    /**
+     * 
+     * @return
+     *     returns java.util.List<webservices.Usuario>
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "listaUsuarios", targetNamespace = "http://services/", className = "webservices.ListaUsuarios")
+    @ResponseWrapper(localName = "listaUsuariosResponse", targetNamespace = "http://services/", className = "webservices.ListaUsuariosResponse")
+    @Action(input = "http://services/Publicador/listaUsuariosRequest", output = "http://services/Publicador/listaUsuariosResponse")
+    public List<Usuario> listaUsuarios();
+
+    /**
+     * 
+     * @param arg0
+     * @return
      *     returns java.util.List<webservices.ReclamoDTO>
      */
     @WebMethod

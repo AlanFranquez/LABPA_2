@@ -1120,7 +1120,14 @@ public class Presentacion {
             }
         });
         
-        
+        JMenuItem mntmMostrarProductosDestacados = new JMenuItem("Mostrar Productos Destacados");
+        mntmMostrarProductosDestacados.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                ProductosDestacados productosVentana = new ProductosDestacados();
+                desktopPane.add(productosVentana); // Añadir la ventana al JDesktopPane
+                productosVentana.setVisible(true); // Hacer visible la ventana
+            }
+        });
         
         mnUsuarios.add(mntmRegistrarUsuario);
         mnProductos.add(mntmRegistrarProducto);
@@ -1132,6 +1139,9 @@ public class Presentacion {
         mnProductos.add(mntmListarProductos);
         mnOrdenes.add(mntmCancelarOrden);
         mnOrdenes.add(mntmMostrarOrden);
+        mnProductos.add(mntmMostrarProductosDestacados);
+
+        
         
         
 

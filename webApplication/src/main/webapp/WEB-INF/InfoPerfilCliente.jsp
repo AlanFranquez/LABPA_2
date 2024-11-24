@@ -101,7 +101,7 @@ if (usr != null && port.getTipo(nickUser).equals("proveedor")) {
         <div class="col-md-6 col-12 text-center">
 
     <img class="img-fluid rounded-circle" style="width: 200px; height: 200px; object-fit: cover;" 
-         src="data:image/jpg;base64,<%= request.getAttribute("imagenEnBits") %>" 
+          src="mostrarImagen?nick=<%= nickUser %>" 
          alt="Imagen de cliente" />
 </div>
 
