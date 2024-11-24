@@ -120,6 +120,8 @@ if (user != null && port.getTipo(nickUser).equals("proveedor")) {
             listaDTProductos.add(dtp);
         }
     %>
+    
+    
     <div class="row row-cols-1 row-cols-md-3 g-4">
         <% for (Producto pdt : prods) { 
             DtProducto dtp = port.crearDTProd(pdt);

@@ -6,6 +6,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import webservices.Publicador;
+import webservices.PublicadorService;
 
 import java.io.IOException;
 
@@ -49,11 +51,8 @@ public class PerfilOrdenMOBILE extends HttpServlet {
             return;
         }
         
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-        EntityManager em = emf.createEntityManager();
-
-        
-        em.getTransaction().begin();
+        PublicadorService p = new PublicadorService();
+        Publicador port = p.getPublicadorPort();
         
         String ordenParam = request.getParameter("orden");
 
@@ -63,8 +62,9 @@ public class PerfilOrdenMOBILE extends HttpServlet {
             return;
         }
 
-        Cliente cl = (Cliente) sess.getAttribute("usuarioLogueado");
-        Cliente cliente = em.find(Cliente.class, cl.getNick());
+        webservices.Usuario user = (webservices.Usuario) sess.getAttribute("usuarioLogueado");
+        webservices.Cliente cliente = port.obtenerCliente(user.getNick());
+        request.setAttribute("usuarioOrdenEsp", cliente);
 
         if (ordenParam != null && !ordenParam.isEmpty()) {
             int numeroOrden;
@@ -75,11 +75,10 @@ public class PerfilOrdenMOBILE extends HttpServlet {
                 return;
             }
 
-            DTOrdenDeCompra orden = cliente.mostrarCompras(numeroOrden);
+            webservices.OrdenDeCompra orden = port.getCompra(numeroOrden, cliente.getNick());
             if (orden != null) {
-                DTCliente dtcli = (DTCliente) cliente.crearDt();
                 request.setAttribute("ordencompra", orden);
-                request.setAttribute("usuario", dtcli);
+
                 request.getRequestDispatcher("/WEB-INF/DetalleOrdenMOBILE.jsp").forward(request, response);
             } else {
                 response.sendError(HttpServletResponse.SC_NOT_FOUND, "Orden no encontrada.");
@@ -88,9 +87,6 @@ public class PerfilOrdenMOBILE extends HttpServlet {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Falta el número de orden.");
         }
         
-        em.getTransaction().commit();
-        em.close();
-        emf.close();
     }
 
     @Override
@@ -98,10 +94,9 @@ public class PerfilOrdenMOBILE extends HttpServlet {
         String accion = request.getParameter("accion");
         String ordenParam = request.getParameter("numeroOrden");
         
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-        EntityManager em = emf.createEntityManager();
+        PublicadorService p = new PublicadorService();
+        Publicador port = p.getPublicadorPort();
         
-        em.getTransaction().begin();
 
         // Detectar si el acceso proviene de un dispositivo móvil
         String userAgent = request.getHeader("User-Agent");
@@ -118,8 +113,9 @@ public class PerfilOrdenMOBILE extends HttpServlet {
             return;
         }
 
-        Cliente cl = (Cliente) sess.getAttribute("usuarioLogueado");
-        Cliente cliente = em.find(Cliente.class, cl.getNick());
+        webservices.Usuario user = (webservices.Usuario) sess.getAttribute("usuarioLogueado");
+        webservices.Cliente cliente = port.obtenerCliente(user.getNick());
+        request.setAttribute("usuarioOrdenEsp", cliente);
 
         if (ordenParam != null && !ordenParam.isEmpty()) {
             int numeroOrden;
@@ -131,21 +127,19 @@ public class PerfilOrdenMOBILE extends HttpServlet {
             }
 
             if ("confirmar".equals(accion)) {
-                DTOrdenDeCompra orden = cliente.mostrarCompras(numeroOrden);
+            	webservices.OrdenDeCompra orden = port.getCompra(numeroOrden, cliente.getNick());
                 if (orden != null) {
-                    sist.cambiarEstadoOrden("Entregado", "GRACIAS POR COMPRAR <3", orden.getNumero(), cliente.getNick());
+                	port.setEstado(orden.getNumero(), cliente.getNick(), "Entregada", "El cliente ha recibido el pedido.");
                 } else {
                     response.sendError(HttpServletResponse.SC_NOT_FOUND, "Orden no encontrada.");
                     return;
                 }
             }
-
-            request.setAttribute("ordencompra", cliente.mostrarCompras(numeroOrden));
+            
+            request.setAttribute("listaEstados", port.getHistorialEstado(numeroOrden, user.getNick()));
+            request.setAttribute("ordencompra", port.getCompra(numeroOrden, cliente.getNick()));
             response.sendRedirect("perfilOrdenMOBILE?nickname=" + cliente.getNick() + "&orden=" + numeroOrden);
 
-            em.getTransaction().commit();
-            em.close();
-            emf.close();
             
         } else {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Falta el número de orden.");

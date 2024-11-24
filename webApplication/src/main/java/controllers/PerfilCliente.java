@@ -67,13 +67,7 @@ public class PerfilCliente extends HttpServlet {
         }
         
         
-        
-        EntityManagerFactory emf = null;
-        EntityManager em = null;
-
-        emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-        em = emf.createEntityManager();
-
+       
         PublicadorService p = new PublicadorService();
         Publicador port = p.getPublicadorPort();
 
@@ -134,14 +128,6 @@ public class PerfilCliente extends HttpServlet {
         }
 
         response.sendRedirect("home");
-
-        // Cerrar los recursos de la base de datos
-        if (em != null) {
-            em.close();
-        }
-        if (emf != null) {
-            emf.close();
-        }
     }
     
     /**

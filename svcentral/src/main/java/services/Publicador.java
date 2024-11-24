@@ -955,11 +955,11 @@ public class Publicador {
 	PaginaExito.java
 	PerfilCliente.java -
 	PerfilClienteMOBILE.java -
-	PerfilOrden.java
-	PerfilOrdenMOBILE.java
-	PerfilProducto.java
-	perfilProductoMOBILE.java
-	PerfilProveedor.java
+	PerfilOrden.java -
+	PerfilOrdenMOBILE.java -
+	PerfilProducto.java -
+	perfilProductoMOBILE.java -
+	PerfilProveedor.java -
 	*/
 
 	// FABRICIO

@@ -1,18 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
-<%@page import="com.market.svcentral.DTEstado"%>
+
 <%@page import="java.util.List"%>
-<%@page import="com.market.svcentral.DTItem"%>
-<%@page import="com.market.svcentral.Usuario"%>
-<%@page import="com.market.svcentral.DTOrdenDeCompra"%>
-<%@page import="com.market.svcentral.DTCliente"%>
 <%@page import="java.util.Map"%>
-<%@page import="com.market.svcentral.Item"%>
+<%@page import="webservices.*"%>
 
 <%
-    DTOrdenDeCompra orden = (DTOrdenDeCompra) request.getAttribute("ordencompra");
-    Map<Integer, Item> items = orden.getItems();
-    List<DTEstado> estados = orden.getHistorialEstado();
+	PublicadorService p = new PublicadorService();
+	Publicador port = p.getPublicadorPort();
+
+	webservices.OrdenDeCompra orden = (webservices.OrdenDeCompra) request.getAttribute("ordencompra");
+	List<webservices.Item> items = (List<webservices.Item>) request.getAttribute("items");
+	List<DtEstado> estados = request.getAttribute("listaEstados");
 %>
 
 <!DOCTYPE html>
@@ -26,7 +25,6 @@
 <body>
 
 <%
-    DTCliente user = (DTCliente) request.getAttribute("usuario");
 	Usuario usr = (Usuario) request.getAttribute("usuarioLogueado");
 %>
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2C2C2C;">
@@ -50,9 +48,9 @@
 
             <ul class="navbar-nav align-items-center">
                 <li class="nav-item">
-                    <% if (usr != null && usr.getTipo() == "proveedor") { %>
+                    <% if (usr != null && usr instanceof Proveedor) { %>
                         <a class="nav-link" href="perfilProveedorMOBILE?nickname=<%= usr.getNick() %>">Perfil</a>
-                    <% } else if(usr != null && usr.getTipo() == "cliente"){ %>
+                    <% } else if(usr != null && usr instanceof Cliente){ %>
                         <a class="nav-link" href="perfilClienteMOBILE?nickname=<%= usr.getNick() %>">Perfil</a>
                     <% } %>
                 </li>
@@ -73,12 +71,12 @@
         <div class="card-body">
             <h3>Seguimiento de la Orden</h3>
             <ul class="list-unstyled">
-                <% for (DTEstado estado : estados) { %>
+                <% for (DtEstado estado : estados) { %>
                     <li class="d-flex align-items-center mb-3">
-                        <span class="position-relative me-2" style="width: 10px; height: 10px; border-radius: 50%; background-color: <%= estado.getEstado().equalsIgnoreCase("Entregado") ? "#00b200" : "#FFA500" %>;"></span>
+                        <span class="position-relative me-2" style="width: 10px; height: 10px; border-radius: 50%; background-color: <%= port.imprimirEstadoOrden(usr.getNick(), orden.getNumero()).equalsIgnoreCase("Entregado") ? "#00b200" : "#FFA500" %>;"></span>
                         <div>
-                            <strong style="color: <%= estado.getEstado().equalsIgnoreCase("Entregado") ? "#00b200" : "#FFA500" %>;">Estado:</strong> <%= estado.getEstado() %> - <%= estado.getFecha() %><br>
-                            <small class="text-muted">Comentarios: <%= estado.getComentarios() %></small>
+                            <strong style="color: <%= port.imprimirEstadoOrden(usr.getNick(), orden.getNumero()).equalsIgnoreCase("Entregado") ? "#00b200" : "#FFA500" %>;">Estado:</strong> <%= port.imprimirEstadoOrden(usr.getNick(), orden.getNumero()) %> - <%= port.getFechaEstado(estado) %><br>
+                            <small class="text-muted">Comentarios: <%= port.getComEstado(estado) %></small>
                         </div>
                     </li>
                 <% } %>
@@ -86,7 +84,7 @@
         </div>
     </div>
 
-    <% if(orden.getEstado().equalsIgnoreCase("Enviado")) { %>
+    <% if(port.imprimirEstadoOrden(usr.getNick(), orden.getNumero()).equalsIgnoreCase("Enviado")) { %>
         <form action="perfilOrden" method="post" class="text-center mb-4">
             <input type="hidden" name="numeroOrden" value="<%= orden.getNumero() %>">
             <input type="hidden" name="accion" value="confirmar">
@@ -96,25 +94,24 @@
 
     <div class="card">
         <div class="card-body">
-            <p><strong>Precio Total: </strong><%= orden.getPrecioTotal() %> USD</p>
-            <p><strong>Fecha de Compra: </strong><%= orden.getFechaString() %></p>
+            <p><strong>Precio Total: </strong><%= port.imprimirPrecioTotal(usr.getNick(), orden.getNumero()) %> USD</p>
+            <p><strong>Fecha de Compra: </strong><%= port.imprimirFechaOrden(usr.getNick(), orden.getNumero()) %></p>
 
             <h4>Detalles de Productos:</h4>
             <hr>
             <ul class="list-unstyled">
-                <% for (Map.Entry<Integer, Item> entry : items.entrySet()) { 
-                    DTItem dtit = entry.getValue().crearDT();
+                <% for (webservices.Item item : items) { 
                 %>
                     <li class="mb-3">
-                        <a class="link" href="perfilProductoMOBILE?producto=<%=dtit.getProducto().crearDT().getNumRef()%>">Ver Producto</a>
-                        <p><strong>Nombre: </strong> <%= dtit.getProducto().crearDT().getNombre() %></p>
-                        <p><strong>Precio Unitario: </strong> $<%= dtit.getProducto().crearDT().getPrecio() %> USD</p>
-                        <p><strong>Cantidad:</strong> <%= dtit.getCant() %></p>
-                        <p><strong>Subtotal: </strong> $<%= dtit.getSubTotal() %></p>
+                        <a class="link" href="perfilProductoMOBILE?producto=<%=port.imprimirNumRef(item.getProducto().getNumRef())%>">Ver Producto</a>
+                        <p><strong>Nombre: </strong> <%= port.imprimirNumRef(item.getProducto().getNumRef()) %></p>
+                        <p><strong>Precio Unitario: </strong> $<%= port.imprimirPrecioProd(item.getProducto().getNumRef())  %> USD</p>
+                        <p><strong>Cantidad:</strong> <%= port.imprimirCantidad(orden.getNumero(), usr.getNick(), item.getProducto().getNumRef()) %></p>
+                        <p><strong>Subtotal: </strong> $<%= port.imprimirSubTotal(orden.getNumero(), usr.getNick(), item.getProducto().getNumRef()) %></p>
                     </li>
                 <% } %>
             </ul>
-            <p><strong>Total de la orden:</strong> $<%= orden.getPrecioTotal() %></p>
+            <p><strong>Total de la orden:</strong> $<%= port.imprimirPrecioTotal(usr.getNick(), orden.getNumero()) %></p>
         </div>
     </div>
 

@@ -13,9 +13,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-import com.market.svcentral.Cliente;
-import com.market.svcentral.DTCliente;
-import com.market.svcentral.Usuario;
+import webservices.*;
 
 @WebServlet("/perfilClienteMOBILE")
 public class PerfilClienteMOBILE extends HttpServlet {
@@ -33,10 +31,8 @@ public class PerfilClienteMOBILE extends HttpServlet {
         String userAgent = request.getHeader("User-Agent");
         boolean isMobile = isMobileDevice(userAgent);
         
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-        EntityManager em = emf.createEntityManager();
-        
-        em.getTransaction().begin();
+        PublicadorService p = new PublicadorService();
+        Publicador port = p.getPublicadorPort();
         
         if(!isMobile) {
         	response.sendRedirect("home");
@@ -50,14 +46,15 @@ public class PerfilClienteMOBILE extends HttpServlet {
         }
         
 
-        Usuario u = (Usuario) session.getAttribute("usuarioLogueado");
-        Usuario usuarioLogueado = em.find(Usuario.class, u.getNick());
+        webservices.Usuario usuarioLogueado = (webservices.Usuario) session.getAttribute("usuarioLogueado");
+        
 
         // Redirigir si el usuario logueado no es de tipo Cliente
         if (!(usuarioLogueado instanceof Cliente)) {
             response.sendRedirect("home");
             return;
         }
+        
 
         String parametro = request.getParameter("nickname");
         
@@ -68,16 +65,12 @@ public class PerfilClienteMOBILE extends HttpServlet {
         }
 
         // Si todas las condiciones se cumplen, cargar los datos de perfil
-        Cliente cli = (Cliente) usuarioLogueado;
-        DTCliente dtcli = cli.crearDt();
-
+        webservices.Cliente cli = port.obtenerCliente(usuarioLogueado.getNick());
+        
         request.setAttribute("usuarioLogueado", usuarioLogueado);
-        request.setAttribute("usuario", dtcli);
+        request.setAttribute("usuario", cli);
         request.getRequestDispatcher("/WEB-INF/InfoPerfilCilenteMOBILE.jsp").forward(request, response);
         
-        em.getTransaction().commit();
-        em.close();
-        emf.close();
     }
 
     @Override
