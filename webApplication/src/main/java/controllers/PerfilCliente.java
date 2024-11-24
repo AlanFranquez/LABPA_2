@@ -60,6 +60,7 @@ public class PerfilCliente extends HttpServlet {
             return;
         }
         
+        
         // Verificar si el usuario está logueado
         if (session == null || session.getAttribute("usuarioLogueado") == null) {
             response.sendRedirect("formlogin");
