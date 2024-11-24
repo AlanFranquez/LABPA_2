@@ -30,6 +30,7 @@ public class ObjectFactory {
     private final static QName _ImprimirFechaRespuesta_QNAME = new QName("http://services/", "imprimirFechaRespuesta");
     private final static QName _ImprimirDescripcion_QNAME = new QName("http://services/", "imprimirDescripcion");
     private final static QName _ComprobarSiProductoExisteCarrito_QNAME = new QName("http://services/", "comprobarSiProductoExisteCarrito");
+    private final static QName _ObtenerImagenUsuarioResponse_QNAME = new QName("http://services/", "obtenerImagenUsuarioResponse");
     private final static QName _AsignarlePadreCategoria_QNAME = new QName("http://services/", "asignarlePadreCategoria");
     private final static QName _GetCompania_QNAME = new QName("http://services/", "getCompania");
     private final static QName _GetDescDTProdResponse_QNAME = new QName("http://services/", "getDescDTProdResponse");
@@ -39,7 +40,6 @@ public class ObjectFactory {
     private final static QName _GetPrecioTotalOrdenResponse_QNAME = new QName("http://services/", "getPrecioTotalOrdenResponse");
     private final static QName _MostrarCompraClienteResponse_QNAME = new QName("http://services/", "mostrarCompraClienteResponse");
     private final static QName _NotificarComentarista_QNAME = new QName("http://services/", "notificarComentarista");
-    private final static QName _GetEstadoIncorrecto_QNAME = new QName("http://services/", "getEstadoIncorrecto");
     private final static QName _ImprimirITemsORDENSResponse_QNAME = new QName("http://services/", "imprimirITemsORDENSResponse");
     private final static QName _ObtenerCliente_QNAME = new QName("http://services/", "obtenerCliente");
     private final static QName _ImprimirFechaOrdenResponse_QNAME = new QName("http://services/", "imprimirFechaOrdenResponse");
@@ -57,6 +57,7 @@ public class ObjectFactory {
     private final static QName _ImprimirTextoComentario_QNAME = new QName("http://services/", "imprimirTextoComentario");
     private final static QName _ObtenerProvDeProducto_QNAME = new QName("http://services/", "obtenerProvDeProducto");
     private final static QName _UsuarioRepetidoException_QNAME = new QName("http://services/", "UsuarioRepetidoException");
+    private final static QName _ObtenerImagenUsuario_QNAME = new QName("http://services/", "obtenerImagenUsuario");
     private final static QName _Item_QNAME = new QName("http://services/", "item");
     private final static QName _GetEspecsDTProd_QNAME = new QName("http://services/", "getEspecsDTProd");
     private final static QName _ImprimirAutor_QNAME = new QName("http://services/", "imprimirAutor");
@@ -141,7 +142,6 @@ public class ObjectFactory {
     private final static QName _ComproProducto_QNAME = new QName("http://services/", "comproProducto");
     private final static QName _GetNombreUsuario_QNAME = new QName("http://services/", "getNombreUsuario");
     private final static QName _GetEstado_QNAME = new QName("http://services/", "getEstado");
-    private final static QName _GetEstadoIncorrectoResponse_QNAME = new QName("http://services/", "getEstadoIncorrectoResponse");
     private final static QName _ImprimirAutorReclamo_QNAME = new QName("http://services/", "imprimirAutorReclamo");
     private final static QName _ExisteProdCarritoResponse_QNAME = new QName("http://services/", "existeProdCarritoResponse");
     private final static QName _GetNickPorDTCliente_QNAME = new QName("http://services/", "getNickPorDTCliente");
@@ -169,7 +169,6 @@ public class ObjectFactory {
     private final static QName _GetSitioWeb_QNAME = new QName("http://services/", "getSitioWeb");
     private final static QName _ImprimirAutorResponse_QNAME = new QName("http://services/", "imprimirAutorResponse");
     private final static QName _GetAutorComentarioResponse_QNAME = new QName("http://services/", "getAutorComentarioResponse");
-    private final static QName _GetEstadoCorrecto_QNAME = new QName("http://services/", "getEstadoCorrecto");
     private final static QName _ObtenerCarritoCliente_QNAME = new QName("http://services/", "obtenerCarritoCliente");
     private final static QName _GetSubTotaItem_QNAME = new QName("http://services/", "getSubTotaItem");
     private final static QName _ClienteTieneCarritoResponse_QNAME = new QName("http://services/", "clienteTieneCarritoResponse");
@@ -177,6 +176,7 @@ public class ObjectFactory {
     private final static QName _CrearDTOrden_QNAME = new QName("http://services/", "crearDTOrden");
     private final static QName _GetApellidoDTClienteResponse_QNAME = new QName("http://services/", "getApellidoDTClienteResponse");
     private final static QName _GetFechaOrden_QNAME = new QName("http://services/", "getFechaOrden");
+    private final static QName _ListaUsuariosResponse_QNAME = new QName("http://services/", "listaUsuariosResponse");
     private final static QName _ImprimirPrecioTotalResponse_QNAME = new QName("http://services/", "imprimirPrecioTotalResponse");
     private final static QName _AgregarCliente2_QNAME = new QName("http://services/", "agregarCliente2");
     private final static QName _NotificarComentaristaResponse_QNAME = new QName("http://services/", "notificarComentaristaResponse");
@@ -255,7 +255,6 @@ public class ObjectFactory {
     private final static QName _ImprimirAutorReclamoResponse_QNAME = new QName("http://services/", "imprimirAutorReclamoResponse");
     private final static QName _ObtenerReclamosResponse_QNAME = new QName("http://services/", "obtenerReclamosResponse");
     private final static QName _AgregarCATProducto_QNAME = new QName("http://services/", "agregarCATProducto");
-    private final static QName _GetEstadoCorrectoResponse_QNAME = new QName("http://services/", "getEstadoCorrectoResponse");
     private final static QName _IOException_QNAME = new QName("http://services/", "IOException");
     private final static QName _ObtenerClienteResponse_QNAME = new QName("http://services/", "obtenerClienteResponse");
     private final static QName _VerificarClienteYCrearCarritoResponse_QNAME = new QName("http://services/", "verificarClienteYCrearCarritoResponse");
@@ -305,6 +304,7 @@ public class ObjectFactory {
     private final static QName _EditarCantidadItemResponse_QNAME = new QName("http://services/", "editarCantidadItemResponse");
     private final static QName _CrearDTItemResponse_QNAME = new QName("http://services/", "crearDTItemResponse");
     private final static QName _GetNickDTCliente_QNAME = new QName("http://services/", "getNickDTCliente");
+    private final static QName _ListaUsuarios_QNAME = new QName("http://services/", "listaUsuarios");
     private final static QName _GetCategoriasLista_QNAME = new QName("http://services/", "getCategoriasLista");
     private final static QName _CrearDTItem_QNAME = new QName("http://services/", "crearDTItem");
     private final static QName _AgregarCliente_QNAME = new QName("http://services/", "agregarCliente");
@@ -823,14 +823,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GetEstadoCorrectoResponse }
-     * 
-     */
-    public GetEstadoCorrectoResponse createGetEstadoCorrectoResponse() {
-        return new GetEstadoCorrectoResponse();
-    }
-
-    /**
      * Create an instance of {@link IOException }
      * 
      */
@@ -1287,6 +1279,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ListaUsuarios }
+     * 
+     */
+    public ListaUsuarios createListaUsuarios() {
+        return new ListaUsuarios();
+    }
+
+    /**
      * Create an instance of {@link CrearDTItemResponse }
      * 
      */
@@ -1399,14 +1399,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GetEstadoIncorrecto }
-     * 
-     */
-    public GetEstadoIncorrecto createGetEstadoIncorrecto() {
-        return new GetEstadoIncorrecto();
-    }
-
-    /**
      * Create an instance of {@link ImprimirITemsORDENSResponse }
      * 
      */
@@ -1500,6 +1492,14 @@ public class ObjectFactory {
      */
     public GetCompania createGetCompania() {
         return new GetCompania();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerImagenUsuarioResponse }
+     * 
+     */
+    public ObtenerImagenUsuarioResponse createObtenerImagenUsuarioResponse() {
+        return new ObtenerImagenUsuarioResponse();
     }
 
     /**
@@ -1628,6 +1628,14 @@ public class ObjectFactory {
      */
     public UsuarioRepetidoException createUsuarioRepetidoException() {
         return new UsuarioRepetidoException();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerImagenUsuario }
+     * 
+     */
+    public ObtenerImagenUsuario createObtenerImagenUsuario() {
+        return new ObtenerImagenUsuario();
     }
 
     /**
@@ -2143,14 +2151,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GetEstadoIncorrectoResponse }
-     * 
-     */
-    public GetEstadoIncorrectoResponse createGetEstadoIncorrectoResponse() {
-        return new GetEstadoIncorrectoResponse();
-    }
-
-    /**
      * Create an instance of {@link GetEstado }
      * 
      */
@@ -2599,6 +2599,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ListaUsuariosResponse }
+     * 
+     */
+    public ListaUsuariosResponse createListaUsuariosResponse() {
+        return new ListaUsuariosResponse();
+    }
+
+    /**
      * Create an instance of {@link CrearDTOrden }
      * 
      */
@@ -2636,14 +2644,6 @@ public class ObjectFactory {
      */
     public GetAutorComentarioResponse createGetAutorComentarioResponse() {
         return new GetAutorComentarioResponse();
-    }
-
-    /**
-     * Create an instance of {@link GetEstadoCorrecto }
-     * 
-     */
-    public GetEstadoCorrecto createGetEstadoCorrecto() {
-        return new GetEstadoCorrecto();
     }
 
     /**
@@ -2877,6 +2877,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ObtenerImagenUsuarioResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://services/", name = "obtenerImagenUsuarioResponse")
+    public JAXBElement<ObtenerImagenUsuarioResponse> createObtenerImagenUsuarioResponse(ObtenerImagenUsuarioResponse value) {
+        return new JAXBElement<ObtenerImagenUsuarioResponse>(_ObtenerImagenUsuarioResponse_QNAME, ObtenerImagenUsuarioResponse.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link AsignarlePadreCategoria }{@code >}}
      * 
      */
@@ -2955,15 +2964,6 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://services/", name = "notificarComentarista")
     public JAXBElement<NotificarComentarista> createNotificarComentarista(NotificarComentarista value) {
         return new JAXBElement<NotificarComentarista>(_NotificarComentarista_QNAME, NotificarComentarista.class, null, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link GetEstadoIncorrecto }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://services/", name = "getEstadoIncorrecto")
-    public JAXBElement<GetEstadoIncorrecto> createGetEstadoIncorrecto(GetEstadoIncorrecto value) {
-        return new JAXBElement<GetEstadoIncorrecto>(_GetEstadoIncorrecto_QNAME, GetEstadoIncorrecto.class, null, value);
     }
 
     /**
@@ -3117,6 +3117,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://services/", name = "UsuarioRepetidoException")
     public JAXBElement<UsuarioRepetidoException> createUsuarioRepetidoException(UsuarioRepetidoException value) {
         return new JAXBElement<UsuarioRepetidoException>(_UsuarioRepetidoException_QNAME, UsuarioRepetidoException.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ObtenerImagenUsuario }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://services/", name = "obtenerImagenUsuario")
+    public JAXBElement<ObtenerImagenUsuario> createObtenerImagenUsuario(ObtenerImagenUsuario value) {
+        return new JAXBElement<ObtenerImagenUsuario>(_ObtenerImagenUsuario_QNAME, ObtenerImagenUsuario.class, null, value);
     }
 
     /**
@@ -3876,15 +3885,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link GetEstadoIncorrectoResponse }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://services/", name = "getEstadoIncorrectoResponse")
-    public JAXBElement<GetEstadoIncorrectoResponse> createGetEstadoIncorrectoResponse(GetEstadoIncorrectoResponse value) {
-        return new JAXBElement<GetEstadoIncorrectoResponse>(_GetEstadoIncorrectoResponse_QNAME, GetEstadoIncorrectoResponse.class, null, value);
-    }
-
-    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link ImprimirAutorReclamo }{@code >}}
      * 
      */
@@ -4128,15 +4128,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link GetEstadoCorrecto }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://services/", name = "getEstadoCorrecto")
-    public JAXBElement<GetEstadoCorrecto> createGetEstadoCorrecto(GetEstadoCorrecto value) {
-        return new JAXBElement<GetEstadoCorrecto>(_GetEstadoCorrecto_QNAME, GetEstadoCorrecto.class, null, value);
-    }
-
-    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link ObtenerCarritoCliente }{@code >}}
      * 
      */
@@ -4197,6 +4188,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://services/", name = "getFechaOrden")
     public JAXBElement<GetFechaOrden> createGetFechaOrden(GetFechaOrden value) {
         return new JAXBElement<GetFechaOrden>(_GetFechaOrden_QNAME, GetFechaOrden.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ListaUsuariosResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://services/", name = "listaUsuariosResponse")
+    public JAXBElement<ListaUsuariosResponse> createListaUsuariosResponse(ListaUsuariosResponse value) {
+        return new JAXBElement<ListaUsuariosResponse>(_ListaUsuariosResponse_QNAME, ListaUsuariosResponse.class, null, value);
     }
 
     /**
@@ -4902,15 +4902,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link GetEstadoCorrectoResponse }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://services/", name = "getEstadoCorrectoResponse")
-    public JAXBElement<GetEstadoCorrectoResponse> createGetEstadoCorrectoResponse(GetEstadoCorrectoResponse value) {
-        return new JAXBElement<GetEstadoCorrectoResponse>(_GetEstadoCorrectoResponse_QNAME, GetEstadoCorrectoResponse.class, null, value);
-    }
-
-    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link IOException }{@code >}}
      * 
      */
@@ -5349,6 +5340,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://services/", name = "getNickDTCliente")
     public JAXBElement<GetNickDTCliente> createGetNickDTCliente(GetNickDTCliente value) {
         return new JAXBElement<GetNickDTCliente>(_GetNickDTCliente_QNAME, GetNickDTCliente.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ListaUsuarios }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://services/", name = "listaUsuarios")
+    public JAXBElement<ListaUsuarios> createListaUsuarios(ListaUsuarios value) {
+        return new JAXBElement<ListaUsuarios>(_ListaUsuarios_QNAME, ListaUsuarios.class, null, value);
     }
 
     /**

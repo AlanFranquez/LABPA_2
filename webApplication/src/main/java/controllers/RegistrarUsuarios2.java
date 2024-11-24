@@ -2,6 +2,7 @@ package controllers;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -11,11 +12,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
-import webservices.EstadoSesion;
 import webservices.Publicador;
 import webservices.PublicadorService;
 import webservices.Usuario;
-import webservices.UsuarioRepetidoException;
 
 @WebServlet("/registrarusuario2")
 @MultipartConfig
@@ -29,7 +28,6 @@ public class RegistrarUsuarios2 extends HttpServlet {
     public RegistrarUsuarios2() {
         super();
     }
-
 
     @Override
     public void init() throws ServletException {
@@ -49,55 +47,54 @@ public class RegistrarUsuarios2 extends HttpServlet {
     	request.getRequestDispatcher("/WEB-INF/RegistrarUsuario2.jsp").forward(request, response);
     	System.out.println("Redirigiendo reg2 inicio servlet");
     }
-	
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession objSession = request.getSession();
-        String nick = (String) objSession.getAttribute("nick");
-        String correo = (String) objSession.getAttribute("correo");
 
-        String nombre = request.getParameter("nombre");
-        String apellido = request.getParameter("apellido");
-        String fechaNacimiento = request.getParameter("nacimiento");
-        String contraseña = request.getParameter("password");
-        String contraseña2 = request.getParameter("confirmPassword");
-        String tipoUsuario = request.getParameter("tipoUsuario");
-        
-        Part img = request.getPart("imagen");
-        String fileName = null;
-        if (img != null && img.getSize() > 0) { 
-            String uploadDir = getServletContext().getRealPath("") + File.separator + "media";
-            File uploads = new File(uploadDir);
-            if (!uploads.exists()) {
-            	uploads.mkdirs();
-            }
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession objSession = request.getSession();
+		String nick = (String) objSession.getAttribute("nick");
+		String correo = (String) objSession.getAttribute("correo");
 
-            fileName = img.getSubmittedFileName();
-            File file = new File(uploads, fileName);
-            img.write(file.getAbsolutePath());
-        }
+		String nombre = request.getParameter("nombre");
+		String apellido = request.getParameter("apellido");
+		String fechaNacimiento = request.getParameter("nacimiento");
+		String contraseña = request.getParameter("password");
+		String contraseña2 = request.getParameter("confirmPassword");
+		String tipoUsuario = request.getParameter("tipoUsuario");
+		String nombreCompania = request.getParameter("nombreCompania");
+		String sitioWeb = request.getParameter("sitioWeb");
 
-      
+		Part img = request.getPart("imagen");
+		
+		String fileName = null;
+		byte[] imageBytes = null;
+		if (img != null && img.getSize() > 0) {
+			String uploadDir = getServletContext().getRealPath("") + File.separator + "media";
+			File uploads = new File(uploadDir);
+			if (!uploads.exists()) {
+				uploads.mkdirs();
+			}
+			fileName = img.getSubmittedFileName();
+			File file = new File(uploads, fileName);
+			img.write(file.getAbsolutePath());
+			
+			imageBytes = Files.readAllBytes(file.toPath());
+		}
+		
+		for(Byte b : imageBytes) {
+			System.out.print(b + "");
+		}
+		//Validar campos requeridos
+		if (nombre == null || nombre.isEmpty() || apellido == null || apellido.isEmpty() || fechaNacimiento == null
+				|| fechaNacimiento.isEmpty() || contraseña == null || contraseña.isEmpty() || contraseña2 == null
+				|| contraseña2.isEmpty() || tipoUsuario == null || tipoUsuario.isEmpty()
+				|| (tipoUsuario.equals("proveedor") && (nombreCompania == null || nombreCompania.isEmpty()
+						|| sitioWeb == null || sitioWeb.isEmpty()))) {
 
-
-        String nombreCompania = request.getParameter("nombreCompania");
-        String sitioWeb = request.getParameter("sitioWeb");
-
-        // Validar campos requeridos
-        if (nombre == null || nombre.isEmpty() || 
-            apellido == null || apellido.isEmpty() || 
-            fechaNacimiento == null || fechaNacimiento.isEmpty() || 
-            contraseña == null || contraseña.isEmpty() || 
-            contraseña2 == null || contraseña2.isEmpty() || 
-            tipoUsuario == null || tipoUsuario.isEmpty() || 
-            (tipoUsuario.equals("proveedor") && (nombreCompania == null || nombreCompania.isEmpty() || 
-            sitioWeb == null || sitioWeb.isEmpty()))) {
-
-            request.setAttribute("errorMsg", "Todos los campos marcados con * son obligatorios");
-            System.out.println("No se completaron todos los campos");
-            request.getRequestDispatcher("/WEB-INF/RegistrarUsuario2.jsp").forward(request, response);
-            return;
-        }
+			request.setAttribute("errorMsg", "Todos los campos marcados con * son obligatorios");
+			System.out.println("No se completaron todos los campos");
+			request.getRequestDispatcher("/WEB-INF/RegistrarUsuario2.jsp").forward(request, response);
+			return;
+		}
         
         // Validar contraseñas
         if (!contraseña.equals(contraseña2)) {
@@ -119,7 +116,7 @@ public class RegistrarUsuarios2 extends HttpServlet {
             	System.out.println("Registrado Cliente");
             }
             if (fileName != null) {
-            	port.agregarImagenUsuarioString(nick, fileName);
+            	port.agregarImagenUsuario(nick, imageBytes);
             }
             
             objSession.setAttribute("usuarioLogueado", usr);
@@ -135,5 +132,4 @@ public class RegistrarUsuarios2 extends HttpServlet {
             return;
         }
     }
-
 }

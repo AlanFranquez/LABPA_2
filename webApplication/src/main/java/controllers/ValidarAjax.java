@@ -5,25 +5,20 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import webservices.Publicador;
+import webservices.PublicadorService;
+
 import java.io.IOException;
 import java.util.List;
 
-import com.market.svcentral.Factory;
-import com.market.svcentral.ISistema;
-import com.market.svcentral.Usuario;
 
 @WebServlet("/validarAjax")
 public class ValidarAjax extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private ISistema sist;
 
     @Override
     public void init() throws ServletException {
-        try {
-            sist = Factory.getSistema();  // Inicializa el sistema
-        } catch (Exception e) {
-            throw new ServletException("No se pudo inicializar ISistema", e);
-        }
+       
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -31,7 +26,10 @@ public class ValidarAjax extends HttpServlet {
         String nick = request.getParameter("nick");
         String correo = request.getParameter("correo");
 
-        List<Usuario> usuarios = sist.listaUsuarios();
+        PublicadorService p = new PublicadorService();
+        Publicador port = p.getPublicadorPort();
+        
+        List<webservices.Usuario> usuarios = port.listaUsuarios();
 
         // Validación de nick
         if (nick != null && !nick.isEmpty()) {
@@ -39,7 +37,7 @@ public class ValidarAjax extends HttpServlet {
             
             
             
-            for (Usuario u: usuarios) {
+            for (webservices.Usuario u: usuarios) {
             	if (nick.equals(u.getNick())) {
             		nickExiste = true;
             		break;
@@ -57,7 +55,7 @@ public class ValidarAjax extends HttpServlet {
         if (correo != null && !correo.isEmpty()) {
             boolean correoExiste = false;
             
-            for (Usuario u: usuarios) {
+            for (webservices.Usuario u: usuarios) {
             	if (correo.equals(u.getCorreo())) {
             		correoExiste = true;
             		break;

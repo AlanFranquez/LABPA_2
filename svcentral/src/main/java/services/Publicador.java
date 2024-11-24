@@ -79,11 +79,11 @@ public class Publicador {
 	// ALAN
 	@WebMethod
 	public void agregarImagenUsuario(String nickName, byte[] imagenBytes) {
-	    Cliente cliente = obtenerCliente(nickName);
 	    
 	    EntityManagerFactory prueba = Persistence.createEntityManagerFactory("miUnidadPersistencia");
 	    EntityManager prob = prueba.createEntityManager();
 	    
+	    Cliente cliente = prob.find(Cliente.class, nickName);
 	    // Persistir el cambio
 	    prob.getTransaction().begin();
 	    
@@ -94,6 +94,27 @@ public class Publicador {
 	    prob.getTransaction().commit();
 	    prob.close();
 	    prueba.close();
+	}
+	
+	@WebMethod
+	public String obtenerImagenUsuario(String nickName) {
+	    EntityManagerFactory prueba = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+	    EntityManager prob = prueba.createEntityManager();
+
+	    Cliente cliente = prob.find(Cliente.class, nickName);
+
+	    if (cliente != null && cliente.getImagen() != null) {
+	        System.out.println("Imagen encontrada para el usuario: " + nickName);
+	        return cliente.getImagen();
+	    } else {
+	        System.out.println("No se encontró imagen para el usuario: " + nickName);
+	        return null;
+	    }
+	}
+	
+	@WebMethod
+	public Usuario[] listaUsuarios() {
+		return s.listaUsuarios().toArray(new Usuario[0]);
 	}
 	
 	@WebMethod

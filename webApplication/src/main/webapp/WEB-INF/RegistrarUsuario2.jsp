@@ -129,16 +129,16 @@
             
          	// Validación de la extensión de la imagen
             var imagenExtension = imagen.split('.').pop().toLowerCase(); // Obtiene la extensión del archivo
-            if (imagen && !['png', 'jpg'].includes(imagenExtension)) {
-            	mensajeError.innerHTML = '<div class="alert alert-danger">El formato de imagen no es correcto</div>'
-                event.preventDefault();
-                return;
+           if (imagen && !['jpg'].includes(imagenExtension)) {
+            mensajeError.innerHTML = '<div class="alert alert-danger">El formato de imagen no es correcto</div>'
+			event.preventDefault();
+			return;
             }
 
             const fechaActual = new Date();
             const fechaNacimiento = new Date(nacimiento);
             if (fechaNacimiento > fechaActual) {
-            	mensajeError.innerHTML = '<div class="alert alert-danger">El formato de imagen no es correcto</div>'
+            	mensajeError.innerHTML = '<div class="alert alert-danger">Fecha Incorrecta</div>'
                 event.preventDefault();
                 return;
             }

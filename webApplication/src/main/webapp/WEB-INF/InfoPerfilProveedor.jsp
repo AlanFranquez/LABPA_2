@@ -102,7 +102,7 @@ if (user != null && port.getTipo(nickUser).equals("proveedor")) {
             <p>Nombre: <b><%= port.getNombreDTCliente(nickUser) %></b></p>
             <p>Apellido: <b><%= port.getApellidoDTCliente(nickUser) %></b></p>              
             <p>Sitio WEB: <a href="<%= port.getSitioWeb(nickUser) %>"><%= port.getSitioWeb(nickUser) %></a></p>
-            <p><b><%= port.getCompania(nickUser) %></b></p>
+            <p>Compañia: <b><%= port.getCompania(nickUser) %></b></p>
         </div>
     </section>
 </main>
