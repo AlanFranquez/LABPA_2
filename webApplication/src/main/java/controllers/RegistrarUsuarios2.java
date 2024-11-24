@@ -3,19 +3,6 @@ package controllers;
 import java.io.File;
 import java.io.IOException;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-
-import com.market.svcentral.exceptions.UsuarioRepetidoException;
-import com.market.svcentral.Cliente;
-import com.market.svcentral.DTFecha;
-import com.market.svcentral.EstadoSesion;
-import com.market.svcentral.Factory;
-import com.market.svcentral.ISistema;
-import com.market.svcentral.Proveedor;
-import com.market.svcentral.Usuario;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -24,34 +11,28 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
-
-
-
-
+import webservices.EstadoSesion;
+import webservices.Publicador;
+import webservices.PublicadorService;
+import webservices.Usuario;
+import webservices.UsuarioRepetidoException;
 
 @WebServlet("/registrarusuario2")
 @MultipartConfig
 public class RegistrarUsuarios2 extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-    
+	PublicadorService p = new PublicadorService();
+    Publicador port = p.getPublicadorPort();
     /**
      * @see HttpServlet#HttpServlet()
      */
     public RegistrarUsuarios2() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 
-    private ISistema sist;
-
     @Override
     public void init() throws ServletException {
-        try {
-            sist = Factory.getSistema();  // Aquí puede estar fallando
-        } catch (Exception e) {
-            throw new ServletException("No se pudo inicializar ISistema", e);  // Manejar la excepción
-        }
     }
    
     @Override
@@ -117,14 +98,7 @@ public class RegistrarUsuarios2 extends HttpServlet {
             request.getRequestDispatcher("/WEB-INF/RegistrarUsuario2.jsp").forward(request, response);
             return;
         }
-
-        // Separar la fecha
-        String[] partesFecha = fechaNacimiento.split("-");
-        int anio = Integer.parseInt(partesFecha[0]);
-        int mes = Integer.parseInt(partesFecha[1]);
-        int dia = Integer.parseInt(partesFecha[2]);
-        DTFecha fechaNueva = new DTFecha(dia, mes, anio);
-
+        
         // Validar contraseñas
         if (!contraseña.equals(contraseña2)) {
             request.setAttribute("errorMsg", "Las contraseñas no coinciden");
@@ -133,46 +107,27 @@ public class RegistrarUsuarios2 extends HttpServlet {
             return;
         }
 
-        EstadoSesion nuevoEstado = EstadoSesion.LOGIN_INCORRECTO;
+        objSession.setAttribute("estado", "nologueado"); 
         Usuario usr = null;
 
         try {
             if (tipoUsuario.equals("proveedor")) {
-                Proveedor prov = new Proveedor(nombre, nick, apellido, correo, fechaNueva, nombreCompania, sitioWeb, contraseña);
-                sist.agregarProveedor(nick, correo, nombre, apellido, fechaNueva, nombreCompania, sitioWeb, contraseña, contraseña2);
-                usr = prov;
+            	usr = port.agregarProveedor2(nick, correo, nombre, apellido, fechaNacimiento, nombreCompania, sitioWeb, contraseña, contraseña2);
                 System.out.println("Registrado Proveedor");
             } else {
-                Cliente cliente = new Cliente(nombre, nick, apellido, correo, fechaNueva, contraseña);
-                sist.agregarCliente(nombre, nick, apellido, correo, fechaNueva, contraseña, contraseña2);
-                usr = cliente;
+            	usr = port.agregarCliente2(nombre, nick, apellido, correo, fechaNacimiento, contraseña, contraseña2);
+            	System.out.println("Registrado Cliente");
             }
             if (fileName != null) {
-            	
-            	sist.agregarImagenUsuario(usr.getNick(), fileName);
-            	usr.setImagen(fileName);
+            	port.agregarImagenUsuarioString(nick, fileName);
             }
             
-            EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-			EntityManager em = emf.createEntityManager();
-			
-			em.getTransaction().begin();
-			
-			em.persist(usr);
-			
-			em.getTransaction().commit();
-			
-			emf.close();
-            
-            System.out.print(sist.getUsuario(nick).getImagen());
-            
-            nuevoEstado = EstadoSesion.LOGIN_CORRECTO;
-            objSession.setAttribute("usuarioLogueado", sist.getUsuario(nick));
-            objSession.setAttribute("estado", nuevoEstado); 
+            objSession.setAttribute("usuarioLogueado", usr);
+            objSession.setAttribute("estado", "logueado"); 
 
             response.sendRedirect("home");
             
-        } catch (UsuarioRepetidoException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("errorMsg", "El usuario ya está registrado. Intenta con otro nombre.");
             System.out.println("Usuario ya registrado");
@@ -181,7 +136,4 @@ public class RegistrarUsuarios2 extends HttpServlet {
         }
     }
 
-
-
 }
-

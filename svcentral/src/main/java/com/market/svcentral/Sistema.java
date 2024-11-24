@@ -99,7 +99,7 @@ public class Sistema implements ISistema {
     		return;
     	}
     	user.setImagen(imagen);
-    	
+    	em.merge(user);
     	em.getTransaction().commit();
     	em.close();
     }

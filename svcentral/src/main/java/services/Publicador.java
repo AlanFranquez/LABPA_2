@@ -38,6 +38,7 @@ import com.market.svcentral.DTFecha;
 import com.market.svcentral.DTItem;
 import com.market.svcentral.DTOrdenDeCompra;
 import com.market.svcentral.DtProducto;
+import com.market.svcentral.EstadoSesion;
 import com.market.svcentral.Factory;
 import com.market.svcentral.ISistema;
 import com.market.svcentral.Item;
@@ -982,17 +983,7 @@ public class Publicador {
 		return em.find(Proveedor.class, c).getCompania();
 	}
 	
-	
-	/*
-	PaginaExito.java
-	PerfilCliente.java -
-	PerfilClienteMOBILE.java -
-	PerfilOrden.java -
-	PerfilOrdenMOBILE.java -
-	PerfilProducto.java -
-	perfilProductoMOBILE.java -
-	PerfilProveedor.java -
-	*/
+
 
 	// FABRICIO
 	/*
@@ -1003,9 +994,6 @@ public class Publicador {
 	 * 
 	 * taskkill /PID <ID_proceso> /F
 	 * 
-	 * ProductoServlet.java RealizarCompra.java RealizarReclamo.java
-	 * RegistrarUsuarios1.java RegistrarUsuarios2.java Saludo.java Usuarios.java
-	 * ValidarAjax.java VerReclamo.java
 	 */
 	@WebMethod
 	public List<Categoria> getCategoriasLista() {
@@ -1095,6 +1083,43 @@ public class Publicador {
 		em2.close();
 		
 		em.merge(carrito);
+	}
+	
+	@WebMethod
+	public Usuario agregarProveedor2(String nick, String correo, String nombre, String apellido, String fecha, String nombreCompania, String sitioWeb, String contraseña, String contraseña2) {
+		String[] partesFecha = fecha.split("-");
+        int anio = Integer.parseInt(partesFecha[0]);
+        int mes = Integer.parseInt(partesFecha[1]);
+        int dia = Integer.parseInt(partesFecha[2]);
+        DTFecha fechaNueva = new DTFecha(dia, mes, anio);
+        
+        try {
+			s.agregarProveedor(nick, correo, nombre, apellido, fechaNueva, nombreCompania, sitioWeb, contraseña, contraseña2);
+		} catch (UsuarioRepetidoException e) {
+			e.printStackTrace();
+		}
+        return em.find(Proveedor.class, nick);	
+	}
+	
+	@WebMethod
+	public Usuario agregarCliente2(String nombre, String nick, String apellido, String correo, String fecha, String contraseña, String contraseña2) {
+		String[] partesFecha = fecha.split("-");
+        int anio = Integer.parseInt(partesFecha[0]);
+        int mes = Integer.parseInt(partesFecha[1]);
+        int dia = Integer.parseInt(partesFecha[2]);
+        DTFecha fechaNueva = new DTFecha(dia, mes, anio);
+        
+        try {
+			s.agregarCliente(nombre, nick, apellido, correo, fechaNueva, contraseña, contraseña2);
+		} catch (UsuarioRepetidoException e) {
+			e.printStackTrace();
+		}
+        return em.find(Cliente.class, nick);	
+	}
+	
+	@WebMethod
+	public void agregarImagenUsuarioString(String nick, String fileName) {
+		s.agregarImagenUsuario(nick, fileName);
 	}
 	
 	// RENZO

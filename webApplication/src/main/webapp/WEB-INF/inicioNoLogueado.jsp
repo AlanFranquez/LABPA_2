@@ -81,7 +81,7 @@ List<Producto> prods = (List<Producto>) request.getAttribute("prods");
                 Inicia sesión o registrate para más beneficios
                 </p>
                 <button class="botonIndex">
-                    <a href="formlogin">
+                    <a href="registrarusuario1">
                         Crear una cuenta
                     </a>
                 </button>

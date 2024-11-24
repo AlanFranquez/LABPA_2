@@ -2,6 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <%@page import="webservices.Usuario"%>
+<%@page import="webservices.EstadoSesion"%>
 <%@page import="webservices.Producto"%>
 <%@page import="webservices.Carrito" %>
 <%@page import="webservices.Proveedor" %>
