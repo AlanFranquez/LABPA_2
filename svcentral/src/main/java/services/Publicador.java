@@ -148,6 +148,7 @@ public class Publicador {
 	    prob.getTransaction().commit();
 	    prob.close();
 	    prueba.close();
+	    System.out.println("Se agrego la imagen al usuario: " + nickName);
 	}
 	
 	@WebMethod
@@ -190,9 +191,9 @@ public class Publicador {
 	        	
 	        	dtos.add(dt);
 	        }
-	        
+	        System.out.println("Se obtuvieron los reclamos del proveedor: " + nickProveedor);
 	        return dtos.toArray(new ReclamoDTO[0]);
-	        		
+	       		
 	    
 	}
 	
@@ -200,6 +201,7 @@ public class Publicador {
 	public void agregarValoracion(int puntaje, int numRef, String nickName) {
 		try {
 			obtenerCliente(nickName).agregarPuntaje(puntaje, numRef);
+			 System.out.println("Se agrego una valoracion al producto" + obtenerProducto(numRef).getNombre() + " hecho por " + nickName);
 		} catch (ProductoException e) {
 			e.printStackTrace();
 		}
@@ -207,11 +209,14 @@ public class Publicador {
 
 	@WebMethod
 	public Producto obtenerProducto(int numRef) {
-		return em.find(Producto.class, numRef);
+		Producto p = em.find(Producto.class, numRef);
+		 System.out.println("Se obtuvo el producto: " + p.getNombre() + " Numero Referencia: " + numRef);
+		return p;
 	}
 	
 	@WebMethod
 	public String idReclamo(Reclamo r) {
+		System.out.println("Se Obtuvo el autor del reclamo");
 		return r.getAutor().getNick();
 	}
 
@@ -228,7 +233,7 @@ public class Publicador {
 	@WebMethod
 	public void agregarCliente(String nombre, String nickname, String apellido, String correo, 
 			DTFecha fecha, String pass, String confPass) throws UsuarioRepetidoException {
-		
+		System.out.println("Se registro un nuevo cliente con el nickname: " + nickname);
 		s.agregarCliente(nombre, nickname, apellido, correo, fecha, pass, confPass);
 		
 	}
@@ -236,7 +241,7 @@ public class Publicador {
 	@WebMethod
 	public void agregarProveedor(String nickname, String correo, String nombre, String apellido, DTFecha fecha, String compania, String link, String pass, String confPass) throws UsuarioRepetidoException {
 		
-		
+		System.out.println("Se registro un nuevo proveedor con el nickname: " + nickname);
 		s.agregarProveedor(nickname, correo, nombre, apellido, fecha, compania, link, pass, confPass);
 		
 		
@@ -251,7 +256,7 @@ public class Publicador {
 		
 		Producto p = obtenerProducto(numRef);
 		p.agregarImagen(img);
-		
+		System.out.println("Se agrego una imagen al producto: " + obtenerProducto(numRef).getNombre() + "Numero Referencia: " + numRef);
 		em.merge(p);
 		
 		
@@ -259,21 +264,25 @@ public class Publicador {
 	
 	@WebMethod
 	public void agregarCATPadre(String nombre) throws CategoriaException {
+		System.out.println("Se registro una nueva Categoria Padre: " + nombre);
 		s.agregarCategoria(nombre);
 	}
 	
 	@WebMethod
 	public void agregarCategoriaProducto(int numRef, String nombreCategoria) throws CategoriaException {
+		System.out.println("Se agrego el producto a la categoria: " + nombreCategoria);
 		s.agregarProductoCategoria(nombreCategoria, numRef);
 	}
 	
 	@WebMethod
 	public void agregarCATProducto(String nombre) throws CategoriaException {
+		System.out.println("Se registo una nueva Categoria: " + nombre);
 		s.agregarCategoriaConProductos(nombre);
 	}
 	
 	@WebMethod
 	public void asignarlePadreCategoria(String padre, String nombreCategoria) throws CategoriaException {
+		System.out.println("Ahora la categoria " + padre + " es padre de la categoria " + nombreCategoria);
 		s.asignarlePadreCategoria(padre, nombreCategoria);
 	}
 
@@ -377,6 +386,7 @@ public class Publicador {
 			}
 		}
 		catStr = catStr + "</html>";
+		System.out.println("Se obtuvo el DtProducto del producto: " + numRef);
 		return new DtProducto(p1.getNombre(), p1.getDescripcion(), p1.getPrecio(), p1.getNumRef(),
 				p1.getEspecificaciones(), p1.getProveedor(), catStr, p1.getImagenes(), p1.getStock(),
 				p1.getComentarios(), p1.getCantidadComprada(), p1.getReclamos(), p1.obtenerPuntajes());
@@ -389,6 +399,7 @@ public class Publicador {
 
 	@WebMethod
 	public String obtenerPrimeraIMGProd(Producto p) {
+		System.out.println("Se obtuvo la primera imagen del producto: " + p.getNombre());
 		return this.obtenerProducto(p.getNumRef()).getImagenes().get(0);
 	}
 
@@ -463,6 +474,7 @@ public class Publicador {
 	
 	@WebMethod
 	public void agregarItemsAOrden(int numeroOrden, int numProducto, int cantidad) {
+		 System.out.println("Se agregaron " + cantidad + "a la orden: " + numeroOrden);
 		s.agregarItemsAOrden(numeroOrden, numProducto, cantidad);
 	}
 	
@@ -494,6 +506,7 @@ public class Publicador {
 		} finally {
 			em.close();
 		}
+		System.out.println("Se obtuvo el carrito del Cliente: " + nickUsuario);
 		return carrito;
 	}
 
@@ -504,11 +517,13 @@ public class Publicador {
 
 	@WebMethod
 	public List<Producto> obtenerProductos() {
+		System.out.println("Se obtuvieron todos los productos de la base de datos");
 		return em.createQuery("SELECT p FROM Producto p", Producto.class).getResultList();
 	}
 
 	@WebMethod
 	public Usuario obtenerUsuario(String nick) {
+		System.out.println("Se obtuvo el usuario: " + nick);
 		return em.find(Usuario.class, nick);
 	}
 	
@@ -523,8 +538,8 @@ public class Publicador {
             em2.getTransaction().begin();
             if (cliente != null) {
                 Carrito carrito = cliente.getCarrito();
+                System.out.println("Se modifico la cantidad del Item de " + carrito.getItem(numRef).getCant() + "a " + nuevaCantidad);
                 carrito.getItem(numRef).setCant(nuevaCantidad);
-                
                 em2.merge(carrito);
             } else {
                 throw new Exception("Cliente no encontrado.");
@@ -540,18 +555,20 @@ public class Publicador {
 
 	@WebMethod
 	public Cliente obtenerCliente(String nick) {
+		System.out.println("Se obtuvo el Cliente: " + nick);
 		return (Cliente) em.find(Cliente.class, nick);
 	}
 
 	@WebMethod
 	public Proveedor obtenerProveedor(String nick) {
+		System.out.println("Se obtuvo el Proveedor: " + nick);
 		return (Proveedor) em.find(Proveedor.class, nick);
 	}
 	
 	@WebMethod
 	public void agregarCompraCliente(String nick, int numero) {
 		obtenerCliente(nick).agregarCompra(obtenerOrden(numero));
-		
+		System.out.println("Se agrego una orden al cliente: " + nick);
 		em.merge(obtenerCliente(nick));
 	}
 	
@@ -559,12 +576,13 @@ public class Publicador {
 	@WebMethod
 	public Carrito obtenerCarritoCliente(String nick) {
 		Cliente cl = em.find(Cliente.class, nick);
-
+		System.out.println("Se obtuvo el carrito del Cliente: " + nick);
 		return cl.getCarrito();
 	}
 	
 	@WebMethod
 	public Item prodsAItem(int cantidad, int numRef) {
+		System.out.println("Se crearon " + cantidad + " Items del producto: " + obtenerProducto(numRef).getNombre() + "Numero Referencia: " + numRef);
 		return new Item(cantidad, obtenerProducto(numRef));
 	}
 	
@@ -575,7 +593,7 @@ public class Publicador {
 
 		
 		Proveedor nuevoProv = obtenerProducto(numRef).getProveedor();
-
+		System.out.println("Se obtuvo el proveedor del producto: " + obtenerProducto(numRef).getNombre() + "Numero Referencia: " + numRef);
 		return nuevoProv;
 		
 	}
@@ -583,7 +601,7 @@ public class Publicador {
 	@WebMethod
 	public boolean comprobarSiProductoExisteCarrito(String nick, int numRef) {
 		Carrito c = this.obtenerCarritoCliente(nick);
-
+		System.out.println("Se comprobo si el producto ya existe en el carrito de: " + nick);
 		return c.getItem(numRef) != null;
 	}
 
@@ -594,12 +612,13 @@ public class Publicador {
 
 		cl.setCarrito(nuevoCarrito);
 		em.persist(nuevoCarrito);
-
+		System.out.println("Se Creo un nuevo carrito para: " + nickName);
 		em.close();
 	}
 
 	@WebMethod
 	public String obtenerPrimeraImagenProducto(int numRef) {
+		System.out.println("Se obtuvo la primera imagen del producto: " + obtenerProducto(numRef).getNombre() + "Numero Referencia: " + numRef);
 		return this.obtenerProducto(numRef).crearDT().getImagenes().get(0);
 	}
 
@@ -665,7 +684,7 @@ public class Publicador {
 			e.printStackTrace();
 		}
 
-        
+        System.out.println("El cliente " + nickCliente + "agrego un comentario al producto: " + obtenerProducto(numRef).getNombre());
         prubem.persist(nuevoComentario);
         prubem.merge(obtenerProducto(numRef));
         prubem.merge(obtenerCliente(nickCliente));
@@ -690,6 +709,7 @@ public class Publicador {
 		
 		padre.agregarRespuesta(respuesta);
 		
+		System.out.println("El cliente " + nick + "respondio al comentario de " + padre.getAutor().getNick());
 		prubem.persist(respuesta);
 		prubem.merge(padre);
 		prubem.flush();
@@ -729,6 +749,7 @@ public class Publicador {
     
     @WebMethod
     public void notificarComentarista(int numRef, String mensaje, String nickCliente) {
+    	System.out.println("se notifico al comentarista: " + nickCliente);
         s.notificarComentaristas(obtenerProducto(numRef), mensaje, obtenerCliente(nickCliente));
     }
     
@@ -1044,8 +1065,8 @@ public class Publicador {
 		productos = em.createQuery(jpql, Producto.class)
                 .setParameter("proveedorNick", nick)  // Usar el valor del parámetro correctamente
                 .getResultList();
+		System.out.println("se obtuvieron todos los productos del proveedor: " + nick);
 		return productos.toArray(new Producto[0]);
-		
 	}
 	
 	@WebMethod
@@ -1084,6 +1105,7 @@ public class Publicador {
 	@WebMethod
 	public void agregarProducto(String titulo, int numRef, String descripcion, String especificaciones, float precio,
 			String proveedor, int stock) {
+		System.out.println("se creo un nuevo producto para el proveedor: " + proveedor);
 		s.agregarProducto(titulo, numRef, descripcion, especificaciones, precio, proveedor, stock);
 	}
 
@@ -1105,7 +1127,7 @@ public class Publicador {
 
 		s.realizarCompra(orden, cliNick);
 		s.cambiarEstadoOrden("Comprada", "La compra ha sido realizada correctamente.", orden.getNumero(), cliNick);
-		
+		System.out.println("El cliente " + cliNick + "creo una nueva orden con valor total: " + precioTotal);
 	}
 	
 	@WebMethod
@@ -1116,14 +1138,14 @@ public class Publicador {
 	@WebMethod
 	public boolean clienteTieneCarrito(String nick){
 		Cliente cl = em.find(Cliente.class, nick);
-
+		System.out.println("Se comprobo si " + nick + "tiene carrito");
 		return cl.getCarrito().getProductos().isEmpty();
 	}
 	
 	@WebMethod
 	public Item[] getItemsCarrito(String nick){
 		Carrito cl = obtenerCliente(nick).getCarrito();
-
+		System.out.println("Se obtuvieron todos los productos del carrito de " + nick);
 		return cl.getProductos().toArray(new Item[0]);
 	}
 	@WebMethod
@@ -1160,6 +1182,7 @@ public class Publicador {
 		Cliente cli = em2.find(Cliente.class, nick);
 		Carrito carrito = cli.getCarrito();
 		carrito.vaciarCarrito();
+		System.out.println("se vacio el carrito del cliente: " + nick);
 		em2.getTransaction().commit();
 		em2.close();
 		
@@ -1176,6 +1199,7 @@ public class Publicador {
         
         try {
 			s.agregarProveedor(nick, correo, nombre, apellido, fechaNueva, nombreCompania, sitioWeb, contraseña, contraseña2);
+			System.out.println(nick + "es ahora un nuevo Proveedor!!");
 		} catch (UsuarioRepetidoException e) {
 			e.printStackTrace();
 		}
@@ -1192,6 +1216,7 @@ public class Publicador {
         
         try {
 			s.agregarCliente(nombre, nick, apellido, correo, fechaNueva, contraseña, contraseña2);
+			System.out.println(nick + "es ahora un nuevo Cliente!!");
 		} catch (UsuarioRepetidoException e) {
 			e.printStackTrace();
 		}
@@ -1200,6 +1225,7 @@ public class Publicador {
 	
 	@WebMethod
 	public void agregarImagenUsuarioString(String nick, String fileName) {
+		System.out.println("se agrego una imagen para el usuario: " + nick);
 		s.agregarImagenUsuario(nick, fileName);
 	}
 	
@@ -1217,7 +1243,7 @@ public class Publicador {
 	            if (cliente != null) {
 	                Carrito carrito = cliente.getCarrito();
 	                carrito.eliminarProd(numRef);
-	                
+	                System.out.println("Se elimino el producto " + obtenerProducto(numRef).getNombre() + " del carrito de " + nickCliente);
 	                em2.merge(carrito);
 	            } else {
 	                throw new Exception("Cliente no encontrado.");
@@ -1241,7 +1267,7 @@ public class Publicador {
 	            Cliente cliente = obtenerCliente(nickCliente);
 	                Carrito carrito = cliente.getCarrito();
 	                carrito.agregarProducto(item); 
-	                System.out.println("Producto agregado al carrito de " + nickCliente);
+	                System.out.println("El producto " + item.getProducto().getNombre() + "fue agregado al carrito de " + nickCliente);
 	         emfac.merge(carrito);
 	         emfac.getTransaction().commit();
 	         emfac.close();
@@ -1252,6 +1278,7 @@ public class Publicador {
 		@WebMethod
 		public List<Reclamo> obtenerReclamosProd(int numRef){
 			Producto p = em.find(Producto.class, numRef);
+			System.out.println("Se obtuvieron todos los reclamos del producto: " + obtenerProducto(numRef).getNombre());
 			return p.getReclamos();
 		}
 		
@@ -1260,7 +1287,7 @@ public class Publicador {
 			if (c == null) {
 		        throw new IllegalArgumentException("El cliente no puede ser nulo");
 		    }
-			
+			System.out.println("Se obtuvieron todos los productos del carrito de " + c);
 			return obtenerCarritoCliente(c).getProductos();
 		}
 		
@@ -1268,6 +1295,7 @@ public class Publicador {
 		public Item obtenerItemCarrito(String nick, int numRef) {
 		    Cliente cl = em.find(Cliente.class, nick);
 		    Carrito carrito = cl.getCarrito();
+		    System.out.println("Se obtuvo el Item del carrito: " + obtenerProducto(numRef).getNombre());
 		    return carrito.getItem(numRef); 
 		}
 		
