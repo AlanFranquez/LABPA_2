@@ -3,8 +3,11 @@ package services;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -13,6 +16,7 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
@@ -64,17 +68,67 @@ public class Publicador {
 
 	@WebMethod(exclude = true)
 	public void publicar() {
-		endpoint = Endpoint.publish("http://localhost:1234/publicador", this);
+	    try {
+	        // Carga la configuración desde central.properties
+	        String url = obtenerURLDesdeConfiguracion();
+
+	        if (url == null || url.isEmpty()) {
+	            throw new IllegalArgumentException("La URL del servicio web no está definida en el archivo central.properties");
+	        }
+
+	        // Publica el servicio en la URL
+	        endpoint = Endpoint.publish(url, this);
+	        System.out.println("Servicio publicado en: " + url);
+	    } catch (IOException e) {
+	        System.err.println("Error al cargar el archivo de configuración: " + e.getMessage());
+	    } catch (Exception e) {
+	        System.err.println("Error al publicar el servicio: " + e.getMessage());
+	    }
 	}
 
-	public Publicador() {
-		s = Factory.getSistema();
+	/**
+	 * Método para obtener la URL del servicio desde el archivo de configuración.
+	 */
+	private String obtenerURLDesdeConfiguracion() throws IOException {
+	    Properties config = new Properties();
+	    String rutaConfiguracion = "C:/Users/Usuario/DirectMarket/central.properties";
+
+	    File archivoConfiguracion = new File(rutaConfiguracion);
+
+	    if (!archivoConfiguracion.exists()) {
+	        System.err.println("El archivo de configuración no existe en: " + rutaConfiguracion);
+	        return null;
+	    }
+
+	    try (FileInputStream fis = new FileInputStream(archivoConfiguracion)) {
+	        config.load(fis);
+	    }
+
+	    // Leer la URL del servicio web desde el archivo
+	    String url = config.getProperty("webservice.url");
+	    if (url == null || url.trim().isEmpty()) {
+	        // URL predeterminada si no se encuentra en el archivo
+	        String ipServidor = obtenerIPLocal();
+	        String puerto = config.getProperty("servidor.central.puerto", "1234");
+	        url = "http://" + ipServidor + ":" + puerto + "/publicador";
+	    }
+
+	    return url;
 	}
 
-	@WebMethod(exclude = true)
-	public Endpoint getEndPoint() {
-		return this.endpoint;
+	/**
+	 * Obtiene la IP local de la máquina.
+	 */
+	private String obtenerIPLocal() {
+	    try {
+	        return InetAddress.getLocalHost().getHostAddress();
+	    } catch (UnknownHostException e) {
+	        System.err.println("Error al obtener la dirección IP local: " + e.getMessage());
+	        return "localhost";
+	    }
 	}
+
+
 
 	// ALAN
 	@WebMethod
