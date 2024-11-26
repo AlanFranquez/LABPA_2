@@ -68,22 +68,7 @@ public class Publicador {
 
 	@WebMethod(exclude = true)
 	public void publicar() {
-	    try {
-	        // Carga la configuración desde central.properties
-	        String url = obtenerURLDesdeConfiguracion();
-
-	        if (url == null || url.isEmpty()) {
-	            throw new IllegalArgumentException("La URL del servicio web no está definida en el archivo central.properties");
-	        }
-
-	        // Publica el servicio en la URL
-	        endpoint = Endpoint.publish(url, this);
-	        System.out.println("Servicio publicado en: " + url);
-	    } catch (IOException e) {
-	        System.err.println("Error al cargar el archivo de configuración: " + e.getMessage());
-	    } catch (Exception e) {
-	        System.err.println("Error al publicar el servicio: " + e.getMessage());
-	    }
+		endpoint = Endpoint.publish("http://localhost:1234/publicador", this);
 	}
 
 	/**
@@ -665,11 +650,9 @@ public class Publicador {
 	
 	@WebMethod
     public void agregarComentario(int comentarioId, String mensaje, String nickCliente, int numRef) {
-       
-		EntityManagerFactory prueba = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-		EntityManager prubem = prueba.createEntityManager();
-		
-		prubem.getTransaction().begin();
+        emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+        em = emf.createEntityManager();
+		em.getTransaction().begin();
 		
 		
         
@@ -684,17 +667,16 @@ public class Publicador {
 			e.printStackTrace();
 		}
 
-        System.out.println("El cliente " + nickCliente + "agrego un comentario al producto: " + obtenerProducto(numRef).getNombre());
-        prubem.persist(nuevoComentario);
-        prubem.merge(obtenerProducto(numRef));
-        prubem.merge(obtenerCliente(nickCliente));
-        prubem.flush();
-        prubem.getTransaction().commit();
         
-        prubem.close();
-        prueba.close();
+        em.persist(nuevoComentario);
+        em.merge(obtenerProducto(numRef));
+        em.merge(obtenerCliente(nickCliente));
+        em.flush();
+        em.getTransaction().commit();
         
-    } 
+        
+        
+    }
 	
 	@WebMethod
     public void agregarRespuesta(int comentarioPadre, String mensaje, int respuestaID, String nick) {

@@ -12,6 +12,8 @@ import webservices.PublicadorService;
 import java.io.IOException;
 import java.util.Random;
 
+
+
 @WebServlet("/enviarComentario")
 public class enviarComentario extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -46,6 +48,7 @@ public class enviarComentario extends HttpServlet {
 			return;
 		}
 		
+		
 		webservices.Cliente cliente = (webservices.Cliente) session.getAttribute("usuarioLogueado");
 		webservices.Producto producto1 = port.obtenerProducto(paramNum);
 
@@ -65,4 +68,3 @@ public class enviarComentario extends HttpServlet {
 		
 	}
 }
-
