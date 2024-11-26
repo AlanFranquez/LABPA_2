@@ -7,9 +7,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for producto complex type.
+ * <p>Clase Java para producto complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
  * 
  * <pre>
  * &lt;complexType name="producto">
@@ -52,7 +52,7 @@ public class Producto {
     protected Integer stock;
 
     /**
-     * Gets the value of the cantidadComprada property.
+     * Obtiene el valor de la propiedad cantidadComprada.
      * 
      */
     public int getCantidadComprada() {
@@ -60,7 +60,7 @@ public class Producto {
     }
 
     /**
-     * Sets the value of the cantidadComprada property.
+     * Define el valor de la propiedad cantidadComprada.
      * 
      */
     public void setCantidadComprada(int value) {
@@ -68,7 +68,7 @@ public class Producto {
     }
 
     /**
-     * Gets the value of the descripcion property.
+     * Obtiene el valor de la propiedad descripcion.
      * 
      * @return
      *     possible object is
@@ -80,7 +80,7 @@ public class Producto {
     }
 
     /**
-     * Sets the value of the descripcion property.
+     * Define el valor de la propiedad descripcion.
      * 
      * @param value
      *     allowed object is
@@ -92,7 +92,7 @@ public class Producto {
     }
 
     /**
-     * Gets the value of the nombre property.
+     * Obtiene el valor de la propiedad nombre.
      * 
      * @return
      *     possible object is
@@ -104,7 +104,7 @@ public class Producto {
     }
 
     /**
-     * Sets the value of the nombre property.
+     * Define el valor de la propiedad nombre.
      * 
      * @param value
      *     allowed object is
@@ -116,7 +116,7 @@ public class Producto {
     }
 
     /**
-     * Gets the value of the numRef property.
+     * Obtiene el valor de la propiedad numRef.
      * 
      * @return
      *     possible object is
@@ -128,7 +128,7 @@ public class Producto {
     }
 
     /**
-     * Sets the value of the numRef property.
+     * Define el valor de la propiedad numRef.
      * 
      * @param value
      *     allowed object is
@@ -140,7 +140,7 @@ public class Producto {
     }
 
     /**
-     * Gets the value of the precio property.
+     * Obtiene el valor de la propiedad precio.
      * 
      */
     public float getPrecio() {
@@ -148,7 +148,7 @@ public class Producto {
     }
 
     /**
-     * Sets the value of the precio property.
+     * Define el valor de la propiedad precio.
      * 
      */
     public void setPrecio(float value) {
@@ -156,7 +156,7 @@ public class Producto {
     }
 
     /**
-     * Gets the value of the proveedor property.
+     * Obtiene el valor de la propiedad proveedor.
      * 
      * @return
      *     possible object is
@@ -168,7 +168,7 @@ public class Producto {
     }
 
     /**
-     * Sets the value of the proveedor property.
+     * Define el valor de la propiedad proveedor.
      * 
      * @param value
      *     allowed object is
@@ -180,7 +180,7 @@ public class Producto {
     }
 
     /**
-     * Gets the value of the stock property.
+     * Obtiene el valor de la propiedad stock.
      * 
      * @return
      *     possible object is
@@ -192,7 +192,7 @@ public class Producto {
     }
 
     /**
-     * Sets the value of the stock property.
+     * Define el valor de la propiedad stock.
      * 
      * @param value
      *     allowed object is

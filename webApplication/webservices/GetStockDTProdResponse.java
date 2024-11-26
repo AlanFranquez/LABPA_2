@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for getStockDTProdResponse complex type.
+ * <p>Clase Java para getStockDTProdResponse complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
  * 
  * <pre>
  * &lt;complexType name="getStockDTProdResponse">
@@ -36,7 +36,7 @@ public class GetStockDTProdResponse {
     protected int _return;
 
     /**
-     * Gets the value of the return property.
+     * Obtiene el valor de la propiedad return.
      * 
      */
     public int getReturn() {
@@ -44,7 +44,7 @@ public class GetStockDTProdResponse {
     }
 
     /**
-     * Sets the value of the return property.
+     * Define el valor de la propiedad return.
      * 
      */
     public void setReturn(int value) {

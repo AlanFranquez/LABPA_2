@@ -3,20 +3,13 @@ package services;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.URL;
 import java.net.UnknownHostException;
-import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
@@ -28,106 +21,66 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 import javax.xml.ws.Endpoint;
-import javax.xml.ws.WebServiceException;
 
-import com.market.svcentral.Carrito;
-import com.market.svcentral.Cat_Padre;
-import com.market.svcentral.Cat_Producto;
-import com.market.svcentral.Categoria;
-import com.market.svcentral.Cliente;
-import com.market.svcentral.Comentario;
-import com.market.svcentral.DTCliente;
-import com.market.svcentral.DTEstado;
-import com.market.svcentral.DTFecha;
-import com.market.svcentral.DTItem;
-import com.market.svcentral.DTOrdenDeCompra;
-import com.market.svcentral.DtProducto;
-import com.market.svcentral.EstadoSesion;
-import com.market.svcentral.Factory;
-import com.market.svcentral.ISistema;
-import com.market.svcentral.Item;
-import com.market.svcentral.OrdenDeCompra;
-import com.market.svcentral.Producto;
-import com.market.svcentral.Proveedor;
-import com.market.svcentral.Reclamo;
-import com.market.svcentral.Usuario;
-import com.market.svcentral.exceptions.CategoriaException;
-import com.market.svcentral.exceptions.ProductoException;
-import com.market.svcentral.exceptions.ReclamoException;
-import com.market.svcentral.exceptions.UsuarioRepetidoException;
+import com.market.svcentral.*;
+import com.market.svcentral.exceptions.*;
 
 @WebService
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.WRAPPED)
 public class Publicador {
-	private Endpoint endpoint = null;
-	ISistema s = Factory.getSistema();
-	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-	EntityManager em = emf.createEntityManager();
+    private static final String PERSISTENCE_UNIT = "miUnidadPersistencia";
+    private static EntityManagerFactory emf = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT);
+    private EntityManager em = emf.createEntityManager();
+    private ISistema s = Factory.getSistema();
+    private Endpoint endpoint;
 
-	List<Producto> productos = null;
+    // ======================= MÉTODOS DE SERVICIO ======================= //
 
-	@WebMethod(exclude = true)
-	public void publicar() {
-	    try {
-	        // Carga la configuración desde central.properties
-	        String url = obtenerURLDesdeConfiguracion();
+    /**
+     * Publicar el servicio.
+     */
+    @WebMethod(exclude = true)
+    public void publicar() {
+        try {
+            // Obtener la IP local de forma dinámica
+            String ipServidor = obtenerIPLocal(); // IP de la máquina actual
+            // Construir la URL de publicación usando la IP local y el puerto definido
+            String url = "http://" + ipServidor + ":1234/publicador";
 
-	        if (url == null || url.isEmpty()) {
-	            throw new IllegalArgumentException("La URL del servicio web no está definida en el archivo central.properties");
-	        }
+            // Publicar el servicio en la URL generada
+            endpoint = Endpoint.publish(url, this);
+            System.out.println("Servicio publicado en: " + url);
+        } catch (Exception e) {
+            // Manejo de cualquier error al publicar el servicio
+            System.err.println("Error al publicar el servicio: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 
-	        // Publica el servicio en la URL
-	        endpoint = Endpoint.publish(url, this);
-	        System.out.println("Servicio publicado en: " + url);
-	    } catch (IOException e) {
-	        System.err.println("Error al cargar el archivo de configuración: " + e.getMessage());
-	    } catch (Exception e) {
-	        System.err.println("Error al publicar el servicio: " + e.getMessage());
-	    }
-	}
 
-	/**
-	 * Método para obtener la URL del servicio desde el archivo de configuración.
-	 */
-	private String obtenerURLDesdeConfiguracion() throws IOException {
-	    Properties config = new Properties();
-	    String rutaConfiguracion = "C:/Users/Usuario/DirectMarket/central.properties";
-
-	    File archivoConfiguracion = new File(rutaConfiguracion);
-
-	    if (!archivoConfiguracion.exists()) {
-	        System.err.println("El archivo de configuración no existe en: " + rutaConfiguracion);
-	        return null;
-	    }
-
-	    try (FileInputStream fis = new FileInputStream(archivoConfiguracion)) {
-	        config.load(fis);
-	    }
-
-	    // Leer la URL del servicio web desde el archivo
-	    String url = config.getProperty("webservice.url");
-	    if (url == null || url.trim().isEmpty()) {
-	        // URL predeterminada si no se encuentra en el archivo
-	        String ipServidor = obtenerIPLocal();
-	        String puerto = config.getProperty("servidor.central.puerto", "1234");
-	        url = "http://" + ipServidor + ":" + puerto + "/publicador";
-	    }
-
-	    return url;
-	}
-
-	/**
-	 * Obtiene la IP local de la máquina.
-	 */
-	private String obtenerIPLocal() {
-	    try {
-	        return InetAddress.getLocalHost().getHostAddress();
-	    } catch (UnknownHostException e) {
-	        System.err.println("Error al obtener la dirección IP local: " + e.getMessage());
-	        return "localhost";
-	    }
-	}
-
+    /**
+     * Detener el servicio.
+     */
+    @WebMethod(exclude = true)
+    public void detener() {
+        if (endpoint != null && endpoint.isPublished()) {
+            endpoint.stop();
+            System.out.println("Servicio detenido correctamente.");
+        } else {
+            System.out.println("El servicio no estaba en ejecución.");
+        }
+    }
+    
+    private String obtenerIPLocal() {
+        try {
+            // Obtener la dirección IP local de la máquina
+            return InetAddress.getLocalHost().getHostAddress();
+        } catch (UnknownHostException e) {
+            // En caso de error, mostrar un mensaje y usar "localhost"
+            System.err.println("Error al obtener la dirección IP local: " + e.getMessage());
+            return "localhost"; // Fallback a "localhost"
+        }
+    }
 
 
 	// ALAN

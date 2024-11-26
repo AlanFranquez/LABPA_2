@@ -7,9 +7,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for cliente complex type.
+ * <p>Clase Java para cliente complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
  * 
  * <pre>
  * &lt;complexType name="cliente">
@@ -36,7 +36,7 @@ public class Cliente
     protected Carrito carrito;
 
     /**
-     * Gets the value of the carrito property.
+     * Obtiene el valor de la propiedad carrito.
      * 
      * @return
      *     possible object is
@@ -48,7 +48,7 @@ public class Cliente
     }
 
     /**
-     * Sets the value of the carrito property.
+     * Define el valor de la propiedad carrito.
      * 
      * @param value
      *     allowed object is

@@ -3,10 +3,7 @@ package com.market.svcentral;
 import services.Publicador;
 
 import javax.xml.ws.Endpoint;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Properties;
@@ -17,87 +14,75 @@ public class Main {
 
     public static void main(String[] args) {
         limpiarConsola();
-        System.out.println("  ____  _               _   __  __            _        _   ");
-        System.out.println(" |  _ \\(_)_ __ ___  ___| |_|  \\/  | __ _ _ __| | _____| |_ ");
-        System.out.println(" | | | | | '__/ _ \\/ __| __| |\\/| |/ _` | '__| |/ / _ \\ __|");
-        System.out.println(" | |_| | | | |  __/ (__| |_| |  | | (_| | |  |   <  __/ |_ ");
-        System.out.println(" |____/|_|_|  \\___|\\___|\\__|_|  |_|\\__,_|_|  |_|\\_\\___|\\__|");
-        System.out.println();
-        System.out.println();
-
+        mostrarBanner();
+        
         if (cargarConfiguracion()) {
-            System.out.println("El archivo config.properties se cargó correctamente.");
+            System.out.println("Configuración cargada correctamente.");
             iniciarServidor();
             esperarEntradaParaDetenerServidor();
         } else {
-            //System.err.println("Error: No se pudo cargar el archivo config.properties.");
-            //return; // Termina el programa si la configuración falla
+            System.err.println("Error: No se pudo cargar la configuración. Saliendo...");
         }
     }
 
     private static boolean cargarConfiguracion() {
         String rutaCarpeta;
 
-        // Detectar sistema operativo y ajustar la ruta de configuración
+        // Detectar sistema operativo para definir la ruta
         if (System.getProperty("os.name").toLowerCase().contains("win")) {
-            rutaCarpeta = "C:/Users/Usuario/DirectMarket"; // Ruta para Windows
+            rutaCarpeta = "C:/Users/Usuario/DirectMarket"; // Windows
         } else {
-            String userHome = System.getProperty("user.home"); // Ruta home para Linux/Mac
+            String userHome = System.getProperty("user.home"); // Linux/Mac
             rutaCarpeta = userHome + "/DirectMarket";
         }
 
         String rutaConfig = rutaCarpeta + "/config.properties";
         File carpeta = new File(rutaCarpeta);
 
-        if (!carpeta.exists()) {
-            System.out.println("La carpeta no existe: " + rutaCarpeta);
-            if (!carpeta.mkdirs()) {
-                System.err.println("No se pudo crear la carpeta: " + rutaCarpeta);
-                return false;
-            }
-            System.out.println("Carpeta creada en: " + rutaCarpeta);
+        if (!carpeta.exists() && !carpeta.mkdirs()) {
+            System.err.println("No se pudo crear la carpeta de configuración: " + rutaCarpeta);
+            return false;
         }
 
-        // Crear config.properties si no existe
-        if (!new File(rutaConfig).exists()) {
-            System.out.println("El archivo config.properties no existe en la ruta: " + rutaConfig);
-            crearArchivoConfig(rutaConfig);
+        File archivoConfig = new File(rutaConfig);
+        if (!archivoConfig.exists()) {
+            crearArchivoConfig(archivoConfig);
         }
 
-        // Cargar propiedades del archivo config.properties
         try (FileInputStream configFis = new FileInputStream(rutaConfig)) {
             config.load(configFis);
-            System.out.println("Configuración cargada desde: " + rutaConfig);
             return true;
         } catch (IOException e) {
-            System.err.println("Error al cargar el archivo config.properties: " + e.getMessage());
+            //System.err.println("Error al cargar el archivo config.properties: " + e.getMessage());
             return false;
         }
     }
 
-    private static void crearArchivoConfig(String rutaArchivo) {
-        try (FileWriter writer = new FileWriter(rutaArchivo)) {
+   private static void crearArchivoConfig(File archivoConfig) {
+        try (FileWriter writer = new FileWriter(archivoConfig)) {
+            String ipServidor = obtenerIPLocal(); // Obtener la IP dinámica
+
             writer.write("# Configuración del servidor\n");
-            writer.write("webservice.url=http://localhost:1234/publicador\n");
+            writer.write("webservice.url=http://" + ipServidor + ":1234/publicador\n"); // Usar la IP dinámica
             writer.write("servidor.central.puerto=1234\n");
-            System.out.println("El archivo config.properties no existía y se creó una plantilla en: " + rutaArchivo);
+            System.out.println("Archivo config.properties creado en: " + archivoConfig.getPath());
         } catch (IOException e) {
-            System.err.println("Error al crear el archivo config.properties: " + e.getMessage());
+            //System.err.println("Error al crear el archivo config.properties: " + e.getMessage());
         }
     }
 
+
     private static void iniciarServidor() {
         try {
-            // Obtener la IP local
             String ipServidor = obtenerIPLocal();
             String puertoServidor = config.getProperty("servidor.central.puerto", "1234");
             String urlServidor = config.getProperty("webservice.url", "http://" + ipServidor + ":" + puertoServidor + "/publicador");
+            //String urlServidor = config.getProperty("webservice.url", "http://192.168.1.3:1234/publicador");
 
-            // Publicar el servicio web
             Publicador publicador = new Publicador();
             endpoint = Endpoint.publish(urlServidor, publicador);
 
-            System.out.println("Servidor iniciado y servicios publicados en: " + urlServidor);
+            System.out.println("Servidor iniciado y publicado en: " + urlServidor);
         } catch (Exception e) {
             System.err.println("Error al iniciar el servidor: " + e.getMessage());
         }
@@ -105,18 +90,17 @@ public class Main {
 
     private static String obtenerIPLocal() {
         try {
-            InetAddress localHost = InetAddress.getLocalHost();
-            return localHost.getHostAddress(); // Retorna la dirección IP
+            return InetAddress.getLocalHost().getHostAddress();
         } catch (UnknownHostException e) {
             System.err.println("Error al obtener la dirección IP local: " + e.getMessage());
-            return null;
+            return "localhost";
         }
     }
 
     private static void esperarEntradaParaDetenerServidor() {
         System.out.println("Presiona ENTER para detener el servidor...");
         try {
-            System.in.read(); // Espera a que el usuario presione ENTER
+            System.in.read();
             detenerServidor();
         } catch (IOException e) {
             System.err.println("Error al esperar entrada para detener el servidor: " + e.getMessage());
@@ -143,5 +127,14 @@ public class Main {
         } catch (Exception e) {
             System.err.println("No se pudo limpiar la consola: " + e.getMessage());
         }
+    }
+
+    private static void mostrarBanner() {
+        System.out.println("  ____  _               _   __  __            _        _   ");
+        System.out.println(" |  _ \\(_)_ __ ___  ___| |_|  \\/  | __ _ _ __| | _____| |_ ");
+        System.out.println(" | | | | | '__/ _ \\/ __| __| |\\/| |/ _` | '__| |/ / _ \\ __|");
+        System.out.println(" | |_| | | | |  __/ (__| |_| |  | | (_| | |  |   <  __/ |_ ");
+        System.out.println(" |____/|_|_|  \\___|\\___|\\__|_|  |_|\\__,_|_|  |_|\\_\\___|\\__|");
+        System.out.println();
     }
 }

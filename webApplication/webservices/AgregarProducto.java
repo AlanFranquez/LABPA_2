@@ -7,9 +7,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for agregarProducto complex type.
+ * <p>Clase Java para agregarProducto complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
  * 
  * <pre>
  * &lt;complexType name="agregarProducto">
@@ -52,7 +52,7 @@ public class AgregarProducto {
     protected int arg6;
 
     /**
-     * Gets the value of the arg0 property.
+     * Obtiene el valor de la propiedad arg0.
      * 
      * @return
      *     possible object is
@@ -64,7 +64,7 @@ public class AgregarProducto {
     }
 
     /**
-     * Sets the value of the arg0 property.
+     * Define el valor de la propiedad arg0.
      * 
      * @param value
      *     allowed object is
@@ -76,7 +76,7 @@ public class AgregarProducto {
     }
 
     /**
-     * Gets the value of the arg1 property.
+     * Obtiene el valor de la propiedad arg1.
      * 
      */
     public int getArg1() {
@@ -84,7 +84,7 @@ public class AgregarProducto {
     }
 
     /**
-     * Sets the value of the arg1 property.
+     * Define el valor de la propiedad arg1.
      * 
      */
     public void setArg1(int value) {
@@ -92,7 +92,7 @@ public class AgregarProducto {
     }
 
     /**
-     * Gets the value of the arg2 property.
+     * Obtiene el valor de la propiedad arg2.
      * 
      * @return
      *     possible object is
@@ -104,7 +104,7 @@ public class AgregarProducto {
     }
 
     /**
-     * Sets the value of the arg2 property.
+     * Define el valor de la propiedad arg2.
      * 
      * @param value
      *     allowed object is
@@ -116,7 +116,7 @@ public class AgregarProducto {
     }
 
     /**
-     * Gets the value of the arg3 property.
+     * Obtiene el valor de la propiedad arg3.
      * 
      * @return
      *     possible object is
@@ -128,7 +128,7 @@ public class AgregarProducto {
     }
 
     /**
-     * Sets the value of the arg3 property.
+     * Define el valor de la propiedad arg3.
      * 
      * @param value
      *     allowed object is
@@ -140,7 +140,7 @@ public class AgregarProducto {
     }
 
     /**
-     * Gets the value of the arg4 property.
+     * Obtiene el valor de la propiedad arg4.
      * 
      */
     public float getArg4() {
@@ -148,7 +148,7 @@ public class AgregarProducto {
     }
 
     /**
-     * Sets the value of the arg4 property.
+     * Define el valor de la propiedad arg4.
      * 
      */
     public void setArg4(float value) {
@@ -156,7 +156,7 @@ public class AgregarProducto {
     }
 
     /**
-     * Gets the value of the arg5 property.
+     * Obtiene el valor de la propiedad arg5.
      * 
      * @return
      *     possible object is
@@ -168,7 +168,7 @@ public class AgregarProducto {
     }
 
     /**
-     * Sets the value of the arg5 property.
+     * Define el valor de la propiedad arg5.
      * 
      * @param value
      *     allowed object is
@@ -180,7 +180,7 @@ public class AgregarProducto {
     }
 
     /**
-     * Gets the value of the arg6 property.
+     * Obtiene el valor de la propiedad arg6.
      * 
      */
     public int getArg6() {
@@ -188,7 +188,7 @@ public class AgregarProducto {
     }
 
     /**
-     * Sets the value of the arg6 property.
+     * Define el valor de la propiedad arg6.
      * 
      */
     public void setArg6(int value) {
