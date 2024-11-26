@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
@@ -39,6 +40,16 @@ public class Cliente extends Usuario {
     @OneToOne(cascade = CascadeType.ALL)
     private Carrito carrito;
     
+ // Booleans para controlar notificaciones
+    private boolean recibirNotificaciones;
+    private boolean recibirNotificacionesNuevoProducto;
+    private boolean recibirNotificacionesComentario;
+    
+    // Tokens para cada tipo de notificación
+    private String tokenDesactivacion;
+    private String tokenNuevoProducto;
+    private String tokenComentario;
+    
     public Cliente() {
     
     }
@@ -50,7 +61,60 @@ public class Cliente extends Usuario {
         this.listaComentarios = new HashMap<>();
         this.carrito = new Carrito();
         this.listaPuntajes = new HashMap<>();
+        
+     // Inicialización de los booleanos de notificación a false
+        this.recibirNotificaciones = false;
+        this.recibirNotificacionesNuevoProducto = false;
+        this.recibirNotificacionesComentario = false;
+        
+        // Generación de tokens únicos para cada tipo de notificación
+        this.tokenDesactivacion = generarTokenUnico();
+        this.tokenNuevoProducto = generarTokenUnico();
+        this.tokenComentario = generarTokenUnico();
     }
+    
+ // Métodos para obtener y establecer valores de notificación y tokens
+    public boolean isRecibirNotificaciones() {
+        return recibirNotificaciones;
+    }
+    public void setRecibirNotificaciones(boolean recibirNotificaciones) {
+        this.recibirNotificaciones = recibirNotificaciones;
+    }
+    public boolean isRecibirNotificacionesNuevoProducto() {
+        return recibirNotificacionesNuevoProducto;
+    }
+    public void setRecibirNotificacionesNuevoProducto(boolean recibirNotificacionesNuevoProducto) {
+        this.recibirNotificacionesNuevoProducto = recibirNotificacionesNuevoProducto;
+    }
+    public boolean isRecibirNotificacionesComentario() {
+        return recibirNotificacionesComentario;
+    }
+    public void setRecibirNotificacionesComentario(boolean recibirNotificacionesComentario) {
+        this.recibirNotificacionesComentario = recibirNotificacionesComentario;
+    }
+    public String getTokenDesactivacion() {
+        return tokenDesactivacion;
+    }
+    public void setTokenDesactivacion(String tokenDesactivacion) {
+        this.tokenDesactivacion = tokenDesactivacion;
+    }
+    public String getTokenNuevoProducto() {
+        return tokenNuevoProducto;
+    }
+    public void setTokenNuevoProducto(String tokenNuevoProducto) {
+        this.tokenNuevoProducto = tokenNuevoProducto;
+    }
+    public String getTokenComentario() {
+        return tokenComentario;
+    }
+    public void setTokenComentario(String tokenComentario) {
+        this.tokenComentario = tokenComentario;
+    }
+    // Método para generar un token único
+    private String generarTokenUnico() {
+        return UUID.randomUUID().toString();
+    }
+    
     // gets, sets
     public List<OrdenDeCompra> getCompras() {
         return listaCompras;
@@ -67,11 +131,7 @@ public class Cliente extends Usuario {
 
     
     public void agregarRespuesta(int numeroComentario, String nombreProducto, Comentario respuesta) {
-    	for (OrdenDeCompra entry : listaCompras) {
-    		OrdenDeCompra orden = entry;
-    		
-    		
-    		
+    	for (OrdenDeCompra orden : listaCompras) {
     		for (Map.Entry<Integer, Item> entry2 : orden.getItems().entrySet()) {
         		Item item = entry2.getValue();
         		
@@ -88,11 +148,7 @@ public class Cliente extends Usuario {
     
     
     public void agregarComentario(Comentario comentario, String nombreProducto) throws ProductoException {
-    	for (OrdenDeCompra entry : listaCompras) {
-    		OrdenDeCompra orden = entry;
-    		
-    		
-    		
+    	for (OrdenDeCompra orden : listaCompras) {
     		for (Map.Entry<Integer, Item> entry2 : orden.getItems().entrySet()) {
         		Item item = entry2.getValue();
         		
@@ -104,10 +160,7 @@ public class Cliente extends Usuario {
         	}
     		
     	}
-    	
     	throw new ProductoException("El cliente no compró el producto");
-    	
-    	
     }
 
     public OrdenDeCompra getCompraParticular(int numero) {
@@ -116,7 +169,6 @@ public class Cliente extends Usuario {
     
     public List<DTOrdenDeCompra> mostrarCompras() {
     	List<DTOrdenDeCompra> lista = new ArrayList<DTOrdenDeCompra>();
-    	System.out.println(this.cantCompras());
     	for (OrdenDeCompra entry : listaCompras) {
     		lista.add(entry.crearDT());
     	}
@@ -161,7 +213,7 @@ public class Cliente extends Usuario {
         return listaCompras.size();
     }
     
-    Cliente mostrarPerfil() {
+    public Cliente mostrarPerfil() {
     	return this;
     }
     
@@ -170,27 +222,15 @@ public class Cliente extends Usuario {
     }
     
     public Boolean comproProducto(int numeroRef) {
-    	for (OrdenDeCompra entry : listaCompras) {
-    		OrdenDeCompra orden = entry;
-    		
-    		Map<Integer, Item> items = orden.getItems();
-    		
-    		
-    		for (Map.Entry<Integer, Item> entry2 : items.entrySet()) {
-    			Item item = entry2.getValue();
-    			
-    			
+    	for (OrdenDeCompra orden : listaCompras) {
+    		for (Item item : orden.getItems().values()) {
     			if (item.getProducto().getNumRef() == numeroRef) {
     				return true;
     			}
     		}
         }
-    	
     	return false;
     }
-    
- 
-    
     
     public Carrito getCarrito() {
         return this.carrito;

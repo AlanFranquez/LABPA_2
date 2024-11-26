@@ -39,11 +39,11 @@ public class ObjectFactory {
     private final static QName _NuevaFechaResponse_QNAME = new QName("http://services/", "nuevaFechaResponse");
     private final static QName _GetPrecioTotalOrdenResponse_QNAME = new QName("http://services/", "getPrecioTotalOrdenResponse");
     private final static QName _MostrarCompraClienteResponse_QNAME = new QName("http://services/", "mostrarCompraClienteResponse");
-    private final static QName _NotificarComentarista_QNAME = new QName("http://services/", "notificarComentarista");
     private final static QName _ImprimirITemsORDENSResponse_QNAME = new QName("http://services/", "imprimirITemsORDENSResponse");
     private final static QName _ObtenerCliente_QNAME = new QName("http://services/", "obtenerCliente");
     private final static QName _ImprimirFechaOrdenResponse_QNAME = new QName("http://services/", "imprimirFechaOrdenResponse");
     private final static QName _SetEstadoOrdenResponse_QNAME = new QName("http://services/", "setEstadoOrdenResponse");
+    private final static QName _SetRecibirNotificaciones_QNAME = new QName("http://services/", "setRecibirNotificaciones");
     private final static QName _ImprimirFechaReclamo_QNAME = new QName("http://services/", "imprimirFechaReclamo");
     private final static QName _AgregarCATPadreResponse_QNAME = new QName("http://services/", "agregarCATPadreResponse");
     private final static QName _GetCategoriasDTProdResponse_QNAME = new QName("http://services/", "getCategoriasDTProdResponse");
@@ -94,9 +94,11 @@ public class ObjectFactory {
     private final static QName _IniciarOrden_QNAME = new QName("http://services/", "iniciarOrden");
     private final static QName _GetSubTotaItemResponse_QNAME = new QName("http://services/", "getSubTotaItemResponse");
     private final static QName _GetItemsOrden_QNAME = new QName("http://services/", "getItemsOrden");
+    private final static QName _GetRecibirNotificacionesDTCliente_QNAME = new QName("http://services/", "getRecibirNotificacionesDTCliente");
     private final static QName _ImprimirNumRefResponse_QNAME = new QName("http://services/", "imprimirNumRefResponse");
     private final static QName _SetCarritoCliente_QNAME = new QName("http://services/", "setCarritoCliente");
     private final static QName _ImprimirCatsResponse_QNAME = new QName("http://services/", "imprimirCatsResponse");
+    private final static QName _NotificarComentario_QNAME = new QName("http://services/", "notificarComentario");
     private final static QName _ImprimirFechaComentarioResponse_QNAME = new QName("http://services/", "imprimirFechaComentarioResponse");
     private final static QName _ImprimirEstadoOrdenResponse_QNAME = new QName("http://services/", "imprimirEstadoOrdenResponse");
     private final static QName _AsignarlePadreCategoriaResponse_QNAME = new QName("http://services/", "asignarlePadreCategoriaResponse");
@@ -115,6 +117,7 @@ public class ObjectFactory {
     private final static QName _CrearEstado_QNAME = new QName("http://services/", "crearEstado");
     private final static QName _AgregarCategoriaProductoResponse_QNAME = new QName("http://services/", "agregarCategoriaProductoResponse");
     private final static QName _AgregarClienteResponse_QNAME = new QName("http://services/", "agregarClienteResponse");
+    private final static QName _NotificarRespuestaComentarioResponse_QNAME = new QName("http://services/", "notificarRespuestaComentarioResponse");
     private final static QName _GetNickxDTCliente_QNAME = new QName("http://services/", "getNickxDTCliente");
     private final static QName _ListarComentarios_QNAME = new QName("http://services/", "listarComentarios");
     private final static QName _GetItemsCarritoResponse_QNAME = new QName("http://services/", "getItemsCarritoResponse");
@@ -140,6 +143,7 @@ public class ObjectFactory {
     private final static QName _ObtenerProductosProveedor_QNAME = new QName("http://services/", "obtenerProductosProveedor");
     private final static QName _AgregarProductoCategoria_QNAME = new QName("http://services/", "agregarProductoCategoria");
     private final static QName _CrearDTOrdenResponse_QNAME = new QName("http://services/", "crearDTOrdenResponse");
+    private final static QName _NotificarComentarioResponse_QNAME = new QName("http://services/", "notificarComentarioResponse");
     private final static QName _ComproProducto_QNAME = new QName("http://services/", "comproProducto");
     private final static QName _GetNombreUsuario_QNAME = new QName("http://services/", "getNombreUsuario");
     private final static QName _GetEstado_QNAME = new QName("http://services/", "getEstado");
@@ -180,7 +184,6 @@ public class ObjectFactory {
     private final static QName _ListaUsuariosResponse_QNAME = new QName("http://services/", "listaUsuariosResponse");
     private final static QName _ImprimirPrecioTotalResponse_QNAME = new QName("http://services/", "imprimirPrecioTotalResponse");
     private final static QName _AgregarCliente2_QNAME = new QName("http://services/", "agregarCliente2");
-    private final static QName _NotificarComentaristaResponse_QNAME = new QName("http://services/", "notificarComentaristaResponse");
     private final static QName _CrearDTProdResponse_QNAME = new QName("http://services/", "crearDTProdResponse");
     private final static QName _ImprimirEspec_QNAME = new QName("http://services/", "imprimirEspec");
     private final static QName _GetNumeroComResponse_QNAME = new QName("http://services/", "getNumeroComResponse");
@@ -232,6 +235,7 @@ public class ObjectFactory {
     private final static QName _GetnickProvDTProdResponse_QNAME = new QName("http://services/", "getnickProvDTProdResponse");
     private final static QName _ListarClientes_QNAME = new QName("http://services/", "listarClientes");
     private final static QName _RealizarCompraResponse_QNAME = new QName("http://services/", "realizarCompraResponse");
+    private final static QName _NotificarRespuestaComentario_QNAME = new QName("http://services/", "notificarRespuestaComentario");
     private final static QName _RealizarCompra_QNAME = new QName("http://services/", "realizarCompra");
     private final static QName _OrdenDeCompra_QNAME = new QName("http://services/", "ordenDeCompra");
     private final static QName _ObtenerUsuarioResponse_QNAME = new QName("http://services/", "obtenerUsuarioResponse");
@@ -250,6 +254,7 @@ public class ObjectFactory {
     private final static QName _GetPuntajeDTProdResponse_QNAME = new QName("http://services/", "getPuntajeDTProdResponse");
     private final static QName _GetImagenAutor_QNAME = new QName("http://services/", "getImagenAutor");
     private final static QName _GetNickDTClienteResponse_QNAME = new QName("http://services/", "getNickDTClienteResponse");
+    private final static QName _GetRecibirNotificacionesDTClienteResponse_QNAME = new QName("http://services/", "getRecibirNotificacionesDTClienteResponse");
     private final static QName _SetEstadoPruebaResponse_QNAME = new QName("http://services/", "setEstadoPruebaResponse");
     private final static QName _AgregarCategoriaProducto_QNAME = new QName("http://services/", "agregarCategoriaProducto");
     private final static QName _ImprimirPrecioProd_QNAME = new QName("http://services/", "imprimirPrecioProd");
@@ -300,6 +305,7 @@ public class ObjectFactory {
     private final static QName _NuevoEstadoResponse_QNAME = new QName("http://services/", "nuevoEstadoResponse");
     private final static QName _AgregarComentario_QNAME = new QName("http://services/", "agregarComentario");
     private final static QName _GetTextoCom_QNAME = new QName("http://services/", "getTextoCom");
+    private final static QName _SetRecibirNotificacionesResponse_QNAME = new QName("http://services/", "setRecibirNotificacionesResponse");
     private final static QName _IniciarOrdenResponse_QNAME = new QName("http://services/", "iniciarOrdenResponse");
     private final static QName _GetNombreUsuarioResponse_QNAME = new QName("http://services/", "getNombreUsuarioResponse");
     private final static QName _AgregarProveedorResponse_QNAME = new QName("http://services/", "agregarProveedorResponse");
@@ -598,6 +604,14 @@ public class ObjectFactory {
      */
     public OrdenDeCompra createOrdenDeCompra() {
         return new OrdenDeCompra();
+    }
+
+    /**
+     * Create an instance of {@link NotificarRespuestaComentario }
+     * 
+     */
+    public NotificarRespuestaComentario createNotificarRespuestaComentario() {
+        return new NotificarRespuestaComentario();
     }
 
     /**
@@ -945,6 +959,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link GetRecibirNotificacionesDTClienteResponse }
+     * 
+     */
+    public GetRecibirNotificacionesDTClienteResponse createGetRecibirNotificacionesDTClienteResponse() {
+        return new GetRecibirNotificacionesDTClienteResponse();
+    }
+
+    /**
      * Create an instance of {@link SetEstadoPruebaResponse }
      * 
      */
@@ -1150,6 +1172,14 @@ public class ObjectFactory {
      */
     public GetTextoCom createGetTextoCom() {
         return new GetTextoCom();
+    }
+
+    /**
+     * Create an instance of {@link SetRecibirNotificacionesResponse }
+     * 
+     */
+    public SetRecibirNotificacionesResponse createSetRecibirNotificacionesResponse() {
+        return new SetRecibirNotificacionesResponse();
     }
 
     /**
@@ -1401,14 +1431,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link NotificarComentarista }
-     * 
-     */
-    public NotificarComentarista createNotificarComentarista() {
-        return new NotificarComentarista();
-    }
-
-    /**
      * Create an instance of {@link ImprimirITemsORDENSResponse }
      * 
      */
@@ -1446,6 +1468,14 @@ public class ObjectFactory {
      */
     public SetEstadoOrdenResponse createSetEstadoOrdenResponse() {
         return new SetEstadoOrdenResponse();
+    }
+
+    /**
+     * Create an instance of {@link SetRecibirNotificaciones }
+     * 
+     */
+    public SetRecibirNotificaciones createSetRecibirNotificaciones() {
+        return new SetRecibirNotificaciones();
     }
 
     /**
@@ -1873,6 +1903,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link NotificarComentario }
+     * 
+     */
+    public NotificarComentario createNotificarComentario() {
+        return new NotificarComentario();
+    }
+
+    /**
      * Create an instance of {@link ImprimirFechaComentarioResponse }
      * 
      */
@@ -1910,6 +1948,14 @@ public class ObjectFactory {
      */
     public GetItemsOrden createGetItemsOrden() {
         return new GetItemsOrden();
+    }
+
+    /**
+     * Create an instance of {@link GetRecibirNotificacionesDTCliente }
+     * 
+     */
+    public GetRecibirNotificacionesDTCliente createGetRecibirNotificacionesDTCliente() {
+        return new GetRecibirNotificacionesDTCliente();
     }
 
     /**
@@ -2041,6 +2087,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link NotificarRespuestaComentarioResponse }
+     * 
+     */
+    public NotificarRespuestaComentarioResponse createNotificarRespuestaComentarioResponse() {
+        return new NotificarRespuestaComentarioResponse();
+    }
+
+    /**
      * Create an instance of {@link AgregarClienteResponse }
      * 
      */
@@ -2142,6 +2196,14 @@ public class ObjectFactory {
      */
     public ObtenerReclamosProd createObtenerReclamosProd() {
         return new ObtenerReclamosProd();
+    }
+
+    /**
+     * Create an instance of {@link NotificarComentarioResponse }
+     * 
+     */
+    public NotificarComentarioResponse createNotificarComentarioResponse() {
+        return new NotificarComentarioResponse();
     }
 
     /**
@@ -2577,14 +2639,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link NotificarComentaristaResponse }
-     * 
-     */
-    public NotificarComentaristaResponse createNotificarComentaristaResponse() {
-        return new NotificarComentaristaResponse();
-    }
-
-    /**
      * Create an instance of {@link ImprimirPrecioTotalResponse }
      * 
      */
@@ -2976,15 +3030,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link NotificarComentarista }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://services/", name = "notificarComentarista")
-    public JAXBElement<NotificarComentarista> createNotificarComentarista(NotificarComentarista value) {
-        return new JAXBElement<NotificarComentarista>(_NotificarComentarista_QNAME, NotificarComentarista.class, null, value);
-    }
-
-    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link ImprimirITemsORDENSResponse }{@code >}}
      * 
      */
@@ -3018,6 +3063,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://services/", name = "setEstadoOrdenResponse")
     public JAXBElement<SetEstadoOrdenResponse> createSetEstadoOrdenResponse(SetEstadoOrdenResponse value) {
         return new JAXBElement<SetEstadoOrdenResponse>(_SetEstadoOrdenResponse_QNAME, SetEstadoOrdenResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link SetRecibirNotificaciones }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://services/", name = "setRecibirNotificaciones")
+    public JAXBElement<SetRecibirNotificaciones> createSetRecibirNotificaciones(SetRecibirNotificaciones value) {
+        return new JAXBElement<SetRecibirNotificaciones>(_SetRecibirNotificaciones_QNAME, SetRecibirNotificaciones.class, null, value);
     }
 
     /**
@@ -3471,6 +3525,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link GetRecibirNotificacionesDTCliente }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://services/", name = "getRecibirNotificacionesDTCliente")
+    public JAXBElement<GetRecibirNotificacionesDTCliente> createGetRecibirNotificacionesDTCliente(GetRecibirNotificacionesDTCliente value) {
+        return new JAXBElement<GetRecibirNotificacionesDTCliente>(_GetRecibirNotificacionesDTCliente_QNAME, GetRecibirNotificacionesDTCliente.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link ImprimirNumRefResponse }{@code >}}
      * 
      */
@@ -3495,6 +3558,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://services/", name = "imprimirCatsResponse")
     public JAXBElement<ImprimirCatsResponse> createImprimirCatsResponse(ImprimirCatsResponse value) {
         return new JAXBElement<ImprimirCatsResponse>(_ImprimirCatsResponse_QNAME, ImprimirCatsResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link NotificarComentario }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://services/", name = "notificarComentario")
+    public JAXBElement<NotificarComentario> createNotificarComentario(NotificarComentario value) {
+        return new JAXBElement<NotificarComentario>(_NotificarComentario_QNAME, NotificarComentario.class, null, value);
     }
 
     /**
@@ -3657,6 +3729,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://services/", name = "agregarClienteResponse")
     public JAXBElement<AgregarClienteResponse> createAgregarClienteResponse(AgregarClienteResponse value) {
         return new JAXBElement<AgregarClienteResponse>(_AgregarClienteResponse_QNAME, AgregarClienteResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link NotificarRespuestaComentarioResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://services/", name = "notificarRespuestaComentarioResponse")
+    public JAXBElement<NotificarRespuestaComentarioResponse> createNotificarRespuestaComentarioResponse(NotificarRespuestaComentarioResponse value) {
+        return new JAXBElement<NotificarRespuestaComentarioResponse>(_NotificarRespuestaComentarioResponse_QNAME, NotificarRespuestaComentarioResponse.class, null, value);
     }
 
     /**
@@ -3882,6 +3963,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://services/", name = "crearDTOrdenResponse")
     public JAXBElement<CrearDTOrdenResponse> createCrearDTOrdenResponse(CrearDTOrdenResponse value) {
         return new JAXBElement<CrearDTOrdenResponse>(_CrearDTOrdenResponse_QNAME, CrearDTOrdenResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link NotificarComentarioResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://services/", name = "notificarComentarioResponse")
+    public JAXBElement<NotificarComentarioResponse> createNotificarComentarioResponse(NotificarComentarioResponse value) {
+        return new JAXBElement<NotificarComentarioResponse>(_NotificarComentarioResponse_QNAME, NotificarComentarioResponse.class, null, value);
     }
 
     /**
@@ -4242,15 +4332,6 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://services/", name = "agregarCliente2")
     public JAXBElement<AgregarCliente2> createAgregarCliente2(AgregarCliente2 value) {
         return new JAXBElement<AgregarCliente2>(_AgregarCliente2_QNAME, AgregarCliente2 .class, null, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link NotificarComentaristaResponse }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://services/", name = "notificarComentaristaResponse")
-    public JAXBElement<NotificarComentaristaResponse> createNotificarComentaristaResponse(NotificarComentaristaResponse value) {
-        return new JAXBElement<NotificarComentaristaResponse>(_NotificarComentaristaResponse_QNAME, NotificarComentaristaResponse.class, null, value);
     }
 
     /**
@@ -4713,6 +4794,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link NotificarRespuestaComentario }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://services/", name = "notificarRespuestaComentario")
+    public JAXBElement<NotificarRespuestaComentario> createNotificarRespuestaComentario(NotificarRespuestaComentario value) {
+        return new JAXBElement<NotificarRespuestaComentario>(_NotificarRespuestaComentario_QNAME, NotificarRespuestaComentario.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link RealizarCompra }{@code >}}
      * 
      */
@@ -4872,6 +4962,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://services/", name = "getNickDTClienteResponse")
     public JAXBElement<GetNickDTClienteResponse> createGetNickDTClienteResponse(GetNickDTClienteResponse value) {
         return new JAXBElement<GetNickDTClienteResponse>(_GetNickDTClienteResponse_QNAME, GetNickDTClienteResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link GetRecibirNotificacionesDTClienteResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://services/", name = "getRecibirNotificacionesDTClienteResponse")
+    public JAXBElement<GetRecibirNotificacionesDTClienteResponse> createGetRecibirNotificacionesDTClienteResponse(GetRecibirNotificacionesDTClienteResponse value) {
+        return new JAXBElement<GetRecibirNotificacionesDTClienteResponse>(_GetRecibirNotificacionesDTClienteResponse_QNAME, GetRecibirNotificacionesDTClienteResponse.class, null, value);
     }
 
     /**
@@ -5322,6 +5421,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://services/", name = "getTextoCom")
     public JAXBElement<GetTextoCom> createGetTextoCom(GetTextoCom value) {
         return new JAXBElement<GetTextoCom>(_GetTextoCom_QNAME, GetTextoCom.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link SetRecibirNotificacionesResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://services/", name = "setRecibirNotificacionesResponse")
+    public JAXBElement<SetRecibirNotificacionesResponse> createSetRecibirNotificacionesResponse(SetRecibirNotificacionesResponse value) {
+        return new JAXBElement<SetRecibirNotificacionesResponse>(_SetRecibirNotificacionesResponse_QNAME, SetRecibirNotificacionesResponse.class, null, value);
     }
 
     /**

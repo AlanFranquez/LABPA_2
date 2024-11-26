@@ -53,7 +53,7 @@
 
             <ul class="navbar-nav align-items-center">
                 <li class="nav-item">
-                	<a class="nav-link" href="perfilClienteMOBILE?nickname=<%= usr.getNick() %>">Perfil</a>
+                	<a class="nav-link" href="perfilClienteMOBILE?nickname=<%= nickUser %>">Perfil</a>
                 </li>
                 <li class="nav-item">
                     <button class="btn btn-danger">
@@ -77,6 +77,24 @@
             <p>Nombre: <b><%= port.getNombreDTCliente(nickUser) %></b></p>
             <p>Apellido: <b><%= port.getApellidoDTCliente(nickUser) %></b></p>
             <p>Fecha de Nacimiento: <br><b><%= port.imprimirFechaCliente(usr.getNick()) %></b></p>
+        	
+        	<!-- Formulario para actualizar notificaciones -->
+            <form action="actualizarNotificaciones" method="get" class="mt-4">
+                <input type="hidden" name="userId" value="<%= nickUser %>">
+                <input type="hidden" name="nickname" value="<%= nickUser %>">
+                <div class="form-check">
+                    <input 
+                        class="form-check-input" 
+                        type="checkbox" 
+                        id="notificacionesCheckbox" 
+                        name="activar" 
+                        <% if (port.getRecibirNotificacionesDTCliente(nickUser)) { %> checked <% } %>>
+                    <label class="form-check-label" for="notificacionesCheckbox">
+                        Notificaciones Activas
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Actualizar</button>
+            </form>
         </div>
     </section>
 </main>

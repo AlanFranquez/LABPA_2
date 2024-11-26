@@ -17,6 +17,8 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="correo" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="notificaciones" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
+ *         &lt;element name="tokenDesactivacion" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -27,11 +29,15 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "dtCliente", propOrder = {
-    "correo"
+    "correo",
+    "notificaciones",
+    "tokenDesactivacion"
 })
 public class DtCliente {
 
     protected String correo;
+    protected boolean notificaciones;
+    protected String tokenDesactivacion;
 
     /**
      * Obtiene el valor de la propiedad correo.
@@ -55,6 +61,46 @@ public class DtCliente {
      */
     public void setCorreo(String value) {
         this.correo = value;
+    }
+
+    /**
+     * Obtiene el valor de la propiedad notificaciones.
+     * 
+     */
+    public boolean isNotificaciones() {
+        return notificaciones;
+    }
+
+    /**
+     * Define el valor de la propiedad notificaciones.
+     * 
+     */
+    public void setNotificaciones(boolean value) {
+        this.notificaciones = value;
+    }
+
+    /**
+     * Obtiene el valor de la propiedad tokenDesactivacion.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getTokenDesactivacion() {
+        return tokenDesactivacion;
+    }
+
+    /**
+     * Define el valor de la propiedad tokenDesactivacion.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setTokenDesactivacion(String value) {
+        this.tokenDesactivacion = value;
     }
 
 }

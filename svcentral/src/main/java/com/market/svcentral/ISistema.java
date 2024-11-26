@@ -18,9 +18,9 @@ import com.market.svcentral.exceptions.UsuarioRepetidoException;
 public interface ISistema {
     public abstract boolean validarCorreo(String correo);
     
-    public void agregarProveedor(String nick, String correo, String nombre, String apellido, DTFecha fechaNacimiento, String compania, String link, String contra, String confContra) throws UsuarioRepetidoException;
+    public abstract void agregarProveedor(String nick, String correo, String nombre, String apellido, DTFecha fechaNacimiento, String compania, String link, String contra, String confContra) throws UsuarioRepetidoException;
     
-    public void agregarCliente(String nombre, String nick, String apellido, String correo, DTFecha fecha, String contra, String confContra) throws UsuarioRepetidoException;
+    public abstract void agregarCliente(String nombre, String nick, String apellido, String correo, DTFecha fecha, String contra, String confContra) throws UsuarioRepetidoException;
     
     public abstract void agregarImagenUsuario(String nick, String image);
     
@@ -40,11 +40,11 @@ public interface ISistema {
         
     public abstract List<DTOrdenDeCompra> listarOrdenes();
     
-    public Categoria getCat(String nombre);
+    public abstract Categoria getCat(String nombre);
     
-    public Categoria[] getCategorias();
+    public abstract Categoria[] getCategorias();
     
-    public List<Categoria> getCategoriasLista();
+    public abstract List<Categoria> getCategoriasLista();
     
     public abstract boolean existenOrdenesParaListar();
 
@@ -67,7 +67,7 @@ public interface ISistema {
 	
 	public abstract List<DtProducto> listarProductosPorCategoria(String cat) throws ProductoException;
 	
-	public boolean comprobarCat(String cat) throws CategoriaException;
+	public abstract boolean comprobarCat(String cat) throws CategoriaException;
 
 	public abstract void asignarOrdenCliente(String cliente, int numeroOrden);
 
@@ -85,61 +85,60 @@ public interface ISistema {
 
 	public abstract Integer obtenerStockProducto(int numRef);
 	
-	 // MOSTRAR PERFIL CLIENTE
-	 public DTCliente mostrarPerfilCliente(String nick);
+	public abstract DTCliente mostrarPerfilCliente(String nick);
 	 
-	 // MOSTRAR PERFIL PROVEEDOR
-	 public DTProveedor mostrarPerfilProveedor(String nick);
+	public abstract DTProveedor mostrarPerfilProveedor(String nick);
 	 
-	 // Traer Ordenes de compras de un cliente
-	 public List<DTOrdenDeCompra> getOrdenesCliente(String nick);
+	public abstract List<DTOrdenDeCompra> getOrdenesCliente(String nick);
 	 
+	public abstract Usuario getUserByEmail(String email) throws UsuarioException;
 	 
-	 public Usuario getUserByEmail(String email) throws UsuarioException;
+	public abstract void agregarImagenesDesdeProveedor(String proveedor, int numRef, String imagen);
 	 
-	 
-	 public void agregarImagenesDesdeProveedor(String proveedor, int numRef, String imagen);
-	 
-	 public Producto getProdByCateogria(String cat, int numRef) throws ProductoException;
+	public abstract Producto getProdByCateogria(String cat, int numRef) throws ProductoException;
 	   
+	public abstract Producto getProducto(int numRef);
+	   
+	public abstract List<Producto> buscarProductos(String query);
+	   
+	public abstract List<Producto> getAllProductos();
+	  
+	public abstract void realizarCompra(OrdenDeCompra orden, String nickCliente);
+	  
+	public abstract List<Usuario> listaUsuarios();
+	  
+	public abstract DTOrdenDeCompra getOrden(int numero);
+	  
+	public abstract void cambiarEstadoOrden(String estado, String com, int numero, String cliente);
+	  
+	public abstract void notificarComentario(Producto producto, Comentario nuevoComentario, Comentario comentarioRespondido);
+	  
+	public abstract List<Cliente> obtenerClientesQueHanCompradoDelProveedor(Proveedor proveedor);
+	  
+	public abstract void notificarClientesNuevoProducto(Producto nuevoProducto, Proveedor proveedor);
 
-	  public Producto getProducto(int numRef);
-	   
-	  public List<Producto> buscarProductos(String query);
-	   
-	  public List<Producto> getAllProductos();
-	  
-	  public void realizarCompra(OrdenDeCompra orden, String nickCliente);
-	  
-	  public List<Usuario> listaUsuarios();
-	  
-	  public DTOrdenDeCompra getOrden(int numero);
-	  
-	  public void cambiarEstadoOrden(String estado, String com, int numero, String cliente);
-	  
-	  public void notificarComentaristas(Producto producto, String nuevoComentarioTexto, Cliente autorComentario);
-	  
-	  //public void agregarCliente(Cliente cliente);
-	  
-	  List<Cliente> obtenerClientesQueHanCompradoDelProveedor(Proveedor proveedor);
-	  
-	  public void notificarClientesNuevoProducto(Producto nuevoProducto, Proveedor proveedor);
-
-	  public void agregarReclamo(String texto, LocalDateTime fecha, Producto p, Proveedor prov, Cliente autor) throws ReclamoException;
+	public abstract void agregarReclamo(String texto, LocalDateTime fecha, Producto p, Proveedor prov, Cliente autor) throws ReclamoException;
 
 	public abstract Icon resizeIcon(ImageIcon imageIcon, int i, int j);
 
 	public abstract void cambiarEstadoOrdenconDT(DTEstado estadoComprada11, int numeroOrden, String nick);
 	
-	public List<Producto> obtenerProductosDestacados();
+	public abstract List<Producto> obtenerProductosDestacados();
 
 	public abstract void agregarImagenProd(String img, int numRef);
 	
-	public Integer iniciarOrdenVacia(String nickProveedor);
+	public abstract Integer iniciarOrdenVacia(String nickProveedor);
 	
-	public void realizarCompraPRUEBA(int orden, String nickCliente);
+	public abstract void realizarCompraPRUEBA(int orden, String nickCliente);
 	
-	public void agregarItemsAOrden(int numeroOrden, int numProducto, int cantidad);
+	public abstract void agregarItemsAOrden(int numeroOrden, int numProducto, int cantidad);
 	
-	public void agregarComentario(int numRef, int comentarioId, String mensaje, String nickCliente) throws ProductoException;
+	public abstract void agregarComentario(int numRef, int comentarioId, String mensaje, String nickCliente) throws ProductoException;
+	
+	public abstract Cliente getClientePorCorreo(String email);
+	  
+	public abstract Cliente getClientePorToken(String token);
+
+	public abstract Comentario getComentario(int id);
+
 }

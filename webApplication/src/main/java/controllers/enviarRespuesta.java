@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import webservices.Cliente;
 import webservices.Publicador;
 import webservices.PublicadorService;
 
@@ -41,25 +42,19 @@ public class enviarRespuesta extends HttpServlet {
 		
 		int paramNum = Integer.parseInt(parametro);
 		
-		
-
         if (comentarioIdStr == null || comentarioIdStr.isEmpty()) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "El comentario no está disponible.");
             return;
         }
 
         int comentarioId = Integer.parseInt(comentarioIdStr);
-        
-       
-        
-        webservices.Cliente cli = (webservices.Cliente) session.getAttribute("usuarioLogueado");
-       
-        
+        Cliente cli = (Cliente) session.getAttribute("usuarioLogueado");
         Random rand = new Random();
         int numeroRandom = rand.nextInt(20000);
 
         port.agregarRespuesta(comentarioId, respuestaTexto, numeroRandom, cli.getNick());
-
+        port.notificarRespuestaComentario(paramNum, comentarioId, numeroRandom);
+        
         // Redirigir a la página del producto
         response.sendRedirect("perfilProducto?producto=" + paramNum);
     }
