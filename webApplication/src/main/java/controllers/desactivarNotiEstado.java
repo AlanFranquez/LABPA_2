@@ -5,20 +5,19 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import webservices.Cliente;
+import webservices.Publicador;
+import webservices.PublicadorService;
 
-import com.market.svcentral.Cliente;
-import com.market.svcentral.Sistema;
+import java.io.IOException;
 
 @WebServlet("/desactivarNotiEstado")
 public class desactivarNotiEstado extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    
-    private Sistema sistema;
-
+    PublicadorService p = new PublicadorService();
+	Publicador port = p.getPublicadorPort();
     public desactivarNotiEstado() {
         super();
-        sistema = Sistema.getInstance();
     }
 
     @Override
@@ -31,11 +30,12 @@ public class desactivarNotiEstado extends HttpServlet {
             return;
         }
 
-        Cliente cliente = sistema.getClientePorToken(token);
-        if (cliente != null && token.equals(cliente.getTokenDesactivacion())) {
+        Cliente cliente = port.getClientePorToken(token);
+        String userId = port.getNickCliente(cliente);
+        if (cliente != null) {
             // Desactiva el envío de notificaciones y borra el token
-            cliente.setRecibirNotificaciones(false);
-            cliente.setTokenDesactivacion(null);
+        	port.setRecibirNotificaciones(userId, false);
+            port.setTokenDesactivacionCliente(userId, null);
 
             // Respuesta al usuario en UTF-8
             response.setContentType("text/html; charset=UTF-8");

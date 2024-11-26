@@ -1301,7 +1301,29 @@ public class Publicador {
 			Cliente cliente = obtenerCliente(nick);
 			cliente.setRecibirNotificaciones(activar);
 			System.out.println("El cliente " + nick + " estableció recibirNotificaciones como " + activar);
-	        em.merge(cliente);
+	        
+			em.merge(cliente);
+	        em.getTransaction().commit();
+	        em.close();
+	        emf.close();
+		}
+		
+		@WebMethod
+		public Cliente getClientePorToken(String token) {
+			return s.getClientePorToken(token);
+		}
+		
+		@WebMethod
+		public void setTokenDesactivacionCliente(String nick, String token) {
+			EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+			EntityManager em = emf.createEntityManager();
+			em.getTransaction().begin();
+			
+			Cliente cliente = obtenerCliente(nick);
+			cliente.setTokenDesactivacion(token);
+			System.out.println("El cliente " + nick + " recibió un nuevo token de desactivación: " + token);
+	        
+			em.merge(cliente);
 	        em.getTransaction().commit();
 	        em.close();
 	        emf.close();

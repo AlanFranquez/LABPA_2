@@ -5,11 +5,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import webservices.Cliente;
 import webservices.Publicador;
 import webservices.PublicadorService;
 import webservices.Usuario;
-import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 
 @WebServlet("/actualizarNotificaciones")

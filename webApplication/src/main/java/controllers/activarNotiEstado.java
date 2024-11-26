@@ -5,20 +5,19 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import webservices.Cliente;
+import webservices.Publicador;
+import webservices.PublicadorService;
 
-import com.market.svcentral.Cliente;
-import com.market.svcentral.Sistema;
+import java.io.IOException;
 
 @WebServlet("/activarNotiEstado")
 public class activarNotiEstado extends HttpServlet {
     private static final long serialVersionUID = 1L;
-
-    private Sistema sistema;
-
+    PublicadorService p = new PublicadorService();
+	Publicador port = p.getPublicadorPort();
     public activarNotiEstado() {
         super();
-        sistema = Sistema.getInstance();
     }
 
     @Override
@@ -33,15 +32,15 @@ public class activarNotiEstado extends HttpServlet {
         }
 
         // Buscar el cliente por su token
-        Cliente cliente = sistema.getClientePorToken(token);
-
+        Cliente cliente = port.getClientePorToken(token);
+        String userId = port.getNickCliente(cliente);
         // Si el cliente existe y el token coincide
-        if (cliente != null && token.equals(cliente.getTokenDesactivacion())) {
-            cliente.setRecibirNotificaciones(true); // Activar notificaciones
+        if (cliente != null) {
+        	port.setRecibirNotificaciones(userId, true); // Activar notificaciones
 
             // Generar un nuevo token para mayor seguridad
             String nuevoToken = generarNuevoToken(); // Implementar este método
-            cliente.setTokenDesactivacion(nuevoToken);
+            port.setTokenDesactivacionCliente(userId, nuevoToken);
 
             // Responder al cliente
             response.setContentType("text/html; charset=UTF-8");
