@@ -6,17 +6,19 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import webservices.Cliente;
+import webservices.Producto;
 import webservices.Publicador;
 import webservices.PublicadorService;
 
 import java.io.IOException;
 import java.util.Random;
 
+
+
 @WebServlet("/enviarComentario")
 public class enviarComentario extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
-       
 
     @Override
     public void init() throws ServletException {
@@ -25,6 +27,7 @@ public class enviarComentario extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
+		
 		Random numRandom = new Random();
         int comentarioId = numRandom.nextInt(10000);
 		String mensaje = request.getParameter("comentario");
@@ -46,23 +49,19 @@ public class enviarComentario extends HttpServlet {
 			return;
 		}
 		
-		webservices.Cliente cliente = (webservices.Cliente) session.getAttribute("usuarioLogueado");
-		webservices.Producto producto1 = port.obtenerProducto(paramNum);
+		
+		Cliente cliente = (Cliente) session.getAttribute("usuarioLogueado");
+		Producto producto1 = port.obtenerProducto(paramNum);
 
 		// Crear el comentario
 		
 		port.agregarComentario(comentarioId, mensaje, cliente.getNick(), paramNum);	
 		
-		
-		
-
-		port.notificarComentarista(paramNum, mensaje, cliente.getNick());
-		
-		
+		// Notificar a los interesados
+        port.notificarComentario(paramNum, comentarioId);
 		
 		request.setAttribute("coms", port.listarComentarios(producto1.getNumRef()));
 		response.sendRedirect("perfilProducto?producto=" + paramNum);
 		
 	}
 }
-

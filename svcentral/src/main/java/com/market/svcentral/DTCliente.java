@@ -8,6 +8,9 @@ public class DTCliente {
     
     private List<OrdenDeCompra> ordenes;
 	private String imagen;
+	
+	private boolean notificaciones;
+    private String tokenDesactivacion; 
     
     public DTCliente(String nombre, String nick, String apellido, String correo, DTFecha nacimiento, String imagen, List<OrdenDeCompra> ordenes) {
         this.nombre = nombre;
@@ -20,6 +23,22 @@ public class DTCliente {
         this.tipo = "Cliente";
     }
     // Gets
+    
+    // Métodos para el token de desactivación
+    public String getTokenDesactivacion() {
+        return tokenDesactivacion;
+    }
+    public void setTokenDesactivacion(String tokenDesactivacion) {
+        this.tokenDesactivacion = tokenDesactivacion;
+    }
+  //notificaciones email
+    public boolean isNotificaciones() {
+        return notificaciones;
+    }
+    public void setNotificaciones(boolean notificaciones) {
+        this.notificaciones = notificaciones;
+    }
+    
     public String getNombre() {
         return nombre;
     }

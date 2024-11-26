@@ -31,7 +31,8 @@ public class Sistema implements ISistema {
 	EntityManager em = emf.createEntityManager();
 	
     private static Sistema instance = null;
-    private final EmailService emailService = new EmailService();
+    
+    private final EmailService emailService = new EmailService(this);
     
     private Sistema() {
     }
@@ -836,95 +837,102 @@ public class Sistema implements ISistema {
 	 
 	 public void cambiarEstadoOrdenconDT(DTEstado est, int numero, String cliente) {
 		 Cliente client = em.find(Cliente.class, cliente);
-	 		
-	 		if (client != null) {
-	 			em.find(OrdenDeCompra.class, numero).setEstado(est);
+		 if (client != null) {
+			 em.find(OrdenDeCompra.class, numero).setEstado(est);
 	 			
-	 			String recipientEmail = client.getCorreo();
-	 	        //String recipientEmail = "maria.vairo@estudiantes.utec.edu.uy";
-	 			System.out.println("Correo del cliente: " + recipientEmail);
-
-
-	 	        try {
-	 	            if (recipientEmail != null && !recipientEmail.isEmpty()) {
-	 	                // Enviar el correo de bienvenida
-	 	            	System.out.println("Estado: " + est.getEstado());
-	 	            	System.out.println("recipientEmail: " + recipientEmail);
-	 	                emailService.sendChangeState(recipientEmail, est.getEstado());
-	 	                System.out.println("Correo de cambio de estado enviado a " + recipientEmail);
-	 	            } else {
-	 	                System.out.println("Cambio de estado Error: No se proporcionó una dirección de correo válida.");
-	 	            }
-	 	        } catch (Exception e) {
-	 	            System.out.println("Error al intentar enviar el correo de cambio de estado: " + e.toString());
-	 	            e.printStackTrace();  // Imprime el rastro completo de la excepción en la consola
-	 	            // e.printStackTrace();
-	 	        }
-	 	        
-	 			return;
-	 		}
-	 		
-	 		System.out.print("no se pudo cambiar el estado");
+			 String recipientEmail = client.getCorreo();
+			 //String recipientEmail = "maria.vairo@estudiantes.utec.edu.uy";
+			 System.out.println("Correo del cliente: " + recipientEmail);
+			 try {
+				 if (recipientEmail != null && !recipientEmail.isEmpty()) {
+					 // Enviar el correo de bienvenida
+					 System.out.println("Estado: " + est.getEstado());
+					 System.out.println("recipientEmail: " + recipientEmail);
+					 emailService.sendChangeState(recipientEmail, est.getEstado());
+					 System.out.println("Correo de cambio de estado enviado a " + recipientEmail);
+				 } else {
+					 System.out.println("Cambio de estado Error: No se proporcionó una dirección de correo válida.");
+				 }
+			 } catch (Exception e) {
+				 System.out.println("Error al intentar enviar el correo de cambio de estado: " + e.toString());
+				 e.printStackTrace();  // Imprime el rastro completo de la excepción en la consola
+				 // e.printStackTrace();
+			 }
+			 return;
+		 }
+		 System.out.print("no se pudo cambiar el estado");
 	 }
 	 	
 	 // Caso de uso: alta reclamo
 	 	
-	 	 	public void agregarReclamo(String texto, LocalDateTime fecha, Producto p, Proveedor prov, Cliente autor) throws ReclamoException {
-	 	 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-	 	 		EntityManager em = emf.createEntityManager();
-	 	 		em.getTransaction().begin();
-	 	 		Reclamo r = new Reclamo(texto, fecha, p, prov, autor);
+	 public void agregarReclamo(String texto, LocalDateTime fecha, Producto p, Proveedor prov, Cliente autor) throws ReclamoException {
+		 EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+		 EntityManager em = emf.createEntityManager();
+		 em.getTransaction().begin();
+		 Reclamo r = new Reclamo(texto, fecha, p, prov, autor);
 	 	 		
-	 	 		
-	 	 		
-	 	 		this.getProducto(p.getNumRef()).agregarReclamo(r);
-	 	 		em.persist(r);
-	 	 		em.merge(getProducto(p.getNumRef()));
-	 	 		em.getTransaction().commit();
-	 	 		em.close();
-	 	 		emf.close();
-	 	 	}
+		 this.getProducto(p.getNumRef()).agregarReclamo(r);
+		 em.persist(r);
+		 em.merge(getProducto(p.getNumRef()));
+		 em.getTransaction().commit();
+		 em.close();
+		 emf.close();
+	 }
 	 
-	 
-	 public void notificarComentaristas(Producto producto, String nuevoComentarioTexto, Cliente autorComentario) {
-		    System.out.println("Iniciando notificación a los comentaristas.");
+	 public void notificarComentario(Producto producto, Comentario nuevoComentario, Comentario comentarioRespondido) {
+		 if (producto == null || nuevoComentario == null) {
+			 System.out.println("Error: El producto o el comentario nuevo son nulos.");
+			 return;
+		 }
+	
+		 List<Comentario> comentarios = producto.getComentarios();
+		 if (comentarios != null && !comentarios.isEmpty()) {
+			 for (Comentario comentario : comentarios) {
+				 Cliente comentarista = comentario.getAutor();
+				 Cliente autorNuevoComentario = nuevoComentario.getAutor();
+				 // Notificar a todos los comentaristas excepto al autor del nuevo comentario
+				 if (!comentarista.getCorreo().equals(autorNuevoComentario.getCorreo())) {
+					 String recipientEmail = comentarista.getCorreo();
+					 try {
+						 emailService.sendCommentNotification(
+								 recipientEmail,
+								 producto.getNombre(),
+								 autorNuevoComentario.getNombre(),
+								 nuevoComentario.getTexto()
+								 );
+						 System.out.println("Notificación enviada a " + recipientEmail);
+					 } catch (Exception e) {
+						 System.out.println("Error al enviar notificación a " + recipientEmail + ": " + e.getMessage());
+						 e.printStackTrace();
+					 }
+				 }
+			 }
+		 }
 
-		    // Verificar que los parámetros no sean nulos
-		    if (producto == null || nuevoComentarioTexto == null || autorComentario == null) {
-		        System.out.println("Error: Parámetros inválidos. Asegúrate de que el producto, el comentario y el autor no sean nulos.");
-		        return;
-		    }
+		// Notificar al autor del comentario respondido (si aplica)
+		 if (comentarioRespondido != null) {
+			 Cliente autorComentarioOriginal = comentarioRespondido.getAutor();
+			 Cliente autorNuevoComentario = nuevoComentario.getAutor();
 
-		    List<Comentario> comentarios = producto.getComentarios();
-		    if (comentarios == null || comentarios.isEmpty()) {
-		        System.out.println("No hay comentarios previos en el producto.");
-		        return;
-		    }
+			 // Verificar que el autor del comentario original no sea el mismo que el autor del nuevo comentario
+			 if (!autorComentarioOriginal.getCorreo().equals(autorNuevoComentario.getCorreo())) {
+				// Aquí usamos sendReplyNotification en lugar de sendCommentNotification
+				 try {
+					 emailService.sendReplyNotification(
+							 autorComentarioOriginal.getCorreo(),
+							 producto.getNombre(),
+							 autorNuevoComentario.getNombre(),
+							 nuevoComentario.getTexto()
+							 );
+					 System.out.println("Notificación de respuesta enviada a " + autorComentarioOriginal.getCorreo());
+				 } catch (Exception e) {
+					 System.out.println("Error al enviar la notificación de respuesta: " + e.getMessage());
+					 e.printStackTrace();
+				 }
+			 }
+		 }
+	 }
 
-		    // Notificar a los comentaristas
-		    for (Comentario comentario : comentarios) {
-		        Cliente comentarista = comentario.getAutor();
-
-		        // Enviar notificación solo si el comentarista no es el autor del nuevo comentario
-		        if (!comentarista.getCorreo().equals(autorComentario.getCorreo())) {
-		            String recipientEmail = comentarista.getCorreo();
-		            try {
-		                // Enviar la notificación
-		            	System.out.print("SE ENVIO LA NOTIFICACIÓN");
-		                emailService.sendCommentNotification(recipientEmail, producto.getNombre(), autorComentario.getNombre(), nuevoComentarioTexto);
-		            } catch (Exception e) {
-		                System.out.println("Error al intentar enviar la notificación a " + recipientEmail + ": " + e.getMessage());
-		                e.printStackTrace();
-		            }
-		        }
-		    }
-		}
-
-	 //public void agregarCliente(Cliente cliente) {
-	  //      listaClientes.add(cliente);
-	   // }
-
-	    
 	 public List<Cliente> obtenerClientesQueHanCompradoDelProveedor(Proveedor proveedor) {
 	    List<Cliente> clientesQueHanComprado = new ArrayList<Cliente>();
 	    
@@ -1096,5 +1104,27 @@ public class Sistema implements ISistema {
 	     emf.close();
 	 }
 	 
-	 
+	 public Cliente getClientePorCorreo(String email) {
+		 try {
+			 return em.createQuery("SELECT c FROM Cliente c WHERE c.correo='"+ email +"'", Cliente.class).getSingleResult();
+		 } catch (Exception e) {
+			 System.out.println(e.getMessage());
+		 }
+		 return null;
+	 }
+		 
+	 public Cliente getClientePorToken(String token) {
+		 try {
+			 return em.createQuery("SELECT c FROM Cliente c WHERE c.tokenDesactivacion='"+ token +"'", Cliente.class).getSingleResult();
+		 } catch (Exception e) {
+			 System.out.println(e.getMessage());
+		 }
+		 return null;
+	 }
+	 public Cliente getClientePorNick(String nick) {
+		 return em.find(Cliente.class, nick);
+	 }
+	 public Comentario getComentario(int id) {
+		 return em.find(Comentario.class, id);
+	 }
 }

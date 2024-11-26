@@ -618,11 +618,9 @@ public class Publicador {
 	
 	@WebMethod
     public void agregarComentario(int comentarioId, String mensaje, String nickCliente, int numRef) {
-       
-		EntityManagerFactory prueba = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-		EntityManager prubem = prueba.createEntityManager();
-		
-		prubem.getTransaction().begin();
+        emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+        em = emf.createEntityManager();
+		em.getTransaction().begin();
 		
 		
         
@@ -637,24 +635,23 @@ public class Publicador {
 			e.printStackTrace();
 		}
 
-        System.out.println("El cliente " + nickCliente + "agrego un comentario al producto: " + obtenerProducto(numRef).getNombre());
-        prubem.persist(nuevoComentario);
-        prubem.merge(obtenerProducto(numRef));
-        prubem.merge(obtenerCliente(nickCliente));
-        prubem.flush();
-        prubem.getTransaction().commit();
         
-        prubem.close();
-        prueba.close();
+        em.persist(nuevoComentario);
+        em.merge(obtenerProducto(numRef));
+        em.merge(obtenerCliente(nickCliente));
+        em.flush();
+        em.getTransaction().commit();
         
-    } 
+        
+        
+    }
 	
 	@WebMethod
     public void agregarRespuesta(int comentarioPadre, String mensaje, int respuestaID, String nick) {
-		EntityManagerFactory prueba = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-		EntityManager prubem = prueba.createEntityManager();
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+		EntityManager em = emf.createEntityManager();
 		
-		prubem.getTransaction().begin();
+		em.getTransaction().begin();
 		
 		Comentario respuesta = new Comentario(respuestaID, mensaje, obtenerCliente(nick), LocalDateTime.now());
 		
@@ -663,13 +660,13 @@ public class Publicador {
 		padre.agregarRespuesta(respuesta);
 		
 		System.out.println("El cliente " + nick + "respondio al comentario de " + padre.getAutor().getNick());
-		prubem.persist(respuesta);
-		prubem.merge(padre);
-		prubem.flush();
+		em.persist(respuesta);
+		em.merge(padre);
+		em.flush();
 		
-		prubem.getTransaction().commit();
-		prubem.close();
-		prueba.close();
+		em.getTransaction().commit();
+		em.close();
+		emf.close();
 		
     }
 
@@ -697,15 +694,6 @@ public class Publicador {
         
         return formattedDate;
     }
- 
-
-    
-    @WebMethod
-    public void notificarComentarista(int numRef, String mensaje, String nickCliente) {
-    	System.out.println("se notifico al comentarista: " + nickCliente);
-        s.notificarComentaristas(obtenerProducto(numRef), mensaje, obtenerCliente(nickCliente));
-    }
-    
     
     @WebMethod
 	public String getNickAutor(Comentario c) {
@@ -874,7 +862,12 @@ public class Publicador {
 	public String getNickDTCliente(String c) {
 		return em.find(Usuario.class, c).getNick();
 	}
-			
+	
+	@WebMethod
+	public boolean getRecibirNotificacionesDTCliente(String c) {
+		return em.find(Cliente.class, c).isRecibirNotificaciones();
+	}
+	
 	@WebMethod
 	public String getNombreDTCliente(String c) {
 		return em.find(Usuario.class, c).getNombre();
@@ -1252,11 +1245,59 @@ public class Publicador {
 		    return carrito.getItem(numRef); 
 		}
 		
-
+		@WebMethod
+		public void notificarComentario(int numRef, int comId) {
+			Producto p = s.getProducto(numRef);
+			Comentario c = s.getComentario(comId);
+			s.notificarComentario(p, c, null);
+		}
+		
+		@WebMethod
+		public void notificarRespuestaComentario(int numRef, int comId, int resId) {
+			Producto p = s.getProducto(numRef);
+			Comentario c = s.getComentario(comId);
+			Comentario r = s.getComentario(resId);
+			s.notificarComentario(p, c, r);
+		}
+		
+		@WebMethod
+		public void setRecibirNotificaciones(String nick, boolean activar) {
+			EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+			EntityManager em = emf.createEntityManager();
+			em.getTransaction().begin();
+			
+			Cliente cliente = obtenerCliente(nick);
+			cliente.setRecibirNotificaciones(activar);
+			System.out.println("El cliente " + nick + " estableció recibirNotificaciones como " + activar);
+	        
+			em.merge(cliente);
+	        em.getTransaction().commit();
+	        em.close();
+	        emf.close();
+		}
+		
+		@WebMethod
+		public Cliente getClientePorToken(String token) {
+			return s.getClientePorToken(token);
+		}
+		
+		@WebMethod
+		public void setTokenDesactivacionCliente(String nick, String token) {
+			EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+			EntityManager em = emf.createEntityManager();
+			em.getTransaction().begin();
+			
+			Cliente cliente = obtenerCliente(nick);
+			cliente.setTokenDesactivacion(token);
+			System.out.println("El cliente " + nick + " recibió un nuevo token de desactivación: " + token);
+	        
+			em.merge(cliente);
+	        em.getTransaction().commit();
+	        em.close();
+	        emf.close();
+		}
+		
 		public String saludar() {
 			return "Hola Mundo";
 		}
-
-
-
 }

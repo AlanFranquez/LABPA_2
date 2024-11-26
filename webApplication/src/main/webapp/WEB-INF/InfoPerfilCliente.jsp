@@ -31,8 +31,6 @@
     	webservices.PublicadorService p = new PublicadorService();
     	webservices.Publicador port = p.getPublicadorPort();
     	
-
-    	
 		webservices.Usuario usr = (webservices.Usuario) request.getAttribute("usuario");
 
     	
@@ -117,6 +115,19 @@
             <p>Nombre: <b><%= port.getNombreDTCliente(nickUser) %></b></p>
             <p>Apellido: <b><%= port.getApellidoDTCliente(nickUser) %></b></p>
             <p>Fecha de Nacimiento: <br><b><%= port.imprimirFechaCliente(usr.getNick()) %></b></p> 
+        	<form action="actualizarNotificaciones" method="get">
+				<input type="hidden" name="userId" value="<%=nickUser%>">
+				<input type="hidden" name="nickname" value="<%=nickUser%>">
+				<div class="form-check">
+					<input class="form-check-input" type="checkbox"
+							id="notificacionesCheckbox" name="activar"
+							<%if (port.getRecibirNotificacionesDTCliente(nickUser)) {%> checked <%}%>> 
+					<label class="form-check-label" for="notificacionesCheckbox">
+						Notificaciones Activas 
+					</label>
+				</div>
+				<button type="submit" class="btn btn-primary mt-3">Actualizar</button>
+			</form>
         </div>
     </section>
 </main>
