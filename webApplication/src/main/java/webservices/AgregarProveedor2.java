@@ -7,9 +7,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Clase Java para agregarProveedor2 complex type.
+ * <p>Java class for agregarProveedor2 complex type.
  * 
- * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="agregarProveedor2">
@@ -58,7 +58,7 @@ public class AgregarProveedor2 {
     protected String arg8;
 
     /**
-     * Obtiene el valor de la propiedad arg0.
+     * Gets the value of the arg0 property.
      * 
      * @return
      *     possible object is
@@ -70,7 +70,7 @@ public class AgregarProveedor2 {
     }
 
     /**
-     * Define el valor de la propiedad arg0.
+     * Sets the value of the arg0 property.
      * 
      * @param value
      *     allowed object is
@@ -82,7 +82,7 @@ public class AgregarProveedor2 {
     }
 
     /**
-     * Obtiene el valor de la propiedad arg1.
+     * Gets the value of the arg1 property.
      * 
      * @return
      *     possible object is
@@ -94,7 +94,7 @@ public class AgregarProveedor2 {
     }
 
     /**
-     * Define el valor de la propiedad arg1.
+     * Sets the value of the arg1 property.
      * 
      * @param value
      *     allowed object is
@@ -106,7 +106,7 @@ public class AgregarProveedor2 {
     }
 
     /**
-     * Obtiene el valor de la propiedad arg2.
+     * Gets the value of the arg2 property.
      * 
      * @return
      *     possible object is
@@ -118,7 +118,7 @@ public class AgregarProveedor2 {
     }
 
     /**
-     * Define el valor de la propiedad arg2.
+     * Sets the value of the arg2 property.
      * 
      * @param value
      *     allowed object is
@@ -130,7 +130,7 @@ public class AgregarProveedor2 {
     }
 
     /**
-     * Obtiene el valor de la propiedad arg3.
+     * Gets the value of the arg3 property.
      * 
      * @return
      *     possible object is
@@ -142,7 +142,7 @@ public class AgregarProveedor2 {
     }
 
     /**
-     * Define el valor de la propiedad arg3.
+     * Sets the value of the arg3 property.
      * 
      * @param value
      *     allowed object is
@@ -154,7 +154,7 @@ public class AgregarProveedor2 {
     }
 
     /**
-     * Obtiene el valor de la propiedad arg4.
+     * Gets the value of the arg4 property.
      * 
      * @return
      *     possible object is
@@ -166,7 +166,7 @@ public class AgregarProveedor2 {
     }
 
     /**
-     * Define el valor de la propiedad arg4.
+     * Sets the value of the arg4 property.
      * 
      * @param value
      *     allowed object is
@@ -178,7 +178,7 @@ public class AgregarProveedor2 {
     }
 
     /**
-     * Obtiene el valor de la propiedad arg5.
+     * Gets the value of the arg5 property.
      * 
      * @return
      *     possible object is
@@ -190,7 +190,7 @@ public class AgregarProveedor2 {
     }
 
     /**
-     * Define el valor de la propiedad arg5.
+     * Sets the value of the arg5 property.
      * 
      * @param value
      *     allowed object is
@@ -202,7 +202,7 @@ public class AgregarProveedor2 {
     }
 
     /**
-     * Obtiene el valor de la propiedad arg6.
+     * Gets the value of the arg6 property.
      * 
      * @return
      *     possible object is
@@ -214,7 +214,7 @@ public class AgregarProveedor2 {
     }
 
     /**
-     * Define el valor de la propiedad arg6.
+     * Sets the value of the arg6 property.
      * 
      * @param value
      *     allowed object is
@@ -226,7 +226,7 @@ public class AgregarProveedor2 {
     }
 
     /**
-     * Obtiene el valor de la propiedad arg7.
+     * Gets the value of the arg7 property.
      * 
      * @return
      *     possible object is
@@ -238,7 +238,7 @@ public class AgregarProveedor2 {
     }
 
     /**
-     * Define el valor de la propiedad arg7.
+     * Sets the value of the arg7 property.
      * 
      * @param value
      *     allowed object is
@@ -250,7 +250,7 @@ public class AgregarProveedor2 {
     }
 
     /**
-     * Obtiene el valor de la propiedad arg8.
+     * Gets the value of the arg8 property.
      * 
      * @return
      *     possible object is
@@ -262,7 +262,7 @@ public class AgregarProveedor2 {
     }
 
     /**
-     * Define el valor de la propiedad arg8.
+     * Sets the value of the arg8 property.
      * 
      * @param value
      *     allowed object is

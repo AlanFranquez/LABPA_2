@@ -101,7 +101,7 @@ List<Producto> prods = (List<Producto>) request.getAttribute("prods");
                     <div class="overflow-hidden" style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
                         <% if(port.obtenerImagenesProducto(p.getNumRef()) != null && !port.obtenerImagenesProducto(p.getNumRef()).isEmpty())  {%>
                         
-                          <img src="media/<%= port.obtenerPrimeraImagenProducto(p.getNumRef()) %>"
+                          <img src="mostrarImgProducto?productoId=<%= p.getNumRef() %>"
                              class="img-fluid" alt="Producto" 
                              style="width: 100%; height: 200px; object-fit: cover;" />
                         

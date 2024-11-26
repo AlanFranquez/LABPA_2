@@ -34,11 +34,14 @@ if (port.getTipo(nickUser).equals("cliente")) {
 
 }
 
+List<String> imagenes = port.obtenerImagenesProducto(id);
+
 Boolean comproProducto = false;
 if (cl != null) {
 
 	comproProducto = port.comproProducto(nickUser, id);
 }
+
 %>
 
 <meta charset="UTF-8">
@@ -118,26 +121,39 @@ if (cl != null) {
 			</div>
 		</div>
 	</nav>
+	
+	
 
 
 	<main class="container mt-5">
 		<div class="row justify-content-center align-items-center">
 			<div class="col-md-6">
-				<div id="productCarousel" class="carousel slide"
-					data-bs-ride="carousel">
+				<div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
+  
+  <!-- Controles de navegación -->
+  <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
 
+  <!-- Contenedor de las imágenes -->
+  <div class="carousel-inner">
+    <% 
+    for (int i = 0; i < imagenes.size(); i++) {
+      boolean isActive = (i == 0);
+    %>
+      <div class="carousel-item <%= isActive ? "active" : "" %>">
+        <img alt="Imagen Producto" class="d-block w-100" style="overflow: hidden; height: 800px'" src="mostrarImgProducto?productoId=<%= id %>&indice=<%= i %>" class="d-block w-100">
+      </div>
+    <% } %>
+  </div>
 
-					<button class="carousel-control-prev" type="button"
-						data-bs-target="#productCarousel" data-bs-slide="prev">
-						<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-						<span class="visually-hidden">Previous</span>
-					</button>
-					<button class="carousel-control-next" type="button"
-						data-bs-target="#productCarousel" data-bs-slide="next">
-						<span class="carousel-control-next-icon" aria-hidden="true"></span>
-						<span class="visually-hidden">Next</span>
-					</button>
-				</div>
+  <!-- Controles de navegación -->
+  <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
 
 			</div>
 			<div class="col-md-6">
@@ -205,6 +221,8 @@ if (cl != null) {
 		%>
 	</main>
 
+	<br>
+	<br>
 	<br>
 	<br>
 

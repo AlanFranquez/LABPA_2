@@ -1,6 +1,5 @@
 <%@ page import="java.util.List" %>
-<%@ page import="com.market.svcentral.Proveedor" %>
-<%@ page import="com.market.svcentral.Usuario" %>
+<%@ page import="webservices.*" %>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -18,7 +17,7 @@
 
 <%
 	String estadoUser = (String) request.getAttribute("estado");
-    Usuario usr = (Usuario) session.getAttribute("usuarioLogueado");
+    webservices.Usuario usr = (webservices.Usuario) session.getAttribute("usuarioLogueado");
 	
 	%>
 	
@@ -42,11 +41,11 @@
             <ul class="navbar-nav align-items-center">
                 <li class="nav-item">
                    <% 
-if (usr != null && usr.getTipo().equals("proveedor")) { 
+if (usr != null && usr instanceof webservices.Proveedor) { 
 %> 
     <a class="nav-link" href="perfilProveedor?nickname=<%=usr.getNick()%>">Perfil</a> 
 <% 
-} else if (usr != null && usr.getTipo().equals("cliente")) { 
+} else if (usr != null && usr instanceof webservices.Cliente) { 
 %> 
     <a class="nav-link" href="perfilCliente?nickname=<%=usr.getNick()%>">Perfil</a>
 <% 
@@ -54,7 +53,7 @@ if (usr != null && usr.getTipo().equals("proveedor")) {
 %>
                 </li>
                 <%
-                if (usr != null && usr.getTipo().equals("cliente")) {
+                if (usr != null && usr instanceof webservices.Cliente) {
                 %>
                 <li class="nav-item"><a class="nav-link" href="Carrito">
                     <svg xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" viewBox="0 0 24 24">
@@ -103,15 +102,20 @@ if (usr != null && usr.getTipo().equals("proveedor")) {
                     <option value="" disabled selected>Seleccionar Categoría</option>
                     <% 
                         // Obtener el array desde el request
-                        List<String> categorias = (List<String>) request.getAttribute("categories");
+                        List<webservices.Categoria> categorias = (List<webservices.Categoria>) request.getAttribute("categories");
                         
                         // Verificamos si la lista no es nula ni vacía
                         if (categorias != null && !categorias.isEmpty()) {
-                            for (String categoria : categorias) {
+                            for (Categoria categoria : categorias) {
+                            	
+                            	if("Producto".equals(categoria.getTipo())) {
+               
                     %>
-                                <option value="<%= categoria %>"><%= categoria %></option>
+                    			
+                                <option value="<%= categoria.getNombre() %>"><%= categoria.getNombre()%></option>
+                    			
                     <%
-                            }
+                            }}
                         } else {
                     %>
                         <option value="" disabled>No hay categorías disponibles</option>
@@ -135,16 +139,15 @@ if (usr != null && usr.getTipo().equals("proveedor")) {
 				</script>
 
     
-<%
-Proveedor proveedorLogueado = (Proveedor) session.getAttribute("usuarioLogueado");
-String nickname = (proveedorLogueado != null) ? proveedorLogueado.getNick() : "";
-%>
+
 
 <div class="button-group">
-    <button type="button" class="btn-cancel" 
-        onclick="window.location.href='perfilProveedor?nickname=' + encodeURIComponent('<%= nickname %>');">
+	<a src="home">
+	<button type="button" class="btn-cancel">
         Cancelar
     </button>
+	</a>
+    
     <button type="submit" class="btn-submit">Registrar</button>
 </div>
             </form>

@@ -178,7 +178,7 @@ if (usr != null && usr instanceof Proveedor) {
 												<% } else { %>
 													
 													<img class="card-img-top"
-													src="media/<%=port.obtenerPrimeraImagenProducto(dt.getNumRef())%>"
+													src="mostrarImgProducto?productoId=<%= dt.getNumRef() %>"
 													alt="<%=dt.getNombre()%>"
 													style="height: 200px; object-fit: cover;">
 												<%}%>

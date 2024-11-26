@@ -128,8 +128,8 @@ if (usr != null && port.getTipo(nickUser).equals("proveedor")) {
 									%>
 
 									<img class="img-fluid rounded-3"
-										src="media/<%=port.obtenerPrimeraImagenProducto(producto.getNumRef())%>"
-										alt="<%=port.getNombreProd(port.crearDTProd(producto))%>"
+										src="mostrarImgProducto?productoId=<%= producto.getNumRef() %>"
+										alt="Imagen producto"
 										style="object-fit: cover;">
 									<%}%>
 								</div>

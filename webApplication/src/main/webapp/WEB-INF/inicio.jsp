@@ -2,7 +2,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <%@page import="webservices.Usuario"%>
-<%@page import="webservices.EstadoSesion"%>
 <%@page import="webservices.Producto"%>
 <%@page import="webservices.Carrito" %>
 <%@page import="webservices.Proveedor" %>
@@ -97,6 +96,7 @@ if (usr != null && usr instanceof Proveedor) {
     </div>
 </nav>
 
+
 <div style="position: relative; background-image: url('media/images/fondo1 (2).jpg'); background-size: cover; background-position: center center;">
     <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); z-index: 1;"></div>
     <main class="container d-flex justify-content-center align-items-center vh-90" style="position: relative; z-index: 2;">
@@ -158,7 +158,7 @@ if (usr != null && usr instanceof Proveedor) {
                     <div class="overflow-hidden" style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
                         <% if(port.obtenerImagenesProducto(p.getNumRef()) != null && !port.obtenerImagenesProducto(p.getNumRef()).isEmpty())  {%>
                         
-                          <img src="media/<%= port.obtenerPrimeraImagenProducto(p.getNumRef()) %>"
+                          <img src="mostrarImgProducto?productoId=<%= p.getNumRef() %>"
                              class="img-fluid" alt="Producto" 
                              style="width: 100%; height: 200px; object-fit: cover;" />
                         

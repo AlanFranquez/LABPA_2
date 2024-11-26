@@ -660,7 +660,7 @@ public class Sistema implements ISistema {
 	    	
 		 List<Categoria> categorias = null;
 		 try {
-			 categorias = em.createQuery("SELECT c FROM Categoria", Categoria.class).getResultList();
+			 categorias = em.createQuery("SELECT c FROM Categoria c", Categoria.class).getResultList();
 		 } catch (Exception e) {
 			 em.close();
 			 System.out.print(e);

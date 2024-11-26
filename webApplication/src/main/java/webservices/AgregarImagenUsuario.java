@@ -9,9 +9,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Clase Java para agregarImagenUsuario complex type.
+ * <p>Java class for agregarImagenUsuario complex type.
  * 
- * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="agregarImagenUsuario">
@@ -40,7 +40,7 @@ public class AgregarImagenUsuario {
     protected JAXBElement<byte[]> arg1;
 
     /**
-     * Obtiene el valor de la propiedad arg0.
+     * Gets the value of the arg0 property.
      * 
      * @return
      *     possible object is
@@ -52,7 +52,7 @@ public class AgregarImagenUsuario {
     }
 
     /**
-     * Define el valor de la propiedad arg0.
+     * Sets the value of the arg0 property.
      * 
      * @param value
      *     allowed object is
@@ -64,7 +64,7 @@ public class AgregarImagenUsuario {
     }
 
     /**
-     * Obtiene el valor de la propiedad arg1.
+     * Gets the value of the arg1 property.
      * 
      * @return
      *     possible object is
@@ -76,7 +76,7 @@ public class AgregarImagenUsuario {
     }
 
     /**
-     * Define el valor de la propiedad arg1.
+     * Sets the value of the arg1 property.
      * 
      * @param value
      *     allowed object is

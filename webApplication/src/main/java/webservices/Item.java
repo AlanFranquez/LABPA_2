@@ -7,9 +7,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Clase Java para item complex type.
+ * <p>Java class for item complex type.
  * 
- * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="item">
@@ -43,7 +43,7 @@ public class Item {
     protected Producto producto;
 
     /**
-     * Obtiene el valor de la propiedad id.
+     * Gets the value of the id property.
      * 
      * @return
      *     possible object is
@@ -55,7 +55,7 @@ public class Item {
     }
 
     /**
-     * Define el valor de la propiedad id.
+     * Sets the value of the id property.
      * 
      * @param value
      *     allowed object is
@@ -67,7 +67,7 @@ public class Item {
     }
 
     /**
-     * Obtiene el valor de la propiedad cant.
+     * Gets the value of the cant property.
      * 
      */
     public int getCant() {
@@ -75,7 +75,7 @@ public class Item {
     }
 
     /**
-     * Define el valor de la propiedad cant.
+     * Sets the value of the cant property.
      * 
      */
     public void setCant(int value) {
@@ -83,7 +83,7 @@ public class Item {
     }
 
     /**
-     * Obtiene el valor de la propiedad subTotal.
+     * Gets the value of the subTotal property.
      * 
      */
     public float getSubTotal() {
@@ -91,7 +91,7 @@ public class Item {
     }
 
     /**
-     * Define el valor de la propiedad subTotal.
+     * Sets the value of the subTotal property.
      * 
      */
     public void setSubTotal(float value) {
@@ -99,7 +99,7 @@ public class Item {
     }
 
     /**
-     * Obtiene el valor de la propiedad producto.
+     * Gets the value of the producto property.
      * 
      * @return
      *     possible object is
@@ -111,7 +111,7 @@ public class Item {
     }
 
     /**
-     * Define el valor de la propiedad producto.
+     * Sets the value of the producto property.
      * 
      * @param value
      *     allowed object is

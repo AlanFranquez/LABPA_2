@@ -32,7 +32,7 @@ public class Home extends HttpServlet {
         
        PublicadorService p = new PublicadorService();
         Publicador port = p.getPublicadorPort();
-		
+
 		System.out.print("SALUDANDO DESDE LA WEBAPP --> " + port.saludar());
 		
 		List<webservices.Producto> pruebaaa = port.obtenerProductos();

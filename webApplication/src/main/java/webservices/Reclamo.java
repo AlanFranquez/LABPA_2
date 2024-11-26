@@ -7,9 +7,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Clase Java para reclamo complex type.
+ * <p>Java class for reclamo complex type.
  * 
- * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="reclamo">
@@ -34,7 +34,7 @@ public class Reclamo {
     protected String texto;
 
     /**
-     * Obtiene el valor de la propiedad texto.
+     * Gets the value of the texto property.
      * 
      * @return
      *     possible object is
@@ -46,7 +46,7 @@ public class Reclamo {
     }
 
     /**
-     * Define el valor de la propiedad texto.
+     * Sets the value of the texto property.
      * 
      * @param value
      *     allowed object is

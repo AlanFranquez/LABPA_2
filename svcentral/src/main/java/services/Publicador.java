@@ -68,7 +68,7 @@ public class Publicador {
 
 	@WebMethod(exclude = true)
 	public void publicar() {
-		endpoint = Endpoint.publish("http://localhost:1234/publicador", this);
+		endpoint = Endpoint.publish("http://192.168.1.9:1234/publicador", this);
 	}
 
 	/**
@@ -122,7 +122,7 @@ public class Publicador {
 	    EntityManagerFactory prueba = Persistence.createEntityManagerFactory("miUnidadPersistencia");
 	    EntityManager prob = prueba.createEntityManager();
 	    
-	    Cliente cliente = prob.find(Cliente.class, nickName);
+	    Usuario cliente = prob.find(Usuario.class, nickName);
 	    // Persistir el cambio
 	    prob.getTransaction().begin();
 	    
@@ -137,11 +137,31 @@ public class Publicador {
 	}
 	
 	@WebMethod
+	public void agregarImagenProducto(int numRef, byte[] imagenBytes) {
+	    
+	    EntityManagerFactory prueba = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+	    EntityManager prob = prueba.createEntityManager();
+	    
+	    Producto prod = prob.find(Producto.class, numRef);
+	    // Persistir el cambio
+	    prob.getTransaction().begin();
+	    
+        String base64Image = Base64.getEncoder().encodeToString(imagenBytes);
+	    
+	    prod.agregarImagen(base64Image);
+	    prob.merge(prod);
+	    prob.getTransaction().commit();
+	    prob.close();
+	    prueba.close();
+	    System.out.println("Se agrego la imagen al usuario: " + prod.getNombre());
+	}
+	
+	@WebMethod
 	public String obtenerImagenUsuario(String nickName) {
 	    EntityManagerFactory prueba = Persistence.createEntityManagerFactory("miUnidadPersistencia");
 	    EntityManager prob = prueba.createEntityManager();
 
-	    Cliente cliente = prob.find(Cliente.class, nickName);
+	    Usuario cliente = prob.find(Usuario.class, nickName);
 
 	    if (cliente != null && cliente.getImagen() != null) {
 	        System.out.println("Imagen encontrada para el usuario: " + nickName);
@@ -508,7 +528,7 @@ public class Publicador {
 
 	@WebMethod
 	public Usuario obtenerUsuario(String nick) {
-		System.out.println("Se obtuvo el usuario: " + nick);
+		em = emf.createEntityManager();
 		return em.find(Usuario.class, nick);
 	}
 	
@@ -609,8 +629,37 @@ public class Publicador {
 
 	@WebMethod
 	public List<String> obtenerImagenesProducto(int numRef) {
-		return this.obtenerProducto(numRef).crearDT().getImagenes();
+		 EntityManagerFactory prueba = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+		    EntityManager prob = prueba.createEntityManager();
+
+		    Producto prod = prob.find(Producto.class, numRef);
+
+		    if (prod != null && prod.getImagenes() != null) {
+		        System.out.println("Imagen encontrada para el usuario: " + prod.getNombre());
+		        return prod.getImagenes();
+		    } else {
+		        System.out.println("No se encontró imagen para el usuario: " + prod.getNombre());
+		        return null;
+		    }
 	}
+	
+	@WebMethod
+	public String obtenerImagenesProductoPRIMERA(int numRef) {
+		 EntityManagerFactory prueba = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+		    EntityManager prob = prueba.createEntityManager();
+
+		    Producto prod = prob.find(Producto.class, numRef);
+
+		    if (prod != null && prod.getImagenes() != null) {
+		        System.out.println("Imagen encontrada para el usuario: " + prod.getNombre());
+		        return prod.getImagenes().get(0);
+		    } else {
+		        System.out.println("No se encontró imagen para el usuario: " + prod.getNombre());
+		        return null;
+		    }
+	}
+	
+	
 	
 	@WebMethod
 	public String imprimirNumRefOrden(String nickname, int orden) {
@@ -650,9 +699,11 @@ public class Publicador {
 	
 	@WebMethod
     public void agregarComentario(int comentarioId, String mensaje, String nickCliente, int numRef) {
-        emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-        em = emf.createEntityManager();
-		em.getTransaction().begin();
+       
+		EntityManagerFactory prueba = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+		EntityManager prubem = prueba.createEntityManager();
+		
+		prubem.getTransaction().begin();
 		
 		
         
@@ -667,16 +718,17 @@ public class Publicador {
 			e.printStackTrace();
 		}
 
+        System.out.println("El cliente " + nickCliente + "agrego un comentario al producto: " + obtenerProducto(numRef).getNombre());
+        prubem.persist(nuevoComentario);
+        prubem.merge(obtenerProducto(numRef));
+        prubem.merge(obtenerCliente(nickCliente));
+        prubem.flush();
+        prubem.getTransaction().commit();
         
-        em.persist(nuevoComentario);
-        em.merge(obtenerProducto(numRef));
-        em.merge(obtenerCliente(nickCliente));
-        em.flush();
-        em.getTransaction().commit();
+        prubem.close();
+        prueba.close();
         
-        
-        
-    }
+    } 
 	
 	@WebMethod
     public void agregarRespuesta(int comentarioPadre, String mensaje, int respuestaID, String nick) {
@@ -1080,8 +1132,13 @@ public class Publicador {
 	 * 
 	 */
 	@WebMethod
-	public List<Categoria> getCategoriasLista() {
-		return s.getCategoriasLista();
+	public Categoria[] getCategoriasLista(){
+		List<Categoria> categorias = null;
+	
+			 categorias = s.getCategoriasLista();
+		 
+		
+		return categorias.toArray(new Categoria[0]);
 	}
 
 	@WebMethod
@@ -1100,6 +1157,11 @@ public class Publicador {
 	public void realizarCompra(OrdenDeCompra ordenCompra, String nick) {
 		s.realizarCompra(ordenCompra, nick);
 		
+	}
+	
+	@WebMethod
+	public Categoria[] listaCatPRODS() {
+		return em.createQuery("SELECT c FROM Categoria c", Categoria.class).getResultList().toArray(new Categoria[0]);
 	}
 	
 	@WebMethod

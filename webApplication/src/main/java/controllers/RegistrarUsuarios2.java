@@ -64,7 +64,7 @@ public class RegistrarUsuarios2 extends HttpServlet {
 		String sitioWeb = request.getParameter("sitioWeb");
 
 		Part img = request.getPart("imagen");
-		
+		System.out.print("CONTENIDO DE LA IMAGEN " + img.getContentType());
 		String fileName = null;
 		byte[] imageBytes = null;
 		if (img != null && img.getSize() > 0) {
@@ -80,9 +80,7 @@ public class RegistrarUsuarios2 extends HttpServlet {
 			imageBytes = Files.readAllBytes(file.toPath());
 		}
 		
-		for(Byte b : imageBytes) {
-			System.out.print(b + "");
-		}
+		
 		//Validar campos requeridos
 		if (nombre == null || nombre.isEmpty() || apellido == null || apellido.isEmpty() || fechaNacimiento == null
 				|| fechaNacimiento.isEmpty() || contraseña == null || contraseña.isEmpty() || contraseña2 == null
