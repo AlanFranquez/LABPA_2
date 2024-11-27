@@ -43,30 +43,23 @@ public class InitServlet extends HttpServlet {
     		Publicador port = p.getPublicadorPort();
          
         	 
-        	 DtFecha fecha1 = port.nuevaFecha(12, 12, 1990);
-             DtFecha fecha2 = port.nuevaFecha(12, 12, 1990);
-             DtFecha fecha3 = port.nuevaFecha(12, 12, 1990);
              
              
              
-             
+             String fecha = "12-12-1990";
              
              try {
-				port.agregarCliente("Juan", "Juan123", "Perez", "Juan@gmail.com", fecha1, "123", "123");
+				port.agregarCliente("Juan", "Juan123", "Perez", "Juan@gmail.com", 12, 12, 1990, "123", "123");
 			} catch (UsuarioRepetidoException_Exception e) {
-				System.out.println(e.getMessage());
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
              
              
              byte[] imageBytes = imagenPrecargada("https://priorityonepayroll.com/wp-content/uploads/2018/06/pop-client-meeting.jpg");
              port.agregarImagenUsuario("Juan123", imageBytes);
          
-             try {
-            	
-            	port.agregarProveedor("Perez", "Perez@gmail.com", "Perez", "Alberto", fecha1, "Nueva Helvecia", "nuevahelvecia.com", "123", "123");
-			} catch (UsuarioRepetidoException_Exception e) {
-				System.out.println(e.getMessage());
-			}
+             port.agregarProveedor("Perez", "Perez@gmail.com", "Perez", "Alberto", 12,12,1990, "Nueva Helvecia", "nuevahelvecia.com", "123", "123");
              
              
              byte[] imageBytes2 = imagenPrecargada("https://www.getcanopy.com/hubfs/Legacy/Imported_Blog_Media/ways-to-manage-clients-effectively-2.jpg");

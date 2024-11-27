@@ -187,7 +187,7 @@ public class Publicador {
 	    prob.getTransaction().commit();
 	    prob.close();
 	    prueba.close();
-	    System.out.println("Se agrego la imagen al usuario: " + prod.getNombre());
+	    System.out.println("Se agrego la imagen al Producto: " + prod.getNombre());
 	}
 	
 	@WebMethod
@@ -270,16 +270,17 @@ public class Publicador {
 	}
 
 	@WebMethod
-	public void agregarCliente(String nombre, String nickname, String apellido, String correo, 
-			DTFecha fecha, String pass, String confPass) throws UsuarioRepetidoException {
+	public void agregarCliente(String nombre, String nickname, String apellido, String correo, int dia, int mes, int anio, String pass, String confPass) throws UsuarioRepetidoException {
 		System.out.println("Se registro un nuevo cliente con el nickname: " + nickname);
+		
+		DTFecha fecha = new DTFecha(dia, mes, anio);
 		s.agregarCliente(nombre, nickname, apellido, correo, fecha, pass, confPass);
 		
 	}
 	
 	@WebMethod
-	public void agregarProveedor(String nickname, String correo, String nombre, String apellido, DTFecha fecha, String compania, String link, String pass, String confPass) throws UsuarioRepetidoException {
-		
+	public void agregarProveedor(String nickname, String correo, String nombre, String apellido, int dia, int mes, int anio, String compania, String link, String pass, String confPass) throws UsuarioRepetidoException {
+		DTFecha fecha = new DTFecha(dia, mes, anio);
 		System.out.println("Se registro un nuevo proveedor con el nickname: " + nickname);
 		s.agregarProveedor(nickname, correo, nombre, apellido, fecha, compania, link, pass, confPass);
 		

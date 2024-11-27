@@ -80,7 +80,7 @@ public class RegistrarUsuarios2 extends HttpServlet {
 			imageBytes = Files.readAllBytes(file.toPath());
 		}
 		
-		
+		System.out.print("FECHA NACIMIENTO --> " + fechaNacimiento);
 		//Validar campos requeridos
 		if (nombre == null || nombre.isEmpty() || apellido == null || apellido.isEmpty() || fechaNacimiento == null
 				|| fechaNacimiento.isEmpty() || contraseña == null || contraseña.isEmpty() || contraseña2 == null

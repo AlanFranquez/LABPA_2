@@ -17,6 +17,8 @@ import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -268,7 +270,7 @@ public class Presentacion {
              // Inicializar JFileChooser
                 fileChooser = new JFileChooser();
 
-                // Acción del botón de seleccionar imagen
+                
                 seleccionarImagenButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e1) {
@@ -281,17 +283,23 @@ public class Presentacion {
                                 if (nombreArchivo.endsWith(".jpg") || nombreArchivo.endsWith(".png")) {
                                     imagenLabel.setText(imagenSeleccionada.getName());
                                     imagenSelecc = nombreArchivo;
+
                                 } else {
                                     // Mostrar mensaje de error si el archivo no es válido
                                     JOptionPane.showMessageDialog(null, "Por favor, selecciona un archivo con extensión .jpg o .png", "Archivo no válido", JOptionPane.ERROR_MESSAGE);
+                                    
                                 }
                             } else {
                                 // Mensaje si no se selecciona un archivo
                                 JOptionPane.showMessageDialog(null, "No se seleccionó ningún archivo", "Error", JOptionPane.ERROR_MESSAGE);
+                               
                             }
                         }
                     }
                 });
+                
+
+                
 
                 
                 
@@ -373,9 +381,18 @@ public class Presentacion {
 								return;
 							}
                         	System.out.println("Imagen seleccionada: " + (imagenSelecc != null));
-                        	//if(imagenSelecc != null) {
-                        		//u.setImagen(imagenSelecc);
-                        	//}
+                        	byte[] imagenBytes = null;
+                        	if(imagenSeleccionada != null) {
+                        		
+                        		try {
+									imagenBytes = Files.readAllBytes(imagenSeleccionada.toPath());
+								} catch (IOException e) {
+									e.printStackTrace();
+								}
+                        		s.agregarImagenUsuarioBytes(nickname, imagenBytes);
+                        	}
+                        	
+                        	
                         	
                         	
                         } else {
@@ -388,7 +405,16 @@ public class Presentacion {
 							}
                         	
                         	
-                        	s.agregarImagenUsuario(nickname, imagenSelecc);
+                        	byte[] imagenBytes = null;
+                        	if(imagenSeleccionada != null) {
+                        		
+                        		try {
+									imagenBytes = Files.readAllBytes(imagenSeleccionada.toPath());
+								} catch (IOException e) {
+									e.printStackTrace();
+								}
+                        		s.agregarImagenUsuarioBytes(nickname, imagenBytes);
+                        	}
                         	
                         }
                         

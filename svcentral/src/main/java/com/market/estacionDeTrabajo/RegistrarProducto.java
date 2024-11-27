@@ -4,6 +4,8 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +38,9 @@ import com.market.svcentral.exceptions.*;
 @SuppressWarnings("serial")
 public class RegistrarProducto extends JInternalFrame{
 	private static ISistema s = Factory.getSistema();
-	private List<String> imagenesSeleccionadas = new ArrayList<String>();
+	
+	private File imagenSeleccionada = null;
+	private List<File> imagenesSeleccionadas = new ArrayList<File>();
 	
 	public RegistrarProducto(DtProducto prod) {
 		setResizable(true);
@@ -180,9 +184,9 @@ public class RegistrarProducto extends JInternalFrame{
         scrollPane.setViewportView(tree);
         tree.clearSelection();
         
-        JLabel imagenesLabel = new JLabel("Imágenes:");
-        imagenesLabel.setBounds(20, 450, 100, 25);
-        panel.add(imagenesLabel);
+        JLabel imagenLabel = new JLabel("No se ha seleccionado ninguna imagen");
+        imagenLabel.setBounds(20, 500, 240, 25);
+        panel.add(imagenLabel);
 
         JButton seleccionarImagenButton = new JButton("Seleccionar Imágenes");
         seleccionarImagenButton.setBounds(100, 450, 200, 25);
@@ -194,35 +198,47 @@ public class RegistrarProducto extends JInternalFrame{
 
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setMultiSelectionEnabled(true);
-        seleccionarImagenButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e1) {
-                int returnValue = fileChooser.showOpenDialog(null);
-                if (returnValue == JFileChooser.APPROVE_OPTION) {
-                    File[] archivosSeleccionados = fileChooser.getSelectedFiles();
-                    imagenesSeleccionadas.clear();
-                    StringBuilder imagenesNombres = new StringBuilder();
-                    
-                    for (File archivo : archivosSeleccionados) {
-                        String nombreArchivo = archivo.getAbsolutePath();
-                        if (nombreArchivo.endsWith(".jpg") || nombreArchivo.endsWith(".png")|| nombreArchivo.endsWith(".jpeg")) {
-                            imagenesSeleccionadas.add(nombreArchivo);
-                        } else {
-                        	imagenesSeleccionadas.clear();
-                            JOptionPane.showMessageDialog(null, "El archivo " + archivo.getName() + " no es válido. Seleccione archivos .jpg o .png", "Archivo no válido", JOptionPane.ERROR_MESSAGE);
-                            return;
-                        }
-                    }
-                    
-                    if (imagenesSeleccionadas.isEmpty()) {
-                        imagenesSeleccionadasLabel.setText("No se ha seleccionado ninguna imagen");
-                    } else {
-                        imagenesSeleccionadasLabel.setText("Imágenes seleccionadas: " + imagenesNombres.toString());
-                    }
-                }
-            }
-        });
+       
         
+        
+        List<byte[]> imagenesBytes = new ArrayList<>(); // Lista para almacenar bytes de imágenes
+
+     // Acción del botón de seleccionar imágenes
+     seleccionarImagenButton.addActionListener(new ActionListener() {
+         @Override
+         public void actionPerformed(ActionEvent e1) {
+             int returnValue = fileChooser.showOpenDialog(null);
+             if (returnValue == JFileChooser.APPROVE_OPTION) {
+                 File[] imagenesSeleccionadasArray = fileChooser.getSelectedFiles();
+                 imagenesSeleccionadas.clear();
+                 imagenesBytes.clear();
+                 
+                 StringBuilder nombresArchivos = new StringBuilder("Seleccionadas: ");
+                 
+                 for (File imagen : imagenesSeleccionadasArray) {
+                     if (imagen != null && (imagen.getName().endsWith(".jpg") || imagen.getName().endsWith(".png"))) {
+                         imagenesSeleccionadas.add(imagen); 
+                         nombresArchivos.append(imagen.getName()).append(", ");
+                         
+                         try {
+                             byte[] bytes = Files.readAllBytes(imagen.toPath());
+                             imagenesBytes.add(bytes);
+                         } catch (IOException ex) {
+                             JOptionPane.showMessageDialog(null, "Error al leer el archivo " + imagen.getName(), "Error", JOptionPane.ERROR_MESSAGE);
+                         }
+                     } else {
+                         JOptionPane.showMessageDialog(null, "Archivo no válido: " + imagen.getName(), "Error", JOptionPane.ERROR_MESSAGE);
+                     }
+                 }
+                 
+                 if (!imagenesSeleccionadas.isEmpty()) {
+                     imagenesSeleccionadasLabel.setText(nombresArchivos.toString()); // Mostrar nombres de imágenes seleccionadas
+                 } else {
+                     imagenesSeleccionadasLabel.setText("No se ha seleccionado ninguna imagen válida");
+                 }
+             }
+         }
+     });
         
         
         JButton registrarButton = new JButton("Crear");
@@ -329,8 +345,16 @@ public class RegistrarProducto extends JInternalFrame{
             		return;
             	}
             }
-            for(String img: imagenesSeleccionadas) {
-            	s.agregarImagenProd(img, numRef);
+            for(File img: imagenesSeleccionadas) {
+            	
+            	byte[] imgByte = null;
+				try {
+					imgByte = Files.readAllBytes(img.toPath());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+            	s.agregarImagenProductoBytes(numRef, imgByte);
             }
                 
             if(prod == null) {
