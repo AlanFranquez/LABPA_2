@@ -6,42 +6,26 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import webservices.Cliente;
+import webservices.Item;
 import webservices.OrdenDeCompra;
 import webservices.Publicador;
 import webservices.PublicadorService;
+import webservices.Usuario;
 
 import java.io.IOException;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-
-import com.market.svcentral.Cliente;
-import com.market.svcentral.DTCliente;
-import com.market.svcentral.DTOrdenDeCompra;
-import com.market.svcentral.Factory;
-import com.market.svcentral.ISistema;
-
 @WebServlet("/perfilOrdenMOBILE")
 public class PerfilOrdenMOBILE extends HttpServlet {
     private static final long serialVersionUID = 1L;
-
+    PublicadorService p = new PublicadorService();
+    Publicador port = p.getPublicadorPort();
     public PerfilOrdenMOBILE() {
         super();
     }
     
-    private ISistema sist;
-
     @Override
-    public void init() throws ServletException {
-        try {
-            sist = Factory.getSistema();  // Aquí puede estar fallando
-        } catch (Exception e) {
-            throw new ServletException("No se pudo inicializar ISistema", e);  // Manejar la excepción
-        }
-    }
-
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //String nickname = request.getParameter("nickname");
         String ordenParam = request.getParameter("orden");
@@ -61,11 +45,10 @@ public class PerfilOrdenMOBILE extends HttpServlet {
         }
         
         
-        PublicadorService p = new PublicadorService();
-        Publicador port = p.getPublicadorPort();
+        
 
-        webservices.Usuario user = (webservices.Usuario) sess.getAttribute("usuarioLogueado");
-        webservices.Cliente cliente = port.obtenerCliente(user.getNick());
+        Usuario user = (Usuario) sess.getAttribute("usuarioLogueado");
+        Cliente cliente = port.obtenerCliente(user.getNick());
         
 
         // Comprobar que el parámetro de la orden no sea nulo y convertirlo a entero
@@ -86,12 +69,12 @@ public class PerfilOrdenMOBILE extends HttpServlet {
             System.out.println(orden.getNumero());
             System.out.println("=======");
             
-            List<webservices.Item> items = port.imprimirITemsORDENS(numeroOrden, cliente.getNick());
-           String estado = port.getEstadoOrden(numeroOrden, cliente.getNick());
+            List<Item> items = port.imprimirITemsORDENS(numeroOrden, cliente.getNick());
+            String estado = port.getEstadoOrden(numeroOrden, cliente.getNick());
             
            
             System.out.print("ESTADO -->" + estado);
-            for(webservices.Item it: items) {
+            for(Item it: items) {
             	System.out.print("LISTA --> " + it.getProducto().getNumRef());
             }
             
@@ -110,6 +93,7 @@ public class PerfilOrdenMOBILE extends HttpServlet {
     /**
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
      */
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	String accion = request.getParameter("accion");
         String ordenParam = request.getParameter("numeroOrden");
@@ -128,11 +112,8 @@ public class PerfilOrdenMOBILE extends HttpServlet {
             return;
         }
         
-        PublicadorService p = new PublicadorService();
-        Publicador port = p.getPublicadorPort();
-        
-        webservices.Usuario user = (webservices.Usuario) sess.getAttribute("usuarioLogueado");
-        webservices.Cliente cliente = port.obtenerCliente(user.getNick());
+        Usuario user = (Usuario) sess.getAttribute("usuarioLogueado");
+        Cliente cliente = port.obtenerCliente(user.getNick());
         request.setAttribute("usuarioOrdenEsp", cliente);
 
         if (ordenParam != null && !ordenParam.isEmpty()) {
@@ -144,11 +125,8 @@ public class PerfilOrdenMOBILE extends HttpServlet {
                 return;
             }
             
-            
-            
-            
             if ("confirmar".equals(accion)) {
-            	webservices.OrdenDeCompra orden = port.getCompra(numeroOrden, cliente.getNick());
+            	OrdenDeCompra orden = port.getCompra(numeroOrden, cliente.getNick());
                 if (orden != null) {
              	    port.setEstado(orden.getNumero(), cliente.getNick(), "Entregada", "El cliente ha recibido el pedido.");
                 } else {

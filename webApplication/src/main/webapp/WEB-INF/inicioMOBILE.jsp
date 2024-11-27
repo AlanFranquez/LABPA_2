@@ -1,12 +1,9 @@
-<%@page import="com.market.svcentral.Usuario"%>
-<%@page import="com.market.svcentral.Producto"%>
-<%@page import="com.market.svcentral.DtProducto"%>
-<%@page import="com.market.svcentral.DTCliente" %>
+<%@page import="webservices.Usuario"%>
+<%@page import="webservices.Producto"%>
+<%@page import="webservices.DtProducto"%>
 <%@ page import="java.util.List" %>
-<%@page import="com.market.svcentral.Sistema"%>
-<%@page import="com.market.svcentral.DTCliente" %>
-<%@page import="com.market.svcentral.Carrito" %>
-<%@page import="com.market.svcentral.Cliente" %>
+<%@page import="webservices.Carrito" %>
+<%@page import="webservices.Cliente" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>

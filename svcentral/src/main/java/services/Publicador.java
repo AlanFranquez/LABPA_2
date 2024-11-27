@@ -1297,6 +1297,28 @@ public class Publicador {
 	        emf.close();
 		}
 		
+		@WebMethod
+		public void comprasUnicasProducto(int numRef) {
+			EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+			EntityManager em = emf.createEntityManager();
+			em.getTransaction().begin();
+			Producto p = em.find(Producto.class, numRef);
+			p.setComprasUnicas();
+			em.merge(p);
+			em.getTransaction().commit();
+			em.close();
+			emf.close();
+		}
+		
+		@WebMethod
+		public Integer getComprasUnicasProducto(int numRef) {
+			return this.obtenerProducto(numRef).getComprasUnicas();
+		}
+		
+		@WebMethod
+		public void saludarDesdeSvCentral(String texto) {
+			App.saludar(texto);
+		}
 		public String saludar() {
 			return "Hola Mundo";
 		}

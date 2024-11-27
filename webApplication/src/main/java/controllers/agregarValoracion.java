@@ -1,4 +1,5 @@
 package controllers;
+
 import java.io.IOException;
 
 import jakarta.servlet.ServletException;
@@ -10,6 +11,7 @@ import jakarta.servlet.http.HttpSession;
 import webservices.Cliente;
 import webservices.Publicador;
 import webservices.PublicadorService;
+
 @WebServlet("/agregarValoracion")
 public class agregarValoracion extends HttpServlet{
 	private static final long serialVersionUID = 1L;
@@ -25,7 +27,6 @@ public class agregarValoracion extends HttpServlet{
 		System.out.println("puntaje: " + rate);
 		
 		PublicadorService p = new PublicadorService();
-		
 		Publicador port = p.getPublicadorPort();
 		
 		if (parametro == null || parametro.isEmpty()) {

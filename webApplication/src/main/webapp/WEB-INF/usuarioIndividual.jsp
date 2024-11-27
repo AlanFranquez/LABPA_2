@@ -1,5 +1,6 @@
-<%@page import="com.market.svcentral.DTCliente"%>
-<%@page import="com.market.svcentral.DTFecha" %>
+<%@page import="webservices.Cliente"%>
+<%@page import="webservices.PublicadorService" %>
+<%@page import="webservices.Publicador" %>
 <%@page import="java.util.Collection"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
@@ -17,7 +18,10 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 <body style="Font-Family: 'Poppins', sans-serif">
-    
+    <%
+    PublicadorService p = new PublicadorService();
+	Publicador port = p.getPublicadorPort();
+	%>
     <div id="barra-nav"></div>
     
     <h1 class="text-center uppercase">Perfil del Cliente</h1>
@@ -30,13 +34,13 @@
             <div class="col-md-6 col-12">
  
 			    <% Object usuarioEncontrado = request.getAttribute("user");
-			   		DTCliente dt = (DTCliente) usuarioEncontrado;
+			   		Cliente dt = (Cliente) usuarioEncontrado;
 			    %>
 			   
 			   <p><%= dt.getNick() %></p>
 			   <p><%= dt.getNombre() %></p>
 			   <p><%= dt.getCorreo() %></p>
-			   <p><%= dt.getNacimientoFormateado() %></p>
+			   <p><%= port.getFechaNacDTClienteString(dt.getNick()) %></p>
 			
             
             </div>   

@@ -11,23 +11,21 @@ import jakarta.servlet.http.HttpFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import webservices.Producto;
+import webservices.Publicador;
+import webservices.PublicadorService;
 
 import java.io.IOException;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-
-import com.market.svcentral.Cliente;
-import com.market.svcentral.Item;
-import com.market.svcentral.Producto;
-import com.market.svcentral.Sistema;
+import javax.sound.sampled.Port;
 
 @WebFilter("/PaginaExito")
 public class ProductoDestacadoFilter extends HttpFilter implements Filter {
-
-    public ProductoDestacadoFilter() {
+	private static final long serialVersionUID = 1L;
+	PublicadorService p = new PublicadorService();
+    Publicador port = p.getPublicadorPort();
+	public ProductoDestacadoFilter() {
         super();
     }
 
@@ -45,12 +43,6 @@ public class ProductoDestacadoFilter extends HttpFilter implements Filter {
     	  HttpServletRequest httpRequest = (HttpServletRequest) request;
           HttpServletResponse httpResponse = (HttpServletResponse) response;
 
-    
-          EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-          EntityManager em = emf.createEntityManager();
-
-          em.getTransaction().begin();
-
           System.out.println("Entrando al filtro de la página de éxito");
 
           HttpSession session = httpRequest.getSession();
@@ -60,29 +52,17 @@ public class ProductoDestacadoFilter extends HttpFilter implements Filter {
               return;
           }
 
-
           List<Producto> productosComprados = (List<Producto>) session.getAttribute("productosComprados");
 
           if (productosComprados != null && !productosComprados.isEmpty()) {
               for (Producto producto : productosComprados) {
-                  
-                  Producto productoBD = em.find(Producto.class, producto.getNumRef());
-                  if (productoBD != null) {
-                     
-                      productoBD.setComprasUnicas();  
+            	  port.comprasUnicasProducto(producto.getNumRef());
                       
-                      em.merge(productoBD);
-                      System.out.println("Producto actualizado: " + productoBD.getNombre() + ", Compras únicas: " + productoBD.getComprasUnicas());
-                  }
+            	  System.out.println("Producto actualizado: " + producto.getNombre() + ", Compras únicas: " + port.getComprasUnicasProducto(producto.getNumRef()));
               }
           } else {
               System.out.println("No hay productos en la sesión para actualizar.");
           }
-
-          // Confirmar la transacción y cerrar el EntityManager
-          em.getTransaction().commit();
-          em.close();
-          emf.close();
 
           // Continuar con el flujo de la aplicación
           chain.doFilter(request, response);

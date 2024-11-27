@@ -1,5 +1,5 @@
 <%@page import="java.util.HashMap"%>
-<%@page import="com.market.svcentral.*"%>
+<%@page import="webservices.*"%>
 <%@page import="java.util.Collection"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>

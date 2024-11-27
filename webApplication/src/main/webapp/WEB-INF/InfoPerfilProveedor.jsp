@@ -134,7 +134,7 @@ if (user != null && port.getTipo(nickUser).equals("proveedor")) {
                     <div class="overflow-hidden" style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
                         <% if(port.obtenerImagenesProducto(id) != null && !port.obtenerImagenesProducto(id).isEmpty())  {%>
                         
-                          <img src="media/<%= port.obtenerImagenesProducto(id).getFirst() %>"
+                          <img src="media/<%= port.obtenerImagenesProducto(id).get(0) %>"
                              class="img-fluid" alt="Producto" 
                              style="width: 100%; height: 200px; object-fit: cover;" />
                         

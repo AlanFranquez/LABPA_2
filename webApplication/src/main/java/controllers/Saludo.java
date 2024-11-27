@@ -5,14 +5,16 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import webservices.Publicador;
+import webservices.PublicadorService;
 
-import com.market.svcentral.App;
+import java.io.IOException;
 
 @WebServlet("/Saludo")
 public class Saludo extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+	PublicadorService p = new PublicadorService();
+    Publicador port = p.getPublicadorPort();
     @Override
     public void init() throws ServletException {
     }
@@ -22,8 +24,7 @@ public class Saludo extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
-		App.saludar("Mimi");
+        port.saludarDesdeSvCentral("Mimi");
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 }

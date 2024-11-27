@@ -5,7 +5,7 @@
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.Map"%>
-<%@page import="com.market.svcentral.OrdenDeCompra"%>
+<%@page import="webservices.OrdenDeCompra"%>
 
 
 <!DOCTYPE html>

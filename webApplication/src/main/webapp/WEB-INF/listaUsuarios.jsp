@@ -1,11 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
-<%@ page import="com.market.svcentral.DTCliente"%>
-<%@ page import="com.market.svcentral.DTFecha" %>
+<%@ page import="webservices.Cliente"%>
+<%@ page import="webservices.PublicadorService"%>
+<%@ page import="webservices.Publicador"%>
 <%@ page import="java.util.Collection"%>
 <%@ page import="java.util.List"%>
 <%@ page import="java.util.ArrayList"%>
-<%@ page import="java.util.Map"%>  <!-- Añadir esta línea -->
+<%@ page import="java.util.Map"%>
 <%@ page import="java.io.File"%>
 
 <!DOCTYPE html>
@@ -20,25 +21,27 @@
     <h1>Hello World!</h1>
  
 <% 
+	PublicadorService p = new PublicadorService();
+	Publicador port = p.getPublicadorPort();
     Object usuariosObj = request.getAttribute("clientes");
-		
+	
     if (usuariosObj != null) {
-        List<DTCliente> listaClientes = (List<DTCliente>) usuariosObj;
+        List<Cliente> listaClientes = (List<Cliente>) usuariosObj;
 
         if (listaClientes != null && !listaClientes.isEmpty()) {
-            for(DTCliente l : listaClientes) {
-            	System.out.print(l.getImagenes());
+            for(Cliente l : listaClientes) {
+            	System.out.print(port.obtenerImagenUsuario(l.getNick()));
 %>				
                 <div class="card mb-3">
                     <div class="card-body">
                         <p>Nombre: <%= l.getNombre() %></p>
                         <p>Apellido: <%= l.getApellido() %></p>
                         <p>Correo: <%= l.getCorreo() %></p>
-                        <p>Nacimiento: <%= l.getNacimientoFormateado() %></p>
+                        <p>Nacimiento: <%=  %></p>
                         <a href="Usuarios?usuario=<%= l.getNick() %>">PERFIL</a>
                         
                         <h5>Imagen:</h5>
-                       		<img class="img" style="width: 500px; height: 500px;" alt="" src="media<%= l.getImagenes() %>">
+                       		<img class="img" style="width: 500px; height: 500px;" alt="" src="media<%= port.obtenerImagenUsuario(l.getNick()) %>">
 
 
                         </div>
