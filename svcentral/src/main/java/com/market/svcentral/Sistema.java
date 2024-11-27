@@ -193,7 +193,6 @@ public class Sistema implements ISistema {
     	return (cat.getTipo().equals("Padre"));
     }
     public void agregarProductoCategoria(String catName, int numRef) throws CategoriaException {
-    	System.out.println("\n\n\n" + catName);
     	try {
         	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
         	EntityManager em = emf.createEntityManager();
@@ -201,7 +200,6 @@ public class Sistema implements ISistema {
         	
         	Cat_Producto cat = em.find(Cat_Producto.class, catName);
         	Producto producto = em.find(Producto.class, numRef);
-        	System.out.println(cat + " - " + cat != null + " - " + catName);
         	
         	try {
         		producto.agregarCategorias(cat);
@@ -313,6 +311,24 @@ public class Sistema implements ISistema {
     		listarPadres.add(cat.getNombre());    		
     	}
     	return listarPadres;
+    }
+    
+    public List <String> listarSoloNombresCatProducto() {
+    	List<Cat_Producto> categorias = null;
+    	
+    	try {
+    		categorias = em.createQuery("SELECT c FROM Cat_Producto c", Cat_Producto.class).getResultList();
+    	} catch (Exception e) {
+    		System.out.print(e);
+    	}
+    	if(categorias == null) {
+    		return null;
+    	}
+    	List <String> listarCats = new ArrayList<>();
+    	for (Cat_Producto cat : categorias) {
+    		listarCats.add(cat.getNombre());    		
+    	}
+    	return listarCats;
     }
     
     public boolean existeCategoria(String nombre) {
@@ -945,7 +961,6 @@ public class Sistema implements ISistema {
 	    for (Cliente cliente : this.getAllClientes()) {
 	        for (OrdenDeCompra orden : cliente.getOrdenes()) {
 	        	for(Item i : orden.getItems().values()) {
-	        		System.out.println("\n\n"+cliente.getNick()+" "+orden.getNumero()+" "+i.getProducto().getNumRef()+" "+i.getProducto().getProveedor().getNick()+"\n\n");
 	        		if (i.getProducto().getProveedor().getNick() == proveedor.getNick() && !clientesQueHanComprado.contains(cliente)) {
 	        			clientesQueHanComprado.add(cliente);
 	        			break;

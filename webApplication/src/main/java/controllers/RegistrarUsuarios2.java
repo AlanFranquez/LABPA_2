@@ -1,8 +1,11 @@
 package controllers;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
+import java.util.Base64;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -64,25 +67,44 @@ public class RegistrarUsuarios2 extends HttpServlet {
 		String sitioWeb = request.getParameter("sitioWeb");
 
 		Part img = request.getPart("imagen");
-		
-		String fileName = null;
+
 		byte[] imageBytes = null;
-		if (img != null && img.getSize() > 0) {
-			String uploadDir = getServletContext().getRealPath("") + File.separator + "media";
-			File uploads = new File(uploadDir);
-			if (!uploads.exists()) {
-				uploads.mkdirs();
-			}
-			fileName = img.getSubmittedFileName();
-			File file = new File(uploads, fileName);
-			img.write(file.getAbsolutePath());
+
 			
-			imageBytes = Files.readAllBytes(file.toPath());
-		}
-		
-		for(Byte b : imageBytes) {
-			System.out.print(b + "");
-		}
+        if (img != null && img.getSize() > 0) {
+        	InputStream inputStream = img.getInputStream();
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            
+            byte[] buffer = new byte[1024];
+            int length;
+            
+            while ((length = inputStream.read(buffer)) != -1) {
+                byteArrayOutputStream.write(buffer, 0, length);
+            }
+            
+            imageBytes = byteArrayOutputStream.toByteArray();
+
+            // Guardar la imagen en la base de datos asociada al usuario
+
+            response.getWriter().write("Imagen subida y guardada para el usuario correctamente.");
+        } else {
+            response.getWriter().write("No se ha recibido ninguna imagen.");
+        }
+//		Part img = request.getPart("imagen");
+//		
+//		String fileName = null;
+//		if (img != null && img.getSize() > 0) {
+//			String uploadDir = getServletContext().getRealPath("") + File.separator + "media";
+//			File uploads = new File(uploadDir);
+//			if (!uploads.exists()) {
+//				uploads.mkdirs();
+//			}
+//			fileName = img.getSubmittedFileName();
+//		}
+//		
+//		for(Byte b : imageBytes) {
+//			System.out.print(b + "");
+//		}
 		//Validar campos requeridos
 		if (nombre == null || nombre.isEmpty() || apellido == null || apellido.isEmpty() || fechaNacimiento == null
 				|| fechaNacimiento.isEmpty() || contraseña == null || contraseña.isEmpty() || contraseña2 == null
@@ -115,9 +137,7 @@ public class RegistrarUsuarios2 extends HttpServlet {
             	usr = port.agregarCliente2(nombre, nick, apellido, correo, fechaNacimiento, contraseña, contraseña2);
             	System.out.println("Registrado Cliente");
             }
-            if (fileName != null) {
-            	port.agregarImagenUsuario(nick, imageBytes);
-            }
+            port.agregarImagenUsuario(nick, imageBytes);
             
             objSession.setAttribute("usuarioLogueado", usr);
             objSession.setAttribute("estado", "logueado"); 

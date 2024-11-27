@@ -113,12 +113,6 @@ if (user != null && port.getTipo(nickUser).equals("proveedor")) {
     <% if (prods == null || prods.isEmpty()) { %>
         <p class="text-center mt-4">No ha asignado productos :/</p>
     <% } else { 
-        List<DtProducto> listaDTProductos = new ArrayList<>();
-        
-        for (Producto pr : prods) {
-            DtProducto dtp = port.crearDTProd(pr);
-            listaDTProductos.add(dtp);
-        }
     %>
     
     

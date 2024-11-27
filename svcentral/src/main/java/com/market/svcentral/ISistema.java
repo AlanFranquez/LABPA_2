@@ -141,4 +141,6 @@ public interface ISistema {
 
 	public abstract Comentario getComentario(int id);
 
+	public abstract List<String> listarSoloNombresCatProducto();
+
 }

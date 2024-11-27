@@ -94,14 +94,11 @@ public class Publicador {
 	    // Persistir el cambio
 	    prob.getTransaction().begin();
 	    
-        String base64Image = Base64.getEncoder().encodeToString(imagenBytes);
-	    
-	    cliente.setImagen(base64Image);
+	    cliente.setImagen(Base64.getEncoder().encodeToString(imagenBytes));
 	    prob.merge(cliente);
 	    prob.getTransaction().commit();
 	    prob.close();
 	    prueba.close();
-	    em.merge(cliente);
 	    
 	    System.out.println("Se agrego la imagen al usuario: " + nickName);
 	}
@@ -162,7 +159,7 @@ public class Publicador {
 	@WebMethod
 	public Producto obtenerProducto(int numRef) {
 		Producto p = em.find(Producto.class, numRef);
-		 System.out.println("Se obtuvo el producto: " + p.getNombre() + " Numero Referencia: " + numRef);
+		// System.out.println("Se obtuvo el producto: " + p.getNombre() + " Numero Referencia: " + numRef);
 		return p;
 	}
 	
@@ -1318,7 +1315,7 @@ public class Publicador {
 		
 		@WebMethod
 		public List<String> listarCategoriasProducto(){
-			return s.listarSoloNombresPadresCat();
+			return s.listarSoloNombresCatProducto();
 		}
 		
 		@WebMethod
@@ -1326,6 +1323,39 @@ public class Publicador {
 			return this.obtenerProducto(numRef).getComprasUnicas();
 		}
 		
+		@WebMethod
+		public void saveImageForUser(String nick, byte[] imageBytes) {
+			EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+	        EntityManager em = emf.createEntityManager();
+	        em.getTransaction().begin();
+
+	        try {
+	            Usuario usuario = em.find(Usuario.class, nick);
+	            
+	            if (usuario != null) {
+	            	
+	                usuario.setImagen(Base64.getEncoder().encodeToString(imageBytes));
+	                em.merge(usuario);
+	                em.getTransaction().commit();
+	            } else {
+	                // Si el usuario no existe, hacer rollback y notificar al usuario
+	                em.getTransaction().rollback();
+	                throw new Exception("Usuario no encontrado");
+	            }
+	        } catch (Exception e) {
+	            if (em.getTransaction().isActive()) {
+	                em.getTransaction().rollback();
+	            }
+	            e.printStackTrace();
+	        } finally {
+	            if (em != null) {
+	                em.close();
+	            }
+	            if (emf != null) {
+	                emf.close();
+	            }
+	        }
+		}
 		@WebMethod
 		public void saludarDesdeSvCentral(String texto) {
 			App.saludar(texto);

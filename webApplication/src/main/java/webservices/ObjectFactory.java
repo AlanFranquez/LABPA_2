@@ -77,6 +77,7 @@ public class ObjectFactory {
     private final static QName _AgregarImagenesProd_QNAME = new QName("http://services/", "agregarImagenesProd");
     private final static QName _ObtenerProveedor_QNAME = new QName("http://services/", "obtenerProveedor");
     private final static QName _ObtenerProductos_QNAME = new QName("http://services/", "obtenerProductos");
+    private final static QName _SaveImageForUserResponse_QNAME = new QName("http://services/", "saveImageForUserResponse");
     private final static QName _GetComEstado_QNAME = new QName("http://services/", "getComEstado");
     private final static QName _GetImagenesDTProdResponse_QNAME = new QName("http://services/", "getImagenesDTProdResponse");
     private final static QName _AgregarImagenUsuarioString_QNAME = new QName("http://services/", "agregarImagenUsuarioString");
@@ -190,6 +191,7 @@ public class ObjectFactory {
     private final static QName _ListaUsuariosResponse_QNAME = new QName("http://services/", "listaUsuariosResponse");
     private final static QName _ImprimirPrecioTotalResponse_QNAME = new QName("http://services/", "imprimirPrecioTotalResponse");
     private final static QName _AgregarCliente2_QNAME = new QName("http://services/", "agregarCliente2");
+    private final static QName _SaveImageForUser_QNAME = new QName("http://services/", "saveImageForUser");
     private final static QName _CrearDTProdResponse_QNAME = new QName("http://services/", "crearDTProdResponse");
     private final static QName _GetComprasUnicasProductoResponse_QNAME = new QName("http://services/", "getComprasUnicasProductoResponse");
     private final static QName _ImprimirEspec_QNAME = new QName("http://services/", "imprimirEspec");
@@ -339,7 +341,7 @@ public class ObjectFactory {
     private final static QName _ObtenerProvDeProductoResponse_QNAME = new QName("http://services/", "obtenerProvDeProductoResponse");
     private final static QName _ListarRespuestas_QNAME = new QName("http://services/", "listarRespuestas");
     private final static QName _GetProductosCarritoResponse_QNAME = new QName("http://services/", "getProductosCarritoResponse");
-    private final static QName _AgregarImagenUsuarioArg1_QNAME = new QName("", "arg1");
+    private final static QName _SaveImageForUserArg1_QNAME = new QName("", "arg1");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: webservices
@@ -1829,6 +1831,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link SaveImageForUserResponse }
+     * 
+     */
+    public SaveImageForUserResponse createSaveImageForUserResponse() {
+        return new SaveImageForUserResponse();
+    }
+
+    /**
      * Create an instance of {@link AgregarImagenUsuarioString }
      * 
      */
@@ -2749,6 +2759,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link SaveImageForUser }
+     * 
+     */
+    public SaveImageForUser createSaveImageForUser() {
+        return new SaveImageForUser();
+    }
+
+    /**
      * Create an instance of {@link ImprimirPrecioTotalResponse }
      * 
      */
@@ -3495,6 +3513,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://services/", name = "obtenerProductos")
     public JAXBElement<ObtenerProductos> createObtenerProductos(ObtenerProductos value) {
         return new JAXBElement<ObtenerProductos>(_ObtenerProductos_QNAME, ObtenerProductos.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link SaveImageForUserResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://services/", name = "saveImageForUserResponse")
+    public JAXBElement<SaveImageForUserResponse> createSaveImageForUserResponse(SaveImageForUserResponse value) {
+        return new JAXBElement<SaveImageForUserResponse>(_SaveImageForUserResponse_QNAME, SaveImageForUserResponse.class, null, value);
     }
 
     /**
@@ -4512,6 +4539,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://services/", name = "agregarCliente2")
     public JAXBElement<AgregarCliente2> createAgregarCliente2(AgregarCliente2 value) {
         return new JAXBElement<AgregarCliente2>(_AgregarCliente2_QNAME, AgregarCliente2 .class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link SaveImageForUser }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://services/", name = "saveImageForUser")
+    public JAXBElement<SaveImageForUser> createSaveImageForUser(SaveImageForUser value) {
+        return new JAXBElement<SaveImageForUser>(_SaveImageForUser_QNAME, SaveImageForUser.class, null, value);
     }
 
     /**
@@ -5859,9 +5895,18 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link byte[]}{@code >}}
      * 
      */
+    @XmlElementDecl(namespace = "", name = "arg1", scope = SaveImageForUser.class)
+    public JAXBElement<byte[]> createSaveImageForUserArg1(byte[] value) {
+        return new JAXBElement<byte[]>(_SaveImageForUserArg1_QNAME, byte[].class, SaveImageForUser.class, ((byte[]) value));
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link byte[]}{@code >}}
+     * 
+     */
     @XmlElementDecl(namespace = "", name = "arg1", scope = AgregarImagenUsuario.class)
     public JAXBElement<byte[]> createAgregarImagenUsuarioArg1(byte[] value) {
-        return new JAXBElement<byte[]>(_AgregarImagenUsuarioArg1_QNAME, byte[].class, AgregarImagenUsuario.class, ((byte[]) value));
+        return new JAXBElement<byte[]>(_SaveImageForUserArg1_QNAME, byte[].class, AgregarImagenUsuario.class, ((byte[]) value));
     }
 
 }
