@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpSession;
 import webservices.Carrito;
 import webservices.Publicador;
 import webservices.PublicadorService;
+import webservices.Usuario;
 
 import java.io.IOException;
 import java.util.Base64;
@@ -31,7 +32,7 @@ public class MostrarImagen extends HttpServlet {
         }
 
         // Suponiendo que usuarioLogueado tiene un método para obtener el nick
-        String nick = ((webservices.Usuario) usuarioLogueado).getNick();
+        String nick = request.getParameter("nick");
         System.out.println("Mostrando imagen para el usuario: " + nick);
 
         PublicadorService service = new PublicadorService();
