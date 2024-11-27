@@ -101,54 +101,8 @@ public class PerfilProducto extends HttpServlet {
             }
             
             
+           
             
-/*
-            //webservices.DtProducto dtprod = port.crearDTProd(producto);
-            
-            List<CatProducto> cats = port.getCategoriasDTProd(producto);
-            
-            // Obtener la lista de rutas de imágenes
-            List<String> imagenes = port.getImagenesDTProd(producto);
-
-            // Lista para almacenar las imágenes codificadas en Base64
-            List<String> imagenesBase64 = new ArrayList<>();
-
-            // Procesar cada imagen
-            for (String imagePath : imagenes) {
-                try {
-                    // Obtener la ruta absoluta de la imagen (concatenar con la carpeta 'media')
-                    String absoluteImagePath = getServletContext().getRealPath("/media" + imagePath);
-                    
-                    // Crear un archivo a partir de la ruta
-                    File imageFile = new File(absoluteImagePath);
-
-                    // Leer la imagen
-                    BufferedImage image = ImageIO.read(imageFile);
-
-                    if (image != null) {
-                        // Convertir la imagen a un arreglo de bytes
-                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        ImageIO.write(image, "jpg", baos);
-                        byte[] imageBytes = baos.toByteArray();
-
-                        // Codificar la imagen en Base64
-                        String base64Image = Base64.getEncoder().encodeToString(imageBytes);
-
-                        // Agregar la imagen codificada a la lista
-                        imagenesBase64.add(base64Image);
-                    } else {
-                        System.err.println("No se pudo leer la imagen: " + absoluteImagePath);
-                    }
-                } catch (Exception e) {
-                    // Manejar cualquier error al procesar una imagen
-                    System.err.println("Error al procesar la imagen: " + imagePath);
-                    e.printStackTrace();
-                }
-            }*/
-            
-            // Guardar la lista completa de imágenes Base64 en el request
-            //request.setAttribute("imagenesBase64", imagenesBase64);
-            //request.setAttribute("categoriasp", cats);
             request.setAttribute("coms", coms);
             request.setAttribute("prod", producto);
             request.getRequestDispatcher("/WEB-INF/PerfilProducto.jsp").forward(request, response);

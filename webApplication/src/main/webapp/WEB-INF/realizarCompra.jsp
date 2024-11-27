@@ -77,8 +77,8 @@ if (usr != null && usr instanceof Proveedor) {
 
 <main class="container">
     <ul class="list-group list-group-flush">
-        <% List<Item> items = port.getItemsCarrito(usr.getNick()); %>
-        <% for(Item i : items) { %>
+        <% List<webservices.Item> items = port.getItemsCarrito(usr.getNick()); %>
+        <% for(webservices.Item i : items) { %>
             <li class="list-group-item d-flex column p-2 align-items-center mt-3" style="border: 1px solid gray; border-radius: 5px">
                 <div class="p-2">
                 	<%
@@ -88,7 +88,7 @@ if (usr != null && usr instanceof Proveedor) {
 <% if (imagenes == null || imagenes.isEmpty()) { %>
     <img alt="Img del producto" src="https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png" style="height: 100px; width: 100px;">
 <% } else { %>
-    <img alt="Img del producto" class="img-fluid mr-2"  style="max-width: 160px; height: auto;" src="media/<%= port.obtenerPrimeraImagenProducto(i.getProducto().getNumRef()) %>">
+    <img alt="Img del producto" src="http://localhost:8080/webApplication/mostrarImgProducto?productoId=<%= i.getProducto().getNumRef() %>" class="img-fluid mr-2"  style="max-width: 160px; height: auto;" src="media/<%= port.obtenerPrimeraImagenProducto(i.getProducto().getNumRef()) %>">
 <% } %>
                    
                 </div>

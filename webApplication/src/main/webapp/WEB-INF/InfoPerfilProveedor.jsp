@@ -32,6 +32,7 @@
     	
     	webservices.Proveedor usuarioLogueado = (webservices.Proveedor) request.getAttribute("usuario");
     	String nickUser = port.getNombreUsuario(usuarioLogueado);
+   
     %>
    
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2C2C2C;">
@@ -92,8 +93,8 @@ if (user != null && port.getTipo(nickUser).equals("proveedor")) {
                 <p>No Hay imagen disponible :/</p>
             <% } else { %>
                 <img class="img-fluid rounded-circle" style="width: 200px; height: 200px; object-fit: cover;" 
-         src="data:image/jpg;base64,<%= request.getAttribute("imagenEnBits") %>" 
-         alt="Imagen de cliente" />
+         src="mostrarImagen?nick=<%= user.getNick() %>"
+         alt="Imagen de Proveedor" />
             <% } %>            	
         </div>
         <div class="col-md-6 col-12">
@@ -128,7 +129,7 @@ if (user != null && port.getTipo(nickUser).equals("proveedor")) {
                     <div class="overflow-hidden" style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
                         <% if(port.obtenerImagenesProducto(id) != null && !port.obtenerImagenesProducto(id).isEmpty())  {%>
                         
-                          <img src="media/<%= port.obtenerImagenesProducto(id).get(0) %>"
+                          <img src="mostrarImgProducto?productoId=<%= id %>"
                              class="img-fluid" alt="Producto" 
                              style="width: 100%; height: 200px; object-fit: cover;" />
                         

@@ -44,8 +44,34 @@ public class Publicador {
         try {
             // Obtener la IP local de forma dinámica
             String ipServidor = obtenerIPLocal(); // IP de la máquina actual
-            // Construir la URL de publicación usando la IP local y el puerto definido
+            System.out.print(ipServidor);
             String url = "http://" + ipServidor + ":1234/publicador";
+
+            // Publicar el servicio en la URL generada
+            endpoint = Endpoint.publish(url, this);
+            System.out.println("Servicio publicado en: " + url);
+        } catch (Exception e) {
+            // Manejo de cualquier error al publicar el servicio
+            System.err.println("Error al publicar el servicio: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * Detener el servicio.
+     */
+    @WebMethod(exclude = true)
+    public void detener() {
+        if (endpoint != null && endpoint.isPublished()) {
+            endpoint.stop();
+            System.out.println("Servicio detenido correctamente.");
+        } else {
+            System.out.println("El servicio no estaba en ejecución.");
+        }
+    }
+    
+  
 
             // Publicar el servicio en la URL generada
             endpoint = Endpoint.publish(url, this);
@@ -90,7 +116,7 @@ public class Publicador {
 	    EntityManagerFactory prueba = Persistence.createEntityManagerFactory("miUnidadPersistencia");
 	    EntityManager prob = prueba.createEntityManager();
 	    
-	    Cliente cliente = prob.find(Cliente.class, nickName);
+	    Usuario cliente = prob.find(Usuario.class, nickName);
 	    // Persistir el cambio
 	    prob.getTransaction().begin();
 	    
@@ -104,8 +130,31 @@ public class Publicador {
 	}
 	
 	@WebMethod
+	public void agregarImagenProducto(int numRef, byte[] imagenBytes) {
+	    
+	    EntityManagerFactory prueba = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+	    EntityManager prob = prueba.createEntityManager();
+	    
+	    Producto prod = prob.find(Producto.class, numRef);
+	    // Persistir el cambio
+	    prob.getTransaction().begin();
+	    
+        String base64Image = Base64.getEncoder().encodeToString(imagenBytes);
+	    
+	    prod.agregarImagen(base64Image);
+	    prob.merge(prod);
+	    prob.getTransaction().commit();
+	    prob.close();
+	    prueba.close();
+	    System.out.println("Se agrego la imagen al Producto: " + prod.getNombre());
+	}
+	
+	@WebMethod
 	public String obtenerImagenUsuario(String nickName) {
-	    Cliente cliente = em.find(Cliente.class, nickName);
+	    EntityManagerFactory prueba = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+	    EntityManager prob = prueba.createEntityManager();
+
+	    Usuario cliente = prob.find(Usuario.class, nickName);
 
 	    if (cliente != null && cliente.getImagen() != null) {
 	        System.out.println("Imagen encontrada para el usuario: " + nickName);
@@ -180,16 +229,17 @@ public class Publicador {
 	}
 
 	@WebMethod
-	public void agregarCliente(String nombre, String nickname, String apellido, String correo, 
-			DTFecha fecha, String pass, String confPass) throws UsuarioRepetidoException {
+	public void agregarCliente(String nombre, String nickname, String apellido, String correo, int dia, int mes, int anio, String pass, String confPass) throws UsuarioRepetidoException {
 		System.out.println("Se registro un nuevo cliente con el nickname: " + nickname);
+		
+		DTFecha fecha = new DTFecha(dia, mes, anio);
 		s.agregarCliente(nombre, nickname, apellido, correo, fecha, pass, confPass);
 		
 	}
 	
 	@WebMethod
-	public void agregarProveedor(String nickname, String correo, String nombre, String apellido, DTFecha fecha, String compania, String link, String pass, String confPass) throws UsuarioRepetidoException {
-		
+	public void agregarProveedor(String nickname, String correo, String nombre, String apellido, int dia, int mes, int anio, String compania, String link, String pass, String confPass) throws UsuarioRepetidoException {
+		DTFecha fecha = new DTFecha(dia, mes, anio);
 		System.out.println("Se registro un nuevo proveedor con el nickname: " + nickname);
 		s.agregarProveedor(nickname, correo, nombre, apellido, fecha, compania, link, pass, confPass);
 		
@@ -472,7 +522,7 @@ public class Publicador {
 
 	@WebMethod
 	public Usuario obtenerUsuario(String nick) {
-		System.out.println("Se obtuvo el usuario: " + nick);
+		em = emf.createEntityManager();
 		return em.find(Usuario.class, nick);
 	}
 	
@@ -573,8 +623,37 @@ public class Publicador {
 
 	@WebMethod
 	public List<String> obtenerImagenesProducto(int numRef) {
-		return this.obtenerProducto(numRef).crearDT().getImagenes();
+		 EntityManagerFactory prueba = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+		    EntityManager prob = prueba.createEntityManager();
+
+		    Producto prod = prob.find(Producto.class, numRef);
+
+		    if (prod != null && prod.getImagenes() != null) {
+		        System.out.println("Imagen encontrada para el usuario: " + prod.getNombre());
+		        return prod.getImagenes();
+		    } else {
+		        System.out.println("No se encontró imagen para el usuario: " + prod.getNombre());
+		        return null;
+		    }
 	}
+	
+	@WebMethod
+	public String obtenerImagenesProductoPRIMERA(int numRef) {
+		 EntityManagerFactory prueba = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+		    EntityManager prob = prueba.createEntityManager();
+
+		    Producto prod = prob.find(Producto.class, numRef);
+
+		    if (prod != null && prod.getImagenes() != null) {
+		        System.out.println("Imagen encontrada para el usuario: " + prod.getNombre());
+		        return prod.getImagenes().get(0);
+		    } else {
+		        System.out.println("No se encontró imagen para el usuario: " + prod.getNombre());
+		        return null;
+		    }
+	}
+	
+	
 	
 	@WebMethod
 	public String imprimirNumRefOrden(String nickname, int orden) {
@@ -614,9 +693,11 @@ public class Publicador {
 	
 	@WebMethod
     public void agregarComentario(int comentarioId, String mensaje, String nickCliente, int numRef) {
-        emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-        em = emf.createEntityManager();
-		em.getTransaction().begin();
+       
+		EntityManagerFactory prueba = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+		EntityManager prubem = prueba.createEntityManager();
+		
+		prubem.getTransaction().begin();
 		
 		
         
@@ -631,16 +712,17 @@ public class Publicador {
 			e.printStackTrace();
 		}
 
+        System.out.println("El cliente " + nickCliente + "agrego un comentario al producto: " + obtenerProducto(numRef).getNombre());
+        prubem.persist(nuevoComentario);
+        prubem.merge(obtenerProducto(numRef));
+        prubem.merge(obtenerCliente(nickCliente));
+        prubem.flush();
+        prubem.getTransaction().commit();
         
-        em.persist(nuevoComentario);
-        em.merge(obtenerProducto(numRef));
-        em.merge(obtenerCliente(nickCliente));
-        em.flush();
-        em.getTransaction().commit();
+        prubem.close();
+        prueba.close();
         
-        
-        
-    }
+    } 
 	
 	@WebMethod
     public void agregarRespuesta(int comentarioPadre, String mensaje, int respuestaID, String nick) {
@@ -1040,8 +1122,13 @@ public class Publicador {
 	 * 
 	 */
 	@WebMethod
-	public List<Categoria> getCategoriasLista() {
-		return s.getCategoriasLista();
+	public Categoria[] getCategoriasLista(){
+		List<Categoria> categorias = null;
+	
+			 categorias = s.getCategoriasLista();
+		 
+		
+		return categorias.toArray(new Categoria[0]);
 	}
 
 	@WebMethod
@@ -1067,6 +1154,11 @@ public class Publicador {
 	public void realizarCompra(OrdenDeCompra ordenCompra, String nick) {
 		s.realizarCompra(ordenCompra, nick);
 		
+	}
+	
+	@WebMethod
+	public Categoria[] listaCatPRODS() {
+		return em.createQuery("SELECT c FROM Categoria c", Categoria.class).getResultList().toArray(new Categoria[0]);
 	}
 	
 	@WebMethod

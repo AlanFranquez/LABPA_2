@@ -34,11 +34,14 @@ if (port.getTipo(nickUser).equals("cliente")) {
 
 }
 
+List<String> imagenes = port.obtenerImagenesProducto(id);
+
 Boolean comproProducto = false;
 if (cl != null) {
 
 	comproProducto = port.comproProducto(nickUser, id);
 }
+
 %>
 
 <meta charset="UTF-8">
@@ -120,18 +123,39 @@ if (cl != null) {
 	</nav>
 
 
-	<main class="container mt-5">
+
+
+	<main class="container mt-5 mb-5">
 		<div class="row justify-content-center align-items-center">
 			<div class="col-md-6">
 				<div id="productCarousel" class="carousel slide"
 					data-bs-ride="carousel">
 
-
+					<!-- Controles de navegación -->
 					<button class="carousel-control-prev" type="button"
 						data-bs-target="#productCarousel" data-bs-slide="prev">
 						<span class="carousel-control-prev-icon" aria-hidden="true"></span>
 						<span class="visually-hidden">Previous</span>
 					</button>
+
+					<!-- Contenedor de las imágenes -->
+					<div class="carousel-inner">
+						<%
+						for (int i = 0; i < imagenes.size(); i++) {
+							boolean isActive = (i == 0);
+						%>
+						<div class="carousel-item <%=isActive ? "active" : ""%>">
+							<img alt="Imagen Producto" class="d-block w-100"
+								style="overflow: hidden; height: 800px'"
+								src="mostrarImgProducto?productoId=<%=id%>&indice=<%=i%>"
+								class="d-block w-100">
+						</div>
+						<%
+						}
+						%>
+					</div>
+
+					<!-- Controles de navegación -->
 					<button class="carousel-control-next" type="button"
 						data-bs-target="#productCarousel" data-bs-slide="next">
 						<span class="carousel-control-next-icon" aria-hidden="true"></span>
@@ -191,20 +215,30 @@ if (cl != null) {
 
 			</div>
 		</div>
-
+		
+		<div>
+		
 		<%
-		if (port.getTipo(nickUser).equals("cliente") && comproProducto) {
-		%>
-		<div class="mt-5">
-			<a
-				href="RealizarReclamo?numRef=<%=prod != null ? port.imprimirNumRef(id) : ""%>"
-				class="btn btn-warning">Realizar Reclamo</a>
+	if (port.getTipo(nickUser).equals("cliente") && comproProducto) {
+	%>
+	<div class="mt-5 container">
+		<a
+			href="RealizarReclamo?numRef=<%=prod != null ? port.imprimirNumRef(id) : ""%>"
+			class="btn btn-warning">Realizar Reclamo</a>
+	</div>
+	<%
+	}
+	%>
+		
 		</div>
-		<%
-		}
-		%>
+
+
 	</main>
 
+	
+
+	<br class="mt-5">
+	<br>
 	<br>
 	<br>
 
@@ -289,90 +323,104 @@ if (cl != null) {
 		}
 		%>
 	</div>
-	
+
 	<div class="container mt-5">
 
-<%
-for (Comentario c : comentarios) {
-%>
-<div class="card card-body">
-    <div>
-        <div class="card mt-2" style="border: none;">
-            <div class="card-body">
-                <div class="d-flex align-items-start">
-                    <img class="img-fluid rounded-circle" 
-                		style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;" 
-         		 		src="mostrarImagen?nick=<%= c.getAutor().getNick() %>" 
-         				alt="Imagen de cliente" />
-         				<div class="ml-3" style="margin-left: 15px;">
-                        <h6 style="font-size: 1.1em;"><b><%=port.imprimirAutor(c.getNumero(), id)%></b></h6>
-                        <p style="font-size: 0.9em;"><%=port.imprimirTextoComentario(c.getNumero(), id)%></p>
-                        <small class="text-muted"><%=port.imprimirFechaComentario(c.getNumero(), id)%></small>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+		<%
+		for (Comentario c : comentarios) {
+		%>
+		<div class="card card-body">
+			<div>
+				<div class="card mt-2" style="border: none;">
+					<div class="card-body">
+						<div class="d-flex align-items-start">
+							<img src="mostrarImagen?nick=<%= nickUser %>" alt="Autor" class="mr-3"
+								style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;">
+							<div class="ml-3" style="margin-left: 15px;">
+								<h6 style="font-size: 1.1em;">
+									<b><%=port.imprimirAutor(c.getNumero(), id)%></b>
+								</h6>
+								<p style="font-size: 0.9em;"><%=port.imprimirTextoComentario(c.getNumero(), id)%></p>
+								<small class="text-muted"><%=port.imprimirFechaComentario(c.getNumero(), id)%></small>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 
-    <% if (comproProducto) { %>
-    <div class="accordion" id="accordion<%=c.getNumero()%>">
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="heading<%=c.getNumero()%>">
-                <button class="accordion-button collapsed" type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#collapse<%=c.getNumero()%>"
-                        aria-expanded="false" aria-controls="collapse<%=c.getNumero()%>">
-                    Responder
-                </button>
-            </h2>
-            <div id="collapse<%=c.getNumero()%>"
-                 class="accordion-collapse collapse"
-                 aria-labelledby="heading<%=c.getNumero()%>">
-                <div class="accordion-body">
-                    <form id="formularioRespuesta" action="enviarRespuesta" method="post">
-                        <textarea name="respuesta" class="form-control" rows="3"
-                                  placeholder="Escribe tu respuesta..." required></textarea>
-                        <input type="hidden" name="dtprod" value="<%=id%>">
-                        <input type="hidden" name="comentarioId" value="<%=c.getNumero()%>">
-                        <button class="btn btn-primary mt-3" type="submit">Enviar Respuesta</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <% } %>
+			<%
+			if (comproProducto) {
+			%>
+			<div class="accordion" id="accordion<%=c.getNumero()%>">
+				<div class="accordion-item">
+					<h2 class="accordion-header" id="heading<%=c.getNumero()%>">
+						<button class="accordion-button collapsed" type="button"
+							data-bs-toggle="collapse"
+							data-bs-target="#collapse<%=c.getNumero()%>"
+							aria-expanded="false" aria-controls="collapse<%=c.getNumero()%>">
+							Responder</button>
+					</h2>
+					<div id="collapse<%=c.getNumero()%>"
+						class="accordion-collapse collapse"
+						aria-labelledby="heading<%=c.getNumero()%>">
+						<div class="accordion-body">
+							<form id="formularioRespuesta" action="enviarRespuesta"
+								method="post">
+								<textarea name="respuesta" class="form-control" rows="3"
+									placeholder="Escribe tu respuesta..." required></textarea>
+								<input type="hidden" name="dtprod" value="<%=id%>"> <input
+									type="hidden" name="comentarioId" value="<%=c.getNumero()%>">
+								<button class="btn btn-primary mt-3" type="submit">Enviar
+									Respuesta</button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			<%
+			}
+			%>
 
-    <div class="mt-3">
-        <h6>Respuestas:</h6>
-        <%
-        List<Comentario> respuestas = port.listarRespuestas(id, c.getNumero());
-        if (respuestas == null || respuestas.isEmpty()) {
-        %>
-        <div class="alert alert-secondary" role="alert">No hay respuestas a este comentario.</div>
-        <% } else { %>
-        <% for (Comentario r : respuestas) { %>
-        <div class="card mt-2" style="border: none;">
-            <div class="card-body">
-                <div class="d-flex align-items-start">
-                	<img class="img-fluid rounded-circle" 
-                		style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;" 
-         		 		src="mostrarImagen?nick=<%= r.getAutor().getNick() %>" 
-         				alt="Imagen de cliente" />
-                    <div class="ml-3" style="margin-left: 15px;">
-                        <h6 class="mt-0" style="font-size: 1.1em;"><%=r.getAutor().getNick()%></h6>
-                        <p style="font-size: 0.9em;"><%=r.getTexto()%></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <% } %>
-        <% } %>
-    </div>
-</div>
-<% } %>
+			<div class="mt-3">
+				<h6>Respuestas:</h6>
+				<%
+				List<webservices.Comentario> respuestas = port.listarRespuestas(id, c.getNumero());
+				if (respuestas == null || respuestas.isEmpty()) {
+				%>
+				<div class="alert alert-secondary" role="alert">No hay
+					respuestas a este comentario.</div>
+				<%
+				} else {
+				%>
+				<%
+				for (Comentario r : respuestas) {
+				%>
+				<div class="card mt-2" style="border: none;">
+					<div class="card-body">
+						<div class="d-flex align-items-start">
+							<img src="mostrarImagen?nick=<%= r.getAutor().getNick() %>"  alt="" class="mr-3"
+								style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;">
+							<div class="ml-3" style="margin-left: 15px;">
+								<h6 class="mt-0" style="font-size: 1.1em;"><%=r.getAutor().getNick()%></h6>
+								<p style="font-size: 0.9em;"><%=r.getTexto()%></p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<%
+				}
+				%>
+				<%
+				}
+				%>
+			</div>
+		</div>
+		<%
+		}
+		%>
 
 
-</div>
+	</div>
 
 	<!-- PARTE FINAL PAGINA -->
 

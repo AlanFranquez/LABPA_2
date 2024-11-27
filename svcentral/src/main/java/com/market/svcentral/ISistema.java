@@ -143,4 +143,11 @@ public interface ISistema {
 
 	public abstract List<String> listarSoloNombresCatProducto();
 
+
+	public void agregarComentario(int numRef, int comentarioId, String mensaje, String nickCliente) throws ProductoException;
+
+	public void agregarImagenUsuarioBytes(String nickName, byte[] imagenBytes);
+	
+	public void agregarImagenProductoBytes(int numRef, byte[] imagenBytes);
 }
+

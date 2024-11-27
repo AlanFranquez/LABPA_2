@@ -3,6 +3,7 @@ package com.market.svcentral;
 import java.awt.Image;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.jws.WebMethod;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -683,7 +685,7 @@ public class Sistema implements ISistema {
 	    	
 		 List<Categoria> categorias = null;
 		 try {
-			 categorias = em.createQuery("SELECT c FROM Categoria", Categoria.class).getResultList();
+			 categorias = em.createQuery("SELECT c FROM Categoria c", Categoria.class).getResultList();
 		 } catch (Exception e) {
 			 em.close();
 			 System.out.print(e);
@@ -1127,6 +1129,43 @@ public class Sistema implements ISistema {
 	     em.close();
 	     emf.close();
 	 }
+		public void agregarImagenUsuarioBytes(String nickName, byte[] imagenBytes) {
+		    
+		    EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+		    EntityManager em= emf.createEntityManager();
+		    
+		    Usuario cliente = em.find(Usuario.class, nickName);
+		    // Persistir el cambio
+		    em.getTransaction().begin();
+		    
+	        String base64Image = Base64.getEncoder().encodeToString(imagenBytes);
+		    
+		    cliente.setImagen(base64Image);
+		    em.merge(cliente);
+		    em.getTransaction().commit();
+		    em.close();
+		    emf.close();
+		    System.out.println("Se agrego la imagen al usuario: " + nickName);
+		}
+		
+		public void agregarImagenProductoBytes(int numRef, byte[] imagenBytes) {
+		    
+		    EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+		    EntityManager em = emf.createEntityManager();
+		    
+		    Producto prod = em.find(Producto.class, numRef);
+		    // Persistir el cambio
+		    em.getTransaction().begin();
+		    
+	        String base64Image = Base64.getEncoder().encodeToString(imagenBytes);
+		    
+		    prod.agregarImagen(base64Image);
+		    em.merge(prod);
+		    em.getTransaction().commit();
+		    em.close();
+		    emf.close();
+		    System.out.println("Se agrego la imagen al Producto: " + prod.getNombre());
+		}
 	 
 	 public Cliente getClientePorCorreo(String email) {
 		 try {
