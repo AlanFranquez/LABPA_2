@@ -101,15 +101,14 @@ public class Publicador {
 	    prob.getTransaction().commit();
 	    prob.close();
 	    prueba.close();
+	    em.merge(cliente);
+	    
 	    System.out.println("Se agrego la imagen al usuario: " + nickName);
 	}
 	
 	@WebMethod
 	public String obtenerImagenUsuario(String nickName) {
-	    EntityManagerFactory prueba = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-	    EntityManager prob = prueba.createEntityManager();
-
-	    Cliente cliente = prob.find(Cliente.class, nickName);
+	    Cliente cliente = em.find(Cliente.class, nickName);
 
 	    if (cliente != null && cliente.getImagen() != null) {
 	        System.out.println("Imagen encontrada para el usuario: " + nickName);
@@ -1054,6 +1053,13 @@ public class Publicador {
 		System.out.println("se creo un nuevo producto para el proveedor: " + proveedor);
 		s.agregarProducto(titulo, numRef, descripcion, especificaciones, precio, proveedor, stock);
 	}
+	
+	@WebMethod
+	public void notificarClientesNuevoProducto(int numRef, String nick) {
+		Producto prod = this.obtenerProducto(numRef);
+		Proveedor prov = this.obtenerProveedor(nick);
+		s.notificarClientesNuevoProducto(prod, prov);
+	}
 
 	@WebMethod
 	public void agregarProductoCategoria(String catName, int numRef) throws CategoriaException {
@@ -1308,6 +1314,11 @@ public class Publicador {
 			em.getTransaction().commit();
 			em.close();
 			emf.close();
+		}
+		
+		@WebMethod
+		public List<String> listarCategoriasProducto(){
+			return s.listarSoloNombresPadresCat();
 		}
 		
 		@WebMethod

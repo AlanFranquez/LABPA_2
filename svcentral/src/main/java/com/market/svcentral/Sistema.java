@@ -141,10 +141,11 @@ public class Sistema implements ISistema {
         }
         Producto producto = new Producto(titulo, descripcion, precio, numRef, especificaciones, proveedor, stock);
         try {
-        	proveedor.agregarProd(producto);
         	em.getTransaction().begin();
+        	proveedor.agregarProd(producto);
         	
         	em.persist(producto);
+        	em.merge(proveedor);
         	
         	em.getTransaction().commit();
         	em.close();
@@ -936,9 +937,9 @@ public class Sistema implements ISistema {
 	 public List<Cliente> obtenerClientesQueHanCompradoDelProveedor(Proveedor proveedor) {
 	    List<Cliente> clientesQueHanComprado = new ArrayList<Cliente>();
 	    
-	    for (Cliente cliente : getAllClientes()) {
+	    for (Cliente cliente : this.getAllClientes()) {
 	        for (OrdenDeCompra orden : cliente.getOrdenes()) {
-	            if (orden.getProveedor().equals(proveedor)) {
+	            if (orden.getProveedor().getNick().equals(proveedor.getNick())) {
 	                clientesQueHanComprado.add(cliente);
 	                break;
 	            }

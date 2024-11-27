@@ -103,6 +103,7 @@ public class ObjectFactory {
     private final static QName _NotificarComentario_QNAME = new QName("http://services/", "notificarComentario");
     private final static QName _ImprimirFechaComentarioResponse_QNAME = new QName("http://services/", "imprimirFechaComentarioResponse");
     private final static QName _ImprimirEstadoOrdenResponse_QNAME = new QName("http://services/", "imprimirEstadoOrdenResponse");
+    private final static QName _ListarCategoriasProducto_QNAME = new QName("http://services/", "listarCategoriasProducto");
     private final static QName _AsignarlePadreCategoriaResponse_QNAME = new QName("http://services/", "asignarlePadreCategoriaResponse");
     private final static QName _ComprobarCliente_QNAME = new QName("http://services/", "comprobarCliente");
     private final static QName _ImprimirFechaClienteResponse_QNAME = new QName("http://services/", "imprimirFechaClienteResponse");
@@ -257,6 +258,7 @@ public class ObjectFactory {
     private final static QName _NuevoEstado_QNAME = new QName("http://services/", "nuevoEstado");
     private final static QName _ObtenerCarritoDeCliente_QNAME = new QName("http://services/", "obtenerCarritoDeCliente");
     private final static QName _ObtenerDTProducto_QNAME = new QName("http://services/", "obtenerDTProducto");
+    private final static QName _NotificarClientesNuevoProductoResponse_QNAME = new QName("http://services/", "notificarClientesNuevoProductoResponse");
     private final static QName _ComprasUnicasProducto_QNAME = new QName("http://services/", "comprasUnicasProducto");
     private final static QName _ImprimirEstadoOrden_QNAME = new QName("http://services/", "imprimirEstadoOrden");
     private final static QName _GetPuntajeDTProdResponse_QNAME = new QName("http://services/", "getPuntajeDTProdResponse");
@@ -319,6 +321,7 @@ public class ObjectFactory {
     private final static QName _GetNombreUsuarioResponse_QNAME = new QName("http://services/", "getNombreUsuarioResponse");
     private final static QName _AgregarProveedorResponse_QNAME = new QName("http://services/", "agregarProveedorResponse");
     private final static QName _EditarCantidadItemResponse_QNAME = new QName("http://services/", "editarCantidadItemResponse");
+    private final static QName _NotificarClientesNuevoProducto_QNAME = new QName("http://services/", "notificarClientesNuevoProducto");
     private final static QName _CrearDTItemResponse_QNAME = new QName("http://services/", "crearDTItemResponse");
     private final static QName _GetNickDTCliente_QNAME = new QName("http://services/", "getNickDTCliente");
     private final static QName _ListaUsuarios_QNAME = new QName("http://services/", "listaUsuarios");
@@ -327,6 +330,7 @@ public class ObjectFactory {
     private final static QName _AgregarCliente_QNAME = new QName("http://services/", "agregarCliente");
     private final static QName _Saludar_QNAME = new QName("http://services/", "saludar");
     private final static QName _EliminarProductoDelCarritoResponse_QNAME = new QName("http://services/", "eliminarProductoDelCarritoResponse");
+    private final static QName _ListarCategoriasProductoResponse_QNAME = new QName("http://services/", "listarCategoriasProductoResponse");
     private final static QName _MostrarCompraCliente_QNAME = new QName("http://services/", "mostrarCompraCliente");
     private final static QName _GetRespuestas_QNAME = new QName("http://services/", "getRespuestas");
     private final static QName _GetnickProvDTProd_QNAME = new QName("http://services/", "getnickProvDTProd");
@@ -985,6 +989,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link NotificarClientesNuevoProductoResponse }
+     * 
+     */
+    public NotificarClientesNuevoProductoResponse createNotificarClientesNuevoProductoResponse() {
+        return new NotificarClientesNuevoProductoResponse();
+    }
+
+    /**
      * Create an instance of {@link GetNickDTClienteResponse }
      * 
      */
@@ -1361,6 +1373,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link NotificarClientesNuevoProducto }
+     * 
+     */
+    public NotificarClientesNuevoProducto createNotificarClientesNuevoProducto() {
+        return new NotificarClientesNuevoProducto();
+    }
+
+    /**
      * Create an instance of {@link CrearDTItemResponse }
      * 
      */
@@ -1470,6 +1490,14 @@ public class ObjectFactory {
      */
     public EliminarProductoDelCarritoResponse createEliminarProductoDelCarritoResponse() {
         return new EliminarProductoDelCarritoResponse();
+    }
+
+    /**
+     * Create an instance of {@link ListarCategoriasProductoResponse }
+     * 
+     */
+    public ListarCategoriasProductoResponse createListarCategoriasProductoResponse() {
+        return new ListarCategoriasProductoResponse();
     }
 
     /**
@@ -2230,6 +2258,14 @@ public class ObjectFactory {
      */
     public VaciarCarrito createVaciarCarrito() {
         return new VaciarCarrito();
+    }
+
+    /**
+     * Create an instance of {@link ListarCategoriasProducto }
+     * 
+     */
+    public ListarCategoriasProducto createListarCategoriasProducto() {
+        return new ListarCategoriasProducto();
     }
 
     /**
@@ -3696,6 +3732,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ListarCategoriasProducto }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://services/", name = "listarCategoriasProducto")
+    public JAXBElement<ListarCategoriasProducto> createListarCategoriasProducto(ListarCategoriasProducto value) {
+        return new JAXBElement<ListarCategoriasProducto>(_ListarCategoriasProducto_QNAME, ListarCategoriasProducto.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link AsignarlePadreCategoriaResponse }{@code >}}
      * 
      */
@@ -5082,6 +5127,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link NotificarClientesNuevoProductoResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://services/", name = "notificarClientesNuevoProductoResponse")
+    public JAXBElement<NotificarClientesNuevoProductoResponse> createNotificarClientesNuevoProductoResponse(NotificarClientesNuevoProductoResponse value) {
+        return new JAXBElement<NotificarClientesNuevoProductoResponse>(_NotificarClientesNuevoProductoResponse_QNAME, NotificarClientesNuevoProductoResponse.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link ComprasUnicasProducto }{@code >}}
      * 
      */
@@ -5640,6 +5694,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link NotificarClientesNuevoProducto }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://services/", name = "notificarClientesNuevoProducto")
+    public JAXBElement<NotificarClientesNuevoProducto> createNotificarClientesNuevoProducto(NotificarClientesNuevoProducto value) {
+        return new JAXBElement<NotificarClientesNuevoProducto>(_NotificarClientesNuevoProducto_QNAME, NotificarClientesNuevoProducto.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link CrearDTItemResponse }{@code >}}
      * 
      */
@@ -5709,6 +5772,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://services/", name = "eliminarProductoDelCarritoResponse")
     public JAXBElement<EliminarProductoDelCarritoResponse> createEliminarProductoDelCarritoResponse(EliminarProductoDelCarritoResponse value) {
         return new JAXBElement<EliminarProductoDelCarritoResponse>(_EliminarProductoDelCarritoResponse_QNAME, EliminarProductoDelCarritoResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ListarCategoriasProductoResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://services/", name = "listarCategoriasProductoResponse")
+    public JAXBElement<ListarCategoriasProductoResponse> createListarCategoriasProductoResponse(ListarCategoriasProductoResponse value) {
+        return new JAXBElement<ListarCategoriasProductoResponse>(_ListarCategoriasProductoResponse_QNAME, ListarCategoriasProductoResponse.class, null, value);
     }
 
     /**

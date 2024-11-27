@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -14,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
+import webservices.Proveedor;
 import webservices.Publicador;
 import webservices.PublicadorService;
 
@@ -28,19 +28,11 @@ public class ProductoServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	/*PublicadorService p = new PublicadorService();
+    	PublicadorService p = new PublicadorService();
         Publicador port = p.getPublicadorPort();
 
         // Obtener la lista de categorías
-        List<Categoria> listacats = port.getCategoriasLista();
-        List<String> listaString = new ArrayList<>();
-
-        for (Categoria cat : listacats) {
-            if (cat instanceof Cat_Producto) {
-                String stringUnico = cat.getNombre();
-                listaString.add(stringUnico);
-            }
-        }
+        List<String> listaString = port.listarCategoriasProducto();
 
         // Establecer el atributo de categorías antes de redirigir al JSP
         if (!listaString.isEmpty()) {
@@ -53,12 +45,11 @@ public class ProductoServlet extends HttpServlet {
 
         // Redirige al JSP de registro de productos
         request.getRequestDispatcher("/WEB-INF/RegistrarProducto.jsp").forward(request, response);
-        */
+        
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        /*
     	HttpSession objSession = request.getSession();
         Proveedor prov = (Proveedor) objSession.getAttribute("usuarioLogueado");
         PublicadorService p = new PublicadorService();
@@ -71,8 +62,6 @@ public class ProductoServlet extends HttpServlet {
             return;
         }
         
-        objSession.setAttribute("usuarioLogueado", prov);
-
         // Recibir los datos del formulario
         String titulo = request.getParameter("titulo");
         String referenciaStr = request.getParameter("referencia");
@@ -143,44 +132,26 @@ public class ProductoServlet extends HttpServlet {
             if (!imagenesUrls.isEmpty()) {
             	for (String img : imagenesUrls) {
                     System.out.print(img);
-                    port.obtenerProducto(referencia).agregarImagen(img);
+                    port.agregarImagenesProd(referencia, img);
                 }
             }
             
 
-            Cat_Producto catp1 = new Cat_Producto(categoriaSeleccionada);
-            catp1.agregarProducto(port.obtenerProducto(referencia));
-            
-            EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
-            EntityManager em = emf.createEntityManager();
-            
-            em.getTransaction().begin();
-            
-            
             try {
-				port.agregarProductoCategoria(catp1.getNombre(), referencia);
-			} catch (CategoriaException e) {
-				// TODO Auto-generated catch block
+				port.agregarProductoCategoria(categoriaSeleccionada, referencia);
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
             
-            prov.agregarProd(port.obtenerProducto(referencia));
-            em.persist(port.obtenerProducto(referencia));
-            response.sendRedirect("perfilProveedor?nickname=" + prov.getNick());
-            em.getTransaction().commit();
-            em.close();
-            emf.close();
-            
-
             // Notificar a los clientes sobre el nuevo producto
-            sist.notificarClientesNuevoProducto(sist.getProducto(referencia), prov);
-
+            System.out.println(prov.getNick());
+            port.notificarClientesNuevoProducto(referencia, prov.getNick());
+            
             // Redirigir al perfil del proveedor
             response.sendRedirect("perfilProveedor?nickname=" + prov.getNick());
         } else {
             request.setAttribute("error", "El precio debe ser mayor a cero.");
             request.getRequestDispatcher("/WEB-INF/RegistrarProducto.jsp").forward(request, response);
         }
-        */
     }
 }
