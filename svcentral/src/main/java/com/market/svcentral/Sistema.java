@@ -193,18 +193,23 @@ public class Sistema implements ISistema {
     	return (cat.getTipo().equals("Padre"));
     }
     public void agregarProductoCategoria(String catName, int numRef) throws CategoriaException {
-        try {
+    	System.out.println("\n\n\n" + catName);
+    	try {
         	EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
         	EntityManager em = emf.createEntityManager();
         	em.getTransaction().begin();
         	
         	Cat_Producto cat = em.find(Cat_Producto.class, catName);
         	Producto producto = em.find(Producto.class, numRef);
-        	
         	System.out.println(cat + " - " + cat != null + " - " + catName);
         	
-        	producto.agregarCategorias(cat);
-        	cat.agregarProducto(producto);
+        	try {
+        		producto.agregarCategorias(cat);
+        		cat.agregarProducto(producto);
+        		
+        	}catch(Exception e) {
+        		e.printStackTrace();
+        	}
         	
         	em.getTransaction().commit();
         	em.close();
@@ -939,10 +944,13 @@ public class Sistema implements ISistema {
 	    
 	    for (Cliente cliente : this.getAllClientes()) {
 	        for (OrdenDeCompra orden : cliente.getOrdenes()) {
-	            if (orden.getProveedor().getNick().equals(proveedor.getNick())) {
-	                clientesQueHanComprado.add(cliente);
-	                break;
-	            }
+	        	for(Item i : orden.getItems().values()) {
+	        		System.out.println("\n\n"+cliente.getNick()+" "+orden.getNumero()+" "+i.getProducto().getNumRef()+" "+i.getProducto().getProveedor().getNick()+"\n\n");
+	        		if (i.getProducto().getProveedor().getNick() == proveedor.getNick() && !clientesQueHanComprado.contains(cliente)) {
+	        			clientesQueHanComprado.add(cliente);
+	        			break;
+	        		}
+	        	}
 	        }
 	    }
 	    
