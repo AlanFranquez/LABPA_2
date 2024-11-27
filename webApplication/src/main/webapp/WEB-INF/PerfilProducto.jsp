@@ -300,10 +300,11 @@ for (Comentario c : comentarios) {
         <div class="card mt-2" style="border: none;">
             <div class="card-body">
                 <div class="d-flex align-items-start">
-                    <img src="media/"
-                         alt="Autor" class="mr-3"
-                         style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;">
-                    <div class="ml-3" style="margin-left: 15px;">
+                    <img class="img-fluid rounded-circle" 
+                		style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;" 
+         		 		src="mostrarImagen?nick=<%= c.getAutor().getNick() %>" 
+         				alt="Imagen de cliente" />
+         				<div class="ml-3" style="margin-left: 15px;">
                         <h6 style="font-size: 1.1em;"><b><%=port.imprimirAutor(c.getNumero(), id)%></b></h6>
                         <p style="font-size: 0.9em;"><%=port.imprimirTextoComentario(c.getNumero(), id)%></p>
                         <small class="text-muted"><%=port.imprimirFechaComentario(c.getNumero(), id)%></small>
@@ -353,9 +354,10 @@ for (Comentario c : comentarios) {
         <div class="card mt-2" style="border: none;">
             <div class="card-body">
                 <div class="d-flex align-items-start">
-                    <img src="media/"
-                         alt="Autor" class="mr-3"
-                         style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;">
+                	<img class="img-fluid rounded-circle" 
+                		style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;" 
+         		 		src="mostrarImagen?nick=<%= r.getAutor().getNick() %>" 
+         				alt="Imagen de cliente" />
                     <div class="ml-3" style="margin-left: 15px;">
                         <h6 class="mt-0" style="font-size: 1.1em;"><%=r.getAutor().getNick()%></h6>
                         <p style="font-size: 0.9em;"><%=r.getTexto()%></p>
