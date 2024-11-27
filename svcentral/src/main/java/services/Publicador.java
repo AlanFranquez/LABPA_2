@@ -66,10 +66,44 @@ public class Publicador {
 
 	List<Producto> productos = null;
 
-	@WebMethod(exclude = true)
-	public void publicar() {
-		endpoint = Endpoint.publish("http://192.168.1.9:1234/publicador", this);
-	}
+	// ======================= MÉTODOS DE SERVICIO ======================= //
+
+    /**
+     * Publicar el servicio.
+     */
+    @WebMethod(exclude = true)
+    public void publicar() {
+        try {
+            // Obtener la IP local de forma dinámica
+            String ipServidor = obtenerIPLocal(); // IP de la máquina actual
+            System.out.print(ipServidor);
+            String url = "http://" + ipServidor + ":1234/publicador";
+
+            // Publicar el servicio en la URL generada
+            endpoint = Endpoint.publish(url, this);
+            System.out.println("Servicio publicado en: " + url);
+        } catch (Exception e) {
+            // Manejo de cualquier error al publicar el servicio
+            System.err.println("Error al publicar el servicio: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * Detener el servicio.
+     */
+    @WebMethod(exclude = true)
+    public void detener() {
+        if (endpoint != null && endpoint.isPublished()) {
+            endpoint.stop();
+            System.out.println("Servicio detenido correctamente.");
+        } else {
+            System.out.println("El servicio no estaba en ejecución.");
+        }
+    }
+    
+  
 
 	/**
 	 * Método para obtener la URL del servicio desde el archivo de configuración.

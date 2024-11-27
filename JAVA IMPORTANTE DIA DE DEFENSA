@@ -1,0 +1,12 @@
+¿Que hacer si no es la version de java correcta?
+
+mvn -v
+sudo apt install openjdk-8-jdk
+sudo update-alternatives --config java
+nano ~/.bashrc
+
+cambiar el export por la version de java
+
+source ~/.bashrc
+
+
