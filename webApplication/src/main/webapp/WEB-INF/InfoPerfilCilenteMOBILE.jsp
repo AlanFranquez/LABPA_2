@@ -69,7 +69,7 @@
 <main class="container my-5">
     <section class="row justify-content-center align-items-center text-center text-md-start">
         <div class="col-md-4 col-12 mb-4">
-            <img class="img-fluid rounded-circle" style="width: 200px; height: 200px; object-fit: cover;" src="media/<%= usr.getImagen() %>" alt="Imagen de cliente" />
+            <img class="img-fluid rounded-circle" style="width: 200px; height: 200px; object-fit: cover;"  src="mostrarImagen?nick=<%= nickUser %>"  alt="Imagen de cliente" />
         </div>
         <div class="col-md-6 col-12">
             <p>Tipo de Usuario: <b>Cliente</b></p>

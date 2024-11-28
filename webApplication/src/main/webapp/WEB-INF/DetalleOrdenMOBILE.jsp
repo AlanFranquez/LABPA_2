@@ -108,7 +108,7 @@
                 <h1><%= port.imprimirNumRef(item.getProducto().getNumRef()) %></h1>
                 <a class="link" href="perfilProductoMOBILE?producto=<%= port.imprimirNumRef(item.getProducto().getNumRef())%>">Ver Producto</a>
                 <li>
-                    <p><strong>Nombre: </strong> <%= port.imprimirNumRef(item.getProducto().getNumRef())%></p>
+                    <p><strong>Nombre: </strong> <%= port.imprimirNombreProd(item.getProducto().getNumRef())%></p>
                     <p><strong>Precio Unitario: </strong> $<%= port.imprimirPrecioProd(item.getProducto().getNumRef()) %> USD</p>
                     <p><strong>Cantidad:</strong> <%= port.imprimirCantidad(orden.getNumero(), usr.getNick(), item.getProducto().getNumRef()) %></p>
                     <p><strong>Subtotal: </strong> $<%= port.imprimirSubTotal(orden.getNumero(), usr.getNick(), item.getProducto().getNumRef()) %></p>

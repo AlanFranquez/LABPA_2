@@ -79,19 +79,35 @@ if (cl != null) {
 
     <main class="container mt-5">
         <div class="row justify-content-center align-items-center">
-            <div class="col-lg-6 col-md-8">
-                <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
-                    
-                    <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
-                </div>
-            </div>
+            <div class="col-md-6">
+				<div id="productCarousel" class="carousel slide"
+					data-bs-ride="carousel">
+
+					<!-- Controles de navegación -->
+					<button class="carousel-control-prev" type="button"
+						data-bs-target="#productCarousel" data-bs-slide="prev">
+						<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+						<span class="visually-hidden">Previous</span>
+					</button>
+
+					<div class="carousel-inner">
+						
+							<img alt="Imagen Producto" class="d-block w-100"
+								style="overflow: hidden; height: 800px'"
+								src="mostrarImgProducto?productoId=<%=id%>&indice=<%=0%>"
+								class="d-block w-100">
+					
+					</div>
+
+					<!-- Controles de navegación -->
+					<button class="carousel-control-next" type="button"
+						data-bs-target="#productCarousel" data-bs-slide="next">
+						<span class="carousel-control-next-icon" aria-hidden="true"></span>
+						<span class="visually-hidden">Next</span>
+					</button>
+				</div>
+
+			</div>
             <div class="col-lg-6 col-md-8">
                 <h1 class="display-5 text-center text-md-start"><%= prod != null ? port.imprimirNombreProd(id) : "Producto no encontrado"%></h1>
                 <p class="lead text-center text-md-start"><%= prod != null ? port.imprimirDescripcion(id) : "Descripción no disponible."%></p>
@@ -105,94 +121,6 @@ if (cl != null) {
         </div>
     </main>
     
-    <div class="container my-4 p-3 border rounded shadow-sm">
-		<%
-		List<Integer> puntajes = port.getPuntajeDTProd(id);
-		%>
-		<h3 class="text-primary">
-			Puntaje Medio: <span class="fw-bold"><%=puntajes.get(0)%></span>
-		</h3>
-
-		<ul class="list-group my-3">
-			<li
-				class="list-group-item d-flex justify-content-between align-items-center">
-				1 Estrella <span class="badge bg-primary rounded-pill"><%=puntajes.get(1)%></span>
-			</li>
-			<li
-				class="list-group-item d-flex justify-content-between align-items-center">
-				2 Estrellas <span class="badge bg-secondary rounded-pill"><%=puntajes.get(2)%></span>
-			</li>
-			<li
-				class="list-group-item d-flex justify-content-between align-items-center">
-				3 Estrellas <span class="badge bg-success rounded-pill"><%=puntajes.get(3)%></span>
-			</li>
-			<li
-				class="list-group-item d-flex justify-content-between align-items-center">
-				4 Estrellas <span class="badge bg-warning rounded-pill"><%=puntajes.get(4)%></span>
-			</li>
-			<li
-				class="list-group-item d-flex justify-content-between align-items-center">
-				5 Estrellas <span class="badge bg-danger rounded-pill"><%=puntajes.get(5)%></span>
-			</li>
-		</ul>
-	</div>
-	
-	<div class="container mt-5">
-
-<%
-for (Comentario c : comentarios) {
-%>
-<div class="card card-body">
-    <div>
-        <div class="card mt-2" style="border: none;">
-            <div class="card-body">
-                <div class="d-flex align-items-start">
-                    <img src="media/"
-                         alt="Autor" class="mr-3"
-                         style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;">
-                    <div class="ml-3" style="margin-left: 15px;">
-                        <h6 style="font-size: 1.1em;"><b><%=port.imprimirAutor(c.getNumero(), id)%></b></h6>
-                        <p style="font-size: 0.9em;"><%=port.imprimirTextoComentario(c.getNumero(), id)%></p>
-                        <small class="text-muted"><%=port.imprimirFechaComentario(c.getNumero(), id)%></small>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    
-
-    <div class="mt-3">
-        <h6>Respuestas:</h6>
-        <%
-        List<Comentario> respuestas = port.listarRespuestas(id, c.getNumero());
-        if (respuestas == null || respuestas.isEmpty()) {
-        %>
-        <div class="alert alert-secondary" role="alert">No hay respuestas a este comentario.</div>
-        <% } else { %>
-        <% for (Comentario r : respuestas) { %>
-        <div class="card mt-2" style="border: none;">
-            <div class="card-body">
-                <div class="d-flex align-items-start">
-                    <img src="media/"
-                         alt="Autor" class="mr-3"
-                         style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;">
-                    <div class="ml-3" style="margin-left: 15px;">
-                        <h6 class="mt-0" style="font-size: 1.1em;"><%=r.getAutor().getNick()%></h6>
-                        <p style="font-size: 0.9em;"><%=r.getTexto()%></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <% } %>
-        <% } %>
-    </div>
-</div>
-<% } %>
-
-    <br>
-    <br>
-    <br>
 
     
 
