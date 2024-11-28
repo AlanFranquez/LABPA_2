@@ -2,6 +2,8 @@ package com.market.svcentral;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -185,6 +187,62 @@ public class EmailService {
 			e.printStackTrace();
 		}
 	}
+	
+	public void sendCompraNotificacion(Cliente cl, OrdenDeCompra ord) {
+	    // Verificar si el cliente desea recibir notificaciones
+	    if (!cl.isRecibirNotificaciones()) {
+	        System.out.println("El cliente ha desactivado las notificaciones.");
+	        return;
+	    }
+
+	    // Obtener correo del cliente
+	    String recipientEmail = cl.getCorreo();
+	    if (recipientEmail == null || recipientEmail.isEmpty()) {
+	        System.out.println("El cliente no tiene un correo electrónico registrado.");
+	        return;
+	    }
+
+	    // Generar enlace para desactivar notificaciones
+	    String linkDesactivacion = "http://localhost/webApplication/desactivarNotiEstado?token=" + cl.getTokenDesactivacion();
+
+	    // Asunto del correo
+	    String subject = "¡Has realizado una nueva compra!";
+
+	    // Generar el contenido del correo
+	    StringBuilder productosListados = new StringBuilder();
+	    for (Map.Entry<Integer, Item> entry : ord.getItems().entrySet()) {
+	        Item it = entry.getValue();
+	        productosListados.append("<li>").append(it.getProducto().getNombre()).append("</li>");
+	    }
+
+	    String body = "<html>" +
+	            "<body style='font-family: Arial, sans-serif; color: #333;'>" +
+	            "<div style='max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px;'>" +
+	            "<h2 style='color: #0066cc;'>¡HAS REALIZADO UNA COMPRA NUEVA!</h2>" +
+	            "<p>Hola, esto son los productos que has comprado</p> <br>" +
+	            "<h3 style='color: #444;'>Productos comprados:</h3>" +
+	            "<ul>" + productosListados.toString() + "</ul>" +
+	            
+	            "<br><p>El estado actual de tu compra es --> <b>"+ ord.getEstado() + "</b></p>"+ 
+	            "<p>Esperamos que disfrutes de tu compra. ¡Gracias por confiar en nosotros!</p>" +
+	            "<hr>" +
+	            "<footer>" +
+	            "<p>Si no deseas recibir más correos, puedes <a href='" + linkDesactivacion + "'>desactivar las notificaciones aquí</a>.</p>" +
+	            "</footer>" +
+	            "</div>" +
+	            "</body>" +
+	            "</html>";
+
+	    // Enviar el correo
+	    try {
+	        sendEmail(recipientEmail, subject, body);
+	        System.out.println("Notificación de nueva compra enviada a " + recipientEmail);
+	    } catch (Exception e) {
+	        System.out.println("Error al enviar el correo a " + recipientEmail + ": " + e.getMessage());
+	        e.printStackTrace();
+	    }
+	}
+
 
 	public void sendNewProductNotification(String recipientEmail, String proveedorNombre, String clienteNombre,
 			String productoNombre) {

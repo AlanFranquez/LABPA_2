@@ -149,5 +149,7 @@ public interface ISistema {
 	public void agregarImagenUsuarioBytes(String nickName, byte[] imagenBytes);
 	
 	public void agregarImagenProductoBytes(int numRef, byte[] imagenBytes);
+	
+	public void notificarCompra(Cliente cl, OrdenDeCompra ord);
 }
 

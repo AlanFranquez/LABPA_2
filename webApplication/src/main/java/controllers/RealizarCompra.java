@@ -162,6 +162,7 @@ public class RealizarCompra extends HttpServlet {
             port.realizarCompraPRUEBA(items, precioTotal, user.getNick());
 //        port.vaciarCarritoCli(cliente.getNick());
         port.vaciarCarrito(user.getNick());
+        
 
         // Guardar el precio total general en la sesión
         session.setAttribute("mensajeExito", "Su compra se ha realizado con éxito.");

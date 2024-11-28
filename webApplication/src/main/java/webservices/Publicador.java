@@ -777,6 +777,21 @@ public interface Publicador {
 
     /**
      * 
+     * @param arg1
+     * @param arg0
+     */
+    @WebMethod
+    @RequestWrapper(localName = "notificarCompra", targetNamespace = "http://services/", className = "webservices.NotificarCompra")
+    @ResponseWrapper(localName = "notificarCompraResponse", targetNamespace = "http://services/", className = "webservices.NotificarCompraResponse")
+    @Action(input = "http://services/Publicador/notificarCompraRequest", output = "http://services/Publicador/notificarCompraResponse")
+    public void notificarCompra(
+        @WebParam(name = "arg0", targetNamespace = "")
+        String arg0,
+        @WebParam(name = "arg1", targetNamespace = "")
+        int arg1);
+
+    /**
+     * 
      * @param arg0
      * @return
      *     returns webservices.Carrito

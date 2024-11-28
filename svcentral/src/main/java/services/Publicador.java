@@ -465,6 +465,8 @@ public class Publicador {
 		
 		s.realizarCompra(nuevaCompra, nickCliente);
 		obtenerCliente(nickCliente).agregarCompra(nuevaCompra);
+		
+        notificarCompra(nickCliente, nuevaCompra.getNumero());
 	}
 
 	@WebMethod
@@ -1121,7 +1123,6 @@ public class Publicador {
 		Proveedor prov = this.obtenerProveedor(nick);
 		s.notificarClientesNuevoProducto(prod, prov);
 	}
-
 	@WebMethod
 	public void agregarProductoCategoria(String catName, int numRef) throws CategoriaException {
 		s.agregarProductoCategoria(catName, numRef);
@@ -1314,6 +1315,14 @@ public class Publicador {
 			Producto p = s.getProducto(numRef);
 			Comentario c = s.getComentario(comId);
 			s.notificarComentario(p, c, null);
+		}
+		
+		@WebMethod
+		public void notificarCompra(String nick, int numRef) {
+			Cliente cl = obtenerCliente(nick);
+			OrdenDeCompra ord = em.find(OrdenDeCompra.class, numRef);
+			
+			s.notificarCompra(cl, ord);
 		}
 		
 		@WebMethod

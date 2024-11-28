@@ -908,51 +908,52 @@ public class Sistema implements ISistema {
 			 System.out.println("Error: El producto o el comentario nuevo son nulos.");
 			 return;
 		 }
-	
-		 List<Comentario> comentarios = producto.getComentarios();
-		 if (comentarios != null && !comentarios.isEmpty()) {
-			 for (Comentario comentario : comentarios) {
-				 Cliente comentarista = comentario.getAutor();
-				 Cliente autorNuevoComentario = nuevoComentario.getAutor();
-				 // Notificar a todos los comentaristas excepto al autor del nuevo comentario
-				 if (!comentarista.getCorreo().equals(autorNuevoComentario.getCorreo())) {
-					 String recipientEmail = comentarista.getCorreo();
-					 try {
-						 emailService.sendCommentNotification(
-								 recipientEmail,
-								 producto.getNombre(),
-								 autorNuevoComentario.getNombre(),
-								 nuevoComentario.getTexto()
-								 );
-						 System.out.println("Notificación enviada a " + recipientEmail);
-					 } catch (Exception e) {
-						 System.out.println("Error al enviar notificación a " + recipientEmail + ": " + e.getMessage());
-						 e.printStackTrace();
-					 }
-				 }
-			 }
+		 
+		 Proveedor prov = producto.getProveedor();
+		 
+		 
+		 EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
+		 EntityManager em = emf.createEntityManager();
+		 
+		 List<OrdenDeCompra> todasOrdenes = em.createQuery("SELECT o FROM OrdenDeCompra o").getResultList();
+		 
+		 List<Cliente> clientesCompras= new ArrayList<Cliente>();
+		 int id = producto.getNumRef();
+		 for(OrdenDeCompra o : todasOrdenes) {
+			Map<Integer, Item> items = o.getItems();
+			
+			for(Map.Entry<Integer, Item> i : items.entrySet()) {
+				Item itIndividual = i.getValue();
+				
+				if(itIndividual.getProducto().getNumRef() == id) {
+					int idCompra = o.getNumero();
+					String jpql = "SELECT c FROM Cliente c JOIN c.listaCompras o WHERE o.numero = :numeroOrden";
+					Cliente cl = em.createQuery(jpql, Cliente.class)
+					                    .setParameter("numeroOrden", idCompra)
+					                    .getSingleResult();
+					
+					if(!clientesCompras.contains(cl) && cl.isRecibirNotificaciones()) {
+						clientesCompras.add(cl);
+					}
+				}
+				
+			}
+			
 		 }
-
-		// Notificar al autor del comentario respondido (si aplica)
-		 if (comentarioRespondido != null) {
-			 Cliente autorComentarioOriginal = comentarioRespondido.getAutor();
-			 Cliente autorNuevoComentario = nuevoComentario.getAutor();
-
-			 // Verificar que el autor del comentario original no sea el mismo que el autor del nuevo comentario
-			 if (!autorComentarioOriginal.getCorreo().equals(autorNuevoComentario.getCorreo())) {
-				// Aquí usamos sendReplyNotification en lugar de sendCommentNotification
-				 try {
-					 emailService.sendReplyNotification(
-							 autorComentarioOriginal.getCorreo(),
-							 producto.getNombre(),
-							 autorNuevoComentario.getNombre(),
-							 nuevoComentario.getTexto()
-							 );
-					 System.out.println("Notificación de respuesta enviada a " + autorComentarioOriginal.getCorreo());
-				 } catch (Exception e) {
-					 System.out.println("Error al enviar la notificación de respuesta: " + e.getMessage());
-					 e.printStackTrace();
-				 }
+		 
+		 for(Cliente c : clientesCompras) {
+			 String recipientEmail = c.getCorreo();
+			 try {
+				 emailService.sendCommentNotification(
+						 recipientEmail,
+						 producto.getNombre(),
+						 c.getNombre(),
+						 nuevoComentario.getTexto()
+						 );
+				 System.out.println("Notificación enviada a " + recipientEmail);
+			 } catch (Exception e) {
+				 System.out.println("Error al enviar notificación a " + recipientEmail + ": " + e.getMessage());
+				 e.printStackTrace();
 			 }
 		 }
 	 }
@@ -974,6 +975,23 @@ public class Sistema implements ISistema {
 	    return clientesQueHanComprado;
 	}
 	 
+	 
+	 public void notificarCompra(Cliente cl, OrdenDeCompra ord) {
+		 
+		 if(cl.isRecibirNotificaciones()) {
+			 String recipientEmail = cl.getCorreo();
+			 try {
+				 emailService.sendCompraNotificacion(
+						 cl, ord
+						 );
+				 System.out.println("Notificación enviada a " + recipientEmail);
+			 } catch (Exception e) {
+				 System.out.println("Error al enviar notificación a " + recipientEmail + ": " + e.getMessage());
+				 e.printStackTrace();
+			 }
+		 }
+		 
+	 }
 	 
 	 public void notificarClientesNuevoProducto(Producto nuevoProducto, Proveedor proveedor) {
 	    System.out.println("Iniciando notificación de registro de nuevo producto a los clientes.");
