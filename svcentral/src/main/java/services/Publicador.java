@@ -719,6 +719,7 @@ public class Publicador {
 		System.out.println("El cliente " + nick + "respondio al comentario de " + padre.getAutor().getNick());
 		em.persist(respuesta);
 		em.merge(padre);
+		em.merge(respuesta);
 		em.flush();
 		
 		em.getTransaction().commit();

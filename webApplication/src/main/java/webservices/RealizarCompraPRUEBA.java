@@ -9,9 +9,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for realizarCompraPRUEBA complex type.
+ * <p>Clase Java para realizarCompraPRUEBA complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
  * 
  * <pre>
  * &lt;complexType name="realizarCompraPRUEBA">
@@ -71,7 +71,7 @@ public class RealizarCompraPRUEBA {
     }
 
     /**
-     * Gets the value of the arg1 property.
+     * Obtiene el valor de la propiedad arg1.
      * 
      */
     public float getArg1() {
@@ -79,7 +79,7 @@ public class RealizarCompraPRUEBA {
     }
 
     /**
-     * Sets the value of the arg1 property.
+     * Define el valor de la propiedad arg1.
      * 
      */
     public void setArg1(float value) {
@@ -87,7 +87,7 @@ public class RealizarCompraPRUEBA {
     }
 
     /**
-     * Gets the value of the arg2 property.
+     * Obtiene el valor de la propiedad arg2.
      * 
      * @return
      *     possible object is
@@ -99,7 +99,7 @@ public class RealizarCompraPRUEBA {
     }
 
     /**
-     * Sets the value of the arg2 property.
+     * Define el valor de la propiedad arg2.
      * 
      * @param value
      *     allowed object is

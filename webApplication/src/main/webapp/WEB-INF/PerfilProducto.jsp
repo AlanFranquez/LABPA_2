@@ -334,7 +334,7 @@ if (cl != null) {
 				<div class="card mt-2" style="border: none;">
 					<div class="card-body">
 						<div class="d-flex align-items-start">
-							<img src="mostrarImagen?nick=<%= nickUser %>" alt="Autor" class="mr-3"
+							<img src="mostrarImagen?nick=<%= c.getAutor().getNick() %>" alt="Autor" class="mr-3"
 								style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;">
 							<div class="ml-3" style="margin-left: 15px;">
 								<h6 style="font-size: 1.1em;">
@@ -384,7 +384,7 @@ if (cl != null) {
 			<div class="mt-3">
 				<h6>Respuestas:</h6>
 				<%
-				List<webservices.Comentario> respuestas = port.listarRespuestas(id, c.getNumero());
+				List<Comentario> respuestas = port.listarRespuestas(id, c.getNumero());
 				if (respuestas == null || respuestas.isEmpty()) {
 				%>
 				<div class="alert alert-secondary" role="alert">No hay

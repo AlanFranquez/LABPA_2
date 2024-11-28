@@ -1,11 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <%@page import="webservices.*"%>
-<%@page import="webservices.Producto" %>
-<%@page import="webservices.Usuario" %>
-<%@page import="webservices.Carrito" %>
-<%@page import="webservices.Publicador" %>
-<%@page import="webservices.PublicadorService" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.List" %>
 <!DOCTYPE html>

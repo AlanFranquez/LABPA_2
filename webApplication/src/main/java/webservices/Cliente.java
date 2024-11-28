@@ -7,9 +7,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for cliente complex type.
+ * <p>Clase Java para cliente complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
  * 
  * <pre>
  * &lt;complexType name="cliente">
@@ -54,7 +54,7 @@ public class Cliente
     protected String tokenNuevoProducto;
 
     /**
-     * Gets the value of the carrito property.
+     * Obtiene el valor de la propiedad carrito.
      * 
      * @return
      *     possible object is
@@ -66,7 +66,7 @@ public class Cliente
     }
 
     /**
-     * Sets the value of the carrito property.
+     * Define el valor de la propiedad carrito.
      * 
      * @param value
      *     allowed object is
@@ -78,7 +78,7 @@ public class Cliente
     }
 
     /**
-     * Gets the value of the recibirNotificaciones property.
+     * Obtiene el valor de la propiedad recibirNotificaciones.
      * 
      */
     public boolean isRecibirNotificaciones() {
@@ -86,7 +86,7 @@ public class Cliente
     }
 
     /**
-     * Sets the value of the recibirNotificaciones property.
+     * Define el valor de la propiedad recibirNotificaciones.
      * 
      */
     public void setRecibirNotificaciones(boolean value) {
@@ -94,7 +94,7 @@ public class Cliente
     }
 
     /**
-     * Gets the value of the recibirNotificacionesComentario property.
+     * Obtiene el valor de la propiedad recibirNotificacionesComentario.
      * 
      */
     public boolean isRecibirNotificacionesComentario() {
@@ -102,7 +102,7 @@ public class Cliente
     }
 
     /**
-     * Sets the value of the recibirNotificacionesComentario property.
+     * Define el valor de la propiedad recibirNotificacionesComentario.
      * 
      */
     public void setRecibirNotificacionesComentario(boolean value) {
@@ -110,7 +110,7 @@ public class Cliente
     }
 
     /**
-     * Gets the value of the recibirNotificacionesNuevoProducto property.
+     * Obtiene el valor de la propiedad recibirNotificacionesNuevoProducto.
      * 
      */
     public boolean isRecibirNotificacionesNuevoProducto() {
@@ -118,7 +118,7 @@ public class Cliente
     }
 
     /**
-     * Sets the value of the recibirNotificacionesNuevoProducto property.
+     * Define el valor de la propiedad recibirNotificacionesNuevoProducto.
      * 
      */
     public void setRecibirNotificacionesNuevoProducto(boolean value) {
@@ -126,7 +126,7 @@ public class Cliente
     }
 
     /**
-     * Gets the value of the tokenComentario property.
+     * Obtiene el valor de la propiedad tokenComentario.
      * 
      * @return
      *     possible object is
@@ -138,7 +138,7 @@ public class Cliente
     }
 
     /**
-     * Sets the value of the tokenComentario property.
+     * Define el valor de la propiedad tokenComentario.
      * 
      * @param value
      *     allowed object is
@@ -150,7 +150,7 @@ public class Cliente
     }
 
     /**
-     * Gets the value of the tokenDesactivacion property.
+     * Obtiene el valor de la propiedad tokenDesactivacion.
      * 
      * @return
      *     possible object is
@@ -162,7 +162,7 @@ public class Cliente
     }
 
     /**
-     * Sets the value of the tokenDesactivacion property.
+     * Define el valor de la propiedad tokenDesactivacion.
      * 
      * @param value
      *     allowed object is
@@ -174,7 +174,7 @@ public class Cliente
     }
 
     /**
-     * Gets the value of the tokenNuevoProducto property.
+     * Obtiene el valor de la propiedad tokenNuevoProducto.
      * 
      * @return
      *     possible object is
@@ -186,7 +186,7 @@ public class Cliente
     }
 
     /**
-     * Sets the value of the tokenNuevoProducto property.
+     * Define el valor de la propiedad tokenNuevoProducto.
      * 
      * @param value
      *     allowed object is

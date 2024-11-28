@@ -7,9 +7,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for agregarCliente2 complex type.
+ * <p>Clase Java para agregarCliente2 complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
  * 
  * <pre>
  * &lt;complexType name="agregarCliente2">
@@ -52,7 +52,7 @@ public class AgregarCliente2 {
     protected String arg6;
 
     /**
-     * Gets the value of the arg0 property.
+     * Obtiene el valor de la propiedad arg0.
      * 
      * @return
      *     possible object is
@@ -64,7 +64,7 @@ public class AgregarCliente2 {
     }
 
     /**
-     * Sets the value of the arg0 property.
+     * Define el valor de la propiedad arg0.
      * 
      * @param value
      *     allowed object is
@@ -76,7 +76,7 @@ public class AgregarCliente2 {
     }
 
     /**
-     * Gets the value of the arg1 property.
+     * Obtiene el valor de la propiedad arg1.
      * 
      * @return
      *     possible object is
@@ -88,7 +88,7 @@ public class AgregarCliente2 {
     }
 
     /**
-     * Sets the value of the arg1 property.
+     * Define el valor de la propiedad arg1.
      * 
      * @param value
      *     allowed object is
@@ -100,7 +100,7 @@ public class AgregarCliente2 {
     }
 
     /**
-     * Gets the value of the arg2 property.
+     * Obtiene el valor de la propiedad arg2.
      * 
      * @return
      *     possible object is
@@ -112,7 +112,7 @@ public class AgregarCliente2 {
     }
 
     /**
-     * Sets the value of the arg2 property.
+     * Define el valor de la propiedad arg2.
      * 
      * @param value
      *     allowed object is
@@ -124,7 +124,7 @@ public class AgregarCliente2 {
     }
 
     /**
-     * Gets the value of the arg3 property.
+     * Obtiene el valor de la propiedad arg3.
      * 
      * @return
      *     possible object is
@@ -136,7 +136,7 @@ public class AgregarCliente2 {
     }
 
     /**
-     * Sets the value of the arg3 property.
+     * Define el valor de la propiedad arg3.
      * 
      * @param value
      *     allowed object is
@@ -148,7 +148,7 @@ public class AgregarCliente2 {
     }
 
     /**
-     * Gets the value of the arg4 property.
+     * Obtiene el valor de la propiedad arg4.
      * 
      * @return
      *     possible object is
@@ -160,7 +160,7 @@ public class AgregarCliente2 {
     }
 
     /**
-     * Sets the value of the arg4 property.
+     * Define el valor de la propiedad arg4.
      * 
      * @param value
      *     allowed object is
@@ -172,7 +172,7 @@ public class AgregarCliente2 {
     }
 
     /**
-     * Gets the value of the arg5 property.
+     * Obtiene el valor de la propiedad arg5.
      * 
      * @return
      *     possible object is
@@ -184,7 +184,7 @@ public class AgregarCliente2 {
     }
 
     /**
-     * Sets the value of the arg5 property.
+     * Define el valor de la propiedad arg5.
      * 
      * @param value
      *     allowed object is
@@ -196,7 +196,7 @@ public class AgregarCliente2 {
     }
 
     /**
-     * Gets the value of the arg6 property.
+     * Obtiene el valor de la propiedad arg6.
      * 
      * @return
      *     possible object is
@@ -208,7 +208,7 @@ public class AgregarCliente2 {
     }
 
     /**
-     * Sets the value of the arg6 property.
+     * Define el valor de la propiedad arg6.
      * 
      * @param value
      *     allowed object is

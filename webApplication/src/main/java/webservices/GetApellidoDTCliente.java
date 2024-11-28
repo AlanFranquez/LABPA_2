@@ -7,9 +7,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for getApellidoDTCliente complex type.
+ * <p>Clase Java para getApellidoDTCliente complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
  * 
  * <pre>
  * &lt;complexType name="getApellidoDTCliente">
@@ -34,7 +34,7 @@ public class GetApellidoDTCliente {
     protected String arg0;
 
     /**
-     * Gets the value of the arg0 property.
+     * Obtiene el valor de la propiedad arg0.
      * 
      * @return
      *     possible object is
@@ -46,7 +46,7 @@ public class GetApellidoDTCliente {
     }
 
     /**
-     * Sets the value of the arg0 property.
+     * Define el valor de la propiedad arg0.
      * 
      * @param value
      *     allowed object is

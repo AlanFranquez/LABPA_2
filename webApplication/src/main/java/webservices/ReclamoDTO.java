@@ -7,9 +7,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for reclamoDTO complex type.
+ * <p>Clase Java para reclamoDTO complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
  * 
  * <pre>
  * &lt;complexType name="reclamoDTO">
@@ -43,7 +43,7 @@ public class ReclamoDTO {
     protected String texto;
 
     /**
-     * Gets the value of the autor property.
+     * Obtiene el valor de la propiedad autor.
      * 
      * @return
      *     possible object is
@@ -55,7 +55,7 @@ public class ReclamoDTO {
     }
 
     /**
-     * Sets the value of the autor property.
+     * Define el valor de la propiedad autor.
      * 
      * @param value
      *     allowed object is
@@ -67,7 +67,7 @@ public class ReclamoDTO {
     }
 
     /**
-     * Gets the value of the fecha property.
+     * Obtiene el valor de la propiedad fecha.
      * 
      * @return
      *     possible object is
@@ -79,7 +79,7 @@ public class ReclamoDTO {
     }
 
     /**
-     * Sets the value of the fecha property.
+     * Define el valor de la propiedad fecha.
      * 
      * @param value
      *     allowed object is
@@ -91,7 +91,7 @@ public class ReclamoDTO {
     }
 
     /**
-     * Gets the value of the nombreProducto property.
+     * Obtiene el valor de la propiedad nombreProducto.
      * 
      * @return
      *     possible object is
@@ -103,7 +103,7 @@ public class ReclamoDTO {
     }
 
     /**
-     * Sets the value of the nombreProducto property.
+     * Define el valor de la propiedad nombreProducto.
      * 
      * @param value
      *     allowed object is
@@ -115,7 +115,7 @@ public class ReclamoDTO {
     }
 
     /**
-     * Gets the value of the texto property.
+     * Obtiene el valor de la propiedad texto.
      * 
      * @return
      *     possible object is
@@ -127,7 +127,7 @@ public class ReclamoDTO {
     }
 
     /**
-     * Sets the value of the texto property.
+     * Define el valor de la propiedad texto.
      * 
      * @param value
      *     allowed object is
