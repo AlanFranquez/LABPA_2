@@ -6,7 +6,7 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.Map"%>
 <%@ page import="webservices.PublicadorService" %>
-<%@ page import="services.Publicador" %>
+<%@ page import="webservices.Publicador" %>
 <%@ page import="webservices.DtCliente" %>
 <%@ page import="webservices.Usuario" %>
 <%@ page import="webservices.OrdenDeCompra" %>

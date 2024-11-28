@@ -249,7 +249,7 @@ public class Cliente extends Usuario {
         return new DTCliente(this.getNombre(), this.getNick(), this.getApellido(), this.getCorreo(), this.getNacimiento(), this.getImagen(), this.getCompras());
     }
     
-    public boolean haCompradoDelProveedor(Proveedor proveedor) {
+   /* public boolean haCompradoDelProveedor(Proveedor proveedor) {
     	for (OrdenDeCompra orden : listaCompras) {
             // Imprimir el proveedor de la orden para depuración
             System.out.println("Comparando con proveedor: " + orden.getProveedor().getNombre());
@@ -262,6 +262,7 @@ public class Cliente extends Usuario {
         return false; // No se encontraron compras del proveedor
     }
 
+*/
     public Map<Integer, Puntaje> getPuntajes() {
         return this.listaPuntajes;
     }

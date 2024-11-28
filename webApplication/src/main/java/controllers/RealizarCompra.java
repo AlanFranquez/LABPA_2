@@ -114,7 +114,7 @@ public class RealizarCompra extends HttpServlet {
 
         List<Item> items = port.getItemsCarrito(user.getNick());
         
-        List<Producto> prodsComprados = new ArrayList<Producto>();
+        /*List<Producto> prodsComprados = new ArrayList<Producto>();
         
        
 
@@ -152,14 +152,20 @@ public class RealizarCompra extends HttpServlet {
             // Sumar el precio total del proveedor al total general
             precioTotalGeneral += precioTotalPorProveedor;
 
-            port.realizarCompraPRUEBA(listaItems, precioTotalPorProveedor, proveedor.getNick(), user.getNick());
+        }*/
+        float precioTotal = 0;
+        
+        for(Item it : items) {
+        	precioTotal += it.getSubTotal();
         }
+        
+            port.realizarCompraPRUEBA(items, precioTotal, user.getNick());
 //        port.vaciarCarritoCli(cliente.getNick());
         port.vaciarCarrito(user.getNick());
 
         // Guardar el precio total general en la sesión
         session.setAttribute("mensajeExito", "Su compra se ha realizado con éxito.");
-        session.setAttribute("precioTotal", String.valueOf(precioTotalGeneral)); // Total general de todas las órdenes
+        session.setAttribute("precioTotal", String.valueOf(precioTotal)); // Total general de todas las órdenes
         
         request.getRequestDispatcher("/WEB-INF/paginaExito.jsp").forward(request, response);
     }

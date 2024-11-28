@@ -58,30 +58,7 @@ public class Publicador {
     }
 
 
-    /**
-     * Detener el servicio.
-     */
-    @WebMethod(exclude = true)
-    public void detener() {
-        if (endpoint != null && endpoint.isPublished()) {
-            endpoint.stop();
-            System.out.println("Servicio detenido correctamente.");
-        } else {
-            System.out.println("El servicio no estaba en ejecución.");
-        }
-    }
     
-  
-
-            // Publicar el servicio en la URL generada
-            endpoint = Endpoint.publish(url, this);
-            System.out.println("Servicio publicado en: " + url);
-        } catch (Exception e) {
-            // Manejo de cualquier error al publicar el servicio
-            System.err.println("Error al publicar el servicio: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
 
 
     /**
@@ -477,14 +454,14 @@ public class Publicador {
 		s.agregarItemsAOrden(numeroOrden, numProducto, cantidad);
 	}
 	
-	public void realizarCompraPRUEBA(List<Item> items, float precioTotal, String nickProveedor, String nickCliente) {
+	public void realizarCompraPRUEBA(List<Item> items, float precioTotal, String nickCliente) {
 		Map<Integer, Item> prods = new HashMap<>();
 		
 		for(Item p: items) {
 			prods.put(p.getProducto().getNumRef(), p);
 		}
 		
-		OrdenDeCompra nuevaCompra = new OrdenDeCompra(prods, precioTotal, obtenerProveedor(nickCliente));
+		OrdenDeCompra nuevaCompra = new OrdenDeCompra(prods, precioTotal);
 		
 		s.realizarCompra(nuevaCompra, nickCliente);
 		obtenerCliente(nickCliente).agregarCompra(nuevaCompra);
@@ -1161,15 +1138,7 @@ public class Publicador {
 		return em.createQuery("SELECT c FROM Categoria c", Categoria.class).getResultList().toArray(new Categoria[0]);
 	}
 	
-	@WebMethod
-	public void crearOrden(Map <Integer, Item> itemsProveedor, int precioTotal, String proveedorNick, String cliNick) {
-		Proveedor prov = em.find(Proveedor.class, proveedorNick);
-		OrdenDeCompra orden = new OrdenDeCompra(itemsProveedor, precioTotal, prov);
-
-		s.realizarCompra(orden, cliNick);
-		s.cambiarEstadoOrden("Comprada", "La compra ha sido realizada correctamente.", orden.getNumero(), cliNick);
-		System.out.println("El cliente " + cliNick + "creo una nueva orden con valor total: " + precioTotal);
-	}
+	
 	
 	@WebMethod
 	public List<Producto> buscarProductos(String searchQuery){

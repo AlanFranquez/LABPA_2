@@ -1,7 +1,8 @@
-<%@page import="webservices.Proveedor"%>
+
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <%@page import="webservices.Usuario"%>
+<%@page import="webservices.Proveedor"%>
 <%@page import="webservices.Producto"%>
 <%@page import="webservices.Carrito" %>
 <%@page import="webservices.Proveedor" %>
@@ -25,7 +26,7 @@
 
 <%
 	String estadoUser = (String) session.getAttribute("estado");
-    Usuario usr = (Usuario) request.getAttribute("usuario");
+    webservices.Usuario usr = (Usuario) request.getAttribute("usuario");
     
     PublicadorService pub = new PublicadorService();
 	Publicador port = pub.getPublicadorPort();

@@ -59,7 +59,12 @@ public class InitServlet extends HttpServlet {
              byte[] imageBytes = imagenPrecargada("https://priorityonepayroll.com/wp-content/uploads/2018/06/pop-client-meeting.jpg");
              port.agregarImagenUsuario("Juan123", imageBytes);
          
-             port.agregarProveedor("Perez", "Perez@gmail.com", "Perez", "Alberto", 12,12,1990, "Nueva Helvecia", "nuevahelvecia.com", "123", "123");
+             try {
+				port.agregarProveedor("Perez", "Perez@gmail.com", "Perez", "Alberto", 12,12,1990, "Nueva Helvecia", "nuevahelvecia.com", "123", "123");
+			} catch (UsuarioRepetidoException_Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
              
              
              byte[] imageBytes2 = imagenPrecargada("https://www.getcanopy.com/hubfs/Legacy/Imported_Blog_Media/ways-to-manage-clients-effectively-2.jpg");

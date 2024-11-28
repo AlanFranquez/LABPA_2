@@ -187,7 +187,7 @@ public class CrearOrdenCompra extends JInternalFrame {
 
                     float precioTotal = (float) itemsProveedor.values().stream().mapToDouble(Item::getSubTotal).sum();
 
-                    OrdenDeCompra orden = new OrdenDeCompra(itemsProveedor, precioTotal, proveedor);
+                    OrdenDeCompra orden = new OrdenDeCompra(itemsProveedor, precioTotal);
 
                     s.realizarCompra(orden, cliente);
                 }

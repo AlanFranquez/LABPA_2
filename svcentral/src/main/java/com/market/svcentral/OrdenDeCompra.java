@@ -28,14 +28,12 @@ public class OrdenDeCompra implements Serializable{
     @OneToMany(cascade = CascadeType.PERSIST)
     private List<Comentario> comentarios; 
     
-    @ManyToOne
-    @JoinColumn(name = "proveedorNick")
-    private Proveedor proveedor;
 
     public OrdenDeCompra() {
     }
 
-    public OrdenDeCompra(Map<Integer, Item> itemsAdquiridos, float precioTotal, Proveedor proveedor) {
+   
+    public OrdenDeCompra(Map<Integer, Item> itemsAdquiridos, float precioTotal) {
         Random random = new Random();
         this.numero = random.nextInt(1000); // o algún otro método para generar números de orden únicos
         this.precioTotal = precioTotal;
@@ -43,7 +41,6 @@ public class OrdenDeCompra implements Serializable{
         this.items = itemsAdquiridos;
         this.comentarios = new ArrayList<>();
         this.estados = new ArrayList<>();
-        this.proveedor = proveedor;
 
         // Estado inicial
         DTEstado estadoComprada = new DTEstado("Comprada", "El cliente ha realizado la compra");
@@ -60,7 +57,6 @@ public class OrdenDeCompra implements Serializable{
         this.items = new HashMap<>();
         this.comentarios = new ArrayList<>();
         this.estados = new ArrayList<>();
-        this.proveedor = proveedor;
 
         // Estado inicial
         DTEstado estadoComprada = new DTEstado("Comprada", "El cliente ha realizado la compra");
@@ -122,9 +118,6 @@ public class OrdenDeCompra implements Serializable{
         return comentarios;
     }
 
-    public Proveedor getProveedor() {
-        return proveedor;
-    }
 
     public void addItem(Producto producto, int cant) {
         if (items.containsKey(producto.getNumRef())) {

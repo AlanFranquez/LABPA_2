@@ -144,7 +144,7 @@ public class ProductoServlet extends HttpServlet {
             
             
             
-            //sist.notificarClientesNuevoProducto(sist.getProducto(referencia), prov);
+            port.notificarClientesNuevoProducto(referencia, prov.getNick());
 
             // Redirigir al perfil del proveedor
             response.sendRedirect("perfilProveedor?nickname=" + prov.getNick());

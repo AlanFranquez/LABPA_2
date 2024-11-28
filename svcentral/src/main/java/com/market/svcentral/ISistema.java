@@ -133,7 +133,7 @@ public interface ISistema {
 	
 	public abstract void agregarItemsAOrden(int numeroOrden, int numProducto, int cantidad);
 	
-	public abstract void agregarComentario(int numRef, int comentarioId, String mensaje, String nickCliente) throws ProductoException;
+	//public abstract void agregarComentario(int numRef, int comentarioId, String mensaje, String nickCliente) throws ProductoException;
 	
 	public abstract Cliente getClientePorCorreo(String email);
 	  

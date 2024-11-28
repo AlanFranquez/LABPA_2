@@ -92,7 +92,6 @@ Usuario usr = (Usuario) request.getAttribute("usuarioLogueado");
 
                 <div class="card-body">
                    
-                    <p><b>Fech</b> <%= r.getNombreProducto() %></p>
                     <p><b>Cliente:</b> <%= r.getAutor()%></p>
                     <p><b>Texto del Reclamo:</b> <%=  r.getTexto()%></p>
                    
